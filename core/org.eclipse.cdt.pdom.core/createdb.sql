@@ -18,9 +18,7 @@ create table Names
 	 fileId int not null,
 	 offset int not null,
 	 length int not null,
-	 isDecl int not null,
-	 isDef int not null,
-	 isRef int not null,
+	 role int not null,
 	 bindingId int not null);
 create index NamesFileIdIx on Names(fileId);
 

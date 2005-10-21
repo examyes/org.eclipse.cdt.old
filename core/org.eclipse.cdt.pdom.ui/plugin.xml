@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.0"?>
 <plugin>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            id="org.eclipse.cdt.pdom.ui.contribution.updatePDOM"
+            nameFilter="*"
+            objectClass="org.eclipse.cdt.core.model.ICProject">
+         <menu
+               id="org.eclipse.cdt.pdom.ui.menu1"
+               label="PDOM"
+               path="additions">
+            <separator name="group1"/>
+         </menu>
+         <action
+               class="org.eclipse.cdt.pdom.ui.popup.actions.PDOMUpdateProjectAction"
+               enablesFor="+"
+               id="org.eclipse.cdt.pdom.ui.newAction"
+               label="Update PDOM"
+               menubarPath="org.eclipse.cdt.pdom.ui.menu1/group1"/>
+      </objectContribution>
+   </extension>
 
 </plugin>

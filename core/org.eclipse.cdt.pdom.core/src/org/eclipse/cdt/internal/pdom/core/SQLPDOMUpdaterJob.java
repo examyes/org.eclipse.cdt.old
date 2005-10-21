@@ -47,9 +47,11 @@ public class SQLPDOMUpdaterJob extends Job {
 
 	private SQLPDOMUpdaterJob prevJob;
 	private ICElementDelta delta;
+	private ICProject project;
 	private List addedTUs;
 	private List changedTUs;
 	private List removedTUs;
+	private int count;
 	
 	public SQLPDOMUpdaterJob(ICElementDelta delta, SQLPDOMUpdaterJob prevJob) {
 		super("SQL PDOM Updater");
@@ -57,6 +59,12 @@ public class SQLPDOMUpdaterJob extends Job {
 		this.delta = delta;
 	}
 
+	public SQLPDOMUpdaterJob(ICProject project, SQLPDOMUpdaterJob prevJob) {
+		super("SQL PDOM Project Updater");
+		this.prevJob = prevJob;
+		this.project = project;
+	}
+	
 	protected IStatus run(IProgressMonitor monitor) {
 		if (prevJob != null)
 			try {
@@ -66,22 +74,34 @@ public class SQLPDOMUpdaterJob extends Job {
 			
 		long start = System.currentTimeMillis();
 		
-		processDelta(delta);
+		if (delta != null)
+			processDelta(delta);
+		if (project != null)
+			processNewProject(project);
 		
 		if (addedTUs != null)
 			for (Iterator i = addedTUs.iterator(); i.hasNext();) {
+				if (monitor.isCanceled())
+					return Status.CANCEL_STATUS;
+				monitor.subTask("Files remaining: " + (count--));
 				ITranslationUnit tu = (ITranslationUnit)i.next();
 				processAddedTU(tu);
 			}
 		
 		if (changedTUs != null)
 			for (Iterator i = changedTUs.iterator(); i.hasNext();) {
+				if (monitor.isCanceled())
+					return Status.CANCEL_STATUS;
+				monitor.subTask("Files remaining: " + (count--));
 				ITranslationUnit tu = (ITranslationUnit)i.next();
 				processChangedTU(tu);
 			}
 		
 		if (removedTUs != null)
 			for (Iterator i = removedTUs.iterator(); i.hasNext();) {
+				if (monitor.isCanceled())
+					return Status.CANCEL_STATUS;
+				monitor.subTask("Files remaining: " + (count--));
 				ITranslationUnit tu = (ITranslationUnit)i.next();
 				processRemovedTU(tu);
 			}
@@ -115,16 +135,19 @@ public class SQLPDOMUpdaterJob extends Job {
 				if (addedTUs == null)
 					addedTUs = new LinkedList();
 				addedTUs.add(element);
+				++count;
 				break;
 			case ICElementDelta.CHANGED:
 				if (changedTUs == null)
 					changedTUs = new LinkedList();
 				changedTUs.add(element);
+				++count;
 				break;
 			case ICElementDelta.REMOVED:
 				if (removedTUs == null)
 					removedTUs = new LinkedList();
 				removedTUs.add(element);
+				++count;
 				break;
 			}
 		}
@@ -146,6 +169,7 @@ public class SQLPDOMUpdaterJob extends Job {
 							if (addedTUs == null)
 								addedTUs = new LinkedList();
 							addedTUs.add(CoreModel.getDefault().create((IFile)proxy.requestResource()));
+							++count;
 						}
 						// TODO handle header files
 						return false;

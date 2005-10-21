@@ -461,7 +461,7 @@ public void addName(SQLPDOMName name) throws CoreException {
 		try {
 			if (insertNameStmt == null) {
 				insertNameStmt
-					= connection.prepareStatement("insert into Names values (?, ?, ?, ?, ?, ?, ?, ?)");
+					= connection.prepareStatement("insert into Names values (?, ?, ?, ?, ?, ?)");
 			}
 			
 			SQLPDOMFileLocation fileloc = (SQLPDOMFileLocation)name.getFileLocation();
@@ -470,10 +470,8 @@ public void addName(SQLPDOMName name) throws CoreException {
 			insertNameStmt.setInt(2, fileloc.getFileId());
 			insertNameStmt.setInt(3, fileloc.getNodeOffset());
 			insertNameStmt.setInt(4, fileloc.getNodeLength());
-			insertNameStmt.setInt(5, name.isDeclaration() ? 1 : 0);
-			insertNameStmt.setInt(6, name.isReference() ? 1 : 0);
-			insertNameStmt.setInt(7, name.isDefinition() ? 1 : 0);
-			insertNameStmt.setInt(8, name.getBindingId());
+			insertNameStmt.setInt(5, name.getRole());
+			insertNameStmt.setInt(6, name.getBindingId());
 			insertNameStmt.executeUpdate();
 		} catch (SQLException e) {
 			throw new CoreException(new Status(IStatus.ERROR, PDOMCorePlugin.ID, 0, "Failed to add name", e));
@@ -594,9 +592,7 @@ public void addName(SQLPDOMName name) throws CoreException {
 					getFileName(fileId),
 					rs.getInt(3),
 					rs.getInt(4),
-					rs.getInt(5) == 1,
-					rs.getInt(6) == 1,
-					rs.getInt(7) == 1,
+					rs.getInt(5),
 					pdomBinding));
 			}
 			
@@ -612,9 +608,7 @@ public void addName(SQLPDOMName name) throws CoreException {
 						getFileName(fileId),
 						rs.getInt(3),
 						rs.getInt(4),
-						rs.getInt(5) == 1,
-						rs.getInt(6) == 1,
-						rs.getInt(7) == 1,
+						rs.getInt(5),
 						pdomBinding));
 				}
 			}

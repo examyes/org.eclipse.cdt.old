@@ -13,9 +13,15 @@ package org.eclipse.cdt.internal.pdom.dom;
 import org.eclipse.cdt.core.dom.ast.DOMException;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.IEnumerator;
+import org.eclipse.cdt.core.dom.ast.IFunction;
+import org.eclipse.cdt.core.dom.ast.ILabel;
 import org.eclipse.cdt.core.dom.ast.IProblemBinding;
 import org.eclipse.cdt.core.dom.ast.IScope;
+import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.IVariable;
+import org.eclipse.cdt.core.dom.ast.c.ICScope;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPBlockScope;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPField;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPVariable;
@@ -48,6 +54,15 @@ public class SQLPDOMBinding implements IBinding {
 	
 	public static SQLPDOMBinding create(SQLPDOM pdom, IASTName name) throws CoreException {
 		IBinding binding = name.resolveBinding();
+		if (binding == null)
+			return null;
+
+		IScope scope = null;
+		try {
+			scope = binding.getScope();
+		} catch (DOMException e) {
+		}
+		
 		if (binding instanceof IProblemBinding) {
 			// Problem, no binding for you
 			return null;
@@ -57,6 +72,16 @@ public class SQLPDOMBinding implements IBinding {
 		} else {
 			// It's a DOM binding, need to create the PDOM version of it
 			if (binding instanceof IVariable) {
+				// If the scope of the variable is block, skip it
+				if (scope != null && scope instanceof ICPPBlockScope)
+					return null;
+				
+				try {
+					if (scope != null && scope instanceof ICScope && scope.getParent() != null)
+						return null;
+				} catch (DOMException e) {
+				}
+				
 				// The order here is important since these all extend eachother
 				if (binding instanceof ICPPField) {
 					return new SQLPDOMCPPField(pdom, name, (ICPPField)binding);
@@ -67,6 +92,14 @@ public class SQLPDOMBinding implements IBinding {
 				}
 			} else if (binding instanceof ICPPClassType) {
 				return new SQLPDOMCPPClassType(pdom, name, (ICPPClassType)binding);
+			} else if (binding instanceof IType) {
+				return new SQLPDOMBinding(pdom, name, binding); 
+			} else if (binding instanceof IFunction) {
+				return new SQLPDOMBinding(pdom, name, binding); 
+			} else if (binding instanceof IEnumerator) {
+				return new SQLPDOMBinding(pdom, name, binding); 
+			} else if (binding instanceof ILabel) {
+				return null;
 			} else {
 				return new SQLPDOMBinding(pdom, name, binding); 
 			}
@@ -94,11 +127,13 @@ public class SQLPDOMBinding implements IBinding {
 		
 		try {
 			IScope scope = binding.getScope();
-			IASTName scopeName = scope.getScopeName();
-			if (scopeName != null) {
-				IBinding scopeBinding = scope.getScopeName().getBinding();
-				if (scopeBinding instanceof SQLPDOMBinding)
-					scopeId = ((SQLPDOMBinding)scopeBinding).getId();
+			if (scope != null) {
+				IASTName scopeName = scope.getScopeName();
+				if (scopeName != null) {
+					IBinding scopeBinding = scope.getScopeName().getBinding();
+					if (scopeBinding instanceof SQLPDOMBinding)
+						scopeId = ((SQLPDOMBinding)scopeBinding).getId();
+				}
 			}
 		} catch (DOMException e) {
 		}
@@ -138,7 +173,8 @@ public class SQLPDOMBinding implements IBinding {
 	}
 
 	public IScope getScope() throws DOMException {
-		throw new SQLPDOMNotImplementedError();
+		// TODO if we have the scope id, we should be able to create a scope object 
+		return null;
 	}
 
 	public int getId() {

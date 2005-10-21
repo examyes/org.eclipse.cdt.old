@@ -16,18 +16,24 @@ public class SQLPDOMName implements IASTName {
 	private char[] name;
 	private SQLPDOMFileLocation fileLocation;
 	private SQLPDOMBinding binding;
-	private boolean isDeclaration;
-	private boolean isReference;
-	private boolean isDefinition;
+	
+	public static final int R_UNKNOWN = 0;
+	public static final int R_DECLARATION = 1;
+	public static final int R_REFERENCE = 2;
+	public static final int R_DEFINITION = 4;
+	private int role;
 	
 	public SQLPDOMName(SQLPDOM pdom, IASTName name, SQLPDOMBinding binding) throws CoreException {
 		this.name = name.toCharArray();
 		this.binding = binding;
 		fileLocation = new SQLPDOMFileLocation(pdom, name.getFileLocation());
 		
-		isDeclaration = name.isDeclaration();
-		isReference = name.isReference();
-		isDefinition = name.isDefinition();
+		if (name.isDefinition())
+			role = R_DEFINITION;
+		else if (name.isDeclaration())
+			role = R_DECLARATION;
+		else if (name.isReference())
+			role = R_REFERENCE;
 
 		pdom.addName(this);
 	}
@@ -36,14 +42,10 @@ public class SQLPDOMName implements IASTName {
 					   String fileName,
 					   int offset,
 					   int length,
-					   boolean isDeclaration,
-					   boolean isReference,
-					   boolean isDefinition,
+					   int role,
 					   SQLPDOMBinding binding) {
 		fileLocation = new SQLPDOMFileLocation(fileId, fileName, offset, length);
-		this.isDeclaration = isDeclaration;
-		this.isReference = isReference;
-		this.isDefinition = isDefinition;
+		this.role = role;
 		this.binding = binding;
 		name = binding.getNameCharArray();
 	}
@@ -76,16 +78,20 @@ public class SQLPDOMName implements IASTName {
 		return name;
 	}
 
+	public int getRole() {
+		return role;
+	}
+	
 	public boolean isDeclaration() {
-		return isDeclaration;
+		return role == R_DECLARATION;
 	}
 
 	public boolean isReference() {
-		return isReference;
+		return role == R_REFERENCE;
 	}
 
 	public boolean isDefinition() {
-		return isDefinition;
+		return role == R_DEFINITION;
 	}
 
 	public IASTTranslationUnit getTranslationUnit() {

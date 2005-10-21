@@ -69,7 +69,8 @@ public class SQLPDOMCPPClassType extends SQLPDOMBinding implements
 	}
 
 	public IField findField(String name) throws DOMException {
-		throw new SQLPDOMNotImplementedError();
+		// TODO
+		return null;
 	}
 
 	public ICPPField[] getDeclaredFields() throws DOMException {
@@ -89,7 +90,8 @@ public class SQLPDOMCPPClassType extends SQLPDOMBinding implements
 	}
 
 	public ICPPConstructor[] getConstructors() throws DOMException {
-		throw new SQLPDOMNotImplementedError();
+		// TODO
+		return new ICPPConstructor[0];
 	}
 
 	public IBinding[] getFriends() throws DOMException {
@@ -109,7 +111,8 @@ public class SQLPDOMCPPClassType extends SQLPDOMBinding implements
 	}
 
 	public boolean isSameType(IType type) {
-		throw new SQLPDOMNotImplementedError();
+		 // TODO should probably be a little more detailed.
+		return (type == this);
 	}
 
 	public String[] getQualifiedName() throws DOMException {
@@ -121,7 +124,8 @@ public class SQLPDOMCPPClassType extends SQLPDOMBinding implements
 	}
 
 	public boolean isGloballyQualified() throws DOMException {
-		throw new SQLPDOMNotImplementedError();
+		// TODO
+		return false;
 	}
 
 	public ICPPClassType getClassType() {
@@ -137,7 +141,7 @@ public class SQLPDOMCPPClassType extends SQLPDOMBinding implements
 	}
 
 	public void addName(IASTName name) throws DOMException {
-		throw new SQLPDOMNotImplementedError();
+		// TODO
 	}
 
 	public IBinding[] find(String name) throws DOMException {
@@ -154,7 +158,7 @@ public class SQLPDOMCPPClassType extends SQLPDOMBinding implements
 	}
 
 	public IScope getParent() throws DOMException {
-		throw new SQLPDOMNotImplementedError();
+		return null;
 	}
 
 	public IASTNode getPhysicalNode() throws DOMException {
@@ -162,7 +166,8 @@ public class SQLPDOMCPPClassType extends SQLPDOMBinding implements
 	}
 
 	public IASTName getScopeName() throws DOMException {
-		throw new SQLPDOMNotImplementedError();
+		// TODO
+		return null;
 	}
 
 	public boolean isFullyCached() throws DOMException {

@@ -42,7 +42,8 @@ public class SQLPDOMCVariable extends SQLPDOMBinding implements IVariable {
 	}
 	
 	public IType getType() throws DOMException {
-		throw new SQLPDOMNotImplementedError();
+		// TODO
+		return null;
 	}
 
 	public boolean isStatic() throws DOMException {

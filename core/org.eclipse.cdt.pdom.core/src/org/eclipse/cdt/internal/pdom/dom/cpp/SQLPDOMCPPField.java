@@ -38,7 +38,8 @@ public class SQLPDOMCPPField extends SQLPDOMBinding implements ICPPField {
 	}
 	
 	public IType getType() throws DOMException {
-		throw new SQLPDOMNotImplementedError();
+		// TODO - this should return the appropriate type
+		return null;
 	}
 
 	public boolean isStatic() throws DOMException {
