@@ -67,7 +67,8 @@ public class SQLPDOMCPPField extends SQLPDOMBinding implements ICPPField {
 	}
 
 	public char[][] getQualifiedNameCharArray() throws DOMException {
-		throw new SQLPDOMNotImplementedError();
+		// TODO 
+		return null;
 	}
 
 	public boolean isGloballyQualified() throws DOMException {
