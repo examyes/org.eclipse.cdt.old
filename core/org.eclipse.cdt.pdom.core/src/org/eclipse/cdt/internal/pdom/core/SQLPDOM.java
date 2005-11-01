@@ -576,14 +576,11 @@ public void addName(SQLPDOMName name) throws CoreException {
 		try {
 			if (getDeclarationsStmt == null) {
 				getDeclarationsStmt
-					= connection.prepareStatement("select * from Names where isDecl = 1 and isDef = ? and bindingId = ?");
+					= connection.prepareStatement("select * from Names where (role = 1 or role = 4) and bindingId = ?");
 			}
 			
 			ArrayList names = new ArrayList();
-			
-			// first try defs
-			getDeclarationsStmt.setInt(1, 1);
-			getDeclarationsStmt.setInt(2, pdomBinding.getId());
+			getDeclarationsStmt.setInt(1, pdomBinding.getId());
 			ResultSet rs = getDeclarationsStmt.executeQuery();
 			while (rs.next()) {
 				int fileId = rs.getInt(2);
@@ -594,23 +591,6 @@ public void addName(SQLPDOMName name) throws CoreException {
 					rs.getInt(4),
 					rs.getInt(5),
 					pdomBinding));
-			}
-			
-			if (names.isEmpty()) {
-				// none, let's try decls 
-				getDeclarationsStmt.setInt(1, 0);
-				getDeclarationsStmt.setInt(2, pdomBinding.getId());
-				rs = getDeclarationsStmt.executeQuery();
-				while (rs.next()) {
-					int fileId = rs.getInt(2);
-					names.add(new SQLPDOMName(
-						fileId,
-						getFileName(fileId),
-						rs.getInt(3),
-						rs.getInt(4),
-						rs.getInt(5),
-						pdomBinding));
-				}
 			}
 			
 			return (IASTName[])names.toArray(new IASTName[names.size()]);
