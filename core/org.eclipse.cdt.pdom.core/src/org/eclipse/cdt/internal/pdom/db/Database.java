@@ -19,7 +19,7 @@ import java.io.RandomAccessFile;
  */
 public class Database {
 
-	private final Chunk[] toc;
+	private Chunk[] toc;
 	private final RandomAccessFile file;
 	
 	static final int CHUNK_SIZE = 4096;
@@ -34,7 +34,6 @@ public class Database {
 		// Allocate chunk table, make sure we have at least one
 		long nChunks = file.length() / CHUNK_SIZE;
 		if (nChunks == 0) {
-			byte[] emptyChunk = new byte[CHUNK_SIZE]; 
 			file.seek(0);
 			file.write(new byte[CHUNK_SIZE]); // the header chunk
 			++nChunks;
@@ -46,7 +45,7 @@ public class Database {
 		toc[0] = new Chunk(file, 0);
 	}
 
-	/**emptyChunk
+	/**
 	 * Return the Chunk that contains the given offset.
 	 * 
 	 * @param offset
@@ -54,12 +53,7 @@ public class Database {
 	 */
 	private Chunk getChunk(int offset) {
 		int index = offset / CHUNK_SIZE;
-		
-		if (index >= toc.length) {
-			// grow 
-		}
-
-		return null;
+		return toc[index];
 	}
 
 	/**
@@ -77,7 +71,7 @@ public class Database {
 			if (blocksize - INT_SIZE >= size) {
 				if (matchsize == 0) // our real size
 					matchsize = blocksize;
-				freeblock = toc[0].getInt(blocksize / MIN_SIZE - 1);
+				freeblock = getFirstBlock(blocksize);
 				if (freeblock != 0)
 					break;
 			}
@@ -87,11 +81,10 @@ public class Database {
 		Chunk chunk;
 		if (freeblock == 0) {
 			// Out of memory, allocate a new chunk
+			int i = createChunk();
+			freeblock = i * CHUNK_SIZE;
 			blocksize = CHUNK_SIZE;
-			freeblock = (int)file.length();
-			file.seek(freeblock);
-			file.write(new byte[CHUNK_SIZE]);
-			chunk = new Chunk(file, freeblock);
+			chunk = toc[i];
 		} else {
 			chunk = getChunk(freeblock);
 			removeBlock(chunk, matchsize, freeblock);
@@ -106,6 +99,18 @@ public class Database {
 		chunk.putInt(freeblock, - matchsize);
 		
 		return freeblock + INT_SIZE;
+	}
+	
+	private int createChunk() throws IOException {
+		int offset = (int)file.length();
+		file.seek(offset);
+		file.write(new byte[CHUNK_SIZE]);
+		Chunk[] oldtoc = toc;
+		int i = oldtoc.length;
+		toc = new Chunk[i + 1];
+		System.arraycopy(oldtoc, 0, toc, 0, i);
+		toc[i] = new Chunk(file, offset);
+		return i;
 	}
 	
 	private int getFirstBlock(int blocksize) {
@@ -133,8 +138,11 @@ public class Database {
 		chunk.putInt(block, blocksize);
 
 		// Add us to the head of the list
+		int prevfirst = getFirstBlock(blocksize);
 		chunk.putInt(block + PREV_OFFSET, 0);
-		chunk.putInt(block + NEXT_OFFSET, getFirstBlock(blocksize));
+		chunk.putInt(block + NEXT_OFFSET, prevfirst);
+		if (prevfirst != 0)
+			chunk.putInt(prevfirst + PREV_OFFSET, block);
 		setFirstBlock(blocksize, block);
 	}
 	
