@@ -22,11 +22,14 @@ public class Database {
 	private Chunk[] toc;
 	private final RandomAccessFile file;
 	
-	static final int CHUNK_SIZE = 4096;
-	static final int MIN_SIZE = 16;
-	static final int INT_SIZE = 4;
-	static final int PREV_OFFSET = INT_SIZE;
-	static final int NEXT_OFFSET = INT_SIZE * 2;
+	// public for tests only, you shouldn't need these
+	public static final int CHUNK_SIZE = 4096;
+	public static final int MIN_SIZE = 16;
+	public static final int INT_SIZE = 4;
+	public static final int CHAR_SIZE = 2;
+	public static final int PREV_OFFSET = INT_SIZE;
+	public static final int NEXT_OFFSET = INT_SIZE * 2;
+	public static final int DATA_AREA = CHUNK_SIZE / MIN_SIZE * INT_SIZE;
 	
 	public Database(String filename) throws IOException {
 		file = new RandomAccessFile(filename, "rw"); //$NON-NLS-1$
@@ -34,25 +37,36 @@ public class Database {
 		// Allocate chunk table, make sure we have at least one
 		long nChunks = file.length() / CHUNK_SIZE;
 		if (nChunks == 0) {
-			file.seek(0);
-			file.write(new byte[CHUNK_SIZE]); // the header chunk
+			create();
 			++nChunks;
 		}
 		
 		toc = new Chunk[(int)nChunks];
 		
-		// Load in chunk zero and one
+		// Load in the magic chunk zero
 		toc[0] = new Chunk(file, 0);
 	}
 
+	/**
+	 * Create the database, including chunk zero and the b-trees.
+	 */
+	private void create() throws IOException {
+		file.seek(0);
+		file.write(new byte[CHUNK_SIZE]); // the header chunk
+	}
+	
 	/**
 	 * Return the Chunk that contains the given offset.
 	 * 
 	 * @param offset
 	 * @return
 	 */
-	private Chunk getChunk(int offset) {
+	Chunk getChunk(int offset) throws IOException {
+		// TODO - Eventually, we'll need to do caching so that we
+		// don't end up loading the entire database into memory
 		int index = offset / CHUNK_SIZE;
+		if (toc[index] == null)
+			toc[index] = new Chunk(file, index * CHUNK_SIZE);
 		return toc[index];
 	}
 
@@ -121,7 +135,7 @@ public class Database {
 		toc[0].putInt((blocksize / MIN_SIZE - 1) * INT_SIZE, block);
 	}
 	
-	private void removeBlock(Chunk chunk, int blocksize, int block) {
+	private void removeBlock(Chunk chunk, int blocksize, int block) throws IOException {
 		int prevblock = chunk.getInt(block + PREV_OFFSET);
 		int nextblock = chunk.getInt(block + NEXT_OFFSET);
 		if (prevblock != 0)
@@ -151,7 +165,7 @@ public class Database {
 	 * 
 	 * @param offset
 	 */
-	public void free(int offset) {
+	public void free(int offset) throws IOException {
 		// TODO - look for opportunities to merge blocks
 		int block = offset - INT_SIZE;
 		Chunk chunk = getChunk(block);
@@ -159,20 +173,30 @@ public class Database {
 		addBlock(chunk, blocksize, block);
 	}
 
-	public void putInt(int offset, int value) {
+	public void putInt(int offset, int value) throws IOException {
 		Chunk chunk = getChunk(offset);
 		chunk.putInt(offset, value);
 	}
 	
-	/**
-	 * Get an int at the given offset.
-	 * 
-	 * @param offset
-	 * @return
-	 */
-	public int getInt(int offset) {
+	public int getInt(int offset) throws IOException {
 		Chunk chunk = getChunk(offset);
 		return chunk.getInt(offset);
 	}
 
+	public int putString(String value) throws IOException {
+		int record = malloc((value.length() + 1) * CHAR_SIZE);
+		Chunk chunk = getChunk(record);
+		chunk.putString(record, value);
+		return record;
+	}
+	
+	public String getString(int offset) throws IOException {
+		Chunk chunk = getChunk(offset);
+		return chunk.getString(offset);
+	}
+	
+	public char getChar(int offset) throws IOException {
+		Chunk chunk = getChunk(offset);
+		return chunk.getChar(offset);
+	}
 }
