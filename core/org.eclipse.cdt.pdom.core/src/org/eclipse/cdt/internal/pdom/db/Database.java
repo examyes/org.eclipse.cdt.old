@@ -23,15 +23,16 @@ public class Database {
 	private final RandomAccessFile file;
 	
 	// public for tests only, you shouldn't need these
+	public static final int VERSION_OFFSET = 0;
 	public static final int CHUNK_SIZE = 4096;
 	public static final int MIN_SIZE = 16;
 	public static final int INT_SIZE = 4;
 	public static final int CHAR_SIZE = 2;
 	public static final int PREV_OFFSET = INT_SIZE;
 	public static final int NEXT_OFFSET = INT_SIZE * 2;
-	public static final int DATA_AREA = CHUNK_SIZE / MIN_SIZE * INT_SIZE;
+	public static final int DATA_AREA = CHUNK_SIZE / MIN_SIZE * INT_SIZE + INT_SIZE;
 	
-	public Database(String filename) throws IOException {
+	public Database(String filename, int version) throws IOException {
 		file = new RandomAccessFile(filename, "rw"); //$NON-NLS-1$
 		
 		// Allocate chunk table, make sure we have at least one
@@ -45,6 +46,11 @@ public class Database {
 		
 		// Load in the magic chunk zero
 		toc[0] = new Chunk(file, 0);
+		int oldversion = toc[0].getInt(0);
+		if (oldversion != version) {
+			// Conversion?
+			toc[0].putInt(0, version);
+		}
 	}
 
 	/**
@@ -128,11 +134,11 @@ public class Database {
 	}
 	
 	private int getFirstBlock(int blocksize) {
-		return toc[0].getInt((blocksize / MIN_SIZE - 1) * INT_SIZE);
+		return toc[0].getInt((blocksize / MIN_SIZE) * INT_SIZE);
 	}
 	
 	private void setFirstBlock(int blocksize, int block) {
-		toc[0].putInt((blocksize / MIN_SIZE - 1) * INT_SIZE, block);
+		toc[0].putInt((blocksize / MIN_SIZE) * INT_SIZE, block);
 	}
 	
 	private void removeBlock(Chunk chunk, int blocksize, int block) throws IOException {

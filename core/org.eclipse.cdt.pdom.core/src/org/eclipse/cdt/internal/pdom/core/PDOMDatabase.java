@@ -46,6 +46,8 @@ public class PDOMDatabase implements IPDOM {
 	private final IPath dbPath;
 	private final Database db;
 	
+	private static final int VERSION = 0;
+	
 	public static final int STRING_INDEX = Database.DATA_AREA;
 	private StringBTree stringIndex;
 	
@@ -66,7 +68,7 @@ public class PDOMDatabase implements IPDOM {
 		dbPath = PDOMCorePlugin.getDefault().getStateLocation().append(dbName);
 		
 		try {
-			db = new Database(dbPath.toOSString());
+			db = new Database(dbPath.toOSString(), VERSION);
 		} catch (IOException e) {
 			throw new CoreException(new Status(IStatus.ERROR,
 					PDOMCorePlugin.ID, 0, "Failed to create database", e));
