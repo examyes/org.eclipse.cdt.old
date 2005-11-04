@@ -96,12 +96,12 @@ public class Database {
 		if (freeblock == 0) {
 			// Out of memory, allocate a new chunk
 			int i = createChunk();
+			chunk = toc[i];
 			freeblock = i * CHUNK_SIZE;
 			blocksize = CHUNK_SIZE;
-			chunk = toc[i];
 		} else {
 			chunk = getChunk(freeblock);
-			removeBlock(chunk, matchsize, freeblock);
+			removeBlock(chunk, blocksize, freeblock);
 		}
  
 		if (blocksize != matchsize) {
@@ -147,7 +147,7 @@ public class Database {
 			putInt(nextblock + PREV_OFFSET, prevblock);
 	}
 	
-	private void addBlock(Chunk chunk, int blocksize, int block) {
+	private void addBlock(Chunk chunk, int blocksize, int block) throws IOException {
 		// Mark our size
 		chunk.putInt(block, blocksize);
 
@@ -156,7 +156,7 @@ public class Database {
 		chunk.putInt(block + PREV_OFFSET, 0);
 		chunk.putInt(block + NEXT_OFFSET, prevfirst);
 		if (prevfirst != 0)
-			chunk.putInt(prevfirst + PREV_OFFSET, block);
+			putInt(prevfirst + PREV_OFFSET, block);
 		setFirstBlock(blocksize, block);
 	}
 	
@@ -183,11 +183,9 @@ public class Database {
 		return chunk.getInt(offset);
 	}
 
-	public int putString(String value) throws IOException {
-		int record = malloc((value.length() + 1) * CHAR_SIZE);
-		Chunk chunk = getChunk(record);
-		chunk.putString(record, value);
-		return record;
+	public void putString(int offset, String value) throws IOException {
+		Chunk chunk = getChunk(offset);
+		chunk.putString(offset, value);
 	}
 	
 	public String getString(int offset) throws IOException {

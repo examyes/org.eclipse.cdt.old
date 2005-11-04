@@ -19,8 +19,18 @@ import java.io.IOException;
  */
 public class StringBTree extends BTree {
 
-	public StringBTree(Database db, int rootPointer) {
+	private final int offset;
+	
+	/**
+	 * Constructor.
+	 * 
+	 * @param db
+	 * @param rootPointer
+	 * @param offset offset into the record of the string
+	 */
+	public StringBTree(Database db, int rootPointer, int offset) {
 		super(db, rootPointer);
+		this.offset = offset;
 	}
 
 	/**
@@ -65,7 +75,7 @@ public class StringBTree extends BTree {
 	private int compare(int record, String key) throws IOException {
 		Chunk chunk = db.getChunk(record);
 		
-		int i1 = record;
+		int i1 = record + offset;
 		int i2 = 0;
 		int n2 = key.length();
 		char c1 = chunk.getChar(i1);
@@ -96,8 +106,8 @@ public class StringBTree extends BTree {
 		Chunk chunk1 = db.getChunk(record1);
 		Chunk chunk2 = db.getChunk(record2);
 		
-		int i1 = record1;
-		int i2 = record2;
+		int i1 = record1 + offset;
+		int i2 = record2 + offset;
 		char c1 = chunk1.getChar(i1);
 		char c2 = chunk2.getChar(i2);
 		

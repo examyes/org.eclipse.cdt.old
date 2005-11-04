@@ -27,6 +27,7 @@ public abstract class BTree {
 	protected static final int OFFSET_CHILDREN = NUM_RECORDS * Database.INT_SIZE;
 	
 	private int height;
+	private int count;
 	
 	/**
 	 * Contructor.
@@ -69,10 +70,16 @@ public abstract class BTree {
 		// is this our first time in
 		if (root == 0) {
 			firstInsert(record);
+			++count;
 			return record;
 		}
 		
-		return insert(null, 0, 0, root, record);
+		int result = insert(null, 0, 0, root, record);
+		
+		if (result == record)
+			++count;
+			
+		return result;
 	}
 	
 	private int insert(Chunk pChunk, int parent, int iParent, int node, int record) throws IOException {
@@ -117,7 +124,10 @@ public abstract class BTree {
 				putRecord(chunk, node, MEDIAN_RECORD, 0);
 				
 				// set the node to the correct one to follow
-				node = compare(median, record) < 0 ? newnode : node;
+				if (compare(median, record) < 0) {
+					node = newnode;
+					chunk = db.getChunk(node);
+				}
 			}
 		}
 
@@ -175,7 +185,8 @@ public abstract class BTree {
 	 * @param offset of the record
 	 */
 	public void delete(int record) {
-		
+		--count;
+		// TODO some day
 	}
 
 	/**

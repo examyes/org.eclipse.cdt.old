@@ -56,6 +56,18 @@ public class DBTest extends TestCase {
 		assertEquals(0, db.getInt(mem1 + Database.INT_SIZE));
 	}
 	
+	public void test3() throws Exception {
+		// 
+		File f = getTestDir().append("test2.dat").toFile();
+		f.delete();
+		Database db = new Database(f.getCanonicalPath());
+		
+		int mem1 = db.malloc(42);
+		db.free(mem1);
+		int mem2 = db.malloc(42);
+		assertEquals(mem2, mem1);
+	}
+	
 	public void testStrings() throws Exception {
 		// Tests inserting and retrieving strings
 		File f = getTestDir().append("testStrings.dat").toFile();
@@ -88,10 +100,12 @@ public class DBTest extends TestCase {
 				"BETA"
 		};
 		
-		StringBTree btree = new StringBTree(db, Database.DATA_AREA);
+		StringBTree btree = new StringBTree(db, Database.DATA_AREA, Database.INT_SIZE);
 		for (int i = 0; i < names.length; ++i) {
 			String name = names[i];
-			int record = db.putString(name);
+			int record = db.malloc((name.length() + 1) * Database.CHAR_SIZE + Database.INT_SIZE);
+			db.putInt(record, i);
+			db.putString(record + Database.INT_SIZE, name);
 			btree.insert(record);
 		}
 		
@@ -99,7 +113,8 @@ public class DBTest extends TestCase {
 			String name = names[i];
 			int record = btree.find(name);
 			assertTrue(record != 0);
-			String rname = db.getString(record);
+			assertEquals(i, db.getInt(record));
+			String rname = db.getString(record + Database.INT_SIZE);
 			assertEquals(name, rname);
 		}
 	}

@@ -17,6 +17,7 @@ public class SQLPDOMName implements IASTName {
 	private SQLPDOMFileLocation fileLocation;
 	private SQLPDOMBinding binding;
 	
+	
 	public static final int R_UNKNOWN = 0;
 	public static final int R_DECLARATION = 1;
 	public static final int R_REFERENCE = 2;
