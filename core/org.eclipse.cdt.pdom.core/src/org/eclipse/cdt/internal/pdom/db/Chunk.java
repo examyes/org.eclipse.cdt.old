@@ -21,9 +21,16 @@ import java.nio.channels.FileChannel.MapMode;
  */
 public class Chunk {
 
-	MappedByteBuffer buffer;
+	private MappedByteBuffer buffer;
+	
+	// Cache info
+	private Database db;
+	int index;
+	private Chunk prevChunk;
+	private Chunk nextChunk;
 	
 	Chunk(RandomAccessFile file, int offset) throws IOException {
+		index = offset / Database.CHUNK_SIZE;
 		buffer = file.getChannel().map(MapMode.READ_WRITE, offset, Database.CHUNK_SIZE);
 	}
 	
@@ -62,4 +69,27 @@ public class Chunk {
 		return strbuf.toString();
 	}
 
+	Chunk getNextChunk() {
+		return nextChunk;
+	}
+	
+	void setNextChunk(Chunk nextChunk) {
+		this.nextChunk = nextChunk;
+	}
+	
+	Chunk getPrevChunk() {
+		return prevChunk;
+	}
+	
+	void setPrevChunk(Chunk prevChunk) {
+		this.prevChunk = prevChunk;
+	}
+	
+	void free() {
+		// nextChunk should be null
+		db.toc[index] = null;
+		db.lruChunk = prevChunk;
+		prevChunk.nextChunk = null;
+	}
+	
 }

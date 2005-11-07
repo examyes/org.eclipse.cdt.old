@@ -19,12 +19,17 @@ import java.io.RandomAccessFile;
  */
 public class Database {
 
-	private Chunk[] toc;
 	private final RandomAccessFile file;
+	Chunk[] toc;
+	Chunk mruChunk;
+	Chunk lruChunk;
+	
+	private int loadedChunks;
 	
 	// public for tests only, you shouldn't need these
 	public static final int VERSION_OFFSET = 0;
 	public static final int CHUNK_SIZE = 4096;
+	public static final int CACHE_SIZE = 10000; // Should be configable
 	public static final int MIN_SIZE = 16;
 	public static final int INT_SIZE = 4;
 	public static final int CHAR_SIZE = 2;
@@ -68,12 +73,32 @@ public class Database {
 	 * @return
 	 */
 	Chunk getChunk(int offset) throws IOException {
-		// TODO - Eventually, we'll need to do caching so that we
-		// don't end up loading the entire database into memory
 		int index = offset / CHUNK_SIZE;
-		if (toc[index] == null)
-			toc[index] = new Chunk(file, index * CHUNK_SIZE);
-		return toc[index];
+		Chunk chunk = toc[index];
+		if (chunk == null) {
+			if (loadedChunks == CACHE_SIZE)
+				// cache is full, free lruChunk
+				lruChunk.free();
+			
+			chunk = toc[index] = new Chunk(file, index * CHUNK_SIZE);
+		}
+		
+		// insert into cache
+		// TODO We can move this into the chunks
+		Chunk prevChunk = chunk.getPrevChunk();
+		Chunk nextChunk = chunk.getNextChunk();
+		if (prevChunk != null)
+			prevChunk.setNextChunk(nextChunk);
+		if (nextChunk != null)
+			nextChunk.setPrevChunk(prevChunk);
+		if (mruChunk != null) {
+			chunk.setNextChunk(mruChunk);
+			mruChunk.setPrevChunk(chunk);
+		}
+		mruChunk = chunk;
+		chunk.setPrevChunk(null);
+		
+		return chunk;
 	}
 
 	/**
