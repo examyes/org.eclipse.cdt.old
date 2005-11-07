@@ -68,7 +68,7 @@ public class DumpStats implements IObjectActionDelegate {
 				buff.append('\n');
 				
 				BTree fileIndex = mypdom.getFileIndex();
-				buff.append("    File Index");
+				buff.append("    File Index\n");
 				
 				buff.append("        height = ");
 				buff.append(fileIndex.getHeight());
@@ -83,7 +83,7 @@ public class DumpStats implements IObjectActionDelegate {
 				buff.append('\n');
 				
 				BTree stringIndex = mypdom.getStringIndex();
-				buff.append("    String Index");
+				buff.append("    String Index\n");
 				
 				buff.append("        height = ");
 				buff.append(stringIndex.getHeight());
