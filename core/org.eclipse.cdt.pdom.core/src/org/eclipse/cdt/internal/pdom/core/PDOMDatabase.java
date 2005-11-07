@@ -15,15 +15,21 @@ import java.io.IOException;
 import org.eclipse.cdt.core.dom.ICodeReaderFactory;
 import org.eclipse.cdt.core.dom.IPDOM;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
+import org.eclipse.cdt.core.dom.ast.DOMException;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.IScope;
+import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.c.CASTVisitor;
 import org.eclipse.cdt.core.dom.ast.cpp.CPPASTVisitor;
+import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.core.model.IWorkingCopy;
 import org.eclipse.cdt.core.parser.ParserLanguage;
 import org.eclipse.cdt.internal.pdom.db.Database;
+import org.eclipse.cdt.internal.pdom.db.IntBTree;
 import org.eclipse.cdt.internal.pdom.db.StringBTree;
+import org.eclipse.cdt.internal.pdom.dom.PDOMBinding;
 import org.eclipse.cdt.internal.pdom.dom.PDOMFile;
 import org.eclipse.cdt.internal.pdom.dom.PDOMName;
 import org.eclipse.cdt.internal.pdom.dom.PDOMString;
@@ -45,15 +51,17 @@ public class PDOMDatabase implements IPDOM {
 
 	private final IPath dbPath;
 	private final Database db;
-	private int nameCount;
 	
 	private static final int VERSION = 0;
 	
-	public static final int STRING_INDEX = Database.DATA_AREA;
+	public static final int STRING_INDEX = Database.DATA_AREA + 0 * Database.INT_SIZE;
 	private StringBTree stringIndex;
 	
-	public static final int FILE_INDEX = Database.DATA_AREA + Database.INT_SIZE;
+	public static final int FILE_INDEX = Database.DATA_AREA + 1 * Database.INT_SIZE;
 	private StringBTree fileIndex;
+
+	public static final int BINDING_INDEX = Database.DATA_AREA + 2 * Database.INT_SIZE;
+	private IntBTree bindingIndex;
 
 	private static final QualifiedName dbNameProperty
 		= new QualifiedName(PDOMCorePlugin.ID, "dbName"); //$NON-NLS-1$
@@ -82,14 +90,20 @@ public class PDOMDatabase implements IPDOM {
 
 	public StringBTree getStringIndex() {
 		if (stringIndex == null)
-			stringIndex = new StringBTree(db, STRING_INDEX, PDOMString.STRING_OFFSET);
+			stringIndex = new StringBTree(db, STRING_INDEX, PDOMString.KEY_OFFSET);
 		return stringIndex;
 	}
 	
 	public StringBTree getFileIndex() {
 		if (fileIndex == null)
-			fileIndex = new StringBTree(db, FILE_INDEX, PDOMFile.FILE_NAME_OFFSET);
+			fileIndex = new StringBTree(db, FILE_INDEX, PDOMFile.KEY_OFFSET);
 		return fileIndex;
+	}
+	
+	public IntBTree getBindingIndex() {
+		if (bindingIndex == null)
+			bindingIndex = new IntBTree(db, BINDING_INDEX, PDOMBinding.KEY_OFFSET);
+		return bindingIndex;
 	}
 	
 	public void addSymbols(IASTTranslationUnit ast) {
@@ -129,24 +143,40 @@ public class PDOMDatabase implements IPDOM {
 	
 	public void addSymbol(IASTName name) {
 		try {
-			new PDOMName(this, name);
-			++nameCount;
+			IBinding binding = name.resolveBinding();
+			if (binding == null)
+				return;
+			
+			IScope scope = binding.getScope();
+			if (scope == null)
+				return;
+			
+			IASTName scopeName = scope.getScopeName();
+			
+			if (scopeName == null) {
+				PDOMBinding pdomBinding = new PDOMBinding(this, name, binding);
+				new PDOMName(this, name, pdomBinding);
+			} else {
+				IBinding scopeBinding = scopeName.resolveBinding();
+				if (scopeBinding instanceof IType) {
+					PDOMBinding pdomBinding = new PDOMBinding(this, name, binding);
+					new PDOMName(this, name, pdomBinding);
+				}
+			}
 		} catch (CoreException e) {
 			PDOMCorePlugin.log(e);
+		} catch (DOMException e) {
+			PDOMCorePlugin.log(new CoreException(new Status(IStatus.ERROR,
+					PDOMCorePlugin.ID, 0, "DOMException", e)));
 		}
 	}
 	
-	public void removeSymbols(IASTTranslationUnit ast) {
+	public void removeSymbols(ITranslationUnit ast) {
 		
-	}
-	
-	public int getNameCount() {
-		return nameCount;
 	}
 	
 	public void delete() throws CoreException {
 		// TODO Auto-generated method stub
-		
 	}
 
 	public ICodeReaderFactory getCodeReaderFactory() {
@@ -158,16 +188,31 @@ public class PDOMDatabase implements IPDOM {
 	}
 
 	public IASTName[] getDeclarations(IBinding binding) {
+		try {
+			if (binding instanceof PDOMBinding) {
+				PDOMName name = ((PDOMBinding)binding).getFirstDeclaration();
+				if (name == null)
+					return new IASTName[0];
+				return new IASTName[] { name }; 
+			}
+		} catch (IOException e) {
+			PDOMCorePlugin.log(new CoreException(new Status(IStatus.ERROR,
+					PDOMCorePlugin.ID, 0, "getDeclarations", e)));
+		}
 		return new IASTName[0];
 	}
 
 	public IBinding resolveBinding(IASTName name) {
-		return null;
+		try {
+			return new PDOMBinding(this, name, null);
+		} catch (CoreException e) {
+			PDOMCorePlugin.log(e);
+			return null;
+		}
 	}
 
 	public IBinding[] resolvePrefix(IASTName name) {
 		return null;
 	}
-	
 	
 }
