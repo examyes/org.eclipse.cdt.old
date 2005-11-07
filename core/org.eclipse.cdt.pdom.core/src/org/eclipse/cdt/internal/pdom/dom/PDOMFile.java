@@ -31,39 +31,31 @@ public class PDOMFile {
 	private PDOMDatabase pdom;
 	private int record;
 	
-	public static final int FIRST_NAME_OFFSET = 0;
-	public static final int FILE_NAME_OFFSET = Database.INT_SIZE;
+	private static final int FIRST_NAME_OFFSET = 0;
+	private static final int FILE_NAME_OFFSET = Database.INT_SIZE;
+	
+	public static final int KEY_OFFSET = FILE_NAME_OFFSET;
 
-	public static PDOMFile insert(PDOMDatabase pdom, String filename) throws CoreException {
-		try {
-			StringBTree index = pdom.getFileIndex();
-			Database db = pdom.getDB();
-			int record = index.find(filename);
-			if (record == 0) {
-				record = db.malloc(FILE_NAME_OFFSET + (filename.length() + 1) * Database.CHAR_SIZE);
-				db.putInt(record + FIRST_NAME_OFFSET, 0);
-				db.putString(record + FILE_NAME_OFFSET, filename);
-				index.insert(record);
-			}
-			return new PDOMFile(pdom, record);
-		} catch (IOException e) {
-			throw new CoreException(new Status(IStatus.ERROR,
-					PDOMCorePlugin.ID, 0, "Failed to allocate string", e));
+	public static PDOMFile insert(PDOMDatabase pdom, String filename) throws IOException {
+		StringBTree index = pdom.getFileIndex();
+		Database db = pdom.getDB();
+		int record = index.find(filename);
+		if (record == 0) {
+			record = db.malloc(FILE_NAME_OFFSET + (filename.length() + 1) * Database.CHAR_SIZE);
+			db.putInt(record + FIRST_NAME_OFFSET, 0);
+			db.putString(record + FILE_NAME_OFFSET, filename);
+			index.insert(record);
 		}
+		return new PDOMFile(pdom, record);
 	}
 
-	public static PDOMFile find(PDOMDatabase pdom, String filename) throws CoreException {
-		try {
-			StringBTree index = pdom.getFileIndex(); 
-			int record = index.find(filename);
-			return (record != 0) ? new PDOMFile(pdom, record) : null;
-		} catch (IOException e) {
-			throw new CoreException(new Status(IStatus.ERROR,
-					PDOMCorePlugin.ID, 0, "Failed to find string", e));
-		}
+	public static PDOMFile find(PDOMDatabase pdom, String filename) throws IOException {
+		StringBTree index = pdom.getFileIndex(); 
+		int record = index.find(filename);
+		return (record != 0) ? new PDOMFile(pdom, record) : null;
 	}
 	
-	private PDOMFile(PDOMDatabase pdom, int record) {
+	public PDOMFile(PDOMDatabase pdom, int record) {
 		this.pdom = pdom;
 		this.record = record;
 	}
@@ -72,22 +64,16 @@ public class PDOMFile {
 		return record;
 	}
 	
-	public int getFirstName() throws CoreException {
-		try {
-			return pdom.getDB().getInt(record + FIRST_NAME_OFFSET);
-		} catch (IOException e) {
-			throw new CoreException(new Status(IStatus.ERROR,
-					PDOMCorePlugin.ID, 0, "Failed to getFirstName", e));
-		}
+	public String getFileName() throws IOException {
+		return pdom.getDB().getString(record + FILE_NAME_OFFSET);
+	}
+	
+	public int getFirstName() throws IOException {
+		return pdom.getDB().getInt(record + FIRST_NAME_OFFSET);
 	}
 
-	public void setFirstName(int firstName) throws CoreException {
-		try {
-			pdom.getDB().putInt(record + FIRST_NAME_OFFSET, firstName);
-		} catch (IOException e) {
-			throw new CoreException(new Status(IStatus.ERROR,
-					PDOMCorePlugin.ID, 0, "Failed to putFirstName", e));
-		}
+	public void setFirstName(int firstName) throws IOException {
+		pdom.getDB().putInt(record + FIRST_NAME_OFFSET, firstName);
 	}
 	
 	public void free() throws CoreException {

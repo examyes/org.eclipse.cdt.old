@@ -34,25 +34,31 @@ import org.eclipse.core.runtime.Status;
 public class PDOMName implements IASTName, IASTFileLocation {
 
 	private final PDOMDatabase pdom;
-	private int record;
+	private final int record;
 	
 	private static final int FILE_REC_OFFSET = 0 * Database.INT_SIZE;
 	private static final int FILE_PREV_OFFSET = 1 * Database.INT_SIZE;
 	private static final int FILE_NEXT_OFFSET = 2 * Database.INT_SIZE;
-	private static final int STRING_REC_OFFSET = 3 * Database.INT_SIZE;
-	private static final int BINDING_REC_OFFET = 4 * Database.INT_SIZE;
-	private static final int BINDING_PREV_OFFSET = 5 * Database.INT_SIZE;
-	private static final int BINDING_NEXT_OFFSET = 6 * Database.INT_SIZE;
+	private static final int BINDING_REC_OFFET = 3 * Database.INT_SIZE;
+	private static final int BINDING_PREV_OFFSET = 4 * Database.INT_SIZE;
+	private static final int BINDING_NEXT_OFFSET = 5 * Database.INT_SIZE;
+	private static final int NODE_OFFSET_OFFSET = 6 * Database.INT_SIZE;
+	private static final int NODE_LENGTH_OFFSET = 7 * Database.INT_SIZE;
 	
-	private static final int RECORD_SIZE = 7 * Database.INT_SIZE;
+	private static final int RECORD_SIZE = 8 * Database.INT_SIZE;
 
-	public PDOMName(PDOMDatabase pdom, IASTName name) throws CoreException {
+	public PDOMName(PDOMDatabase pdom, IASTName name, PDOMBinding binding) throws CoreException {
 		try {
 			this.pdom = pdom;
-			
 			Database db = pdom.getDB();
-			
 			record = db.malloc(RECORD_SIZE);
+			
+			// Hook us up to the binding
+			if (binding != null) {
+				db.putInt(record + BINDING_REC_OFFET, binding.getRecord());
+				if (name.isDeclaration())
+					binding.addDeclaration(this);
+			}
 			
 			// Hook us up the the liked name list from file
 			IASTFileLocation fileloc = name.getFileLocation();
@@ -66,16 +72,44 @@ public class PDOMName implements IASTName, IASTFileLocation {
 			}
 			pdomFile.setFirstName(record);
 			
-			int stringRecord = PDOMString.insert(pdom, new String(name.toCharArray())).getRecord();
-			db.putInt(record + STRING_REC_OFFSET, stringRecord);
+			db.putInt(record + NODE_OFFSET_OFFSET, fileloc.getNodeOffset());
+			db.putInt(record + NODE_LENGTH_OFFSET, fileloc.getNodeLength());
 		} catch (IOException e) {
 			throw new CoreException(new Status(IStatus.ERROR,
 					PDOMCorePlugin.ID, 0, "Failed to allocate name", e));
 		}
 	}
 	
+	public PDOMName(PDOMDatabase pdom, int nameRecord) throws IOException {
+		this.pdom = pdom;
+		this.record = nameRecord;
+	}
+	
+	public int getRecord() {
+		return record;
+	}
+	
+	public void setBinding(PDOMBinding binding) throws IOException {
+		pdom.getDB().putInt(record + BINDING_REC_OFFET, binding.getRecord());
+	}
+
+	public void setPrevInBinding(PDOMName prevName) throws IOException {
+		pdom.getDB().putInt(record + BINDING_PREV_OFFSET, prevName.getRecord());
+	}
+	
+	public void setNextInBinding(PDOMName nextName) throws IOException {
+		pdom.getDB().putInt(record + BINDING_NEXT_OFFSET, nextName.getRecord());
+	}
+	
 	public IBinding resolveBinding() {
-		throw new PDOMNotImplementedError();
+		try {
+			int bindingRecord = pdom.getDB().getInt(record + BINDING_REC_OFFET);
+			return new PDOMBinding(pdom, bindingRecord);
+		} catch (IOException e) {
+			PDOMCorePlugin.log(new CoreException(new Status(IStatus.ERROR,
+					PDOMCorePlugin.ID, 0, "Failed to allocate name", e)));
+			return null;
+		}
 	}
 
 	public IBinding getBinding() {
@@ -91,7 +125,18 @@ public class PDOMName implements IASTName, IASTFileLocation {
 	}
 
 	public char[] toCharArray() {
-		throw new PDOMNotImplementedError();
+		try {
+			Database db = pdom.getDB();
+			int bindingRec = db.getInt(record + BINDING_REC_OFFET);
+			if (bindingRec == 0)
+				return null;
+			
+			return new PDOMBinding(pdom, bindingRec).getNameCharArray();
+		} catch (IOException e) {
+			PDOMCorePlugin.log(new CoreException(new Status(IStatus.ERROR,
+					PDOMCorePlugin.ID, 0, "Failed to allocate name", e)));
+			return null;
+		}
 	}
 
 	public boolean isDeclaration() {
@@ -107,7 +152,8 @@ public class PDOMName implements IASTName, IASTFileLocation {
 	}
 
 	public IASTTranslationUnit getTranslationUnit() {
-		throw new PDOMNotImplementedError();
+		// TODO Bug 115367 this is dumb - only need for validation checks
+		return new PDOMTranslationUnit();
 	}
 
 	public IASTNodeLocation[] getNodeLocations() {
@@ -151,7 +197,13 @@ public class PDOMName implements IASTName, IASTFileLocation {
 	}
 
 	public String getFileName() {
-		throw new PDOMNotImplementedError();
+		try {
+			return new PDOMFile(pdom, pdom.getDB().getInt(record + FILE_REC_OFFSET)).getFileName();
+		} catch (IOException e) {
+			PDOMCorePlugin.log(new CoreException(new Status(IStatus.ERROR,
+					PDOMCorePlugin.ID, 0, "PDOM Exception", e)));
+			return null;
+		}
 	}
 
 	public int getStartingLineNumber() {
@@ -163,11 +215,23 @@ public class PDOMName implements IASTName, IASTFileLocation {
 	}
 
 	public int getNodeLength() {
-		throw new PDOMNotImplementedError();
+		try {
+			return pdom.getDB().getInt(record + NODE_LENGTH_OFFSET);
+		} catch (IOException e) {
+			PDOMCorePlugin.log(new CoreException(new Status(IStatus.ERROR,
+					PDOMCorePlugin.ID, 0, "PDOM Exception", e)));
+			return 0;
+		}
 	}
 
 	public int getNodeOffset() {
-		throw new PDOMNotImplementedError();
+		try {
+			return pdom.getDB().getInt(record + NODE_OFFSET_OFFSET);
+		} catch (IOException e) {
+			PDOMCorePlugin.log(new CoreException(new Status(IStatus.ERROR,
+					PDOMCorePlugin.ID, 0, "PDOM Exception", e)));
+			return 0;
+		}
 	}
 	
 }

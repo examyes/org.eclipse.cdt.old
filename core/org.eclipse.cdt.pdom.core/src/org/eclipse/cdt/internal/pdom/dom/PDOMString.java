@@ -31,8 +31,10 @@ public class PDOMString {
 	private PDOMDatabase pdom;
 	private int record;
 
-	public static final int REF_OFFSET = 0;
-	public static final int STRING_OFFSET = Database.INT_SIZE;
+	private static final int REF_OFFSET = 0;
+	private static final int STRING_OFFSET = Database.INT_SIZE;
+	
+	public static final int KEY_OFFSET = STRING_OFFSET;
 
 	public static PDOMString insert(PDOMDatabase pdom, String string) throws CoreException {
 		try {
@@ -66,13 +68,17 @@ public class PDOMString {
 		}
 	}
 	
-	private PDOMString(PDOMDatabase pdom, int record) {
+	public PDOMString(PDOMDatabase pdom, int record) {
 		this.pdom = pdom;
 		this.record = record;
 	}
 	
 	public int getRecord() {
 		return record;
+	}
+	
+	public char[] getString() throws IOException {
+		return pdom.getDB().getString(record + STRING_OFFSET).toCharArray();
 	}
 	
 	public void free() throws CoreException {

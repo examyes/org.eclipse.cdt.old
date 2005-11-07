@@ -23,6 +23,8 @@ import org.eclipse.cdt.core.parser.ParserUtil;
 import org.eclipse.cdt.internal.pdom.dom.PDOMFile;
 import org.eclipse.cdt.pdom.core.PDOMCorePlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 
 /**
  * @author Doug Schaefer
@@ -62,8 +64,9 @@ public class PDOMCodeReaderFactory implements ICodeReaderFactory {
 			}
 			if (PDOMFile.find(pdom, path) != null)
 				return null;
-		} catch (CoreException e) {
-			PDOMCorePlugin.log(e);
+		} catch (IOException e) {
+			PDOMCorePlugin.log(new CoreException(new Status(IStatus.ERROR,
+					PDOMCorePlugin.ID, 0, "PDOM Exception", e)));
 		}
 		
 		return ParserUtil.createReader(path, null);

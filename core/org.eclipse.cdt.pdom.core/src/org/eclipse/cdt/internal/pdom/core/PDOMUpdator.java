@@ -202,16 +202,11 @@ public class PDOMUpdator extends Job {
 	private void processRemovedTU(ITranslationUnit tu) {
 		IProject project = tu.getCProject().getProject();
 		IPDOM pdom = PDOM.getPDOM(project);
-		if (pdom == null || !(pdom instanceof SQLPDOM))
+		if (pdom == null || !(pdom instanceof PDOMDatabase))
 			return;
 
-		try {
-			SQLPDOM sqlpdom = (SQLPDOM)pdom;
-			sqlpdom.removeSymbols(tu);
-			sqlpdom.commit();
-		} catch (CoreException e) {
-			PDOMCorePlugin.log(e);
-		}
+		PDOMDatabase mypdom = (PDOMDatabase)pdom;
+		mypdom.removeSymbols(tu);
 	}
 
 	private void processChangedTU(ITranslationUnit tu) {
@@ -233,8 +228,8 @@ public class PDOMUpdator extends Job {
 			// weird
 			return;
 		
-			mypdom.removeSymbols(ast);
-			mypdom.addSymbols(ast);
+		mypdom.removeSymbols(tu);
+		mypdom.addSymbols(ast);
 	}
 
 }

@@ -33,127 +33,127 @@ import org.eclipse.cdt.core.parser.ParserLanguage;
  * This is really a dummy translation unit that is necessary for names
  * to be valid.
  */
-public class SQLPDOMTranslationUnit implements IASTTranslationUnit {
+public class PDOMTranslationUnit implements IASTTranslationUnit {
 
 	public IASTDeclaration[] getDeclarations() {
-		throw new SQLPDOMNotImplementedError();
+		throw new PDOMNotImplementedError();
 	}
 
 	public void addDeclaration(IASTDeclaration declaration) {
-		throw new SQLPDOMNotImplementedError();
+		throw new PDOMNotImplementedError();
 	}
 
 	public IScope getScope() {
-		throw new SQLPDOMNotImplementedError();
+		throw new PDOMNotImplementedError();
 	}
 
 	public IASTName[] getDeclarations(IBinding binding) {
-		throw new SQLPDOMNotImplementedError();
+		throw new PDOMNotImplementedError();
 	}
 
 	public IASTName[] getDefinitions(IBinding binding) {
-		throw new SQLPDOMNotImplementedError();
+		throw new PDOMNotImplementedError();
 	}
 
 	public IASTName[] getReferences(IBinding binding) {
-		throw new SQLPDOMNotImplementedError();
+		throw new PDOMNotImplementedError();
 	}
 
 	public IASTNodeLocation[] getLocationInfo(int offset, int length) {
-		throw new SQLPDOMNotImplementedError();
+		throw new PDOMNotImplementedError();
 	}
 
 	public IASTNode selectNodeForLocation(String path, int offset, int length) {
-		throw new SQLPDOMNotImplementedError();
+		throw new PDOMNotImplementedError();
 	}
 
 	public IASTPreprocessorMacroDefinition[] getMacroDefinitions() {
-		throw new SQLPDOMNotImplementedError();
+		throw new PDOMNotImplementedError();
 	}
 
 	public IASTPreprocessorIncludeStatement[] getIncludeDirectives() {
-		throw new SQLPDOMNotImplementedError();
+		throw new PDOMNotImplementedError();
 	}
 
 	public IASTPreprocessorStatement[] getAllPreprocessorStatements() {
-		throw new SQLPDOMNotImplementedError();
+		throw new PDOMNotImplementedError();
 	}
 
 	public IASTProblem[] getPreprocessorProblems() {
-		throw new SQLPDOMNotImplementedError();
+		throw new PDOMNotImplementedError();
 	}
 
 	public String getUnpreprocessedSignature(IASTNodeLocation[] locations) {
-		throw new SQLPDOMNotImplementedError();
+		throw new PDOMNotImplementedError();
 	}
 
 	public String getFilePath() {
-		throw new SQLPDOMNotImplementedError();
+		throw new PDOMNotImplementedError();
 	}
 
 	public IASTFileLocation flattenLocationsToFile(
 			IASTNodeLocation[] nodeLocations) {
-		throw new SQLPDOMNotImplementedError();
+		throw new PDOMNotImplementedError();
 	}
 
 	public IDependencyTree getDependencyTree() {
-		throw new SQLPDOMNotImplementedError();
+		throw new PDOMNotImplementedError();
 	}
 
 	public String getContainingFilename(int offset) {
-		throw new SQLPDOMNotImplementedError();
+		throw new PDOMNotImplementedError();
 	}
 
 	public ParserLanguage getParserLanguage() {
-		throw new SQLPDOMNotImplementedError();
+		throw new PDOMNotImplementedError();
 	}
 
 	public IPDOM getPDOM() {
-		throw new SQLPDOMNotImplementedError();
+		throw new PDOMNotImplementedError();
 	}
 
 	public void setPDOM(IPDOM pdom) {
-		throw new SQLPDOMNotImplementedError();
+		throw new PDOMNotImplementedError();
 	}
 
 	public IASTTranslationUnit getTranslationUnit() {
-		throw new SQLPDOMNotImplementedError();
+		throw new PDOMNotImplementedError();
 	}
 
 	public IASTNodeLocation[] getNodeLocations() {
-		throw new SQLPDOMNotImplementedError();
+		throw new PDOMNotImplementedError();
 	}
 
 	public IASTFileLocation getFileLocation() {
-		throw new SQLPDOMNotImplementedError();
+		throw new PDOMNotImplementedError();
 	}
 
 	public String getContainingFilename() {
-		throw new SQLPDOMNotImplementedError();
+		throw new PDOMNotImplementedError();
 	}
 
 	public IASTNode getParent() {
-		throw new SQLPDOMNotImplementedError();
+		throw new PDOMNotImplementedError();
 	}
 
 	public void setParent(IASTNode node) {
-		throw new SQLPDOMNotImplementedError();
+		throw new PDOMNotImplementedError();
 	}
 
 	public ASTNodeProperty getPropertyInParent() {
-		throw new SQLPDOMNotImplementedError();
+		throw new PDOMNotImplementedError();
 	}
 
 	public void setPropertyInParent(ASTNodeProperty property) {
-		throw new SQLPDOMNotImplementedError();
+		throw new PDOMNotImplementedError();
 	}
 
 	public boolean accept(ASTVisitor visitor) {
-		throw new SQLPDOMNotImplementedError();
+		throw new PDOMNotImplementedError();
 	}
 
 	public String getRawSignature() {
-		throw new SQLPDOMNotImplementedError();
+		throw new PDOMNotImplementedError();
 	}
 
 }
