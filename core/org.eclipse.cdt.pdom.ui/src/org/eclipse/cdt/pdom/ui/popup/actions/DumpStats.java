@@ -61,6 +61,10 @@ public class DumpStats implements IObjectActionDelegate {
 				
 				PDOMDatabase mypdom = (PDOMDatabase)pdom;
 				
+				buff.append("    nameCount = ");
+				buff.append(mypdom.getNameCount());
+				buff.append('\n');
+				
 				Database db = mypdom.getDB();
 				
 				buff.append("    numChunks = ");

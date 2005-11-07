@@ -45,6 +45,7 @@ public class PDOMDatabase implements IPDOM {
 
 	private final IPath dbPath;
 	private final Database db;
+	private int nameCount;
 	
 	private static final int VERSION = 0;
 	
@@ -129,6 +130,7 @@ public class PDOMDatabase implements IPDOM {
 	public void addSymbol(IASTName name) {
 		try {
 			new PDOMName(this, name);
+			++nameCount;
 		} catch (CoreException e) {
 			PDOMCorePlugin.log(e);
 		}
@@ -136,6 +138,10 @@ public class PDOMDatabase implements IPDOM {
 	
 	public void removeSymbols(IASTTranslationUnit ast) {
 		
+	}
+	
+	public int getNameCount() {
+		return nameCount;
 	}
 	
 	public void delete() throws CoreException {
