@@ -16,8 +16,14 @@
          <action
                class="org.eclipse.cdt.pdom.ui.popup.actions.PDOMUpdateProjectAction"
                enablesFor="+"
-               id="org.eclipse.cdt.pdom.ui.newAction"
+               id="org.eclipse.cdt.pdom.ui.updatePDOM"
                label="Update PDOM"
+               menubarPath="org.eclipse.cdt.pdom.ui.menu1/group1"/>
+         <action
+               class="org.eclipse.cdt.pdom.ui.popup.actions.DumpStats"
+               enablesFor="+"
+               id="org.eclipse.cdt.pdom.ui.dumpStats"
+               label="Dump Stats"
                menubarPath="org.eclipse.cdt.pdom.ui.menu1/group1"/>
       </objectContribution>
    </extension>

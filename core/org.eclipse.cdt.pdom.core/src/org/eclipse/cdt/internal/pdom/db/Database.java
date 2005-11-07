@@ -203,4 +203,8 @@ public class Database {
 		Chunk chunk = getChunk(offset);
 		return chunk.getChar(offset);
 	}
+	
+	public int getNumChunks() {
+		return toc.length;
+	}
 }

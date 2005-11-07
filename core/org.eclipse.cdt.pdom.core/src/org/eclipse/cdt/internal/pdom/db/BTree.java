@@ -26,9 +26,6 @@ public abstract class BTree {
 	protected static final int NUM_CHILDREN = NUM_RECORDS + 1;
 	protected static final int OFFSET_CHILDREN = NUM_RECORDS * Database.INT_SIZE;
 	
-	private int height;
-	private int count;
-	
 	/**
 	 * Contructor.
 	 * 
@@ -38,6 +35,10 @@ public abstract class BTree {
 	public BTree(Database db, int rootPointer) {
 		this.db = db;
 		this.rootPointer = rootPointer;
+	}
+	
+	protected int getRoot() throws IOException {
+		return db.getInt(rootPointer);
 	}
 	
 	protected final void putRecord(Chunk chunk, int node, int index, int record) {
@@ -65,21 +66,15 @@ public abstract class BTree {
 	 * @return 
 	 */
 	public int insert(int record) throws IOException {
-		int root = db.getInt(rootPointer);
+		int root = getRoot();
 		
 		// is this our first time in
 		if (root == 0) {
 			firstInsert(record);
-			++count;
 			return record;
 		}
 		
-		int result = insert(null, 0, 0, root, record);
-		
-		if (result == record)
-			++count;
-			
-		return result;
+		return insert(null, 0, 0, root, record);
 	}
 	
 	private int insert(Chunk pChunk, int parent, int iParent, int node, int record) throws IOException {
@@ -96,18 +91,21 @@ public abstract class BTree {
 				// create the new node and move the larger records over
 				int newnode = allocateNode();
 				Chunk newchunk = db.getChunk(newnode);
-				for (int i = MEDIAN_RECORD + 1; i < NUM_RECORDS; ++i) {
-					putRecord(newchunk, newnode, i - MEDIAN_RECORD - 1, getRecord(chunk, node, i));
-					putRecord(chunk, node, i, 0);
+				for (int i = 0; i < MEDIAN_RECORD; ++i) {
+					putRecord(newchunk, newnode, i, getRecord(chunk, node, MEDIAN_RECORD + 1 + i));
+					putRecord(chunk, node, MEDIAN_RECORD + 1 + i, 0);
+					putChild(newchunk, newnode, i, getChild(chunk, node, MEDIAN_RECORD + 1 + i));
+					putChild(chunk, node, MEDIAN_RECORD + 1 + i, 0);
 				}
+				putChild(newchunk, newnode, MEDIAN_RECORD, getChild(chunk, node, NUM_RECORDS));
+				putChild(chunk, node, NUM_RECORDS, 0);
 
 				if (parent == 0) {
-					// create a new parent
+					// create a new root
 					parent = allocateNode();
 					pChunk = db.getChunk(parent);
 					db.putInt(rootPointer, parent);
 					putChild(pChunk, parent, 0, node);
-					++height;
 				} else {
 					// insert the median into the parent
 					for (int i = NUM_RECORDS - 2; i >= iParent; --i) {
@@ -124,9 +122,9 @@ public abstract class BTree {
 				putRecord(chunk, node, MEDIAN_RECORD, 0);
 				
 				// set the node to the correct one to follow
-				if (compare(median, record) < 0) {
+				if (compare(record, median) > 0) {
 					node = newnode;
-					chunk = db.getChunk(node);
+					chunk = newchunk;
 				}
 			}
 		}
@@ -172,7 +170,6 @@ public abstract class BTree {
 		db.putInt(rootPointer, root);
 		// put the record in the first slot of the node
 		putRecord(db.getChunk(root), root, 0, record); 
-		height = 1;
 	}
 	
 	private int allocateNode() throws IOException {
@@ -185,7 +182,6 @@ public abstract class BTree {
 	 * @param offset of the record
 	 */
 	public void delete(int record) {
-		--count;
 		// TODO some day
 	}
 
@@ -199,4 +195,80 @@ public abstract class BTree {
 	 */
 	protected abstract int compare(int record1, int record2) throws IOException;
 	
+	public int getHeight() throws IOException {
+		int root = getRoot();
+		
+		if (root == 0)
+			return 0;
+		
+		return getHeight(root);
+	}
+	
+	private int getHeight(int node) throws IOException {
+		int height = 0;
+		Chunk chunk = db.getChunk(node);
+		
+		for (int i = 0; i < NUM_CHILDREN; ++i) {
+			int child = getChild(chunk, node, i);
+			if (child == 0)
+				break;
+			int n = getHeight(child);
+			if (n == -1)
+				return -1;
+			if (height != 0 && height != n)
+				return -1;
+			height = n;
+		}
+		
+		return height + 1;
+	}
+	
+	public int getRecordCount() throws IOException {
+		int root = getRoot();
+		
+		if (root == 0)
+			return 0;
+		
+		return getRecordCount(root);
+	}
+	
+	private int getRecordCount(int node) throws IOException {
+		Chunk chunk = db.getChunk(node);
+		
+		int count;
+		for (count = 0; count < NUM_RECORDS; ++count)
+			if (getRecord(chunk, node, count) == 0)
+				break;
+		
+		for (int i = 0; i < NUM_CHILDREN; ++i) {
+			int child = getChild(chunk, node, i);
+			if (child != 0)
+				count += getRecordCount(child);
+		}
+		
+		return count;
+	}
+	
+	public int getNodeCount() throws IOException {
+		int root = getRoot();
+		
+		if (root == 0)
+			return 0;
+		
+		return getNodeCount(root);
+	}
+	
+	private int getNodeCount(int node) throws IOException {
+		Chunk chunk = db.getChunk(node);
+		
+		int count = 1;
+		
+		for (int i = 0; i < NUM_CHILDREN; ++i) {
+			int child = getChild(chunk, node, i);
+			if (child != 0)
+				count += getNodeCount(child);
+		}
+		
+		return count;
+	}
 }

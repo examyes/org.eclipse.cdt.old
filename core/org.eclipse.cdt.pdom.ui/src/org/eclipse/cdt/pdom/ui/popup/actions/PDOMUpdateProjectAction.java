@@ -14,13 +14,6 @@ public class PDOMUpdateProjectAction implements IObjectActionDelegate {
 	private ISelection selection;
 	
 	/**
-	 * Constructor for Action1.
-	 */
-	public PDOMUpdateProjectAction() {
-		super();
-	}
-
-	/**
 	 * @see IObjectActionDelegate#setActivePart(IAction, IWorkbenchPart)
 	 */
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
