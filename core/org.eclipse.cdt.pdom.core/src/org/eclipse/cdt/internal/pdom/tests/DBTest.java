@@ -1,11 +1,14 @@
 package org.eclipse.cdt.internal.pdom.tests;
 
 import java.io.File;
+import java.io.IOException;
 
 import junit.framework.TestCase;
 
+import org.eclipse.cdt.internal.pdom.db.BTree;
 import org.eclipse.cdt.internal.pdom.db.Database;
-import org.eclipse.cdt.internal.pdom.db.StringBTree;
+import org.eclipse.cdt.internal.pdom.db.StringComparator;
+import org.eclipse.cdt.internal.pdom.db.StringVisitor;
 import org.eclipse.cdt.pdom.core.PDOMCorePlugin;
 import org.eclipse.core.runtime.IPath;
 
@@ -68,6 +71,26 @@ public class DBTest extends TestCase {
 		assertEquals(mem2, mem1);
 	}
 	
+	private static class FindVisitor extends StringVisitor {
+		
+		private int record;
+		
+		public FindVisitor(Database db, String key) {
+			super(db, Database.INT_SIZE, key);
+		}
+		
+		public boolean visit(int record) throws IOException {
+			this.record = record;
+			return false;
+		}
+		
+		public int findIn(BTree btree) throws IOException {
+			btree.visit(this);
+			return record;
+		}
+		
+	}
+	
 	public void testStrings() throws Exception {
 		// Tests inserting and retrieving strings
 		File f = getTestDir().append("testStrings.dat").toFile();
@@ -100,18 +123,18 @@ public class DBTest extends TestCase {
 				"BETA"
 		};
 		
-		StringBTree btree = new StringBTree(db, Database.DATA_AREA, Database.INT_SIZE);
+		BTree btree = new BTree(db, Database.DATA_AREA);
 		for (int i = 0; i < names.length; ++i) {
 			String name = names[i];
 			int record = db.malloc((name.length() + 1) * Database.CHAR_SIZE + Database.INT_SIZE);
 			db.putInt(record, i);
 			db.putString(record + Database.INT_SIZE, name);
-			btree.insert(record);
+			btree.insert(record, new StringComparator(db, Database.INT_SIZE));
 		}
 		
 		for (int i = 0; i < names.length; ++i) {
 			String name = names[i];
-			int record = btree.find(name);
+			int record = new FindVisitor(db, name).findIn(btree);
 			assertTrue(record != 0);
 			assertEquals(i, db.getInt(record));
 			String rname = db.getString(record + Database.INT_SIZE);

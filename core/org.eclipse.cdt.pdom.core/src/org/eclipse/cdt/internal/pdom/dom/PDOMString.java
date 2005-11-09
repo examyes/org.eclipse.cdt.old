@@ -13,8 +13,10 @@ package org.eclipse.cdt.internal.pdom.dom;
 import java.io.IOException;
 
 import org.eclipse.cdt.internal.pdom.core.PDOMDatabase;
+import org.eclipse.cdt.internal.pdom.db.BTree;
 import org.eclipse.cdt.internal.pdom.db.Database;
-import org.eclipse.cdt.internal.pdom.db.StringBTree;
+import org.eclipse.cdt.internal.pdom.db.StringComparator;
+import org.eclipse.cdt.internal.pdom.db.StringVisitor;
 import org.eclipse.cdt.pdom.core.PDOMCorePlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
@@ -34,33 +36,55 @@ public class PDOMString {
 	private static final int REF_OFFSET = 0;
 	private static final int STRING_OFFSET = Database.INT_SIZE;
 	
-	public static final int KEY_OFFSET = STRING_OFFSET;
-
 	public static PDOMString insert(PDOMDatabase pdom, String string) throws CoreException {
 		try {
-			StringBTree index = pdom.getStringIndex();
+			BTree index = pdom.getStringIndex();
 			Database db = pdom.getDB();
-			int record = index.find(string);
-			if (record == 0) {
-				record = db.malloc(STRING_OFFSET + (string.length() + 1) * Database.CHAR_SIZE);
+			PDOMString pdomString = find(pdom, string);
+			if (pdomString == null) {
+				int record = db.malloc(STRING_OFFSET + (string.length() + 1) * Database.CHAR_SIZE);
 				db.putInt(record + REF_OFFSET, 0);
 				db.putString(record + STRING_OFFSET, string);
-				index.insert(record);
-			} else {
-				// Increment reference count
-				db.putInt(record + REF_OFFSET, db.getInt(record + REF_OFFSET) + 1);
+				index.insert(record, new StringComparator(db, STRING_OFFSET));
+				pdomString = new PDOMString(pdom, record);
 			}
-			return new PDOMString(pdom, record);
+			return pdomString;
 		} catch (IOException e) {
 			throw new CoreException(new Status(IStatus.ERROR,
 					PDOMCorePlugin.ID, 0, "Failed to allocate string", e));
 		}
 	}
 
+	public static abstract class Visitor extends StringVisitor {
+		public Visitor(Database db, String key) {
+			super(db, STRING_OFFSET, key);
+		}
+	}
+	
+	public static class FindVisitor extends Visitor {
+		int record;
+		
+		public FindVisitor(Database db, String key) {
+			super(db, key); 
+		}
+		
+		public boolean visit(int record) throws IOException {
+			// just capture the first record
+			this.record = record;
+			return false;
+		}
+		
+		public int getRecord() {
+			return record;
+		}
+	}
+	
 	public static PDOMString find(PDOMDatabase pdom, String string) throws CoreException {
 		try {
-			StringBTree index = pdom.getStringIndex(); 
-			int record = index.find(string);
+			BTree index = pdom.getStringIndex();
+			FindVisitor visitor = new FindVisitor(pdom.getDB(), string);
+			index.visit(visitor);
+			int record = visitor.getRecord();
 			return (record != 0) ? new PDOMString(pdom, record) : null;
 		} catch (IOException e) {
 			throw new CoreException(new Status(IStatus.ERROR,

@@ -72,7 +72,7 @@ public class Database {
 	 * @param offset
 	 * @return
 	 */
-	Chunk getChunk(int offset) throws IOException {
+	public Chunk getChunk(int offset) throws IOException {
 		int index = offset / CHUNK_SIZE;
 		Chunk chunk = toc[index];
 		if (chunk == null) {

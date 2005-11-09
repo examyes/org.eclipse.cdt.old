@@ -16,7 +16,7 @@ import java.io.IOException;
  * @author Doug Schaefer
  *
  */
-public abstract class BTree {
+public class BTree {
 
 	protected Database db;
 	protected int rootPointer;
@@ -65,7 +65,7 @@ public abstract class BTree {
 	 * @param offset of the record
 	 * @return 
 	 */
-	public int insert(int record) throws IOException {
+	public int insert(int record, IBTreeComparator comparator) throws IOException {
 		int root = getRoot();
 		
 		// is this our first time in
@@ -74,10 +74,10 @@ public abstract class BTree {
 			return record;
 		}
 		
-		return insert(null, 0, 0, root, record);
+		return insert(null, 0, 0, root, record, comparator);
 	}
 	
-	private int insert(Chunk pChunk, int parent, int iParent, int node, int record) throws IOException {
+	private int insert(Chunk pChunk, int parent, int iParent, int node, int record, IBTreeComparator comparator) throws IOException {
 		Chunk chunk = db.getChunk(node);
 		
 		// if this node is full (last record isn't null), split it
@@ -122,7 +122,7 @@ public abstract class BTree {
 				putRecord(chunk, node, MEDIAN_RECORD, 0);
 				
 				// set the node to the correct one to follow
-				if (compare(record, median) > 0) {
+				if (comparator.compare(record, median) > 0) {
 					node = newnode;
 					chunk = newchunk;
 				}
@@ -137,7 +137,7 @@ public abstract class BTree {
 				// past the end
 				break;
 			} else {
-				int compare = compare(record1, record);
+				int compare = comparator.compare(record1, record);
 				if (compare == 0)
 					// found it, no insert, just return the record
 					return record;
@@ -150,7 +150,7 @@ public abstract class BTree {
 		int	child = getChild(chunk, node, i);
 		if (child != 0) {
 			// visit the children
-			return insert(chunk, node, i, child, record);
+			return insert(chunk, node, i, child, record, comparator);
 		} else {
 			// were at the leaf, add us in.
 			// first copy everything after over one
@@ -186,15 +186,66 @@ public abstract class BTree {
 	}
 
 	/**
-	 * Returns whether record1 < record2 (-1), record1 == record2 (0),
-	 * record1 > record2 (1).
+	 * Visit all nodes beginning when the visitor comparator
+	 * returns >= 0 until the visitor visit returns falls.
 	 * 
-	 * @param offset of record1
-	 * @param offset of record2
-	 * @return
+	 * @param visitor
 	 */
-	protected abstract int compare(int record1, int record2) throws IOException;
+	public void visit(IBTreeVisitor visitor) throws IOException {
+		visit(db.getInt(rootPointer), visitor, false);
+	}
 	
+	private boolean visit(int node, IBTreeVisitor visitor, boolean found) throws IOException {
+		// if found is false, we are still in search mode
+		// once found is true visit everything
+		// return false when ready to quit
+		if (node == 0)
+			return true;
+
+		Chunk chunk = db.getChunk(node);
+
+		if (found) {
+			int child = getChild(chunk, node, 0);
+			if (child != 0)
+				if (!visit(child, visitor, true))
+					return false;
+		}
+		
+		int i;
+		for (i = 0; i < NUM_RECORDS; ++i) {
+			int record = getRecord(chunk, node, i);
+			if (record == 0)
+				break;
+			
+			if (found) {
+				if (!visitor.visit(record))
+					return false;
+				if (!visit(getChild(chunk, node, i + 1), visitor, true))
+					return false;
+			} else {
+				int compare = visitor.compare(record);
+				if (compare > 0) {
+					// start point is to the left
+					if (!visit(getChild(chunk, node, i), visitor, false))
+						return false;
+					if (!visitor.visit(record))
+						return false;
+					if (!visit(getChild(chunk, node, i + 1), visitor, true))
+						return false;
+					found = true;
+				} else if (compare == 0) {
+					if (!visitor.visit(record))
+						return false;
+					if (!visit(getChild(chunk, node, i + 1), visitor, true))
+							return false;
+					found = true;
+				}
+			}
+		}
+		
+		return visit(getChild(chunk, node, i), visitor, found);
+	}
+
 	public int getHeight() throws IOException {
 		int root = getRoot();
 		

@@ -14,10 +14,18 @@ import java.io.IOException;
 
 /**
  * @author Doug Schaefer
- * 
+ *
  */
-public abstract class BTreeVisitor {
+public interface IBTreeComparator {
 
-	public abstract boolean visit(int record) throws IOException;
+	/**
+	 * Compare two records. Used for insert.
+	 * 
+	 * @param record1
+	 * @param record2
+	 * @return
+	 * @throws IOException
+	 */
+	public abstract int compare(int record1, int record2) throws IOException;
 	
 }

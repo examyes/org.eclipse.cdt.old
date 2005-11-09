@@ -34,23 +34,23 @@ public class Chunk {
 		buffer = file.getChannel().map(MapMode.READ_WRITE, offset, Database.CHUNK_SIZE);
 	}
 	
-	void putInt(int offset, int value) {
+	public void putInt(int offset, int value) {
 		buffer.putInt(offset % Database.CHUNK_SIZE, value);
 	}
 	
-	int getInt(int offset) {
+	public int getInt(int offset) {
 		return buffer.getInt(offset % Database.CHUNK_SIZE);
 	}
 	
-	void putChar(int offset, char value) {
+	public void putChar(int offset, char value) {
 		buffer.putChar(offset % Database.CHUNK_SIZE, value);
 	}
 	
-	char getChar(int offset) {
+	public char getChar(int offset) {
 		return buffer.getChar(offset % Database.CHUNK_SIZE);
 	}
 	
-	void putString(int offset, String value) {
+	public void putString(int offset, String value) {
 		buffer.position(offset % Database.CHUNK_SIZE);
 		int n = value.length();
 		for (int i = 0; i < n; ++i)
@@ -58,7 +58,7 @@ public class Chunk {
 		buffer.putChar('\0');
 	}
 	
-	String getString(int offset) {
+	public String getString(int offset) {
 		StringBuffer strbuf = new StringBuffer();
 		buffer.position(offset % Database.CHUNK_SIZE);
 		char c = buffer.getChar();

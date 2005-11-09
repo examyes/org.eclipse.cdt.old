@@ -17,7 +17,10 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.IScope;
 import org.eclipse.cdt.internal.pdom.core.PDOMDatabase;
+import org.eclipse.cdt.internal.pdom.db.BTree;
 import org.eclipse.cdt.internal.pdom.db.Database;
+import org.eclipse.cdt.internal.pdom.db.IBTreeComparator;
+import org.eclipse.cdt.internal.pdom.db.IBTreeVisitor;
 import org.eclipse.cdt.pdom.core.PDOMCorePlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
@@ -37,7 +40,78 @@ public class PDOMBinding implements IBinding {
 	private static final int FIRST_DEF_OFFSET = 2 * Database.INT_SIZE;
 	private static final int FIRST_REF_OFFSET = 3 * Database.INT_SIZE;
 	
-	public static final int KEY_OFFSET = STRING_REC_OFFSET;
+	public static class Comparator implements IBTreeComparator {
+		
+		private final Database db;
+		
+		public Comparator(Database db) {
+			this.db = db;
+		}
+		
+		public int compare(int record1, int record2) throws IOException {
+			int string1 = db.getInt(record1 + STRING_REC_OFFSET);
+			int string2 = db.getInt(record2 + STRING_REC_OFFSET);
+			
+			if (string1 < string2)
+				return -1;
+			else if (string1 > string2)
+				return 1;
+			else
+				return 0;
+		}
+		
+	}
+	
+	public abstract static class Visitor implements IBTreeVisitor {
+		
+		private final Database db;
+		private final int stringKey;
+		
+		public Visitor(Database db, int stringKey) {
+			this.db = db;
+			this.stringKey = stringKey;
+		}
+		
+		public int compare(int record) throws IOException {
+			int s = db.getInt(record + STRING_REC_OFFSET);
+			if (s < stringKey)
+				return -1;
+			else if (s > stringKey)
+				return 1;
+			else
+				return 0;
+		}
+
+	}
+
+	public static class FindVisitor extends Visitor {
+		
+		private int record;
+		
+		public FindVisitor(Database db, int stringKey) {
+			super(db, stringKey);
+		}
+		
+		public boolean visit(int record) throws IOException {
+			this.record = record;
+			return false;
+		}
+		
+		public int findIn(BTree btree) throws IOException {
+			btree.visit(this);
+			return record;
+		}
+
+	}
+	
+	public static PDOMBinding find(PDOMDatabase pdom, int stringRecord) throws IOException {
+		BTree index = pdom.getBindingIndex();
+		int bindingRecord = new FindVisitor(pdom.getDB(), stringRecord).findIn(index);
+		if (bindingRecord != 0)
+			return new PDOMBinding(pdom, bindingRecord);
+		else
+			return null;
+	}
 	
 	public PDOMBinding(PDOMDatabase pdom, IASTName name, IBinding binding) throws CoreException {
 		try {
@@ -45,11 +119,12 @@ public class PDOMBinding implements IBinding {
 			
 			String namestr = new String(name.toCharArray());
 			
+			BTree index = pdom.getBindingIndex();
 			int stringRecord = 0;
 			PDOMString string = PDOMString.find(pdom, namestr);
 			if (string != null) {
 				stringRecord = string.getRecord();
-				record = pdom.getBindingIndex().find(stringRecord);
+				record = new FindVisitor(pdom.getDB(), stringRecord).findIn(index);
 			}
 			
 			if (record == 0) {
@@ -60,7 +135,7 @@ public class PDOMBinding implements IBinding {
 					stringRecord = PDOMString.insert(pdom, namestr).getRecord();
 				
 				db.putInt(record + STRING_REC_OFFSET, stringRecord);
-				pdom.getBindingIndex().insert(record);
+				pdom.getBindingIndex().insert(record, new Comparator(db));
 			}
 		} catch (IOException e) {
 			throw new CoreException(new Status(IStatus.ERROR,

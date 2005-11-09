@@ -27,12 +27,9 @@ import org.eclipse.cdt.core.dom.ast.cpp.CPPASTVisitor;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.core.model.IWorkingCopy;
 import org.eclipse.cdt.core.parser.ParserLanguage;
-import org.eclipse.cdt.internal.pdom.db.BTreeVisitor;
+import org.eclipse.cdt.internal.pdom.db.BTree;
 import org.eclipse.cdt.internal.pdom.db.Database;
-import org.eclipse.cdt.internal.pdom.db.IntBTree;
-import org.eclipse.cdt.internal.pdom.db.StringBTree;
 import org.eclipse.cdt.internal.pdom.dom.PDOMBinding;
-import org.eclipse.cdt.internal.pdom.dom.PDOMFile;
 import org.eclipse.cdt.internal.pdom.dom.PDOMName;
 import org.eclipse.cdt.internal.pdom.dom.PDOMString;
 import org.eclipse.cdt.pdom.core.PDOMCorePlugin;
@@ -57,13 +54,13 @@ public class PDOMDatabase implements IPDOM {
 	private static final int VERSION = 0;
 	
 	public static final int STRING_INDEX = Database.DATA_AREA + 0 * Database.INT_SIZE;
-	private StringBTree stringIndex;
+	private BTree stringIndex;
 	
 	public static final int FILE_INDEX = Database.DATA_AREA + 1 * Database.INT_SIZE;
-	private StringBTree fileIndex;
+	private BTree fileIndex;
 
 	public static final int BINDING_INDEX = Database.DATA_AREA + 2 * Database.INT_SIZE;
-	private IntBTree bindingIndex;
+	private BTree bindingIndex;
 
 	private static final QualifiedName dbNameProperty
 		= new QualifiedName(PDOMCorePlugin.ID, "dbName"); //$NON-NLS-1$
@@ -90,21 +87,21 @@ public class PDOMDatabase implements IPDOM {
 		return db;
 	}
 
-	public StringBTree getStringIndex() {
+	public BTree getStringIndex() {
 		if (stringIndex == null)
-			stringIndex = new StringBTree(db, STRING_INDEX, PDOMString.KEY_OFFSET);
+			stringIndex = new BTree(db, STRING_INDEX);
 		return stringIndex;
 	}
 	
-	public StringBTree getFileIndex() {
+	public BTree getFileIndex() {
 		if (fileIndex == null)
-			fileIndex = new StringBTree(db, FILE_INDEX, PDOMFile.KEY_OFFSET);
+			fileIndex = new BTree(db, FILE_INDEX);
 		return fileIndex;
 	}
 	
-	public IntBTree getBindingIndex() {
+	public BTree getBindingIndex() {
 		if (bindingIndex == null)
-			bindingIndex = new IntBTree(db, BINDING_INDEX, PDOMBinding.KEY_OFFSET);
+			bindingIndex = new BTree(db, BINDING_INDEX);
 		return bindingIndex;
 	}
 	
@@ -218,18 +215,18 @@ public class PDOMDatabase implements IPDOM {
 			final String prefix = new String(name.toCharArray());
 			final ArrayList bindings = new ArrayList();
 			
-			getStringIndex().visit(new BTreeVisitor() {
+			getStringIndex().visit(new PDOMString.Visitor(db, prefix) {
 				public boolean visit(int record) throws IOException {
 					String value = new String(new PDOMString(PDOMDatabase.this, record).getString());
 					if (value.startsWith(prefix)) {
-						int bindingRecord = getBindingIndex().find(record);
-						if (bindingRecord != 0)
-							bindings.add(new PDOMBinding(PDOMDatabase.this, bindingRecord));
+						PDOMBinding pdomBinding = PDOMBinding.find(PDOMDatabase.this, record);
+						if (pdomBinding != null)
+							bindings.add(pdomBinding);
 						return true;
 					} else
 						return false;
 				}
-			}, prefix);
+			});
 			
 			return (IBinding[])bindings.toArray(new IBinding[bindings.size()]);
 		} catch (IOException e) {

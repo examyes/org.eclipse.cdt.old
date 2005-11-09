@@ -13,8 +13,10 @@ package org.eclipse.cdt.internal.pdom.dom;
 import java.io.IOException;
 
 import org.eclipse.cdt.internal.pdom.core.PDOMDatabase;
+import org.eclipse.cdt.internal.pdom.db.BTree;
 import org.eclipse.cdt.internal.pdom.db.Database;
-import org.eclipse.cdt.internal.pdom.db.StringBTree;
+import org.eclipse.cdt.internal.pdom.db.StringComparator;
+import org.eclipse.cdt.internal.pdom.db.StringVisitor;
 import org.eclipse.cdt.pdom.core.PDOMCorePlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
@@ -34,24 +36,57 @@ public class PDOMFile {
 	private static final int FIRST_NAME_OFFSET = 0;
 	private static final int FILE_NAME_OFFSET = Database.INT_SIZE;
 	
-	public static final int KEY_OFFSET = FILE_NAME_OFFSET;
+	public static class Comparator extends StringComparator {
+		
+		public Comparator(Database db) {
+			super(db, FILE_NAME_OFFSET);
+		}
+	}
+	
+	public abstract static class Visitor extends StringVisitor {
+		
+		public Visitor(Database db, String key) {
+			super(db, FILE_NAME_OFFSET, key);
+		}
+	}
 
+	public static class FindVisitor extends Visitor {
+
+		private int record;
+		
+		public FindVisitor(Database db, String key) {
+			super(db, key);
+		}
+		
+		public boolean visit(int record) throws IOException {
+			this.record = record;
+			return false;
+		}
+		
+		public int findIn(BTree btree) throws IOException {
+			btree.visit(this);
+			return record;
+		}
+		
+	}
+	
 	public static PDOMFile insert(PDOMDatabase pdom, String filename) throws IOException {
-		StringBTree index = pdom.getFileIndex();
-		Database db = pdom.getDB();
-		int record = index.find(filename);
-		if (record == 0) {
-			record = db.malloc(FILE_NAME_OFFSET + (filename.length() + 1) * Database.CHAR_SIZE);
+		BTree index = pdom.getFileIndex();
+		PDOMFile pdomFile = find(pdom, filename);
+		if (pdomFile == null) {
+			Database db = pdom.getDB();
+			int record = db.malloc(FILE_NAME_OFFSET + (filename.length() + 1) * Database.CHAR_SIZE);
 			db.putInt(record + FIRST_NAME_OFFSET, 0);
 			db.putString(record + FILE_NAME_OFFSET, filename);
-			index.insert(record);
+			index.insert(record, new Comparator(db));
+			pdomFile = new PDOMFile(pdom, record);
 		}
-		return new PDOMFile(pdom, record);
+		return pdomFile;
 	}
 
 	public static PDOMFile find(PDOMDatabase pdom, String filename) throws IOException {
-		StringBTree index = pdom.getFileIndex(); 
-		int record = index.find(filename);
+		BTree index = pdom.getFileIndex();
+		int record = new FindVisitor(pdom.getDB(), filename).findIn(index);
 		return (record != 0) ? new PDOMFile(pdom, record) : null;
 	}
 	
