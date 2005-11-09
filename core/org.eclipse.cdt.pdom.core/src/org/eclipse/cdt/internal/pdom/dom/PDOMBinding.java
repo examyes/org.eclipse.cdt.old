@@ -96,7 +96,13 @@ public class PDOMBinding implements IBinding {
 	}
 	
 	public String getName() {
-		throw new PDOMNotImplementedError();
+		try {
+			return new String(new PDOMString(pdom, pdom.getDB().getInt(record + STRING_REC_OFFSET)).getString());
+		} catch (IOException e) {
+			PDOMCorePlugin.log(new CoreException(new Status(IStatus.ERROR,
+					PDOMCorePlugin.ID, 0, "PDOMString", e)));
+			return "";
+		}
 	}
 
 	public char[] getNameCharArray() {
@@ -104,7 +110,7 @@ public class PDOMBinding implements IBinding {
 			return new PDOMString(pdom, pdom.getDB().getInt(record + STRING_REC_OFFSET)).getString();
 		} catch (IOException e) {
 			PDOMCorePlugin.log(new CoreException(new Status(IStatus.ERROR,
-					PDOMCorePlugin.ID, 0, "Failed to allocate binding", e)));
+					PDOMCorePlugin.ID, 0, "PDOMString", e)));
 			return new char[0];
 		}
 	}

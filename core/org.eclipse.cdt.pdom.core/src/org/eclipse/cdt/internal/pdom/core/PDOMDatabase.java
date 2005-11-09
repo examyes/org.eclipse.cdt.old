@@ -11,6 +11,7 @@
 package org.eclipse.cdt.internal.pdom.core;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.eclipse.cdt.core.dom.ICodeReaderFactory;
 import org.eclipse.cdt.core.dom.IPDOM;
@@ -26,6 +27,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.CPPASTVisitor;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.core.model.IWorkingCopy;
 import org.eclipse.cdt.core.parser.ParserLanguage;
+import org.eclipse.cdt.internal.pdom.db.BTreeVisitor;
 import org.eclipse.cdt.internal.pdom.db.Database;
 import org.eclipse.cdt.internal.pdom.db.IntBTree;
 import org.eclipse.cdt.internal.pdom.db.StringBTree;
@@ -212,7 +214,29 @@ public class PDOMDatabase implements IPDOM {
 	}
 
 	public IBinding[] resolvePrefix(IASTName name) {
-		return null;
+		try {
+			final String prefix = new String(name.toCharArray());
+			final ArrayList bindings = new ArrayList();
+			
+			getStringIndex().visit(new BTreeVisitor() {
+				public boolean visit(int record) throws IOException {
+					String value = new String(new PDOMString(PDOMDatabase.this, record).getString());
+					if (value.startsWith(prefix)) {
+						int bindingRecord = getBindingIndex().find(record);
+						if (bindingRecord != 0)
+							bindings.add(new PDOMBinding(PDOMDatabase.this, bindingRecord));
+						return true;
+					} else
+						return false;
+				}
+			}, prefix);
+			
+			return (IBinding[])bindings.toArray(new IBinding[bindings.size()]);
+		} catch (IOException e) {
+			PDOMCorePlugin.log(new CoreException(new Status(IStatus.ERROR,
+					PDOMCorePlugin.ID, 0, "resolvePrefix", e)));
+			return null;
+		}
 	}
 	
 }

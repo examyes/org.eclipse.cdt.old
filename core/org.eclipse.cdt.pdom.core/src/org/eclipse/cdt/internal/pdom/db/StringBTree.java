@@ -131,4 +131,67 @@ public class StringBTree extends BTree {
 			return 1;
 	}
 
+	/**
+	 * Visit all nodes beginning with and after the key until
+	 * the visitor returns falls.
+	 * 
+	 * @param visitor
+	 * @param key
+	 */
+	public void visit(BTreeVisitor visitor, String key) throws IOException {
+		int root = db.getInt(rootPointer);
+		if (root == 0)
+			return;
+
+		visit(root, visitor, key, false);
+	}
+	
+	private boolean visit(int node, BTreeVisitor visitor, String key, boolean found) throws IOException {
+		// if found is false, we are still in search mode
+		// once found is true visit everything
+		// return false when ready to quit
+		Chunk chunk = db.getChunk(node);
+
+		if (found) {
+			int child = getChild(chunk, node, 0);
+			if (child != 0)
+				if (!visit(child, visitor, key, true))
+					return false;
+		}
+		
+		int i;
+		for (i = 0; i < NUM_RECORDS; ++i) {
+			int record = getRecord(chunk, node, i);
+			if (record == 0)
+				return true;
+			
+			if (found) {
+				if (!visitor.visit(record))
+					return false;
+				if (!visit(getChild(chunk, node, i + 1), visitor, key, true))
+					return false;
+			} else {
+				int compare = compare(record, key);
+				if (compare > 0) {
+					// start point is to the left
+					if (!visit(getChild(chunk, node, i), visitor, key, false))
+						return false;
+					if (!visitor.visit(record))
+						return false;
+					if (!visit(getChild(chunk, node, i + 1), visitor, key, true))
+						return false;
+					found = true;
+				} else if (compare == 0) {
+					if (!visitor.visit(record))
+						return false;
+					if (!visit(getChild(chunk, node, i + 1), visitor, key, true))
+							return false;
+					found = true;
+				} // else skip over this one
+			}
+		}
+		
+		return true;
+	}
+	
 }
