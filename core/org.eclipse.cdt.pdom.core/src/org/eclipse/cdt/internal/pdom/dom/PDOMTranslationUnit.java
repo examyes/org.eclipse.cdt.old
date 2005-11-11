@@ -25,6 +25,7 @@ import org.eclipse.cdt.core.dom.ast.IASTProblem;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.IScope;
+import org.eclipse.cdt.core.dom.ast.IScope2;
 import org.eclipse.cdt.core.parser.ParserLanguage;
 
 /**
@@ -156,4 +157,8 @@ public class PDOMTranslationUnit implements IASTTranslationUnit {
 		throw new PDOMNotImplementedError();
 	}
 
+	public IScope2 getScope(IASTNode child, ASTNodeProperty childProperty) {
+		throw new PDOMNotImplementedError();
+	}
+	
 }

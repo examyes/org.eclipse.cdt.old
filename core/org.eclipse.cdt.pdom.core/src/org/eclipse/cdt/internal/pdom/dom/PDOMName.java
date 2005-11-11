@@ -20,6 +20,7 @@ import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTNodeLocation;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.IScope2;
 import org.eclipse.cdt.internal.pdom.core.PDOMDatabase;
 import org.eclipse.cdt.internal.pdom.db.Database;
 import org.eclipse.cdt.pdom.core.PDOMCorePlugin;
@@ -232,6 +233,11 @@ public class PDOMName implements IASTName, IASTFileLocation {
 					PDOMCorePlugin.ID, 0, "PDOM Exception", e)));
 			return 0;
 		}
+	}
+
+	public IScope2 getScope(IASTNode child, ASTNodeProperty childProperty) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }
