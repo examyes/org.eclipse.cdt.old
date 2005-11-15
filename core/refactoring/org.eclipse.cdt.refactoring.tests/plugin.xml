@@ -1,34 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.0"?>
-<plugin
-   id="org.eclipse.cdt.refactoring.tests"
-   name="Refactoring Tests Plug-in"
-   version="3.1.0"
-   provider-name="Eclipse.org"
-   class="org.eclipse.cdt.refactoring.tests.TestsPlugin">
+<plugin>
 
-   <runtime>
-      <library name="tests.jar">
-         <export name="*"/>
-      </library>
-   </runtime>
-
-   <requires>
-      <import plugin="org.eclipse.ui"/>
-      <import plugin="org.eclipse.core.runtime"/>
-      <import plugin="org.junit"/>
-      <import plugin="org.eclipse.cdt.core"/>
-      <import plugin="org.eclipse.core.resources"/>
-      <import plugin="org.eclipse.cdt.refactoring"/>
-      <import plugin="org.eclipse.ltk.core.refactoring"/>
-      <import plugin="org.eclipse.ltk.ui.refactoring"/>
-      <import plugin="org.eclipse.jface.text"/>
-      <import plugin="org.eclipse.ui.workbench.texteditor"/>
-      <import plugin="org.eclipse.cdt.core.tests"/>
-      <import plugin="org.eclipse.search"/>
-   </requires>
-
-   <extension point="org.eclipse.ltk.core.refactoring.renameParticipants">
+     <extension point="org.eclipse.ltk.core.refactoring.renameParticipants">
       <renameParticipant
             class="org.eclipse.cdt.refactoring.tests.TestRenameParticipant"
             name="TestRenameParticipant"
