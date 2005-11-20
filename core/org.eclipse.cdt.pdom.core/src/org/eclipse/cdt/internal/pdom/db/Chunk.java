@@ -50,23 +50,37 @@ public class Chunk {
 		return buffer.getChar(offset % Database.CHUNK_SIZE);
 	}
 	
+	public void putChars(int offset, char[] value) {
+		buffer.position(offset % Database.CHUNK_SIZE);
+		for (int i = 0; i < value.length; ++i)
+			buffer.putChar(value[i]);
+		buffer.putChar((char)0);
+	}
+	
+	public char[] getChars(int offset) {
+		buffer.position(offset % Database.CHUNK_SIZE);
+		int n = 0;
+		for (char c = buffer.getChar(); c != 0; c = buffer.getChar())
+			++n;
+		
+		buffer.position(offset % Database.CHUNK_SIZE);
+		char[] chars = new char[n];
+		int i = 0;
+		for (char c = buffer.getChar(); c != 0; c = buffer.getChar())
+			chars[i++] = c;
+		return chars;
+	}
+	
 	public void putString(int offset, String value) {
 		buffer.position(offset % Database.CHUNK_SIZE);
 		int n = value.length();
 		for (int i = 0; i < n; ++i)
 			buffer.putChar(value.charAt(i));
-		buffer.putChar('\0');
+		buffer.putChar((char)0);
 	}
 	
 	public String getString(int offset) {
-		StringBuffer strbuf = new StringBuffer();
-		buffer.position(offset % Database.CHUNK_SIZE);
-		char c = buffer.getChar();
-		while (c != '\0') {
-			strbuf.append(c);
-			c = buffer.getChar();
-		}
-		return strbuf.toString();
+		return new String(getChars(offset));
 	}
 
 	Chunk getNextChunk() {

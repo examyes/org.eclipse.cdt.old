@@ -214,6 +214,16 @@ public class Database {
 		return chunk.getInt(offset);
 	}
 
+	public void putChars(int offset, char[] value) throws IOException {
+		Chunk chunk = getChunk(offset);
+		chunk.putChars(offset, value);
+	}
+	
+	public char[] getChars(int offset) throws IOException {
+		Chunk chunk = getChunk(offset);
+		return chunk.getChars(offset);
+	}
+	
 	public void putString(int offset, String value) throws IOException {
 		Chunk chunk = getChunk(offset);
 		chunk.putString(offset, value);
@@ -222,11 +232,6 @@ public class Database {
 	public String getString(int offset) throws IOException {
 		Chunk chunk = getChunk(offset);
 		return chunk.getString(offset);
-	}
-	
-	public char getChar(int offset) throws IOException {
-		Chunk chunk = getChunk(offset);
-		return chunk.getChar(offset);
 	}
 	
 	public int getNumChunks() {

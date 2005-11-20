@@ -200,7 +200,7 @@ public class BTree {
 		// once found is true visit everything
 		// return false when ready to quit
 		if (node == 0)
-			return true;
+			return visitor.visit(0);
 
 		Chunk chunk = db.getChunk(node);
 
@@ -322,4 +322,5 @@ public class BTree {
 		
 		return count;
 	}
+
 }

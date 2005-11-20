@@ -17,6 +17,7 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.IScope;
 import org.eclipse.cdt.internal.pdom.core.PDOMDatabase;
+import org.eclipse.cdt.internal.pdom.core.PDOMUtils;
 import org.eclipse.cdt.internal.pdom.db.BTree;
 import org.eclipse.cdt.internal.pdom.db.Database;
 import org.eclipse.cdt.internal.pdom.db.IBTreeComparator;
@@ -41,9 +42,9 @@ public class PDOMBinding implements IBinding {
 	private static final int FIRST_REF_OFFSET = 3 * Database.INT_SIZE;
 	
 	public static class Comparator implements IBTreeComparator {
-		
-		private final Database db;
-		
+	
+		private Database db;
+	
 		public Comparator(Database db) {
 			this.db = db;
 		}
@@ -52,34 +53,25 @@ public class PDOMBinding implements IBinding {
 			int string1 = db.getInt(record1 + STRING_REC_OFFSET);
 			int string2 = db.getInt(record2 + STRING_REC_OFFSET);
 			
-			if (string1 < string2)
-				return -1;
-			else if (string1 > string2)
-				return 1;
-			else
-				return 0;
+			return PDOMUtils.stringCompare(db, string1, string2);
 		}
 		
 	}
 	
 	public abstract static class Visitor implements IBTreeVisitor {
+	
+		private Database db;
+		private char[] key;
 		
-		private final Database db;
-		private final int stringKey;
-		
-		public Visitor(Database db, int stringKey) {
+		public Visitor(Database db, char[] key) {
 			this.db = db;
-			this.stringKey = stringKey;
+			this.key = key;
 		}
 		
-		public int compare(int record) throws IOException {
-			int s = db.getInt(record + STRING_REC_OFFSET);
-			if (s < stringKey)
-				return -1;
-			else if (s > stringKey)
-				return 1;
-			else
-				return 0;
+		public int compare(int record1) throws IOException {
+			int string1 = db.getInt(record1 + STRING_REC_OFFSET);
+			
+			return PDOMUtils.stringCompare(db, string1, key);
 		}
 
 	}
@@ -88,7 +80,7 @@ public class PDOMBinding implements IBinding {
 		
 		private int record;
 		
-		public FindVisitor(Database db, int stringKey) {
+		public FindVisitor(Database db, char[] stringKey) {
 			super(db, stringKey);
 		}
 		
@@ -104,35 +96,30 @@ public class PDOMBinding implements IBinding {
 
 	}
 	
-	public static PDOMBinding find(PDOMDatabase pdom, int stringRecord) throws IOException {
+	public static PDOMBinding find(PDOMDatabase pdom, char[] name) throws IOException {
 		BTree index = pdom.getBindingIndex();
-		int bindingRecord = new FindVisitor(pdom.getDB(), stringRecord).findIn(index);
+		int bindingRecord = new FindVisitor(pdom.getDB(), name).findIn(index);
 		if (bindingRecord != 0)
 			return new PDOMBinding(pdom, bindingRecord);
 		else
 			return null;
 	}
-	
+
 	public PDOMBinding(PDOMDatabase pdom, IASTName name, IBinding binding) throws CoreException {
 		try {
 			this.pdom = pdom;
-			
-			String namestr = new String(name.toCharArray());
+
+			char[] namechars = name.toCharArray();
 			
 			BTree index = pdom.getBindingIndex();
-			int stringRecord = 0;
-			PDOMString string = PDOMString.find(pdom, namestr);
-			if (string != null) {
-				stringRecord = string.getRecord();
-				record = new FindVisitor(pdom.getDB(), stringRecord).findIn(index);
-			}
+			record = new FindVisitor(pdom.getDB(), namechars).findIn(index);
 			
 			if (record == 0) {
 				Database db = pdom.getDB();
 				record = db.malloc(getRecordSize());
 
-				if (stringRecord == 0)
-					stringRecord = PDOMString.insert(pdom, namestr).getRecord();
+				int stringRecord = db.malloc((namechars.length + 1) * Database.CHAR_SIZE);
+				db.putChars(stringRecord, namechars);
 				
 				db.putInt(record + STRING_REC_OFFSET, stringRecord);
 				pdom.getBindingIndex().insert(record, new Comparator(db));
@@ -172,7 +159,9 @@ public class PDOMBinding implements IBinding {
 	
 	public String getName() {
 		try {
-			return new String(new PDOMString(pdom, pdom.getDB().getInt(record + STRING_REC_OFFSET)).getString());
+			Database db = pdom.getDB();
+			int stringRecord = db.getInt(record + STRING_REC_OFFSET);
+			return db.getString(stringRecord);
 		} catch (IOException e) {
 			PDOMCorePlugin.log(new CoreException(new Status(IStatus.ERROR,
 					PDOMCorePlugin.ID, 0, "PDOMString", e)));
@@ -182,7 +171,9 @@ public class PDOMBinding implements IBinding {
 
 	public char[] getNameCharArray() {
 		try {
-			return new PDOMString(pdom, pdom.getDB().getInt(record + STRING_REC_OFFSET)).getString();
+			Database db = pdom.getDB();
+			int stringRecord = db.getInt(record + STRING_REC_OFFSET);
+			return db.getChars(stringRecord);
 		} catch (IOException e) {
 			PDOMCorePlugin.log(new CoreException(new Status(IStatus.ERROR,
 					PDOMCorePlugin.ID, 0, "PDOMString", e)));

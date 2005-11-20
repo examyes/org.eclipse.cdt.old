@@ -18,8 +18,8 @@ import java.io.IOException;
  */
 public class StringComparator implements IBTreeComparator {
 
-	private Database db;
-	private int offset;
+	protected Database db;
+	protected int offset;
 	
 	public StringComparator(Database db, int offset) {
 		this.db = db;

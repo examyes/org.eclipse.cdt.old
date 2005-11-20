@@ -18,7 +18,7 @@ import java.io.IOException;
  */
 public abstract class StringVisitor implements IBTreeVisitor {
 
-	private final Database db;
+	public final Database db;
 	private final int offset;
 	private final String key;
 	

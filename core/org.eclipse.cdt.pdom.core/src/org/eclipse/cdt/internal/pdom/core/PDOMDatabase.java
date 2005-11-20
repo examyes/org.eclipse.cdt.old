@@ -31,7 +31,6 @@ import org.eclipse.cdt.internal.pdom.db.BTree;
 import org.eclipse.cdt.internal.pdom.db.Database;
 import org.eclipse.cdt.internal.pdom.dom.PDOMBinding;
 import org.eclipse.cdt.internal.pdom.dom.PDOMName;
-import org.eclipse.cdt.internal.pdom.dom.PDOMString;
 import org.eclipse.cdt.pdom.core.PDOMCorePlugin;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -150,7 +149,7 @@ public class PDOMDatabase implements IPDOM {
 			if (scope == null)
 				return;
 			
-			IASTName scopeName = scope.getScopeName();
+			IASTName scopeName = null;//scope.getScopeName();
 			
 			if (scopeName == null) {
 				PDOMBinding pdomBinding = new PDOMBinding(this, name, binding);
@@ -160,7 +159,7 @@ public class PDOMDatabase implements IPDOM {
 				if (scopeBinding instanceof IType) {
 					PDOMBinding pdomBinding = new PDOMBinding(this, name, binding);
 					new PDOMName(this, name, pdomBinding);
-				}
+				} 
 			}
 		} catch (CoreException e) {
 			PDOMCorePlugin.log(e);
@@ -211,29 +210,29 @@ public class PDOMDatabase implements IPDOM {
 	}
 
 	public IBinding[] resolvePrefix(IASTName name) {
-		try {
+//		try {
 			final String prefix = new String(name.toCharArray());
 			final ArrayList bindings = new ArrayList();
 			
-			getStringIndex().visit(new PDOMString.Visitor(db, prefix) {
-				public boolean visit(int record) throws IOException {
-					String value = new String(new PDOMString(PDOMDatabase.this, record).getString());
-					if (value.startsWith(prefix)) {
-						PDOMBinding pdomBinding = PDOMBinding.find(PDOMDatabase.this, record);
-						if (pdomBinding != null)
-							bindings.add(pdomBinding);
-						return true;
-					} else
-						return false;
-				}
-			});
+//			getStringIndex().visit(new PDOMString.Visitor(db, prefix) {
+//				public boolean visit(int record) throws IOException {
+//					String value = new String(new PDOMString(PDOMDatabase.this, record).getString());
+//					if (value.startsWith(prefix)) {
+//						PDOMBinding pdomBinding = PDOMBinding.find(PDOMDatabase.this, record);
+//						if (pdomBinding != null)
+//							bindings.add(pdomBinding);
+//						return true;
+//					} else
+//						return false;
+//				}
+//			});
 			
 			return (IBinding[])bindings.toArray(new IBinding[bindings.size()]);
-		} catch (IOException e) {
-			PDOMCorePlugin.log(new CoreException(new Status(IStatus.ERROR,
-					PDOMCorePlugin.ID, 0, "resolvePrefix", e)));
-			return null;
-		}
+//		} catch (IOException e) {
+//			PDOMCorePlugin.log(new CoreException(new Status(IStatus.ERROR,
+//					PDOMCorePlugin.ID, 0, "resolvePrefix", e)));
+//			return null;
+//		}
 	}
 	
 }
