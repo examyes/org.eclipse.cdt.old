@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: PDOM UI Plug-in
 Bundle-SymbolicName: org.eclipse.cdt.pdom.ui; singleton:=true
 Bundle-Version: 3.1.0
-Bundle-Activator: org.eclipse.cdt.pdom.ui.UiPlugin
+Bundle-Activator: org.eclipse.cdt.pdom.ui.PDOMUIPlugin
 Bundle-Vendor: Eclipse.org
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
@@ -11,5 +11,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.cdt.ui,
  org.eclipse.core.resources,
  org.eclipse.cdt.core,
- org.eclipse.cdt.pdom.core
+ org.eclipse.cdt.pdom.core,
+ org.eclipse.ui.workbench.texteditor,
+ org.eclipse.jface.text
 Eclipse-AutoStart: true

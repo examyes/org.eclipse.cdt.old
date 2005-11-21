@@ -1,21 +1,24 @@
 package org.eclipse.cdt.pdom.ui;
 
 import org.eclipse.ui.plugin.*;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.osgi.framework.BundleContext;
 
 /**
  * The main plugin class to be used in the desktop.
  */
-public class UiPlugin extends AbstractUIPlugin {
+public class PDOMUIPlugin extends AbstractUIPlugin {
 
+	public static final String ID = "org.eclipse.cdt.pdom.ui";
+	
 	//The shared instance.
-	private static UiPlugin plugin;
+	private static PDOMUIPlugin plugin;
 	
 	/**
 	 * The constructor.
 	 */
-	public UiPlugin() {
+	public PDOMUIPlugin() {
 		plugin = this;
 	}
 
@@ -37,7 +40,7 @@ public class UiPlugin extends AbstractUIPlugin {
 	/**
 	 * Returns the shared instance.
 	 */
-	public static UiPlugin getDefault() {
+	public static PDOMUIPlugin getDefault() {
 		return plugin;
 	}
 
@@ -51,4 +54,9 @@ public class UiPlugin extends AbstractUIPlugin {
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.cdt.pdom.ui", path);
 	}
+	
+	public static void log(CoreException e) {
+		plugin.getLog().log(e.getStatus());
+	}
+
 }

@@ -4,10 +4,27 @@ import java.io.IOException;
 
 import org.eclipse.cdt.core.dom.IPDOM;
 import org.eclipse.cdt.core.dom.PDOM;
+import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
+import org.eclipse.cdt.core.model.CModelException;
+import org.eclipse.cdt.core.resources.FileStorage;
+import org.eclipse.cdt.core.search.ILineLocatable;
+import org.eclipse.cdt.core.search.IMatchLocatable;
+import org.eclipse.cdt.core.search.IOffsetLocatable;
 import org.eclipse.cdt.internal.pdom.core.PDOMDatabase;
 import org.eclipse.cdt.internal.pdom.db.IBTreeVisitor;
 import org.eclipse.cdt.internal.pdom.dom.PDOMBinding;
+import org.eclipse.cdt.internal.pdom.dom.PDOMName;
+import org.eclipse.cdt.internal.ui.util.EditorUtility;
+import org.eclipse.cdt.pdom.ui.PDOMUIPlugin;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -15,6 +32,8 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ILazyContentProvider;
@@ -30,10 +49,13 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.texteditor.AbstractTextEditor;
 
 /**
  * This sample class demonstrates how to plug-in a new workbench view. The view
@@ -252,14 +274,77 @@ public class BindingsView extends ViewPart {
 		doubleClickAction = new Action() {
 			public void run() {
 				ISelection selection = viewer.getSelection();
-				Object obj = ((IStructuredSelection) selection)
+				PDOMBinding binding = (PDOMBinding)((IStructuredSelection) selection)
 						.getFirstElement();
-				showMessage("Double-click detected on " + obj.toString());
+				try {
+					PDOMName name = binding.getFirstDeclaration();
+					if (name == null)
+						return;
+					IASTFileLocation loc = name.getFileLocation();
+					IPath path = new Path(loc.getFileName());
+					IFile[] files = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocation(path);
+					IEditorPart part;
+					if (files.length == 0)
+						part = EditorUtility.openInEditor(new FileStorage(path));
+					else
+						// TODO what if length > 1?
+						part = EditorUtility.openInEditor(files[0]);
+					((AbstractTextEditor)part).selectAndReveal(loc.getNodeOffset(), loc.getNodeLength());
+				} catch (IOException e) {
+					PDOMUIPlugin.log(new CoreException(new Status(
+							IStatus.ERROR, PDOMUIPlugin.ID, 0,
+							"doubleClick", e)));
+				} catch (CoreException e) {
+					PDOMUIPlugin.log(e);
+				}
 			}
 		};
 	}
 
-	private void hookDoubleClickAction() {
+    protected void open( IResource resource, IMatchLocatable locatable ) throws CModelException, PartInitException {
+        IEditorPart part= EditorUtility.openInEditor(resource);
+        setSelectionAtOffset(part, locatable);
+    }
+
+    protected void setSelectionAtOffset(IEditorPart part, IMatchLocatable locatable) {
+        if( part instanceof AbstractTextEditor )
+        {
+			int startOffset=0;
+			int length=0;
+		
+			if (locatable instanceof IOffsetLocatable){
+			    startOffset = ((IOffsetLocatable)locatable).getNameStartOffset();
+			    length = ((IOffsetLocatable)locatable).getNameEndOffset() - startOffset;
+			} else if (locatable instanceof ILineLocatable){
+				int tempstartOffset = ((ILineLocatable)locatable).getStartLine();
+				
+				IDocument doc =  ((AbstractTextEditor) part).getDocumentProvider().getDocument(part.getEditorInput());
+				try {
+					//NOTE: Subtract 1 from the passed in line number because, even though the editor is 1 based, the line
+					//resolver doesn't take this into account and is still 0 based
+					startOffset = doc.getLineOffset(tempstartOffset-1);
+					length=doc.getLineLength(tempstartOffset-1);
+				} catch (BadLocationException e) {}			
+				
+				//Check to see if an end offset is provided
+				int tempendOffset = ((ILineLocatable)locatable).getEndLine();
+				//Make sure that there is a real value for the end line
+				if (tempendOffset>0 && tempendOffset>tempstartOffset){
+					try {
+						//See NOTE above
+						int endOffset = doc.getLineOffset(tempendOffset-1);
+						length=endOffset - startOffset;
+					} catch (BadLocationException e) {}		
+				}
+					
+			}
+            try {
+            ((AbstractTextEditor) part).selectAndReveal(startOffset, length);
+            } catch (Exception e) {}
+        }
+    }
+
+    private void hookDoubleClickAction() {
 		viewer.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent event) {
 				doubleClickAction.run();
