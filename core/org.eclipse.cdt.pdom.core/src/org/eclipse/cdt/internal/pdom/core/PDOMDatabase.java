@@ -149,7 +149,7 @@ public class PDOMDatabase implements IPDOM {
 			if (scope == null)
 				return;
 			
-			IASTName scopeName = null;//scope.getScopeName();
+			IASTName scopeName = scope.getScopeName();
 			
 			if (scopeName == null) {
 				PDOMBinding pdomBinding = new PDOMBinding(this, name, binding);
