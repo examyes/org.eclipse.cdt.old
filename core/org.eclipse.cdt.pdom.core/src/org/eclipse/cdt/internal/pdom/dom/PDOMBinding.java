@@ -36,11 +36,17 @@ public class PDOMBinding implements IBinding {
 	protected final PDOMDatabase pdom;
 	protected int record;
 	
-	private static final int STRING_REC_OFFSET = 0 * Database.INT_SIZE;
-	private static final int FIRST_DECL_OFFSET = 1 * Database.INT_SIZE;
-	private static final int FIRST_DEF_OFFSET = 2 * Database.INT_SIZE;
-	private static final int FIRST_REF_OFFSET = 3 * Database.INT_SIZE;
+	private static final int STRING_REC_OFFSET =  0; // size 4
+	private static final int FIRST_DECL_OFFSET =  4; // size 4
+	private static final int FIRST_DEF_OFFSET  =  8; // size 4
+	private static final int FIRST_REF_OFFSET  = 12; // size 4
+	private static final int LANGUAGE_OFFSET   = 16; // size 2
+	private static final int TYPE_OFFSET       = 18; // size 2
 	
+	protected int getRecordSize() {
+		return 20;
+	}
+
 	public static class Comparator implements IBTreeComparator {
 	
 		private Database db;
@@ -96,15 +102,6 @@ public class PDOMBinding implements IBinding {
 
 	}
 	
-	public static PDOMBinding find(PDOMDatabase pdom, char[] name) throws IOException {
-		BTree index = pdom.getBindingIndex();
-		int bindingRecord = new FindVisitor(pdom.getDB(), name).findIn(index);
-		if (bindingRecord != 0)
-			return new PDOMBinding(pdom, bindingRecord);
-		else
-			return null;
-	}
-
 	public PDOMBinding(PDOMDatabase pdom, IASTName name, IBinding binding) throws CoreException {
 		try {
 			this.pdom = pdom;
@@ -135,10 +132,6 @@ public class PDOMBinding implements IBinding {
 		this.record = bindingRecord;
 	}
 	
-	protected int getRecordSize() {
-		return 4 * Database.INT_SIZE;
-	}
-
 	public int getRecord() {
 		return record;
 	}
@@ -184,6 +177,15 @@ public class PDOMBinding implements IBinding {
 	public IScope getScope() throws DOMException {
 		// TODO implement this
 		return null;
+	}
+
+	public static PDOMBinding find(PDOMDatabase pdom, char[] name) throws IOException {
+		BTree index = pdom.getBindingIndex();
+		int bindingRecord = new FindVisitor(pdom.getDB(), name).findIn(index);
+		if (bindingRecord != 0)
+			return new PDOMBinding(pdom, bindingRecord);
+		else
+			return null;
 	}
 
 }
