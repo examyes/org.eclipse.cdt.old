@@ -1,7 +1,7 @@
 package org.eclipse.cdt.pdom.ui.popup.actions;
 
 import org.eclipse.cdt.core.model.ICProject;
-import org.eclipse.cdt.internal.pdom.core.PDOMUpdator;
+import org.eclipse.cdt.internal.core.pdom.PDOMUpdator;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
