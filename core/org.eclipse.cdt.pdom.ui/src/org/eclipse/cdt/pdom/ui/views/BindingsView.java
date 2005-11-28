@@ -4,6 +4,7 @@ import org.eclipse.cdt.core.dom.ILanguage;
 import org.eclipse.cdt.core.dom.IPDOM;
 import org.eclipse.cdt.core.dom.PDOM;
 import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
+import org.eclipse.cdt.core.dom.ast.IFunction;
 import org.eclipse.cdt.core.dom.ast.IVariable;
 import org.eclipse.cdt.core.dom.ast.gnu.c.GCCLanguage;
 import org.eclipse.cdt.core.dom.ast.gnu.cpp.GPPLanguage;
@@ -195,7 +196,10 @@ public class BindingsView extends ViewPart {
 		public Image getImage(Object obj) {
 			if (obj instanceof IVariable) {
 				return CUIPlugin.getImageDescriptorRegistry().get(
-						CElementImageProvider.getVariableDeclarationImageDescriptor());
+						CElementImageProvider.getVariableImageDescriptor());
+			} else if (obj instanceof IFunction){
+				return CUIPlugin.getImageDescriptorRegistry().get(
+						CElementImageProvider.getFunctionImageDescriptor());
 			}
 			
 			return PlatformUI.getWorkbench().getSharedImages().getImage(
