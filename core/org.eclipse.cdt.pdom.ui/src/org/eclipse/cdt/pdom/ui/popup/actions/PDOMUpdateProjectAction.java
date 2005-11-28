@@ -1,7 +1,10 @@
 package org.eclipse.cdt.pdom.ui.popup.actions;
 
+import org.eclipse.cdt.core.dom.PDOM;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.internal.core.pdom.PDOMUpdator;
+import org.eclipse.cdt.pdom.ui.PDOMUIPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -31,8 +34,14 @@ public class PDOMUpdateProjectAction implements IObjectActionDelegate {
 			if (!(objs[i] instanceof ICProject))
 				continue;
 			
-			PDOMUpdator job = new PDOMUpdator((ICProject)objs[i], null);
-			job.schedule();
+			ICProject cproject = (ICProject)objs[i];
+			try {
+				PDOM.deletePDOM(cproject.getProject());
+				PDOMUpdator job = new PDOMUpdator(cproject, null);
+				job.schedule();
+			} catch (CoreException e) {
+				PDOMUIPlugin.log(e);
+			}
 		}
 	}
 

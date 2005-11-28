@@ -17,7 +17,7 @@
                class="org.eclipse.cdt.pdom.ui.popup.actions.PDOMUpdateProjectAction"
                enablesFor="+"
                id="org.eclipse.cdt.pdom.ui.updatePDOM"
-               label="Update PDOM"
+               label="Rebuild PDOM"
                menubarPath="org.eclipse.cdt.pdom.ui.menu1/group1"/>
       </objectContribution>
       <viewerContribution

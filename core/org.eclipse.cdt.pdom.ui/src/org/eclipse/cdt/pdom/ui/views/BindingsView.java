@@ -1,10 +1,12 @@
 package org.eclipse.cdt.pdom.ui.views;
 
-import java.io.IOException;
-
+import org.eclipse.cdt.core.dom.ILanguage;
 import org.eclipse.cdt.core.dom.IPDOM;
 import org.eclipse.cdt.core.dom.PDOM;
 import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
+import org.eclipse.cdt.core.dom.ast.IVariable;
+import org.eclipse.cdt.core.dom.ast.gnu.c.GCCLanguage;
+import org.eclipse.cdt.core.dom.ast.gnu.cpp.GPPLanguage;
 import org.eclipse.cdt.core.model.CModelException;
 import org.eclipse.cdt.core.resources.FileStorage;
 import org.eclipse.cdt.core.search.ILineLocatable;
@@ -12,19 +14,19 @@ import org.eclipse.cdt.core.search.IMatchLocatable;
 import org.eclipse.cdt.core.search.IOffsetLocatable;
 import org.eclipse.cdt.internal.core.pdom.PDOMDatabase;
 import org.eclipse.cdt.internal.core.pdom.db.IBTreeVisitor;
-import org.eclipse.cdt.internal.pdom.dom.PDOMBinding;
-import org.eclipse.cdt.internal.pdom.dom.PDOMName;
+import org.eclipse.cdt.internal.core.pdom.dom.PDOMBinding;
+import org.eclipse.cdt.internal.core.pdom.dom.PDOMName;
 import org.eclipse.cdt.internal.ui.util.EditorUtility;
+import org.eclipse.cdt.internal.ui.viewsupport.CElementImageProvider;
 import org.eclipse.cdt.pdom.ui.PDOMUIPlugin;
+import org.eclipse.cdt.ui.CUIPlugin;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -105,7 +107,7 @@ public class BindingsView extends ViewPart {
 						System.out.println("Binding count: " + counter.count);
 						viewer.setItemCount(counter.count);
 						return;
-					} catch (IOException e) {
+					} catch (CoreException e) {
 					}
 				}
 			}
@@ -126,19 +128,27 @@ public class BindingsView extends ViewPart {
 				PDOMBinding binding = null;
 				if (visitor.result != 0) {
 					binding = new PDOMBinding(pdom, visitor.result);
+					switch (binding.getLanguage()) {
+					case ILanguage.GCC_ID:
+						binding = new GCCLanguage().getPDOMBinding(pdom, binding);
+						break;
+					case ILanguage.GPP_ID:
+						binding = new GPPLanguage().getPDOMBinding(pdom, binding);
+						break;
+					}
 				}
 				viewer.replace(binding, index);
-			} catch (IOException e) {
+			} catch (CoreException e) {
 			}
 		}
 	}
 
 	private static class BTreeCounter implements IBTreeVisitor {
 		int count;
-		public int compare(int record) throws IOException {
+		public int compare(int record) throws CoreException {
 			return 1;
 		}
-		public boolean visit(int record) throws IOException {
+		public boolean visit(int record) throws CoreException {
 			if (record != 0)
 				++count;
 			return true;
@@ -152,10 +162,10 @@ public class BindingsView extends ViewPart {
 		public BTreeIndex(int index) {
 			this.index = index;
 		}
-		public int compare(int record) throws IOException {
+		public int compare(int record) throws CoreException {
 			return 1;
 		};
-		public boolean visit(int record) throws IOException {
+		public boolean visit(int record) throws CoreException {
 			if (record == 0)
 				return true;
 			
@@ -183,6 +193,11 @@ public class BindingsView extends ViewPart {
 		}
 
 		public Image getImage(Object obj) {
+			if (obj instanceof IVariable) {
+				return CUIPlugin.getImageDescriptorRegistry().get(
+						CElementImageProvider.getVariableDeclarationImageDescriptor());
+			}
+			
 			return PlatformUI.getWorkbench().getSharedImages().getImage(
 					ISharedImages.IMG_OBJ_ELEMENT);
 		}
@@ -290,10 +305,6 @@ public class BindingsView extends ViewPart {
 						// TODO what if length > 1?
 						part = EditorUtility.openInEditor(files[0]);
 					((AbstractTextEditor)part).selectAndReveal(loc.getNodeOffset(), loc.getNodeLength());
-				} catch (IOException e) {
-					PDOMUIPlugin.log(new CoreException(new Status(
-							IStatus.ERROR, PDOMUIPlugin.ID, 0,
-							"doubleClick", e)));
 				} catch (CoreException e) {
 					PDOMUIPlugin.log(e);
 				}
