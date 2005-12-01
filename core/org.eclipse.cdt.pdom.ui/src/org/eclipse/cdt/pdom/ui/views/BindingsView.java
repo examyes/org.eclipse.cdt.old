@@ -129,14 +129,8 @@ public class BindingsView extends ViewPart {
 				PDOMBinding binding = null;
 				if (visitor.result != 0) {
 					binding = new PDOMBinding(pdom, visitor.result);
-					switch (binding.getLanguage()) {
-					case ILanguage.GCC_ID:
-						binding = new GCCLanguage().getPDOMBinding(pdom, binding);
-						break;
-					case ILanguage.GPP_ID:
-						binding = new GPPLanguage().getPDOMBinding(pdom, binding);
-						break;
-					}
+					// Replace it with the real binding based on language
+					binding = binding.getLanguage().getPDOMBinding(pdom, binding);
 				}
 				viewer.replace(binding, index);
 			} catch (CoreException e) {
