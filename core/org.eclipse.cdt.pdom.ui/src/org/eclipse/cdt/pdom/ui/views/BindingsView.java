@@ -1,13 +1,10 @@
 package org.eclipse.cdt.pdom.ui.views;
 
-import org.eclipse.cdt.core.dom.ILanguage;
 import org.eclipse.cdt.core.dom.IPDOM;
 import org.eclipse.cdt.core.dom.PDOM;
 import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
 import org.eclipse.cdt.core.dom.ast.IFunction;
 import org.eclipse.cdt.core.dom.ast.IVariable;
-import org.eclipse.cdt.core.dom.ast.gnu.c.GCCLanguage;
-import org.eclipse.cdt.core.dom.ast.gnu.cpp.GPPLanguage;
 import org.eclipse.cdt.core.model.CModelException;
 import org.eclipse.cdt.core.resources.FileStorage;
 import org.eclipse.cdt.core.search.ILineLocatable;
@@ -16,6 +13,7 @@ import org.eclipse.cdt.core.search.IOffsetLocatable;
 import org.eclipse.cdt.internal.core.pdom.PDOMDatabase;
 import org.eclipse.cdt.internal.core.pdom.db.IBTreeVisitor;
 import org.eclipse.cdt.internal.core.pdom.dom.PDOMBinding;
+import org.eclipse.cdt.internal.core.pdom.dom.PDOMFile;
 import org.eclipse.cdt.internal.core.pdom.dom.PDOMName;
 import org.eclipse.cdt.internal.ui.util.EditorUtility;
 import org.eclipse.cdt.internal.ui.viewsupport.CElementImageProvider;
@@ -50,6 +48,7 @@ import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorPart;
@@ -75,7 +74,7 @@ import org.eclipse.ui.texteditor.AbstractTextEditor;
  * <p>
  */
 
-public class BindingsView extends ViewPart {
+public class BindingsView extends ViewPart implements PDOMDatabase.IListener {
 	
 	private TableViewer viewer;
 	private Action action1;
@@ -98,13 +97,18 @@ public class BindingsView extends ViewPart {
 		
 		public void inputChanged(Viewer v, Object oldInput, Object newInput) {
 			this.viewer = (TableViewer)v;
-			if (newInput != null && newInput instanceof IProject) {
-				IPDOM pdom = PDOM.getPDOM((IProject)newInput);
-				if (pdom instanceof PDOMDatabase) {
+			if (newInput != null && newInput instanceof IPDOM) {
+				IPDOM ipdom = (IPDOM)newInput;
+				if (ipdom instanceof PDOMDatabase) {
 					try {
-						this.pdom = (PDOMDatabase)pdom;
-						BTreeCounter counter = new BTreeCounter();
-						this.pdom.getBindingIndex().visit(counter);
+						if (pdom != ipdom) {
+							if (pdom != null)
+								pdom.removeListener(BindingsView.this);
+							pdom = (PDOMDatabase)ipdom;
+							pdom.addListener(BindingsView.this);
+						}
+						BTreeCounter counter = new BTreeCounter(pdom);
+						pdom.getBindingIndex().visit(counter);
 						System.out.println("Binding count: " + counter.count);
 						viewer.setItemCount(counter.count);
 						return;
@@ -124,7 +128,7 @@ public class BindingsView extends ViewPart {
 		public void updateElement(final int index) {
 			try {
 				// find the binding at i
-				BTreeIndex visitor = new BTreeIndex(index);
+				BTreeIndex visitor = new BTreeIndex(pdom, index);
 				pdom.getBindingIndex().visit(visitor);
 				PDOMBinding binding = null;
 				if (visitor.result != 0) {
@@ -140,11 +144,15 @@ public class BindingsView extends ViewPart {
 
 	private static class BTreeCounter implements IBTreeVisitor {
 		int count;
+		PDOMDatabase pdom;
+		public BTreeCounter(PDOMDatabase pdom) {
+			this.pdom = pdom;
+		}
 		public int compare(int record) throws CoreException {
 			return 1;
 		}
 		public boolean visit(int record) throws CoreException {
-			if (record != 0)
+			if (record != 0 && new PDOMBinding(pdom, record).hasDeclarations())
 				++count;
 			return true;
 		}
@@ -154,14 +162,16 @@ public class BindingsView extends ViewPart {
 		final int index;
 		int count;
 		int result;
-		public BTreeIndex(int index) {
+		PDOMDatabase pdom;
+		public BTreeIndex(PDOMDatabase pdom, int index) {
+			this.pdom = pdom;
 			this.index = index;
 		}
 		public int compare(int record) throws CoreException {
 			return 1;
 		};
 		public boolean visit(int record) throws CoreException {
-			if (record == 0)
+			if (record == 0 || !new PDOMBinding(pdom, record).hasDeclarations())
 				return true;
 			
 			if (count++ == index) {
@@ -267,7 +277,22 @@ public class BindingsView extends ViewPart {
 	private void makeActions() {
 		action1 = new Action() {
 			public void run() {
-				showMessage("Action 1 executed");
+				try {
+					final PDOMDatabase pdom = ((ViewContentProvider)viewer.getContentProvider()).pdom;
+					pdom.getFileIndex().visit(new IBTreeVisitor() {
+						public int compare(int record) throws CoreException {
+							return 1;
+						}
+						public boolean visit(int record) throws CoreException {
+							if (record != 0) {
+								System.out.println("File: " + new PDOMFile(pdom, record).getFileName());
+							}
+							return true;
+						}
+					});
+				} catch (CoreException e) {
+					PDOMUIPlugin.log(e);
+				}
 			}
 		};
 		action1.setText("Action 1");
@@ -374,6 +399,15 @@ public class BindingsView extends ViewPart {
 	}
 	
 	public void showProject(IProject project) {
-		viewer.setInput(project);
+		viewer.setInput(PDOM.getPDOM(project));
 	}
+	
+	public void handleChange(final PDOMDatabase pdom) {
+		Display.getDefault().asyncExec(new Runnable() {
+			public void run() {
+				viewer.setInput(pdom);
+			}
+		});
+	}
+
 }
