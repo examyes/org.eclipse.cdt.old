@@ -302,7 +302,26 @@ public class BindingsView extends ViewPart implements PDOMDatabase.IListener {
 
 		action2 = new Action() {
 			public void run() {
-				showMessage("Action 2 executed");
+				ISelection selection = viewer.getSelection();
+				PDOMBinding binding = (PDOMBinding)((IStructuredSelection) selection)
+						.getFirstElement();
+				try {
+					PDOMName name = binding.getFirstReference();
+					if (name == null)
+						return;
+					IASTFileLocation loc = name.getFileLocation();
+					IPath path = new Path(loc.getFileName());
+					IFile[] files = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocation(path);
+					IEditorPart part;
+					if (files.length == 0)
+						part = EditorUtility.openInEditor(new FileStorage(path));
+					else
+						// TODO what if length > 1?
+						part = EditorUtility.openInEditor(files[0]);
+					((AbstractTextEditor)part).selectAndReveal(loc.getNodeOffset(), loc.getNodeLength());
+				} catch (CoreException e) {
+					PDOMUIPlugin.log(e);
+				}
 			}
 		};
 		action2.setText("Action 2");
@@ -315,7 +334,9 @@ public class BindingsView extends ViewPart implements PDOMDatabase.IListener {
 				PDOMBinding binding = (PDOMBinding)((IStructuredSelection) selection)
 						.getFirstElement();
 				try {
-					PDOMName name = binding.getFirstDeclaration();
+					PDOMName name = binding.getFirstDefinition();
+					if (name == null)
+						name = binding.getFirstDeclaration();
 					if (name == null)
 						return;
 					IASTFileLocation loc = name.getFileLocation();
