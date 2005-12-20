@@ -1,0 +1,51 @@
+<project>
+  <bugzilla>
+    <product name="CDT"/>
+  </bugzilla>
+  <committers />
+  <contributors />
+  <leaders />
+  <cvs repository="/cvsroot/tools/">
+    <module path="org.eclipse.cdt-build"/>
+    <module path="org.eclipse.cdt-contrib"/>
+    <module path="org.eclipse.cdt-core"/>
+    <module path="org.eclipse.cdt-cppunit"/>
+    <module path="org.eclipse.cdt-debug"/>
+    <module path="org.eclipse.cdt-doc"/>
+    <module path="org.eclipse.cdt-build"/>
+    <module path="org.eclipse.cdt-build"/>
+    <module path="org.eclipse.cdt-build"/>
+  </cvs>
+  <description paragraph-url="/cdt/project-info/project-page-paragraph.html"/>
+  <summary />
+  <getting-started url="/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/user/Tutorials.html?cvsroot=Tools_Project"/>
+  <ip-log />
+  <mailing-lists url="/mail/main.html#cdt">
+    <list name="cdt-cvs"/>
+    <list name="cdt-dev"/>
+    <list name="cdt-core-dev"/>
+    <list name="cdt-debug-dev"/>
+    <list name="cdt-doc-dev"/>
+    <list name="cdt-patch"/>
+    <list name="cdt-test-dev"/>
+    <list name="cdt-ui-dev"/>
+  </mailing-lists>
+  <project-plan url=""/>
+  <releases>
+    <release name="2.1.1"
+             status="completed"
+             date="03/2005"
+             download="http://download.eclipse.org/tools/cdt/releases/new" />
+    <release name="3.0"
+             status="planned"
+             date="08/2005"
+             plan="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/plans/CDT_R3_0_plan.html?cvsroot=Tools_Project" />
+    <release name="3.0.1"
+             status="planned"
+             date="12/2005" />
+    <release name="3.1"
+             status="tentative"
+             date="08/2006"
+             plan="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/plans/CDT_3.1_plan.html?cvsroot=Tools_Project" />
+  </releases>
+</project>
