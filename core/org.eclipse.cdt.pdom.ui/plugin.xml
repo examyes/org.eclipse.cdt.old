@@ -1,49 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.0"?>
 <plugin>
-   <extension
-         point="org.eclipse.ui.popupMenus">
-      <objectContribution
-            id="org.eclipse.cdt.pdom.ui.contribution.updatePDOM"
-            nameFilter="*"
-            objectClass="org.eclipse.cdt.core.model.ICProject">
-         <menu
-               id="org.eclipse.cdt.pdom.ui.menu1"
-               label="PDOM"
-               path="additions">
-            <separator name="group1"/>
-         </menu>
-         <action
-               class="org.eclipse.cdt.pdom.ui.popup.actions.PDOMUpdateProjectAction"
-               enablesFor="+"
-               id="org.eclipse.cdt.pdom.ui.updatePDOM"
-               label="Rebuild PDOM"
-               menubarPath="org.eclipse.cdt.pdom.ui.menu1/group1"/>
-      </objectContribution>
-      <viewerContribution
-            id="org.eclipse.cdt.pdom.ui.contribution.viewBindings"
-            targetID="org.eclipse.cdt.ui.CView">
-         <visibility>
-            <objectClass name="org.eclipse.cdt.core.model.ICProject"/>
-         </visibility>
-         <action
-               class="org.eclipse.cdt.pdom.ui.popup.actions.ShowInBindingsView"
-               id="org.eclipse.cdt.pdom.ui.bindingsView"
-               label="Show In Bindings View"
-               menubarPath="org.eclipse.cdt.pdom.ui.menu1/group1"/>
-      </viewerContribution>
-   </extension>
-   <extension
-         point="org.eclipse.ui.views">
-      <category
-            id="org.eclipse.cdt.pdom.ui"
-            name="PDOM Views"/>
-      <view
-            category="org.eclipse.cdt.pdom.ui"
-            class="org.eclipse.cdt.pdom.ui.views.BindingsView"
-            icon="icons/sample.gif"
-            id="org.eclipse.cdt.pdom.ui.views.BindingsView"
-            name="Bindings"/>
-   </extension>
 
 </plugin>
