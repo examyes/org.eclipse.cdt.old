@@ -15,7 +15,6 @@ package org.eclipse.cdt.refactoring.actions;
 import org.eclipse.cdt.refactoring.IPositionConsumer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.action.*;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.*;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.ActionGroup;
@@ -73,8 +72,8 @@ public class CRefactoringActionGroup extends ActionGroup implements IPositionCon
 
     private String fGroupName= IWorkbenchActionConstants.GROUP_REORGANIZE;
     private CRenameAction fRenameAction;
-    private CUndoAction fUndoAction;
-    private CRedoAction fRedoAction;
+//    private CUndoAction fUndoAction;
+//    private CRedoAction fRedoAction;
 
     
     /**
@@ -85,8 +84,8 @@ public class CRefactoringActionGroup extends ActionGroup implements IPositionCon
             fGroupName= groupName;
         }
         fRenameAction = new CRenameAction();
-        fUndoAction= new CUndoAction(ww); //$NON-NLS-1$
-        fRedoAction= new CRedoAction(ww); //$NON-NLS-1$
+//        fUndoAction= new CUndoAction(ww); //$NON-NLS-1$
+//        fRedoAction= new CRedoAction(ww); //$NON-NLS-1$
     }
     
     public void init(IWorkbenchPartSite site) {
@@ -95,12 +94,12 @@ public class CRefactoringActionGroup extends ActionGroup implements IPositionCon
     
     public void setEditor(ITextEditor textEditor) {
         fRenameAction.setEditor(textEditor);
-        ISelection sel= null;
-        if (textEditor != null) {
-            sel= textEditor.getSelectionProvider().getSelection();
-        }
-        fUndoAction.selectionChanged(sel);
-        fRedoAction.selectionChanged(sel);
+//        ISelection sel= null;
+//        if (textEditor != null) {
+//            sel= textEditor.getSelectionProvider().getSelection();
+//        }
+//        fUndoAction.selectionChanged(sel);
+//        fRedoAction.selectionChanged(sel);
     }
 
 
@@ -121,8 +120,8 @@ public class CRefactoringActionGroup extends ActionGroup implements IPositionCon
         refactorSubmenu.add(new Separator(GROUP_REORG));
         refactorSubmenu.add(fRenameAction);
         refactorSubmenu.add(new Separator(GROUP_UNDO));
-        refactorSubmenu.add(fUndoAction);
-        refactorSubmenu.add(fRedoAction);
+//        refactorSubmenu.add(fUndoAction);
+//        refactorSubmenu.add(fRedoAction);
         
         menu.appendToGroup(fGroupName, refactorSubmenu);
     }
@@ -130,17 +129,17 @@ public class CRefactoringActionGroup extends ActionGroup implements IPositionCon
     public void updateActionBars() {
     }
 
-    /*
-     * @see ActionGroup#dispose()
-     */
-    public void dispose() {
-        fUndoAction.dispose();
-        super.dispose();
-    }
+//    /*
+//     * @see ActionGroup#dispose()
+//     */
+//    public void dispose() {
+//        fUndoAction.dispose();
+//        super.dispose();
+//    }
 
     public void setPosition(IFile file, int startPos, String text) {
         fRenameAction.setPosition(file, startPos, text);
-        fUndoAction.selectionChanged(null);
-        fRedoAction.selectionChanged(null);
+//        fUndoAction.selectionChanged(null);
+//        fRedoAction.selectionChanged(null);
     }
 }

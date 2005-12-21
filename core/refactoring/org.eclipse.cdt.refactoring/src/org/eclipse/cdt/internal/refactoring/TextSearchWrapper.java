@@ -13,6 +13,8 @@ package org.eclipse.cdt.internal.refactoring;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.cdt.core.model.*;
 import org.eclipse.cdt.internal.refactoring.scanner.Scanner;
@@ -20,8 +22,7 @@ import org.eclipse.cdt.internal.refactoring.scanner.Token;
 import org.eclipse.cdt.refactoring.*;
 import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.*;
-import org.eclipse.search.internal.core.SearchScope;
-import org.eclipse.search.internal.core.text.*;
+import org.eclipse.search.core.text.*;
 import org.eclipse.ui.*;
 
 /**
@@ -29,10 +30,99 @@ import org.eclipse.ui.*;
  * by location (comments, string-literals, etc.).
  */
 public class TextSearchWrapper implements ICRefactoringSearch {
-    
+    private static class SearchScope extends TextSearchScope {
+        public static SearchScope newSearchScope(IWorkingSet ws) {
+            IAdaptable[] adaptables= ws.getElements();
+            ArrayList resources = new ArrayList();
+            for (int i = 0; i < adaptables.length; i++) {
+                IAdaptable adaptable = adaptables[i];
+                IResource r= (IResource) adaptable.getAdapter(IResource.class);
+                if (r != null) {
+                    resources.add(r);
+                }
+            }
+            return newSearchScope((IResource[]) resources.toArray(new IResource[resources.size()]), false);
+		}
+        
+		public static SearchScope newSearchScope(IResource[] resources, boolean copy) {
+			return new SearchScope(resources, copy);
+		}
+
+        private IResource[] fRootResources;
+        private ArrayList fFileMatcher= new ArrayList();
+
+        private SearchScope(IResource[] resources, boolean copy) {
+            fRootResources= copy ? (IResource[]) resources.clone() : resources;
+        }
+
+		public IResource[] getRoots() {
+            return fRootResources;
+        }
+
+        public boolean contains(IResourceProxy proxy) {
+            if (proxy.isDerived()) {
+                return false;
+            }
+            if (proxy.getType() == IResource.FILE) {
+                return containsFile(proxy.getName());
+            }
+            return true;
+		}
+
+		private boolean containsFile(String name) {
+            for (Iterator iter = fFileMatcher.iterator(); iter.hasNext();) {
+                Matcher matcher = (Matcher) iter.next();
+                matcher.reset(name);
+                if (matcher.matches()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void addFileNamePattern(String filePattern) {
+            Pattern p= Pattern.compile(filePatternToRegex(filePattern));
+            fFileMatcher.add(p.matcher("")); //$NON-NLS-1$
+		}
+
+        private String filePatternToRegex(String filePattern) {
+            StringBuffer result = new StringBuffer();
+            for (int i = 0; i < filePattern.length(); i++) {
+                char c = filePattern.charAt(i);
+                switch(c) {
+                case '\\':
+                case '(':
+                case ')':
+                case '{':
+                case '}':
+                case '.':
+                case '[':
+                case ']':
+                case '$':
+                case '^':
+                case '+':
+                case '|':
+                    result.append('\\');
+                    result.append(c);
+                    break;
+                case '?':
+                    result.append('.');
+                    break;
+                case '*':
+                    result.append(".*"); //$NON-NLS-1$
+                    break;
+                default:
+                    result.append(c);
+                break;
+                }
+            }
+            return result.toString();
+        }
+    }
+
     public TextSearchWrapper() {}
     
-    private SearchScope createSearchScope(IFile file, int scope, 
+    private TextSearchScope createSearchScope(IFile file, int scope, 
             String workingSetName, String[] patterns) {
         switch (scope) {
         	case SCOPE_WORKSPACE:
@@ -42,7 +132,7 @@ public class TextSearchWrapper implements ICRefactoringSearch {
         	case SCOPE_FILE:
         	    return defineSearchScope(file, patterns);
         	case SCOPE_WORKING_SET: {
-        	    SearchScope result= defineWorkingSetAsSearchScope(workingSetName, patterns);
+        	    TextSearchScope result= defineWorkingSetAsSearchScope(workingSetName, patterns);
         	    if (result == null) {
         	        result= defineSearchScope(file.getWorkspace().getRoot(), patterns);
         	    }
@@ -52,7 +142,7 @@ public class TextSearchWrapper implements ICRefactoringSearch {
 	    return defineRelatedProjectsAsSearchScope(file.getProject(), patterns);
     }
     
-    private SearchScope defineRelatedProjectsAsSearchScope(IProject project, String[] patterns) {
+    private TextSearchScope defineRelatedProjectsAsSearchScope(IProject project, String[] patterns) {
         HashSet projects= new HashSet();
         LinkedList workThrough= new LinkedList();
         workThrough.add(project);
@@ -71,7 +161,7 @@ public class TextSearchWrapper implements ICRefactoringSearch {
         return defineSearchScope(resources, patterns);
     }
 
-    private SearchScope defineWorkingSetAsSearchScope(String wsName, String[] patterns) {
+    private TextSearchScope defineWorkingSetAsSearchScope(String wsName, String[] patterns) {
         if (wsName == null) {
             return null;
         }
@@ -80,7 +170,7 @@ public class TextSearchWrapper implements ICRefactoringSearch {
 		if (ws == null) {
 		    return null;
 		}
-		SearchScope result= SearchScope.newSearchScope("c/cpp", new IWorkingSet[] {ws}); //$NON-NLS-1$
+		SearchScope result= SearchScope.newSearchScope(ws); 
 		applyFilePatterns(result, patterns);
 		return result;
     }
@@ -92,14 +182,14 @@ public class TextSearchWrapper implements ICRefactoringSearch {
         }
     }
 
-    private SearchScope defineSearchScope(IResource resource, String[] patterns) {
-        SearchScope result= SearchScope.newSearchScope("c/cpp", new IResource[]{resource}); //$NON-NLS-1$
+    private TextSearchScope defineSearchScope(IResource resource, String[] patterns) {
+    	SearchScope result= SearchScope.newSearchScope(new IResource[]{resource}, false); 
         applyFilePatterns(result, patterns);
         return result;
     }
     
-    private SearchScope defineSearchScope(IResource[] resources, String[] patterns) {
-        SearchScope result= SearchScope.newSearchScope("c/cpp", resources); //$NON-NLS-1$            
+    private TextSearchScope defineSearchScope(IResource[] resources, String[] patterns) {
+    	SearchScope result= SearchScope.newSearchScope(resources, true);           
         applyFilePatterns(result, patterns);
         return result;
     }
@@ -110,7 +200,7 @@ public class TextSearchWrapper implements ICRefactoringSearch {
     public IStatus searchWord(int scope, IFile resource, String workingSet, String[] patterns,
             String word, IProgressMonitor monitor, final List target) {
         int startPos= target.size();
-        TextSearchEngine engine= new TextSearchEngine();
+        TextSearchEngine engine= TextSearchEngine.create();
         StringBuffer searchPattern= new StringBuffer(word.length()+ 8);
         searchPattern.append("\\b"); //$NON-NLS-1$
         searchPattern.append("\\Q"); //$NON-NLS-1$
@@ -118,33 +208,22 @@ public class TextSearchWrapper implements ICRefactoringSearch {
         searchPattern.append("\\E"); //$NON-NLS-1$
         searchPattern.append("\\b"); //$NON-NLS-1$
 
-        SearchScope searchscope= createSearchScope(resource, scope, workingSet, patterns);
-        MatchLocator locator= new MatchLocator(searchPattern.toString(), true, true);
-        final IProgressMonitor subProgress= new SubProgressMonitor(monitor, 95);
-        ITextSearchResultCollector collector= new ITextSearchResultCollector() {
-            public IProgressMonitor getProgressMonitor() {
-                return subProgress;
-            }
-            public void aboutToStart(){
-            }
-            public void accept(IResourceProxy proxy, String line, int start, 
-                    int length, int lineNumber) {
-                accept(proxy, start, length);
-            }
-            public void done() {
-            }
-            public void accept(IResourceProxy proxy, int start, int length) {
-                IResource res= proxy.requestResource();
-                if (res instanceof IFile) {
-                    IFile file= (IFile) res;
-                    ICElement elem= CoreModel.getDefault().create(file);
-                    if (elem instanceof ITranslationUnit) {
-                        target.add(new CRefactoringMatch(file, start, length, 0));
-                    }
-                }                
+        Pattern pattern= Pattern.compile(searchPattern.toString());
+        
+        TextSearchScope searchscope= createSearchScope(resource, scope, workingSet, patterns);
+        TextSearchRequestor requestor= new TextSearchRequestor() {
+            public boolean acceptPatternMatch(TextSearchMatchAccess access) {
+            	IFile file= access.getFile();
+            	ICElement elem= CoreModel.getDefault().create(file);
+            	if (elem instanceof ITranslationUnit) {
+            		target.add(new CRefactoringMatch(file, 
+            				access.getMatchOffset(), access.getMatchLength(), 0));
+            	}
+            	return true;
             }
         };
-        IStatus result= engine.search(searchscope, false, collector, locator);
+        IStatus result= engine.search(searchscope, requestor, pattern, 
+        		new SubProgressMonitor(monitor, 95));
         categorizeMatches(target.subList(startPos, target.size()), 
                 new SubProgressMonitor(monitor, 5));
 
@@ -245,30 +324,5 @@ public class TextSearchWrapper implements ICRefactoringSearch {
             } catch (IOException e1) {
             }
         }
-    }
-
-    private int categorizePreprocessor(String text) {
-        boolean skipHash= true;
-        int i=0;
-        for (; i < text.length(); i++) {
-            char c= text.charAt(i);
-            if (!Character.isWhitespace(c)) {
-                if (!skipHash) {
-                    break;
-                }
-                skipHash= false;
-                if (c != '#') {
-                    break;
-                }
-            }
-        }
-        String innerText= text.substring(i);
-        if (innerText.startsWith("include")) { //$NON-NLS-1$
-            return CRefactory.OPTION_IN_INCLUDE_DIRECTIVE;
-        }
-        if (innerText.startsWith("define") || innerText.startsWith("undef")) { //$NON-NLS-1$ //$NON-NLS-2$
-            return CRefactory.OPTION_IN_MACRO_DEFINITION;
-        }
-        return CRefactory.OPTION_IN_PREPROCESSOR_DIRECTIVE;
     }
 }

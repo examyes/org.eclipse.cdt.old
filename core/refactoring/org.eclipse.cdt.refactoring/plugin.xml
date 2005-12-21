@@ -23,7 +23,7 @@
                id="org.eclipse.cdt.refactoring.rename"
                definitionId="org.eclipse.cdt.ui.edit.text.c.rename.element"
          />
-         <action 
+         <!--action 
                label="%Refactoring.redoAction.label" 
                class="org.eclipse.cdt.refactoring.actions.CRedoEditorActionDelegate" 
                menubarPath="org.eclipse.cdt.ui.refactoring.menu/undoRedoGroup" 
@@ -36,7 +36,7 @@
                menubarPath="org.eclipse.cdt.ui.refactoring.menu/undoRedoGroup" 
                id="org.eclipse.cdt.refactoring.undo"
                definitionId="org.eclipse.cdt.ui.edit.text.c.refactor.undo"
-         />
+         /-->
       </viewerContribution>
       <objectContribution 
             id="org.eclipse.cdt.refactoring.contrib"
@@ -61,7 +61,7 @@
                id="org.eclipse.cdt.refactoring.rename"
                definitionId="org.eclipse.cdt.ui.edit.text.c.rename.element"
          />
-         <action 
+         <!--action 
                label="%Refactoring.redoAction.label" 
                class="org.eclipse.cdt.refactoring.actions.CRedoViewActionDelegate" 
                menubarPath="org.eclipse.cdt.ui.refactoring.menu/undoRedoGroup" 
@@ -74,7 +74,7 @@
                menubarPath="org.eclipse.cdt.ui.refactoring.menu/undoRedoGroup" 
                id="org.eclipse.cdt.refactoring.undo"
                definitionId="org.eclipse.cdt.ui.edit.text.c.refactor.undo"
-         />
+         /-->
       </objectContribution>
    </extension>
 

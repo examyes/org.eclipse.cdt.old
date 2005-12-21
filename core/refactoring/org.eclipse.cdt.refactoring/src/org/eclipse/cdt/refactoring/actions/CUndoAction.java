@@ -19,6 +19,8 @@ import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
 /**
  * Undoes a refactoring.
+ * @deprecated This action is now longer needed. Undo is now performed via the
+ *  global undo/redo stack provided by <code>org.eclipse.core.commands</code>. 
  */          
 public class CUndoAction extends Action {
     private IWorkbenchWindowActionDelegate fDelegate;

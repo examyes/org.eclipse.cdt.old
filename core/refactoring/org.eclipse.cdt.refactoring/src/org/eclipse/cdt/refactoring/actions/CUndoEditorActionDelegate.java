@@ -13,12 +13,13 @@ package org.eclipse.cdt.refactoring.actions;
         
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.ltk.ui.refactoring.UndoRefactoringAction;
 import org.eclipse.ui.*;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 /**
  * Undoes a refactoring.
+ * @deprecated This action is now longer needed. Undo is now performed via the
+ *  global undo/redo stack provided by <code>org.eclipse.core.commands</code>. 
  */          
 public class CUndoEditorActionDelegate implements IEditorActionDelegate {
     private IWorkbenchWindowActionDelegate fDelegate;
@@ -33,7 +34,7 @@ public class CUndoEditorActionDelegate implements IEditorActionDelegate {
         }
         else {
             if (fDelegate==null) {
-                fDelegate= new UndoRefactoringAction();
+                fDelegate= new org.eclipse.ltk.ui.refactoring.UndoRefactoringAction();
                 fDelegate.init(targetEditor.getSite().getWorkbenchWindow());
             }
             if (targetEditor instanceof ITextEditor) {

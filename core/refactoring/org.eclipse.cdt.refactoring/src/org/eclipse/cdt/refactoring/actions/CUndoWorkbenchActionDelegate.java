@@ -11,10 +11,11 @@
 
 package org.eclipse.cdt.refactoring.actions;
         
-import org.eclipse.ltk.ui.refactoring.UndoRefactoringAction;
 
 /**
  * Undoes a refactoring.
+ * @deprecated This action is now longer needed. Undo is now performed via the
+ *  global undo/redo stack provided by <code>org.eclipse.core.commands</code>. 
  */          
-public class CUndoWorkbenchActionDelegate extends UndoRefactoringAction {
+public class CUndoWorkbenchActionDelegate extends org.eclipse.ltk.ui.refactoring.UndoRefactoringAction {
 }
