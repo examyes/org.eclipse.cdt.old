@@ -18,7 +18,7 @@
   </cvs>
   <description paragraph-url="/cdt/project-info/project-page-paragraph.html"/>
   <summary paragraph-url="/cdt/project-info/summary.html"/> 
-  <getting-started url="/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/user/Tutorials.html?cvsroot=Tools_Project"/>
+  <getting-started url="/cdt/user/Tutorials.html"/>
   <ip-log />
   <mailing-lists url="/mail/main.html#cdt">
     <list name="cdt-cvs"/>
