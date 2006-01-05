@@ -17,7 +17,7 @@
     <module path="org.eclipse.cdt-build"/>
   </cvs>
   <description paragraph-url="/cdt/project-info/project-page-paragraph.html"/>
-  <summary paragraph-url="/cdt/project-info/summary.html" /> 
+  <summary paragraph-url="/cdt/project-info/summary.html"/> 
   <getting-started url="/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/user/Tutorials.html?cvsroot=Tools_Project"/>
   <ip-log />
   <mailing-lists url="/mail/main.html#cdt">
@@ -35,17 +35,21 @@
     <release name="2.1.1"
              status="completed"
              date="03/2005"
-             download="http://download.eclipse.org/tools/cdt/releases/new" />
+             download="http://download.eclipse.org/tools/cdt/releases/new"/>
     <release name="3.0"
-             status="planned"
+             status="completed"
              date="08/2005"
-             plan="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/plans/CDT_R3_0_plan.html?cvsroot=Tools_Project" />
+             download="http://download.eclipse.org/tools/cdt/releases/eclipse3.1"/>
     <release name="3.0.1"
-             status="planned"
-             date="12/2005" />
+             status="completed"
+             date="12/2005"
+             download="http://download.eclipse.org/tools/cdt/releases/eclipse3.1"/>
+	<release name="3.0.2"
+			 status="planned"
+			 date="2/2006"/>
     <release name="3.1"
-             status="tentative"
-             date="08/2006"
-             plan="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/plans/CDT_3.1_plan.html?cvsroot=Tools_Project" />
+             status="planned"
+             date="06/2006"
+             plan="http://wiki.eclipse.org/index.php/CDT/planning/3.1"/>
   </releases>
 </project>
