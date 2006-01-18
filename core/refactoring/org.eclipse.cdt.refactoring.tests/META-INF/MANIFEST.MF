@@ -20,4 +20,4 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.workbench.texteditor,
  org.eclipse.cdt.core.tests,
  org.eclipse.search
-Eclipse-AutoStart: true
+Eclipse-LazyStart: true

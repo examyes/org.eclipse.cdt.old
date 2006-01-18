@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
-Bundle-SymbolicName: org.eclipse.cdt.refactoring;singleton=true
+Bundle-SymbolicName: org.eclipse.cdt.refactoring;singleton:=true
 Bundle-Version: 3.1.0.qualifier
-Bundle-ClassPath: refactoring.jar
 Bundle-Activator: org.eclipse.cdt.refactoring.CRefactoringPlugin
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
@@ -17,7 +17,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ltk.ui.refactoring,
  org.eclipse.search,
  org.eclipse.cdt.core
-Eclipse-AutoStart: true
-Provide-Package: org.eclipse.cdt.internal.refactoring;x-internal:=true;x-friends:="org.eclipse.cdt.refactoring.tests",
+Export-Package: org.eclipse.cdt.internal.refactoring;x-friends:="org.eclipse.cdt.refactoring.tests",
  org.eclipse.cdt.refactoring,
  org.eclipse.cdt.refactoring.actions
+Eclipse-LazyStart: true
