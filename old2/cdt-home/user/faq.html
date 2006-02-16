@@ -102,6 +102,9 @@
     	I don't get anything showing up when I select CTRL+SPACE in a C/C++ source file.</a></li>
     <li><a href="#editing_20">Search is broken!</a></li>
     <li><a href="#editing_30">I am having problems with the outline view!</a></li>
+    <li><a href="#editing_40">I am using a non gun compiler and I get the following messages:
+    "Error launching external scanner info generator (gcc -E -P -v -dD" and "File not indexed because it was not built <filename>".  How do I get rid of them?
+    </a></li>
     <li><a href="#editing_50">How can I add another extension to CDT so that files other than c/cpp/cc/h 
     	files are recognized as source files? My compiler needs the file extension 
     	to be &quot;xyz&quot;, and when I open xyz files there is no syntax highlighting.</a></li>
@@ -989,6 +992,31 @@ clean :
     </p>
   	<hr size="1">
     </li>
+    <li><b><a name="editing_40">    I am using a non gun compiler and I get the following messages:
+    "Error launching external scanner info generator (gcc -E -P -v -dD" and "File not indexed because it was not built <filename>".  
+    How do I get rid of them?</a></b> <p>
+    
+In general the parser needs to know the include paths and macro 
+definitions for each source file and the compiler built-ins before it 
+can be parsed(the indexer is one client that will parse the files).
+<p>
+In CDT there is a scanner config feature that will invoke the compiler 
+"gcc -E -P -v -dD" to ask it for the default values.   This feature will 
+also look at the output of running "make" and try to determine which 
+includes (-I) and which defines (-D) have bee set on the command line.
+<p>
+Your project has been setup to use the defaults for gnu to get this 
+info.   Since you are using a non-gnu compiler, you should disable 
+all of the discovery feature.  Got to the Properties on your project and 
+open the section "C/C++ Make project" and select the "Discovery 
+Options" tab.  Deselect the "Automate discovery of paths and symbols" 
+and these errors will go away.
+<p>
+Note that you will then need to manually add the paths and symbols to 
+the project (or you will get a lot of other parser errors).  This can be 
+done from the same dialog under "C/C++ Include paths and symbols".
+    <hr size="1">
+  	</li>
  
     <li><b><a name="editing_50">How can I add another extension to CDT so that files other than c/cpp/cc/h 
     	files are recognized as source files? My compiler needs the file extension 
