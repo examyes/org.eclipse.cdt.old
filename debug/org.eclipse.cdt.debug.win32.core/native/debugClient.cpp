@@ -54,9 +54,9 @@ NATIVE(jint, createProcess)(JNIEnv * env, jclass cls, jlong p, jlong server,
 							jstring commandLine, jint createFlags) {
 	IDebugClient5 * debugClient = (IDebugClient5 *)p;
 	
-	const jchar * commandLineJchar = env->GetStringChars(commandLine, NULL);
-	jchar * commandLineStr = wcsdup(commandLineJchar);
-	env->ReleaseStringChars(commandLine, commandLineJchar);
+	const wchar_t * commandLineWchar = (const wchar_t *)env->GetStringChars(commandLine, NULL);
+	wchar_t * commandLineStr = wcsdup(commandLineWchar);
+	env->ReleaseStringChars(commandLine, (const jchar *)commandLineWchar);
 
 	return debugClient->CreateProcessWide(server, commandLineStr, createFlags);
 }
