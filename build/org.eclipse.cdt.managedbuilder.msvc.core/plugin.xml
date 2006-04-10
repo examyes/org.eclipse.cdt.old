@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.cdt.managedbuilder.core.buildDefinitions">
+      <tool
+            command="cl /c"
+            id="cdt.msvc.tool.compiler"
+            isAbstract="false"
+            name="%tool.compiler.name"
+            natureFilter="both"
+            outputFlag="/Fo">
+         <inputType
+               dependencyExtensions="h,hpp"
+               id="cdt.msvc.inputType.compiler"
+               sources="c,cpp"/>
+         <outputType
+               buildVariable="OBJS"
+               id="cdt.msvc.outputType.compiler"
+               outputs="obj"/>
+      </tool>
+      <tool
+            command="link"
+            id="cdt.msvc.tool.linker"
+            isAbstract="false"
+            name="%tool.linker.name"
+            natureFilter="both"
+            outputFlag="/OUT:">
+         <inputType
+               buildVariable="OBJS"
+               id="cdt.msvc.inputType.linker"
+               multipleOfType="true"
+               sources="obj"/>
+      </tool>
+      <tool
+            id="cdt.msvc.tool.linker.exe"
+            isAbstract="false"
+            superClass="cdt.msvc.tool.linker">
+         <outputType
+               id="cdt.msvc.outputType.linker.exe"
+               outputs="exe"/>
+      </tool>
+      <projectType
+            id="cdt.msvc.projectType.exe"
+            isAbstract="false"
+            isTest="false"
+            name="%projectType.exe.name">
+         <configuration
+               artifactExtension="exe"
+               cleanCommand="rmdir /s"
+               errorParsers="org.eclipse.cdt.core.VCErrorParser"
+               id="cdt.msvc.config.exe.debug"
+               name="%config.debug.name">
+            <toolChain
+                  id="cdt.msvc.toolChain.exe.debug"
+                  isAbstract="false"
+                  >
+               <targetPlatform
+                     archList="all"
+                     binaryParser="org.eclipse.cdt.core.PE"
+                     id="cdt.msvc.targetPlatform.exe.debug"
+                     isAbstract="false"
+                     osList="win32"/>
+               <tool
+                     id="cdt.msvc.tool.compiler.exe.debug"
+                     isAbstract="false"
+                     superClass="cdt.msvc.tool.compiler"/>
+               <tool
+                     id="cdt.msvc.tool.linker.exe.debug"
+                     isAbstract="false"
+                     superClass="cdt.msvc.tool.linker.exe"/>
+            </toolChain>
+         </configuration>
+      </projectType>
+   </extension>
+
+</plugin>
