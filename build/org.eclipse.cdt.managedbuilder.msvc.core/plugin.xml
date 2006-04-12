@@ -69,6 +69,10 @@
                      id="cdt.msvc.tool.linker.exe.debug"
                      isAbstract="false"
                      superClass="cdt.msvc.tool.linker.exe"/>
+               <builder
+                     id="org.eclipse.cdt.managedbuilder.msvc.core.builder1"
+                     isAbstract="false"
+                     isVariableCaseSensitive="false"/>
             </toolChain>
          </configuration>
       </projectType>
