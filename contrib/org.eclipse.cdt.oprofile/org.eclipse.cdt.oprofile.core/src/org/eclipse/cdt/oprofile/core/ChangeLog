@@ -1,3 +1,8 @@
+2006-04-28  Keith Seitz  <keiths@redhat.com>
+
+	* OpInfo.java (SearchEventComparator.compare): Compare to String bstr
+	not Object b.
+
 2005-04-14  Keith Seitz  <keiths@redhat.com>
 
 	* ProfileImage.java (Header.event): Now a string variable.

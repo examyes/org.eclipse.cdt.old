@@ -51,7 +51,7 @@ public class OpInfo {
 				astr = ((OpEvent) a).getText();
 				bstr = (String) b;
 			}
-			return astr.compareTo(b);
+			return astr.compareTo(bstr);
 		}
 	}
 	
