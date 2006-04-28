@@ -52,7 +52,11 @@ public class SampleSorter extends ViewerSorter
 				break;
 			
 			case SampleView.COLUMN_VMA:
-				result = collator.compare(o1.getAddress(), o2.getAddress());
+				// Some elements don't have addresses (or at least we don't know them)
+				// In these cases, getAddress will return null. Just pretend they're 0x00.
+				String addr1 = (o1.getAddress() == null) ? "0" : o1.getAddress();
+				String addr2 = (o2.getAddress() == null) ? "0" : o2.getAddress();
+				result = collator.compare(addr1, addr2);
 				break;
 			
 			default:
