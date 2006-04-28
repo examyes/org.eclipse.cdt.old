@@ -1,7 +1,3 @@
-2005-06-10  Keith Seitz  <keiths@redhat.com>
-
-	* src/opxml.cc (main): getopt_long_only returns an int, not a char.
-
 2005-05-27  Jeremy Handcock  <handcock@redhat.com>
 
 	* install: Revert last patch.
@@ -23,11 +19,6 @@
 	* .cvsignore: Add bin/.
 	* build.properties: Include about.html.
 	(bin.includes): Include opcontrol-wrappers.
-
-2005-05-26  Jeremy Handcock  <handcock@redhat.com>
-
-	Eclipse.org Bugzilla #96849:
-	* src/build.xml: Set failonerror="true" for all `exec' tasks.
 
 2005-02-04  Keith Seitz  <keiths@redhat.com>
 
