@@ -114,7 +114,7 @@ samplefile::_get_info_from_filename (void)
       ++i;
 
       // "{dep}" must be followed by "{kern}" or "{root}"
-      if (parts[i] != "{kern}" && parts[i] != "{dep}")
+      if (parts[i] != "{kern}" && parts[i] != "{root}")
 	{
 	  // Error. Filename truncated.
 	  return;

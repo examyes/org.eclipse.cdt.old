@@ -1,3 +1,21 @@
+2006-04-28  Keith Seitz  <keiths@redhat.com>
+
+	* samplefile.h (get_name): Use is_dependency instead of has_samplefile
+	when returnin the logical name.
+	(_lib_image): Clarify comment.
+	* samplefile.cc (_get_info_from_filename): Comment for "{kern}" or
+	"{root}" is correct -- code was using "{kern}" and "{dep}", which is
+	not correct.
+
+2005-06-10  Keith Seitz  <keiths@redhat.com>
+
+	* opxml.cc (main): getopt_long_only returns an int, not a char.
+
+2005-05-26  Jeremy Handcock  <handcock@redhat.com>
+
+	Eclipse.org Bugzilla #96849:
+	* build.xml: Set failonerror="true" for all `exec' tasks.
+
 2005-04-14  Keith Seitz  <keiths@redhat.com>
 
 	* Makefile: Don't link against elfutils.

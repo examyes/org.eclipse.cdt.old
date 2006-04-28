@@ -76,7 +76,7 @@ class samplefile
   // Returns the logical name of the image in this samplefile, i.e.,
   // the lib_image if this is a dependency or image_name if not
   std::string get_name (void) const
-    { return (has_samplefile () ? get_image () : get_lib_image ()); };
+    { return (is_dependency () ? get_lib_image () : get_image ()); };
 
   // Returns the event name that was collected in this samplefile
   std::string get_event (void) const
@@ -126,7 +126,7 @@ class samplefile
   // Information about the collection configuration
   std::string _filename;  // Disk filename of samplefile
   std::string _image;     // Name of the image recorded
-  std::string _lib_image; // Name of the library (may be "")
+  std::string _lib_image; // Name of the library (== _image if not a sub-image)
   std::string _event;
   std::string _count;
   std::string _unit_mask;
