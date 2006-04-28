@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import javax.xml.parsers.SAXParserFactory;
 
 import org.eclipse.cdt.oprofile.core.Oprofile;
 import org.eclipse.cdt.oprofile.core.OprofileCorePlugin;
@@ -20,7 +21,6 @@ import org.eclipse.core.runtime.Platform;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
  * This class will run opxml.
@@ -63,9 +63,10 @@ public class OpxmlRunner {
 		
 		try {
 			// Create XMLReader
-			reader = XMLReaderFactory.createXMLReader();
-		} catch (SAXException e1) {
-			// FIXME error? Exception?
+		        SAXParserFactory factory = SAXParserFactory.newInstance ();
+		        reader = factory.newSAXParser ().getXMLReader ();
+		} catch (Exception e) {
+			System.out.println ("Exception creating SAXParser: " + e.getMessage ());
 		}
 		
 		// Set content/error handlers

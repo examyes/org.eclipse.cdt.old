@@ -83,6 +83,9 @@ public class LinuxOpcontrolProvider implements IOpcontrolProvider {
 	// Unload the oprofile kernel module and oprofilefs
 	private static final String _OPD_DEINIT_MODULE = "--deinit";
 	
+	// Logging verbosity. Specified with setupDaemon.
+	private String _verbosity = null;
+	
 	/**
 	 * Unload the kernel module and oprofilefs
 	 * @throws OpcontrolException
@@ -185,6 +188,14 @@ public class LinuxOpcontrolProvider implements IOpcontrolProvider {
 	// args: list of opcontrol arguments (not including opcontrol program itself)
 	private void _runOpcontrol(ArrayList args, boolean drainOutput) throws OpcontrolException {
 		args.add(0, _OPCONTROL_PROGRAM);
+		// Verbosity hack. If --start or --start-daemon, add verbosity, if set
+		String cmd = (String) args.get(1);
+		if ((cmd.equals (_OPD_START_COLLECTION) || cmd.equals(_OPD_START_DAEMON))
+			&& _verbosity != null)
+		{
+			args.add(_verbosity);
+		}
+		
 		String[] cmdArray = new String[args.size()];
 		args.toArray(cmdArray);
 		
@@ -283,9 +294,9 @@ public class LinuxOpcontrolProvider implements IOpcontrolProvider {
 			args.add(_OPD_KERNEL_FILE + options.getKernelImageFile());
 		}
 		
-		// Add verbosity (only support "all" now)
+		// Note verbosity (only support "all" now)
 		if (options.getVerboseLogging()) {
-			args.add(_OPD_VERBOSE_LOGGING + _OPD_VERBOSE_ALL);
+			_verbosity = _OPD_VERBOSE_LOGGING + _OPD_VERBOSE_ALL;
 		}
 	}
 
