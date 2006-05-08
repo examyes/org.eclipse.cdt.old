@@ -123,24 +123,21 @@ profileimage::get_header (void)
 ostream&
 operator<< (ostream& os, profileimage* image)
 {
-  // HACK ALERT! It would be nice to fix this in add_dependencies,
-  // but we end up with a memory leak because we don't know what to do
-  // with the image passed (we need to prevent its samplefile from being deleted
-  // by profileimage::~profileimage). Sigh.
+  os << startt ("image") << attrt ("name", image->get_name ());
 
-  // If "--separate=none" is used, we could end up with a
-  // a top-level image which is a dependency of itself.
-  // Goofy, but that's what oprofile does: it marks the executable
-  // as a dependency of itself. keiths-20050406
-  if (!image->get_samplefile ()->has_samplefile ())
+  if (image->get_samplefile ()->has_samplefile ())
     {
-      list<profileimage*>* deps = image->get_dependencies ();
-      image = deps->front ();
+      os << image->get_header ()
+	 << image->get_samplefile ();
     }
-
-  os << startt ("image") << attrt ("name", image->get_name ())
-     << image->get_header ()
-     << image->get_samplefile ();
+  else
+    {
+      // If this image does not have a samplefile (i.e., it is a "fake"
+      // one generated because it has no samples but has dependencies which do)
+      // then output the header for a dependency with no samples.
+      list<profileimage*>* deps = image->get_dependencies ();
+      os << deps->front ()->get_header ();
+    }
 
   // Output dependent images
   list<profileimage*>* deps = image->get_dependencies ();

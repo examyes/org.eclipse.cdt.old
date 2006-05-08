@@ -1,3 +1,9 @@
+2006-05-08  Keith Seitz  <keiths@redhat.com>
+
+	* procfileimage.cc (operator<<): When outputting an image
+	with only dependencies, only output the first dependency's header. Then
+	loop through the dependencies.
+
 2006-04-28  Keith Seitz  <keiths@redhat.com>
 
 	* samplefile.h (get_name): Use is_dependency instead of has_samplefile
