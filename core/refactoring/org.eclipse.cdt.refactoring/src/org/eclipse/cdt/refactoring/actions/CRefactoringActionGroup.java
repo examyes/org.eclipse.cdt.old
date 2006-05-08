@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2004, 2005 IBM Corporation and others.
+ * Copyright (c) 2004, 2006 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,11 +7,12 @@
  *
  * Contributors:
  * IBM Rational Software - Initial API and implementation
- * Markus Schorn - ported to the needs of new refactoring implementation 
+ * Markus Schorn, Wind River Systems Inc. - ported for rename refactoring impl. 
  *******************************************************************************/
 
 package org.eclipse.cdt.refactoring.actions;
 
+import org.eclipse.cdt.internal.refactoring.Messages;
 import org.eclipse.cdt.refactoring.IPositionConsumer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.action.*;
@@ -116,7 +117,7 @@ public class CRefactoringActionGroup extends ActionGroup implements IPositionCon
      */
     public void fillContextMenu(IMenuManager menu) {
         super.fillContextMenu(menu);
-        IMenuManager refactorSubmenu = new MenuManager("Refactor", MENU_ID); //$NON-NLS-1$
+        IMenuManager refactorSubmenu = new MenuManager(Messages.getString("CRefactoringActionGroup.RefactorMenu"), MENU_ID); //$NON-NLS-1$
         refactorSubmenu.add(new Separator(GROUP_REORG));
         refactorSubmenu.add(fRenameAction);
         refactorSubmenu.add(new Separator(GROUP_UNDO));
