@@ -42,7 +42,7 @@ class samplefile
 
   // Constructor -- pass in the filename (may be "" when there
   // were no samples collected for the profileimage, i.e., "fake").
-  samplefile::samplefile (std::string filename);
+  samplefile (std::string filename);
 
   // Destructor
   ~samplefile (void);
