@@ -30,10 +30,13 @@ public class CRenameMacroProcessor extends CRenameGlobalProcessor {
         setAvailableOptions(CRefactory.OPTION_ASK_SCOPE | 
                 CRefactory.OPTION_IN_CODE |
                 CRefactory.OPTION_IN_COMMENT | 
-                CRefactory.OPTION_IN_MACRO_DEFINITION |
                 CRefactory.OPTION_IN_PREPROCESSOR_DIRECTIVE);
     }
     
+    protected int getAcceptedLocations(int selectedOptions) {
+        return selectedOptions | CRefactory.OPTION_IN_MACRO_DEFINITION;
+    }
+
     protected void analyzeTextMatches(ArrayList matches, IProgressMonitor monitor, 
             RefactoringStatus status) {
         for (Iterator iter = matches.iterator(); iter.hasNext();) {
