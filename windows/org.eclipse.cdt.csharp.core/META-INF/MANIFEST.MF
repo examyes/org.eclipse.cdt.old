@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: CDT C# Core Plug-in
+Bundle-SymbolicName: org.eclipse.cdt.csharp.core
+Bundle-Version: 1.0.0
+Bundle-Activator: org.eclipse.cdt.csharp.core.Activator
+Bundle-Vendor: Eclipse.org
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.core.runtime
+Eclipse-LazyStart: true
