@@ -818,3 +818,383 @@ typeDeclaration
 qualifiedAliasMember
 	:	identifier '::' identifier ( typeArgumentList )?
 	;
+
+classDeclaration
+	:	( attributes )? ( classModifiers )? ( 'partial' )? 'class' identifier
+		( typeParameterList )? ( classBase )? ( typeParameterConstraintsClauses )?
+		classBody ( ';' )?
+	;
+
+classModifiers
+	:	( classModifier )+
+	;
+
+classModifier
+	:	'new'
+	|	'public'
+	|	'protected'
+	|	'internal'
+	|	'private'
+	|	'abstract'
+	|	'sealed'
+	|	'static'
+	;
+
+classBase
+	:	classType ( ',' interfaceTypeList )?
+	|	interfaceTypeList
+	;
+
+interfaceTypeList
+	:	interfaceType ( ',' interfaceType )*
+	;
+
+classBody
+	:	'{' ( classMemberDeclarations )? '}'
+	;
+
+classMemberDeclarations
+	:	( classMemberDeclaration )+
+	;
+
+classMemberDeclaration
+	:	constantDeclaration
+	|	fieldDeclaration
+	|	methodDeclaration
+	|	propertyDeclaration
+	|	eventDeclaration
+	|	indexerDeclaration
+	|	operatorDeclaration
+	|	constructorDeclaration
+	|	finalizerDeclaration
+	|	staticConstructorDeclaration
+	|	typeDeclaration
+	;
+
+constantDeclaration
+	:	( attributes )? ( constantModifiers )? 'const' type constantDeclarators ';'
+	;
+
+constantModifiers
+	:	( constantModifier )+
+	;
+
+constantModifier
+	:	'new'
+	|	'public'
+	|	'protected'
+	|	'internal'
+	|	'private'
+	;
+
+constructorDeclarators
+	:	constantDeclarator ( ',' constantDeclarator )*
+	;
+
+fieldDeclarator
+	:	( attributes )? ( fieldModifiers )? type variableDeclarators ';'
+	;
+
+fieldModifiers
+	:	( fieldModifier )+
+	;
+
+fieldModifier
+	:	'new'
+	|	'public'
+	|	'protected'
+	|	'internal'
+	|	'private'
+	|	'static'
+	|	'readonly'
+	|	'volatile'
+	;
+
+variableDeclarators
+	:	variableDeclarator ( ',' variableDeclarator )*
+	;
+
+variableDeclarator
+	:	identifier ( '=' variableInitializer )?
+	;
+
+variableInitializer
+	:	expression
+	|	arrayInitializer
+	;
+
+methodDeclaration
+	:	methodHeader methodBody
+	;
+
+methodHeader
+	:	( attributes )? ( methodModifiers )? returnType memberName ( typeParameterList )?
+		'(' ( formalParameterList )? ')' ( typeParameterConstraintsClauses )?
+	;
+
+methodModifiers
+	:	( methodModifier )+
+	;
+
+methodModifier
+	:	'new'
+	|	'public'
+	|	'protected'
+	|	'internal'
+	|	'private'
+	|	'static'
+	|	'virtual'
+	|	'sealed'
+	|	'override'
+	|	'abstract'
+	|	'extern'
+	;
+
+returnType
+	:	type
+	|	'void'
+	;
+
+memberName
+	:	identifier
+	|	interfaceType '.' identifier
+	;
+
+methodBody
+	:	block
+	|	';'
+	;
+
+formalParameterList
+	:	fixedParameters ( ',' parameterArray )?
+	|	parameterArray
+	;
+
+fixedParameters
+	:	fixedParameter ( ',' fixedParameter )*
+	;
+
+fixedParameter
+	:	( attributes )? ( parameterModifier )? type identifier
+	;
+
+parameterModifier
+	:	'ref' | 'out'
+	;
+
+parameterArray
+	:	( attributes )? 'params' arrayType identifier
+	;
+
+propertyDeclaration
+	:	( attributes )? ( propertyModifiers )? type memberName '{' accessorDeclarations '}'
+	;
+
+propertyModifiers
+	:	( propertyModifier )+
+	;
+
+propertyModifier
+	:	'new'
+	|	'public'
+	|	'protected'
+	|	'internal'
+	|	'private'
+	|	'static'
+	|	'virtual'
+	|	'sealed'
+	|	'override'
+	|	'abstract'
+	|	'extern'
+	;
+
+accessorDeclarations
+	:	getAccessorDeclaration ( setAccessorDeclaration )?
+	|	setAccessorDeclaration ( getAccessorDeclaration )?
+	;
+
+getAccessorDeclaration
+	:	( attributes )? ( accessorModifier )? 'get' accessorBody
+	;
+
+setAccessorDeclaration
+	:	( attributes )? ( accessorModifier )? 'set' accessorBody
+	;
+
+accessorModifier
+	:	'protected'
+	|	'internal'
+	|	'private'
+	|	'protected' 'internal'
+	|	'internal' 'protected'
+	;
+
+accessorBody
+	:	block
+	|	';'
+	;
+
+eventDeclaration
+	:	( attributes )? ( eventModifiers )? 'event' type variableDeclarators ';'
+	|	( attributes )? ( eventModifiers )? 'event' type memberName
+		'{' eventAccessorDeclarations '}'
+	;
+
+eventModifiers
+	:	( eventModifier )+
+	;
+
+eventModifier
+	:	'new'
+	|	'public'
+	|	'protected'
+	|	'internal'
+	|	'private'
+	|	'static'
+	|	'virtual'
+	|	'sealed'
+	|	'override'
+	|	'abstract'
+	|	'extern'
+	;
+
+
+eventAccessorDeclarations
+	:	addAccessorDeclaration removeAccessorDeclaration
+	|	removeAccessorDeclaration addAccessorDeclaration
+	;
+
+addAccessorDeclaration
+	:	( attributes )? 'add' block
+	;
+
+removeAccessorDeclaration
+	:	( attributes )? 'remove' block
+	;
+
+indexerDeclaration
+	:	( attributes )? ( indexerModifiers )? indexerDeclarator '{' accessorDeclarations '}'
+	;
+
+indexerModifiers
+	:	( indexerModifier )+
+	;
+
+indexerModifier
+	:	'new'
+	|	'public'
+	|	'protected'
+	|	'internal'
+	|	'private'
+	|	'virtual'
+	|	'sealed'
+	|	'override'
+	|	'abstract'
+	|	'extern'
+	;
+
+indexerDeclarator
+	:	type 'this' '[' formalParameterList ']'
+	|	type interfaceType '.' 'this' '[' formalParameterList ']'
+	;
+
+operatorDeclaration
+	:	( attributes )? operatorModifiers operatorDeclarator operatorBody
+	;
+
+operatorModifiers
+	:	( operatorModifier )+
+	;
+
+operatorModifier
+	:	'public'
+	|	'static'
+	|	'extern'
+	;
+
+operatorDeclarator
+	:	unaryOperatorDeclarator
+	|	binaryOperatorDeclarator
+	|	conversionOperatorDeclarator
+	;
+
+unaryOperatorDeclarator
+	:	type 'operator' overloadableUnaryOperator '(' type identifier ')'
+	;
+
+overloadableUnaryOperator
+	:	'+' | '-' | '!' | '~' | '++' | '--' | 'true' | 'false'
+	;
+
+binaryOperatorDeclarator
+	:	type 'operator' overloadableBinaryOperator
+		'(' type identifier ',' type identifier ')'
+	;
+
+overloadableBinaryOperator
+	:	'+' | '-' | '*' | '/' | '%'
+	|	'&' | '|' | '^' | '<<' | rightShift
+	|	'==' | '!=' | '>' | '<' | '>=' | '<='
+	;
+
+conversionOperatorDeclarator
+	:	( 'implicit' | 'explicit' ) 'operator' type '(' type identifier ')'
+	;
+
+operatorBody
+	:	block
+	|	';'
+	;
+
+constructorDeclaration
+	:	( attributes )? ( constructorModifiers )? constructorDeclarator constructorBody
+	;
+
+constructorModifiers
+	:	( constructorModifier )+
+	;
+
+constructorModifier
+	:	'public'
+	|	'protected'
+	|	'internal'
+	|	'private'
+	|	'extern'
+	;
+
+constructorDeclarator
+	:	identifier '(' ( formalParameterList )? ')' ( constructorInitializer )?
+	;
+
+constructorInitializer
+	:	':' 'base' '(' ( argumentList )? ')'
+	|	':' 'this' '(' ( argumentList )? ')'
+	;
+
+constructorBody
+	:	block
+	|	';'
+	;
+
+staticConstructorDeclaration
+	:	( attributes )? staticConstructorModifiers identifier '(' ')' staticConstructorBody
+	;
+
+staticConstructorModifiers
+	:	'extern' 'static'
+	|	'static' ( 'extern' )?
+	;
+
+staticConstructorBody
+	:	block
+	| 	';'
+	;
+
+finalizerDeclaration
+	:	( attributes )? ( 'extern' )? '~' identifier '(' ')' finalizerBody
+	;
+
+finalizerBody
+	:	block
+	| 	';'
+	;
