@@ -152,3 +152,369 @@ rightShiftAssignment
 	:	'>' '>='
 	;
 
+compilationUnit
+	:	( externAliasDirective )? ( usingDirectives )? ( globalAttributes )?
+		( namespaceMemberDeclarations )?
+	;
+
+namespaceName
+	:	namespaceOrTypeName
+	;
+
+typeName
+	:	namespaceOrTypeName
+	;
+
+namespaceOrTypeName
+	:	(	identifier ( typeArgumentList )?
+		|	qualifiedAliasMember
+		)
+		( '.' identifier ( typeArgumentList )? )*
+	;
+
+type
+	:	valueType
+	|	referenceType
+	|	typeParameter
+	;
+
+valueType
+	:	structType
+	|	enumType
+	;
+
+structType
+	:	typeName
+	|	simpleType
+	|	nullableType
+	;
+
+simpleType
+	:	numericType
+	|	'bool'
+	;
+
+numericType
+	:	integralType
+	|	floatingPointType
+	|	'decimal'
+	;
+
+integralType
+	:	'sbyte'
+	|	'byte'
+	|	'short'
+	|	'ushort'
+	|	'int'
+	|	'uint'
+	|	'long'
+	|	'ulong'
+	|	'char'
+	;
+
+floatingPointType
+	:	'float'
+	|	'double'
+	;
+
+enumType
+	:	typeName
+	;
+
+nullableType
+	:	nonNullableValueType '?'
+	;
+
+nonNullableValueType
+	:	enumType
+	|	typeName
+	|	simpleType
+	;
+
+referenceType
+	:	classType
+	|	interfaceType
+	|	arrayType
+	|	delegateType
+	;
+
+classType
+	:	typeName
+	|	'object'
+	|	'string'
+	;
+
+interfaceType
+	:	typeName
+	;
+
+arrayType
+	:	nonArrayType rankSpecifiers
+	;
+
+nonArrayType
+	:	valueType
+	|	classType
+	|	interfaceType
+	|	delegateType
+	|	typeParameter
+	;
+
+rankSpecifiers
+	:	( rankSpecifier )*
+	;
+
+rankSpecifier
+	:	'[' ( dimSeparators )? ']'
+	;
+
+dimSeparators
+	:	( ',' )*
+	;
+
+delegateType
+	:	typeName
+	;
+
+variableReference
+	:	expression
+	;
+
+argumentList
+	:	argument ( ',' argument )*
+	;
+
+argument
+	:	expression
+	|	'ref' variableReference
+	|	'out' variableReference
+	;
+
+primaryExpression
+	:	arrayCreationExpression
+	|	primaryNoArrayCreationExpression
+	;
+
+primaryNoArrayCreationExpression
+	:	literal
+	|	simpleName
+	|	parenthesizedExpression
+	|	memberAccess
+	|	invocationExpression
+	|	elementAccess
+	|	thisAccess
+	|	baseAccess
+	|	postIncrementExpression
+	|	postDecrementExpression
+	|	objectCreationExpression
+	|	delegateCreationExpression
+	|	typeofExpression
+	|	checkedExpression
+	|	uncheckedExpression
+	|	defaultValueExpression
+	|	anonymousMethodExpression
+	;
+
+simpleName
+	:	identifier ( typeArgumentList )?
+	;
+
+parenthesizedExpression
+	:	'(' expression ')'
+	;
+
+memberAccess
+	:	primaryExpression '.' identifier ( typeArgumentList )?
+	| 	predefinedType '.' identifier ( typeArgumentList )?
+	|	qualifiedAliasMember '.' identifier ( typeArgumentList )?
+	;
+
+predefinedType
+	:	'bool' | 'byte' | 'char' | 'decimal' | 'double' | 'float' | 'int' | 'long'
+	|	'object' | 'sbyte' | 'short' | 'string' | 'uint' | 'ulong' | 'ushort'
+	;
+
+invocationExpression
+	:	primaryExpression '(' ( argumentList )? ')'
+	;
+
+elementAccess
+	:	primaryNoArrayCreationExpression '[' expressionList ']'
+	;
+
+expressionList
+	:	expression ( ',' expression )*
+	;
+
+thisAccess
+	:	'this'
+	;
+
+baseAccess
+	:	'base' '.' identifier ( typeArgumentList )?
+	|	'base' '[' expressionList ']'
+	;
+
+postIncrementExpression
+	:	primaryExpression '++'
+	;
+
+postDecrementExpression
+	:	primaryExpression '--'
+	;
+
+objectCreationExpression
+	:	'new' type '(' ( argumentList )? ')'
+	;
+
+arrayCreationExpression
+	:	'new' nonArrayType '[' expressionList ']' ( rankSpecifiers )? ( arrayInitializer )?
+	;
+
+delegateCreationExpression
+	:	'new' delegateType '(' expression ')'
+	;
+
+typeofExpression
+	:	'typeof' '(' type ')'
+	|	'typeof' '(' unboundTypeName ')'
+	|	'typeof' '(' 'void' ')'
+	;
+
+unboundTypeName
+	:	(	identifier ( genericDimensionSpecifier )?
+		|	identifier '::' identifier ( genericDimensionSpecifier )?
+		)
+		( '.' identifier ( genericDimensionSpecifier )? )*
+	;
+
+genericDimensionSpecifier
+	:	'<' ( commas )? '>'
+	;
+
+commas
+	:	( ',' )+
+	;
+
+checkedExpression
+	:	'checked' '(' expression ')'
+	;
+
+uncheckedExpression
+	:	'unchecked' '(' expression ')'
+	;
+
+defaultValueExpression
+	:	'default' '(' type ')'
+	;
+
+anonymousMethodExpression
+	:	'delegate' ( anonymousMethodSignature )? block
+	;
+
+anonymousMethodSignature
+	:	'(' ( anonymousMethodParameterList )? ')'
+	;
+
+anonymousMethodParameterList
+	:	anonymousMethodParameter ( ',' anonymousMethodParameter )*
+	;
+
+anonymousMethodParameter
+	:	( parameterModifier )? type identifier
+	;
+
+unaryExpression
+	:	primaryExpression
+	|	'+' unaryExpression
+	|	'-' unaryExpression
+	|	'!' unaryExpression
+	|	'~' unaryExpression
+	|	preIncrementExpression
+	|	preDecrementExpression
+	|	castExpression
+	;
+
+preIncrementExpression
+	:	'++' unaryExpression
+	;
+
+preDecrementExpression
+	:	'--' unaryExpression
+	;
+
+castExpression
+	:	'(' type ')' unaryExpression
+	;
+
+multiplicativeExpression
+	:	unaryExpression	( ( '*' | '/' | '%' ) unaryExpression )*
+	;
+
+additiveExpression
+	:	multiplicativeExpression ( ( '+' | '-') multiplicativeExpression )*
+	;
+
+shiftExpression
+	:	additiveExpression ( ( '<<' | rightShift ) additiveExpression )*
+	;
+
+relationalExpression
+	:	shiftExpression
+		( ( '<' | '>' | '<=' | '>=' ) shiftExpression )*
+		( ( 'is' | 'as' ) type )?
+	;
+
+equalityExpression
+	:	relationalExpression ( ( '==' | '!=' ) relationalExpression )*
+	;
+
+andExpression
+	:	equalityExpression ( '&' equalityExpression )*		
+	;
+
+exclusiveOrExpression
+	:	andExpression ( '^' andExpression )*
+	;
+
+inclusiveOrExpression
+	:	exclusiveOrExpression ( '|' exclusiveOrExpression )*
+	;
+
+conditionalAndExpression
+	:	inclusiveOrExpression ( '&&' inclusiveOrExpression )*
+	;
+
+conditionalOrExpression
+	:	conditionalAndExpression ( '||' conditionalAndExpression )*
+	;
+
+nullCoalescingExpression
+	:	conditionalOrExpression ( '??' conditionalOrExpression )*
+	;
+
+conditionalExpression
+	:	nullCoalescingExpression '?' expression ':' expression
+	;
+
+assignment
+	:	unaryExpression assignmentOperator expression
+	;
+
+assignmentOperator
+	:	'=' | '+=' | '-=' | '*=' | '/=' | '%=' | '&=' | '|=' | '^=' | '<<='
+	|	rightShiftAssignment
+	;
+
+expression
+	:	conditionalExpression
+	|	assignment
+	;
+
+constantExpression
+	:	expression
+	;
+
+booleanExpression
+	:	expression
+	;
