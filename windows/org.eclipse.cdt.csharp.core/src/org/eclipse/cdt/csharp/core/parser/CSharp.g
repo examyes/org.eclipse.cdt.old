@@ -301,7 +301,7 @@ argument
 
 primaryExpression
 	:	arrayCreationExpression
-	|	primaryNoArrayCreationExpression
+	|	primaryNoArrayCreationExpression ( primarySuffix )*
 	;
 
 primaryNoArrayCreationExpression
@@ -309,12 +309,8 @@ primaryNoArrayCreationExpression
 	|	simpleName
 	|	parenthesizedExpression
 	|	memberAccess
-	|	invocationExpression
-	|	elementAccess
 	|	thisAccess
 	|	baseAccess
-	|	postIncrementExpression
-	|	postDecrementExpression
 	|	objectCreationExpression
 	|	delegateCreationExpression
 	|	typeofExpression
@@ -324,6 +320,15 @@ primaryNoArrayCreationExpression
 	|	anonymousMethodExpression
 	;
 
+// removes the left recursion
+primarySuffix
+	:	'.' identifier ( typeArgumentList )?
+	|	'++'
+	|	'--'
+	|	'[' expressionList ']'
+	|	'(' ( argumentList )? ')'
+	;
+	
 simpleName
 	:	identifier ( typeArgumentList )?
 	;
@@ -333,8 +338,7 @@ parenthesizedExpression
 	;
 
 memberAccess
-	:	primaryExpression '.' identifier ( typeArgumentList )?
-	| 	predefinedType '.' identifier ( typeArgumentList )?
+	:	predefinedType '.' identifier ( typeArgumentList )?
 	|	qualifiedAliasMember '.' identifier ( typeArgumentList )?
 	;
 
