@@ -272,6 +272,15 @@ dimSeparators
 	:	( ',' )*
 	;
 
+arrayInitializer
+	:	'{' ( variableInitializerList )? '}'
+	|	'{' variableInitializerList ',' '}'
+	;
+
+variableInitializerList
+	:	variableInitializer ( ',' variableInitializer )*
+	;
+
 delegateType
 	:	typeName
 	;
@@ -891,7 +900,7 @@ constructorDeclarators
 	:	constantDeclarator ( ',' constantDeclarator )*
 	;
 
-fieldDeclarator
+fieldDeclaration
 	:	( attributes )? ( fieldModifiers )? type variableDeclarators ';'
 	;
 
@@ -1198,3 +1207,302 @@ finalizerBody
 	:	block
 	| 	';'
 	;
+
+structDeclaration
+	:	( attributes )? ( structModifiers )? ( 'partial' )? 'struct' identifier
+		( typeParameterList )? ( structInterfaces )? ( typeParameterConstraints )?
+		structBody ( ';' )?
+	;
+	
+structModifiers
+	:	( structModifier )+
+	;
+
+structModifier
+	:	'new'
+	|	'public'
+	|	'protected'
+	|	'internal'
+	|	'private'
+	;
+
+structInterfaces
+	:	':' interfaceTypeList
+	;
+
+structBody
+	:	'{' ( structMemberDeclarations )? '}'
+	;
+
+structMemberDeclarations
+	:	( structMemberDeclaration )+
+	;
+
+structMemberDeclaration
+	:	constantDeclaration
+	|	fieldDeclaration
+	|	methodDeclaration
+	|	propertyDeclaration
+	|	eventDeclaration
+	|	indexerDeclaration
+	|	operatorDeclaration
+	|	constructorDeclaration
+	|	staticConstructorDeclaration
+	|	typeDeclaration
+	;
+
+interfaceDeclaration
+	:	( attributes )? ( interfaceModifiers )? ( 'partial' )? 'interface' identifier
+		( typeParameterList )? ( interfaceBase )? ( typeParameterConstraintsClauses )?
+		interfaceBody ( ';' )?
+	;
+
+interfaceModifiers
+	:	( interfaceModifier )+
+	;
+
+interfaceModifier
+	:	'new'
+	|	'public'
+	|	'protected'
+	|	'internal'
+	|	'private'
+	;
+
+interfaceBase
+	:	':' interfaceTypeList
+	;
+
+interfaceBody
+	:	'{' ( interfaceMemberDeclarations )? '}'
+	;
+
+interfaceMemberDeclarations
+	:	( interfaceMemberDeclaration )+
+	;
+
+interfaceMemberDeclaration
+	:	interfaceMethodDeclaration
+	|	interfacePropertyDeclaration
+	|	interfaceEventDeclaration
+	|	interfaceIndexerDeclaration
+	;
+
+interfaceMethodDeclaration
+	:	( attributes )? ( 'new' )? returnType identifier ( typeParameterList )?
+		'(' ( formalParameterList )? ')' ( typeParameterConstraintsClauses )? ';'
+	;
+
+interfacePropertyDeclaration
+	:	( attributes )? ( 'new' )? type identifier '{' interfaceAccessors '}'
+	;
+
+interfaceAccessors
+	:	( attributes )? 'get' ';'
+	|	( attributes )? 'set' ';'
+	|	( attributes )? 'set' ';' ( attributes )? 'get' ';'
+	|	( attributes )? 'get' ';' ( attributes )? 'set' ';'
+	;
+
+interfaceEventDeclaration
+	:	( attributes )? ( 'new' )? 'event' type identifier ';'
+	;
+
+interfaceIndexerDeclaration
+	:	( attributes )? ( 'new' )? type 'this' '[' formalParameterList ']'
+		'{' interfaceAccessors '}'
+	;
+
+enumDeclaration
+	:	( attributes )? ( enumModifiers )? 'enum' identifier ( enumBase )?
+		enumBody ( ';' )?
+	;
+
+enumBase
+	:	':' integralType
+	;
+
+enumBody
+	:	'{' ( enumMemberDeclarations )? '}'
+	|	'{' enumMemberDeclarations ',' '}'
+	;
+
+enumModifiers
+	:	( enumModifier )+
+	;
+
+enumModifier
+	:	'new'
+	|	'public'
+	|	'protected'
+	|	'internal'
+	|	'private'
+	;
+
+enumMemberDeclarations
+	:	enumMemberDeclaration ( ',' enumMemberDeclaration )*
+	;
+
+enumMemberDeclaration
+	:	( attributes )? identifier ( '=' constantExpression )?
+	;
+
+delegateDeclaration
+	:	( attributes )? ( delegateModifiers )? 'delegate' returnType identifier
+		( typeParameterList )? '(' ( formalParameterList )?
+		( typeParameterConstraintsClauses )? ';'
+	;
+
+delegateModifiers
+	:	( delegateModifier )+
+	;
+
+delegateModifier
+	:	'new'
+	|	'public'
+	|	'protected'
+	|	'internal'
+	|	'private'
+	;
+
+globalAttributes
+	:	globalAttributeSections
+	;
+
+globalAttributeSections
+	:	( globalAttributeSection )+
+	;
+
+globalAttributeSection
+	:	'[' globalAttributeTargetSpecifier attributeList ( ',' )? ']'
+	;
+
+globalAttributeTargetSpecifier
+	:	globalAttributeTarget ':'
+	;
+
+globalAttributeTarget
+	:	identifier
+	|	keyword
+	;
+
+attributes
+	:	attributeSections
+	;
+
+attributeSections
+	:	( attributeSection )+
+	;
+
+attributeSection
+	:	'[' ( attributeTargetSpecifier )? attributeList ( ',' )? ']'
+	;
+
+attributeTargetSpecifier
+	:	attributeTarget ':'
+	;
+
+attributeTarget
+	:	identifier
+	|	keyword
+	;
+
+attributeList
+	:	attribute ( ',' attribute )*
+	;
+
+attribute
+	:	attributeName ( attributeArguments )?
+	;
+
+attributeName
+	:	 typeName
+	;
+
+attributeArguments
+	:	'(' ( positionalArgumentList )? ')'
+	|	'(' positionalArgumentList ',' namedArgumentList ')'
+	|	'(' namedArgumentList ')'
+	;
+
+positionalArgumentList
+	:	positionalArgument ( ',' positionalArgument )*
+	;
+
+positionalArgument
+	:	attributeArgumentExpression
+	;
+
+namedArgumentList
+	:	namedArgument ( ',' namedArgument )*
+	;
+
+namedArgument
+	:	identifier '=' attributeArgumentExpression
+	;
+
+attributeArgumentExpression
+	:	expression
+	;
+
+typeParameterList
+	:	'<' typeParameters '>'
+	;
+
+typeParameters
+	:	( attributes )? typeParameter ( ',' ( attributes )? typeParameter )*
+	;
+
+typeParameter
+	:	identifier
+	;
+
+typeArgumentList
+	:	'<' typeArguments '>'
+	;
+
+typeArguments
+	:	 typeArgument ( ',' typeArgument )*
+	;
+
+typeArgument
+	:	type
+	;
+
+typeParameterConstraintsClauses
+	:	( typeParameterConstraintsClause )+
+	;
+
+typeParameterConstraintsClause
+	:	'where' typeParameter ':' typeParameterConstraints
+	;
+
+typeParameterConstraints
+	:	primaryConstraint
+	|	secondaryConstraints
+	|	constructorConstraint
+	|	primaryConstraint ',' secondaryConstraints
+	|	primaryConstraint ',' constructorConstraint
+	|	secondaryConstraints ',' constructorConstraint
+	|	primaryConstraint ',' secondaryConstraints ',' constructorConstraint
+	;
+
+primaryConstraint
+	:	classType
+	|	'class'
+	|	'struct'
+	;
+
+secondaryConstraints
+	:	secondaryConstraint ( ',' secondaryConstraint )*
+	;
+
+secondaryConstraint
+	:	interfaceType
+	|	typeParameter
+	;
+
+constructorConstraint
+	:	'new' '(' ')'
+	;
+
