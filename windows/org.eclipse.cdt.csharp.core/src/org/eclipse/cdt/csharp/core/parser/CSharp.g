@@ -20,20 +20,10 @@ WS	:	(	' '
 		{ channel=99; }
 	;
 
-identifier
-	:	AVAILABLE_IDENTIFIER
-	|	'@' identifierOrKeyword
-	;
-
 // To do Unicode character classes
-AVAILABLE_IDENTIFIER
-	:	( 'a'..'z' | 'A'..'Z' | '_' )
+IDENTIFIER
+	:	( '@' )? ( 'a'..'z' | 'A'..'Z' | '_' )
 		( 'a'..'z' | 'A'..'Z' | '_' | '0'..'9' )*
-	;
-
-identifierOrKeyword
-	:	AVAILABLE_IDENTIFIER
-	|	keyword
 	;
 
 keyword
@@ -153,51 +143,29 @@ rightShiftAssignment
 	;
 
 compilationUnit
-	:	( externAliasDirective )? ( usingDirectives )? ( globalAttributes )?
+	:	( externAliasDirective )? ( usingDirectives )? /*( globalAttributes )?*/
 		( namespaceMemberDeclarations )?
 	;
 
-namespaceName
-	:	namespaceOrTypeName
-	;
-
-typeName
-	:	namespaceOrTypeName
-	;
-
-namespaceOrTypeName
-	:	(	identifier ( typeArgumentList )?
-		|	qualifiedAliasMember
-		)
-		( '.' identifier ( typeArgumentList )? )*
+name
+	:	IDENTIFIER ( '::' IDENTIFIER )? ( typeArgumentList | genericDimensionSpecifier )?
+		( '.' IDENTIFIER ( typeArgumentList | genericDimensionSpecifier )? )*
 	;
 
 type
-	:	valueType
+	:	name
+	|	simpleType
+	|	nullableType
 	|	referenceType
 	|	typeParameter
 	;
 
-valueType
-	:	structType
-	|	enumType
-	;
-
-structType
-	:	typeName
-	|	simpleType
-	|	nullableType
-	;
-
 simpleType
-	:	numericType
-	|	'bool'
-	;
-
-numericType
 	:	integralType
-	|	floatingPointType
+	|	'float'
+	|	'double'
 	|	'decimal'
+	|	'bool'
 	;
 
 integralType
@@ -212,22 +180,12 @@ integralType
 	|	'char'
 	;
 
-floatingPointType
-	:	'float'
-	|	'double'
-	;
-
-enumType
-	:	typeName
-	;
-
 nullableType
 	:	nonNullableValueType '?'
 	;
 
 nonNullableValueType
-	:	enumType
-	|	typeName
+	:	name
 	|	simpleType
 	;
 
@@ -239,13 +197,13 @@ referenceType
 	;
 
 classType
-	:	typeName
+	:	name
 	|	'object'
 	|	'string'
 	;
 
 interfaceType
-	:	typeName
+	:	name
 	;
 
 arrayType
@@ -253,7 +211,9 @@ arrayType
 	;
 
 nonArrayType
-	:	valueType
+	:	name
+	|	simpleType
+	|	nullableType
 	|	classType
 	|	interfaceType
 	|	delegateType
@@ -282,7 +242,7 @@ variableInitializerList
 	;
 
 delegateType
-	:	typeName
+	:	name
 	;
 
 variableReference
@@ -306,7 +266,7 @@ primaryExpression
 
 primaryNoArrayCreationExpression
 	:	literal
-	|	simpleName
+	|	name // covers member access
 	|	parenthesizedExpression
 	|	memberAccess
 	|	thisAccess
@@ -322,24 +282,18 @@ primaryNoArrayCreationExpression
 
 // removes the left recursion
 primarySuffix
-	:	'.' identifier ( typeArgumentList )?
-	|	'++'
+	:	'++'
 	|	'--'
 	|	'[' expressionList ']'
 	|	'(' ( argumentList )? ')'
 	;
 	
-simpleName
-	:	identifier ( typeArgumentList )?
-	;
-
 parenthesizedExpression
 	:	'(' expression ')'
 	;
 
 memberAccess
-	:	predefinedType '.' identifier ( typeArgumentList )?
-	|	qualifiedAliasMember '.' identifier ( typeArgumentList )?
+	:	predefinedType '.' IDENTIFIER ( typeArgumentList )?
 	;
 
 predefinedType
@@ -364,7 +318,7 @@ thisAccess
 	;
 
 baseAccess
-	:	'base' '.' identifier ( typeArgumentList )?
+	:	'base' '.' IDENTIFIER ( typeArgumentList )?
 	|	'base' '[' expressionList ']'
 	;
 
@@ -390,15 +344,8 @@ delegateCreationExpression
 
 typeofExpression
 	:	'typeof' '(' type ')'
-	|	'typeof' '(' unboundTypeName ')'
+	|	'typeof' '(' name ')'
 	|	'typeof' '(' 'void' ')'
-	;
-
-unboundTypeName
-	:	(	identifier ( genericDimensionSpecifier )?
-		|	identifier '::' identifier ( genericDimensionSpecifier )?
-		)
-		( '.' identifier ( genericDimensionSpecifier )? )*
 	;
 
 genericDimensionSpecifier
@@ -434,7 +381,7 @@ anonymousMethodParameterList
 	;
 
 anonymousMethodParameter
-	:	( parameterModifier )? type identifier
+	:	( parameterModifier )? type IDENTIFIER
 	;
 
 unaryExpression
@@ -566,7 +513,7 @@ emptyStatement
 	;
 
 labeledStatement
-	:	identifier ':' statement
+	:	IDENTIFIER ':' statement
 	;
 
 declarationStatement
@@ -583,7 +530,7 @@ localVariableDeclarators
 	;
 
 localVariableDeclarator
-	:	identifier ( '=' localVariableInitializer )?
+	:	IDENTIFIER ( '=' localVariableInitializer )?
 	;
 
 localVariableInitializer
@@ -600,7 +547,7 @@ constantDeclarators
 	;
 
 constantDeclarator
-	:	identifier '=' constantExpression
+	:	IDENTIFIER '=' constantExpression
 	;
 
 expressionStatement
@@ -689,7 +636,7 @@ statementExpressionList
 	;
 
 foreachStatement
-	:	'foreach' '(' type identifier 'in' expression ')' embeddedStatement
+	:	'foreach' '(' type IDENTIFIER 'in' expression ')' embeddedStatement
 	;
 
 jumpStatement
@@ -709,7 +656,7 @@ continueStatement
 	;
 
 gotoStatement
-	:	'goto' identifier ';'
+	:	'goto' IDENTIFIER ';'
 	|	'goto' 'case' constantExpression ';'
 	|	'goto' 'default' ';'
 	;
@@ -737,7 +684,7 @@ specificCatchClauses
 	;
 
 specificCatchClause
-	:	'catch' '(' classType ( identifier )? ')' block
+	:	'catch' '(' classType ( IDENTIFIER )? ')' block
 	;
 
 generalCatchClause
@@ -779,7 +726,7 @@ namespaceDeclaration
 	;
 
 qualifiedIdentifier
-	:	identifier ( '.' identifier )*
+	:	IDENTIFIER ( '.' IDENTIFIER )*
 	;
 
 namespaceBody
@@ -791,7 +738,7 @@ externAliasDirectives
 	;
 
 externAliasDirective
-	:	'extern' 'alias' identifier ';'
+	:	'extern' 'alias' IDENTIFIER ';'
 	;
 
 usingDirectives
@@ -804,11 +751,11 @@ usingDirective
 	;
 
 usingAliasDirective
-	:	'using' identifier '=' namespaceOrTypeName ';'
+	:	'using' IDENTIFIER '=' name ';'
 	;
 
 usingNamespaceDirective
-	:	'using' namespaceName ';'
+	:	'using' name ';'
 	;
 
 namespaceMemberDeclarations
@@ -828,12 +775,8 @@ typeDeclaration
 	|	delegateDeclaration
 	;
 
-qualifiedAliasMember
-	:	identifier '::' identifier ( typeArgumentList )?
-	;
-
 classDeclaration
-	:	( attributes )? ( classModifiers )? ( 'partial' )? 'class' identifier
+	:	( attributes )? ( classModifiers )? ( 'partial' )? 'class' IDENTIFIER
 		( typeParameterList )? ( classBase )? ( typeParameterConstraintsClauses )?
 		classBody ( ';' )?
 	;
@@ -928,7 +871,7 @@ variableDeclarators
 	;
 
 variableDeclarator
-	:	identifier ( '=' variableInitializer )?
+	:	IDENTIFIER ( '=' variableInitializer )?
 	;
 
 variableInitializer
@@ -969,8 +912,8 @@ returnType
 	;
 
 memberName
-	:	identifier
-	|	interfaceType '.' identifier
+	:	IDENTIFIER
+	|	interfaceType '.' IDENTIFIER
 	;
 
 methodBody
@@ -988,7 +931,7 @@ fixedParameters
 	;
 
 fixedParameter
-	:	( attributes )? ( parameterModifier )? type identifier
+	:	( attributes )? ( parameterModifier )? type IDENTIFIER
 	;
 
 parameterModifier
@@ -996,7 +939,7 @@ parameterModifier
 	;
 
 parameterArray
-	:	( attributes )? 'params' arrayType identifier
+	:	( attributes )? 'params' arrayType IDENTIFIER
 	;
 
 propertyDeclaration
@@ -1132,7 +1075,7 @@ operatorDeclarator
 	;
 
 unaryOperatorDeclarator
-	:	type 'operator' overloadableUnaryOperator '(' type identifier ')'
+	:	type 'operator' overloadableUnaryOperator '(' type IDENTIFIER ')'
 	;
 
 overloadableUnaryOperator
@@ -1141,7 +1084,7 @@ overloadableUnaryOperator
 
 binaryOperatorDeclarator
 	:	type 'operator' overloadableBinaryOperator
-		'(' type identifier ',' type identifier ')'
+		'(' type IDENTIFIER ',' type IDENTIFIER ')'
 	;
 
 overloadableBinaryOperator
@@ -1151,7 +1094,7 @@ overloadableBinaryOperator
 	;
 
 conversionOperatorDeclarator
-	:	( 'implicit' | 'explicit' ) 'operator' type '(' type identifier ')'
+	:	( 'implicit' | 'explicit' ) 'operator' type '(' type IDENTIFIER ')'
 	;
 
 operatorBody
@@ -1176,7 +1119,7 @@ constructorModifier
 	;
 
 constructorDeclarator
-	:	identifier '(' ( formalParameterList )? ')' ( constructorInitializer )?
+	:	IDENTIFIER '(' ( formalParameterList )? ')' ( constructorInitializer )?
 	;
 
 constructorInitializer
@@ -1190,7 +1133,7 @@ constructorBody
 	;
 
 staticConstructorDeclaration
-	:	( attributes )? staticConstructorModifiers identifier '(' ')' staticConstructorBody
+	:	( attributes )? staticConstructorModifiers IDENTIFIER '(' ')' staticConstructorBody
 	;
 
 staticConstructorModifiers
@@ -1204,7 +1147,7 @@ staticConstructorBody
 	;
 
 finalizerDeclaration
-	:	( attributes )? ( 'extern' )? '~' identifier '(' ')' finalizerBody
+	:	( attributes )? ( 'extern' )? '~' IDENTIFIER '(' ')' finalizerBody
 	;
 
 finalizerBody
@@ -1213,7 +1156,7 @@ finalizerBody
 	;
 
 structDeclaration
-	:	( attributes )? ( structModifiers )? ( 'partial' )? 'struct' identifier
+	:	( attributes )? ( structModifiers )? ( 'partial' )? 'struct' IDENTIFIER
 		( typeParameterList )? ( structInterfaces )? ( typeParameterConstraints )?
 		structBody ( ';' )?
 	;
@@ -1256,7 +1199,7 @@ structMemberDeclaration
 	;
 
 interfaceDeclaration
-	:	( attributes )? ( interfaceModifiers )? ( 'partial' )? 'interface' identifier
+	:	( attributes )? ( interfaceModifiers )? ( 'partial' )? 'interface' IDENTIFIER
 		( typeParameterList )? ( interfaceBase )? ( typeParameterConstraintsClauses )?
 		interfaceBody ( ';' )?
 	;
@@ -1293,12 +1236,12 @@ interfaceMemberDeclaration
 	;
 
 interfaceMethodDeclaration
-	:	( attributes )? ( 'new' )? returnType identifier ( typeParameterList )?
+	:	( attributes )? ( 'new' )? returnType IDENTIFIER ( typeParameterList )?
 		'(' ( formalParameterList )? ')' ( typeParameterConstraintsClauses )? ';'
 	;
 
 interfacePropertyDeclaration
-	:	( attributes )? ( 'new' )? type identifier '{' interfaceAccessors '}'
+	:	( attributes )? ( 'new' )? type IDENTIFIER '{' interfaceAccessors '}'
 	;
 
 interfaceAccessors
@@ -1309,7 +1252,7 @@ interfaceAccessors
 	;
 
 interfaceEventDeclaration
-	:	( attributes )? ( 'new' )? 'event' type identifier ';'
+	:	( attributes )? ( 'new' )? 'event' type IDENTIFIER ';'
 	;
 
 interfaceIndexerDeclaration
@@ -1318,7 +1261,7 @@ interfaceIndexerDeclaration
 	;
 
 enumDeclaration
-	:	( attributes )? ( enumModifiers )? 'enum' identifier ( enumBase )?
+	:	( attributes )? ( enumModifiers )? 'enum' IDENTIFIER ( enumBase )?
 		enumBody ( ';' )?
 	;
 
@@ -1348,11 +1291,11 @@ enumMemberDeclarations
 	;
 
 enumMemberDeclaration
-	:	( attributes )? identifier ( '=' constantExpression )?
+	:	( attributes )? IDENTIFIER ( '=' constantExpression )?
 	;
 
 delegateDeclaration
-	:	( attributes )? ( delegateModifiers )? 'delegate' returnType identifier
+	:	( attributes )? ( delegateModifiers )? 'delegate' returnType IDENTIFIER
 		( typeParameterList )? '(' ( formalParameterList )?
 		( typeParameterConstraintsClauses )? ';'
 	;
@@ -1386,7 +1329,7 @@ globalAttributeTargetSpecifier
 	;
 
 globalAttributeTarget
-	:	identifier
+	:	IDENTIFIER
 	|	keyword
 	;
 
@@ -1407,7 +1350,7 @@ attributeTargetSpecifier
 	;
 
 attributeTarget
-	:	identifier
+	:	IDENTIFIER
 	|	keyword
 	;
 
@@ -1420,7 +1363,7 @@ attribute
 	;
 
 attributeName
-	:	 typeName
+	:	name
 	;
 
 attributeArguments
@@ -1442,7 +1385,7 @@ namedArgumentList
 	;
 
 namedArgument
-	:	identifier '=' attributeArgumentExpression
+	:	IDENTIFIER '=' attributeArgumentExpression
 	;
 
 attributeArgumentExpression
@@ -1458,7 +1401,7 @@ typeParameters
 	;
 
 typeParameter
-	:	identifier
+	:	IDENTIFIER
 	;
 
 typeArgumentList
@@ -1509,4 +1452,3 @@ secondaryConstraint
 constructorConstraint
 	:	'new' '(' ')'
 	;
-
