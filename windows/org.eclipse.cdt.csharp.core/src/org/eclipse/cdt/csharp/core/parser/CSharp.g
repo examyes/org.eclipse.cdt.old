@@ -203,7 +203,7 @@ argument
 	;
 
 primaryExpression
-	:	primaryNoArrayCreationExpression //( primarySuffix )*
+	:	primaryNoArrayCreationExpression ( primarySuffix )*
 	;
 
 primaryNoArrayCreationExpression
@@ -233,19 +233,6 @@ parenthesizedExpression
 	:	'(' expression ')'
 	;
 
-predefinedType
-	:	'bool' | 'byte' | 'char' | 'decimal' | 'double' | 'float' | 'int' | 'long'
-	|	'object' | 'sbyte' | 'short' | 'string' | 'uint' | 'ulong' | 'ushort'
-	;
-
-invocationExpression
-	:	primaryExpression '(' ( argumentList )? ')'
-	;
-
-elementAccess
-	:	primaryNoArrayCreationExpression '[' expressionList ']'
-	;
-
 expressionList
 	:	expression ( ',' expression )*
 	;
@@ -257,14 +244,6 @@ thisAccess
 baseAccess
 	:	'base' '.' name
 	|	'base' '[' expressionList ']'
-	;
-
-postIncrementExpression
-	:	primaryExpression '++'
-	;
-
-postDecrementExpression
-	:	primaryExpression '--'
 	;
 
 objectCreationExpression
@@ -777,7 +756,7 @@ methodDeclaration
 	;
 
 methodHeader
-	:	type name ( typeParameterList )?
+	:	returnType name ( typeParameterList )?
 		'(' ( formalParameterList )? ')' ( typeParameterConstraintsClauses )?
 	;
 

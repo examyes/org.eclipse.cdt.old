@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="lib" path="antlr-2.7.6.jar"/>
+	<classpathentry exported="true" sourcepath="C:/Eclipse/antlr/antlr-3.0b1/src" kind="lib" path="antlr-3.0b1.jar"/>
+	<classpathentry exported="true" sourcepath="C:/Eclipse/antlr/antlr-3.0b1/src" kind="lib" path="stringtemplate-2.3b8.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry kind="lib" path="antlr-2.7.6.jar"/>
-	<classpathentry kind="lib" path="antlr-3.0b1.jar"/>
-	<classpathentry kind="lib" path="stringtemplate-2.3b8.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
