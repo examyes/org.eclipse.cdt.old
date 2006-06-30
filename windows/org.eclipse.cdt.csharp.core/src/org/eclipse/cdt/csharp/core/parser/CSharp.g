@@ -126,14 +126,6 @@ nullLiteral
 	:	'null'
 	;
 
-operatorOrPunctuator
-	:	'{' | '}' | '[' | ']' | '(' | ')' | '.' | ',' | ':' | ';'
-	|	'+' | '-' | '*' | '/' | '%' | '&' | '|' | '^' | '!' | '~'
-	|	'=' | '>' | '<' | '?' | '??' | '::' | '++' | '--' | '&&' | '||'
-	|	'->' | '==' | '!=' | '<=' | '>=' | '+=' | '-=' | '*=' | '/=' | '%='
-	|	'&=' | '|=' | '^=' | '<<' | '<<='
-	;
-
 rightShift
 	:	'>' '>'
 	;
@@ -148,28 +140,22 @@ compilationUnit
 	;
 
 name
-	:	IDENTIFIER ( '::' IDENTIFIER )? ( typeArgumentList | genericDimensionSpecifier )?
-		( '.' IDENTIFIER ( typeArgumentList | genericDimensionSpecifier )? )*
+	:	IDENTIFIER ( '::' IDENTIFIER )?
+//		( typeArgumentList | genericDimensionSpecifier )?
+		(	'.' IDENTIFIER 
+//			( typeArgumentList | genericDimensionSpecifier )? 
+		)*
 	;
 
 type
+	:	typeName
+//		( '?' )?
+		( rankSpecifiers )?
+	;
+
+typeName
 	:	name
-	|	simpleType
-	|	nullableType
-	|	referenceType
-	|	typeParameter
-	;
-
-simpleType
-	:	integralType
-	|	'float'
-	|	'double'
-	|	'decimal'
-	|	'bool'
-	;
-
-integralType
-	:	'sbyte'
+	|	'sbyte'
 	|	'byte'
 	|	'short'
 	|	'ushort'
@@ -178,71 +164,28 @@ integralType
 	|	'long'
 	|	'ulong'
 	|	'char'
-	;
-
-nullableType
-	:	nonNullableValueType '?'
-	;
-
-nonNullableValueType
-	:	name
-	|	simpleType
-	;
-
-referenceType
-	:	classType
-	|	interfaceType
-	|	arrayType
-	|	delegateType
-	;
-
-classType
-	:	name
+	|	'float'
+	|	'double'
+	|	'decimal'
+	|	'bool'
 	|	'object'
 	|	'string'
 	;
 
-interfaceType
-	:	name
-	;
-
-arrayType
-	:	nonArrayType rankSpecifiers
-	;
-
-nonArrayType
-	:	name
-	|	simpleType
-	|	nullableType
-	|	classType
-	|	interfaceType
-	|	delegateType
-	|	typeParameter
-	;
-
 rankSpecifiers
-	:	( rankSpecifier )*
+	:	( rankSpecifier )+
 	;
 
 rankSpecifier
-	:	'[' ( dimSeparators )? ']'
-	;
-
-dimSeparators
-	:	( ',' )*
+	:	'[' ( ',' )* ']'
 	;
 
 arrayInitializer
-	:	'{' ( variableInitializerList )? '}'
-	|	'{' variableInitializerList ',' '}'
+	:	'{' ( variableInitializer )? '}'
 	;
 
 variableInitializerList
-	:	variableInitializer ( ',' variableInitializer )*
-	;
-
-delegateType
-	:	name
+	:	variableInitializer ( ',' variableInitializer )* ( ',' )?
 	;
 
 variableReference
@@ -260,24 +203,22 @@ argument
 	;
 
 primaryExpression
-	:	arrayCreationExpression
-	|	primaryNoArrayCreationExpression ( primarySuffix )*
+	:	primaryNoArrayCreationExpression //( primarySuffix )*
 	;
 
 primaryNoArrayCreationExpression
 	:	literal
 	|	name // covers member access
 	|	parenthesizedExpression
-	|	memberAccess
 	|	thisAccess
 	|	baseAccess
 	|	objectCreationExpression
-	|	delegateCreationExpression
 	|	typeofExpression
 	|	checkedExpression
 	|	uncheckedExpression
 	|	defaultValueExpression
 	|	anonymousMethodExpression
+	|	arrayCreationExpression
 	;
 
 // removes the left recursion
@@ -290,10 +231,6 @@ primarySuffix
 	
 parenthesizedExpression
 	:	'(' expression ')'
-	;
-
-memberAccess
-	:	predefinedType '.' IDENTIFIER ( typeArgumentList )?
 	;
 
 predefinedType
@@ -318,7 +255,7 @@ thisAccess
 	;
 
 baseAccess
-	:	'base' '.' IDENTIFIER ( typeArgumentList )?
+	:	'base' '.' name
 	|	'base' '[' expressionList ']'
 	;
 
@@ -335,25 +272,16 @@ objectCreationExpression
 	;
 
 arrayCreationExpression
-	:	'new' nonArrayType '[' expressionList ']' ( rankSpecifiers )? ( arrayInitializer )?
-	;
-
-delegateCreationExpression
-	:	'new' delegateType '(' expression ')'
+	:	'new' type '[' expressionList ']' ( rankSpecifiers )? ( arrayInitializer )?
 	;
 
 typeofExpression
-	:	'typeof' '(' type ')'
-	|	'typeof' '(' name ')'
+	:	'typeof' '(' name ')'
 	|	'typeof' '(' 'void' ')'
 	;
 
 genericDimensionSpecifier
-	:	'<' ( commas )? '>'
-	;
-
-commas
-	:	( ',' )+
+	:	'<' ( ',' )* '>'
 	;
 
 checkedExpression
@@ -381,7 +309,7 @@ anonymousMethodParameterList
 	;
 
 anonymousMethodParameter
-	:	( parameterModifier )? type IDENTIFIER
+	:	( 'ref' | 'out' )? type IDENTIFIER
 	;
 
 unaryExpression
@@ -392,7 +320,7 @@ unaryExpression
 	|	'~' unaryExpression
 	|	preIncrementExpression
 	|	preDecrementExpression
-	|	castExpression
+//	|	castExpression
 	;
 
 preIncrementExpression
@@ -453,22 +381,16 @@ nullCoalescingExpression
 	:	conditionalOrExpression ( '??' conditionalOrExpression )*
 	;
 
-conditionalExpression
-	:	nullCoalescingExpression '?' expression ':' expression
-	;
-
-assignment
-	:	unaryExpression assignmentOperator expression
+expression
+	:	nullCoalescingExpression
+		(	( '?' expression ':' expression )
+		|	( assignmentOperator expression )
+		)?
 	;
 
 assignmentOperator
 	:	'=' | '+=' | '-=' | '*=' | '/=' | '%=' | '&=' | '|=' | '^=' | '<<='
 	|	rightShiftAssignment
-	;
-
-expression
-	:	conditionalExpression
-	|	assignment
 	;
 
 constantExpression
@@ -551,17 +473,7 @@ constantDeclarator
 	;
 
 expressionStatement
-	:	statementExpression ';'
-	;
-
-statementExpression
-	:	invocationExpression
-	|	objectCreationExpression
-	|	assignment
-	|	postIncrementExpression
-	|	postDecrementExpression
-	|	preIncrementExpression
-	|	preDecrementExpression
+	:	expression ';'
 	;
 
 selectionStatement
@@ -620,7 +532,7 @@ forStatement
 
 forInitializer
 	:	localVariableDeclaration
-	|	statementExpressionList
+	|	expressionList
 	;
 
 forCondition
@@ -628,11 +540,7 @@ forCondition
 	;
 
 forIterator
-	:	statementExpressionList
-	;
-
-statementExpressionList
-	:	statementExpression ( ',' statementExpression )*
+	:	expressionList
 	;
 
 foreachStatement
@@ -670,21 +578,11 @@ throwStatement
 	;
 
 tryStatement
-	:	'try' block catchClauses
-	|	'try' block ( catchClauses )? finallyClause
-	;
-
-catchClauses
-	:	specificCatchClauses
-	|	( specificCatchClauses )? generalCatchClause
-	;
-
-specificCatchClauses
-	:	( specificCatchClause )+
+	:	'try' block ( specificCatchClause )* ( generalCatchClause )? ( finallyClause )?
 	;
 
 specificCatchClause
-	:	'catch' '(' classType ( IDENTIFIER )? ')' block
+	:	'catch' '(' type ( IDENTIFIER )? ')' block
 	;
 
 generalCatchClause
@@ -768,24 +666,24 @@ namespaceMemberDeclaration
 	;
 
 typeDeclaration
-	:	classDeclaration
-	|	structDeclaration
-	|	interfaceDeclaration
-	|	enumDeclaration
-	|	delegateDeclaration
+	:	( attributes )? ( modifiers )? typeDeclarationProper
 	;
 
-classDeclaration
-	:	( attributes )? ( classModifiers )? ( 'partial' )? 'class' IDENTIFIER
-		( typeParameterList )? ( classBase )? ( typeParameterConstraintsClauses )?
-		classBody ( ';' )?
+typeDeclarationProper
+	:	( 'partial' )?
+		(	classDeclaration
+		|	structDeclaration
+		|	interfaceDeclaration
+		|	enumDeclaration
+		|	delegateDeclaration
+		)
 	;
 
-classModifiers
-	:	( classModifier )+
+modifiers
+	:	( modifier )+
 	;
 
-classModifier
+modifier
 	:	'new'
 	|	'public'
 	|	'protected'
@@ -796,13 +694,14 @@ classModifier
 	|	'static'
 	;
 
-classBase
-	:	classType ( ',' interfaceTypeList )?
-	|	interfaceTypeList
+classDeclaration
+	:	'class' IDENTIFIER ( typeParameterList )?
+		( classBase )? ( typeParameterConstraintsClauses )?
+		classBody ( ';' )?
 	;
 
-interfaceTypeList
-	:	interfaceType ( ',' interfaceType )*
+classBase
+	:	type ( ',' type )*
 	;
 
 classBody
@@ -814,48 +713,25 @@ classMemberDeclarations
 	;
 
 classMemberDeclaration
-	:	constantDeclaration
-	|	fieldDeclaration
-	|	methodDeclaration
-	|	propertyDeclaration
-	|	eventDeclaration
-	|	indexerDeclaration
-	|	operatorDeclaration
-	|	constructorDeclaration
-	|	finalizerDeclaration
-	|	staticConstructorDeclaration
-	|	typeDeclaration
+	:	( attributes )? ( classMemberModifiers )?
+		(	constantDeclaration
+		|	fieldDeclaration
+		|	methodDeclaration
+		|	propertyDeclaration
+		|	eventDeclaration
+		|	indexerDeclaration
+		|	operatorDeclaration
+		|	constructorDeclaration
+		|	finalizerDeclaration
+		|	typeDeclarationProper
+		)
 	;
 
-constantDeclaration
-	:	( attributes )? ( constantModifiers )? 'const' type constantDeclarators ';'
+classMemberModifiers
+	:	( classMemberModifier )+
 	;
 
-constantModifiers
-	:	( constantModifier )+
-	;
-
-constantModifier
-	:	'new'
-	|	'public'
-	|	'protected'
-	|	'internal'
-	|	'private'
-	;
-
-constructorDeclarators
-	:	constantDeclarator ( ',' constantDeclarator )*
-	;
-
-fieldDeclaration
-	:	( attributes )? ( fieldModifiers )? type variableDeclarators ';'
-	;
-
-fieldModifiers
-	:	( fieldModifier )+
-	;
-
-fieldModifier
+classMemberModifier
 	:	'new'
 	|	'public'
 	|	'protected'
@@ -864,6 +740,23 @@ fieldModifier
 	|	'static'
 	|	'readonly'
 	|	'volatile'
+	|	'virtual'
+	|	'sealed'
+	|	'override'
+	|	'abstract'
+	|	'extern'
+	;
+	
+constantDeclaration
+	:	'const' type constantDeclarators ';'
+	;
+
+constructorDeclarators
+	:	constantDeclarator ( ',' constantDeclarator )*
+	;
+
+fieldDeclaration
+	:	type variableDeclarators ';'
 	;
 
 variableDeclarators
@@ -884,36 +777,13 @@ methodDeclaration
 	;
 
 methodHeader
-	:	( attributes )? ( methodModifiers )? returnType memberName ( typeParameterList )?
+	:	type name ( typeParameterList )?
 		'(' ( formalParameterList )? ')' ( typeParameterConstraintsClauses )?
-	;
-
-methodModifiers
-	:	( methodModifier )+
-	;
-
-methodModifier
-	:	'new'
-	|	'public'
-	|	'protected'
-	|	'internal'
-	|	'private'
-	|	'static'
-	|	'virtual'
-	|	'sealed'
-	|	'override'
-	|	'abstract'
-	|	'extern'
 	;
 
 returnType
 	:	type
 	|	'void'
-	;
-
-memberName
-	:	IDENTIFIER
-	|	interfaceType '.' IDENTIFIER
 	;
 
 methodBody
@@ -922,59 +792,23 @@ methodBody
 	;
 
 formalParameterList
-	:	fixedParameters ( ',' parameterArray )?
-	|	parameterArray
+	:	formalParameter ( ',' formalParameter )*
 	;
 
-fixedParameters
-	:	fixedParameter ( ',' fixedParameter )*
-	;
-
-fixedParameter
-	:	( attributes )? ( parameterModifier )? type IDENTIFIER
-	;
-
-parameterModifier
-	:	'ref' | 'out'
-	;
-
-parameterArray
-	:	( attributes )? 'params' arrayType IDENTIFIER
+formalParameter
+	:	( attributes )? ( 'ref' | 'out' | 'params' ) type IDENTIFIER
 	;
 
 propertyDeclaration
-	:	( attributes )? ( propertyModifiers )? type memberName '{' accessorDeclarations '}'
-	;
-
-propertyModifiers
-	:	( propertyModifier )+
-	;
-
-propertyModifier
-	:	'new'
-	|	'public'
-	|	'protected'
-	|	'internal'
-	|	'private'
-	|	'static'
-	|	'virtual'
-	|	'sealed'
-	|	'override'
-	|	'abstract'
-	|	'extern'
+	:	type name '{' accessorDeclarations '}'
 	;
 
 accessorDeclarations
-	:	getAccessorDeclaration ( setAccessorDeclaration )?
-	|	setAccessorDeclaration ( getAccessorDeclaration )?
+	:	accessorDeclaration ( accessorDeclaration )?
 	;
 
-getAccessorDeclaration
-	:	( attributes )? ( accessorModifier )? 'get' accessorBody
-	;
-
-setAccessorDeclaration
-	:	( attributes )? ( accessorModifier )? 'set' accessorBody
+accessorDeclaration
+	:	( attributes )? ( accessorModifier )? ( 'get' | 'set' ) accessorBody
 	;
 
 accessorModifier
@@ -991,81 +825,30 @@ accessorBody
 	;
 
 eventDeclaration
-	:	( attributes )? ( eventModifiers )? 'event' type variableDeclarators ';'
-	|	( attributes )? ( eventModifiers )? 'event' type memberName
+	:	'event' type variableDeclarators ';'
+	|	'event' type name
 		'{' eventAccessorDeclarations '}'
 	;
 
-eventModifiers
-	:	( eventModifier )+
-	;
-
-eventModifier
-	:	'new'
-	|	'public'
-	|	'protected'
-	|	'internal'
-	|	'private'
-	|	'static'
-	|	'virtual'
-	|	'sealed'
-	|	'override'
-	|	'abstract'
-	|	'extern'
-	;
-
-
 eventAccessorDeclarations
-	:	addAccessorDeclaration removeAccessorDeclaration
-	|	removeAccessorDeclaration addAccessorDeclaration
+	:	eventAccessorDeclaration eventAccessorDeclaration
 	;
 
-addAccessorDeclaration
-	:	( attributes )? 'add' block
-	;
-
-removeAccessorDeclaration
-	:	( attributes )? 'remove' block
+eventAccessorDeclaration
+	:	( attributes )? ( 'add' | 'remove' ) block
 	;
 
 indexerDeclaration
-	:	( attributes )? ( indexerModifiers )? indexerDeclarator '{' accessorDeclarations '}'
-	;
-
-indexerModifiers
-	:	( indexerModifier )+
-	;
-
-indexerModifier
-	:	'new'
-	|	'public'
-	|	'protected'
-	|	'internal'
-	|	'private'
-	|	'virtual'
-	|	'sealed'
-	|	'override'
-	|	'abstract'
-	|	'extern'
+	:	indexerDeclarator '{' accessorDeclarations '}'
 	;
 
 indexerDeclarator
 	:	type 'this' '[' formalParameterList ']'
-	|	type interfaceType '.' 'this' '[' formalParameterList ']'
+	|	type type '.' 'this' '[' formalParameterList ']'
 	;
 
 operatorDeclaration
-	:	( attributes )? operatorModifiers operatorDeclarator operatorBody
-	;
-
-operatorModifiers
-	:	( operatorModifier )+
-	;
-
-operatorModifier
-	:	'public'
-	|	'static'
-	|	'extern'
+	:	operatorDeclarator operatorBody
 	;
 
 operatorDeclarator
@@ -1103,19 +886,7 @@ operatorBody
 	;
 
 constructorDeclaration
-	:	( attributes )? ( constructorModifiers )? constructorDeclarator constructorBody
-	;
-
-constructorModifiers
-	:	( constructorModifier )+
-	;
-
-constructorModifier
-	:	'public'
-	|	'protected'
-	|	'internal'
-	|	'private'
-	|	'extern'
+	:	constructorDeclarator constructorBody
 	;
 
 constructorDeclarator
@@ -1132,22 +903,8 @@ constructorBody
 	|	';'
 	;
 
-staticConstructorDeclaration
-	:	( attributes )? staticConstructorModifiers IDENTIFIER '(' ')' staticConstructorBody
-	;
-
-staticConstructorModifiers
-	:	'extern' 'static'
-	|	'static' ( 'extern' )?
-	;
-
-staticConstructorBody
-	:	block
-	| 	';'
-	;
-
 finalizerDeclaration
-	:	( attributes )? ( 'extern' )? '~' IDENTIFIER '(' ')' finalizerBody
+	:	'~' IDENTIFIER '(' ')' finalizerBody
 	;
 
 finalizerBody
@@ -1156,25 +913,13 @@ finalizerBody
 	;
 
 structDeclaration
-	:	( attributes )? ( structModifiers )? ( 'partial' )? 'struct' IDENTIFIER
-		( typeParameterList )? ( structInterfaces )? ( typeParameterConstraints )?
+	:	'struct' IDENTIFIER	( typeParameterList )?
+		( structInterfaces )? ( typeParameterConstraints )?
 		structBody ( ';' )?
 	;
 	
-structModifiers
-	:	( structModifier )+
-	;
-
-structModifier
-	:	'new'
-	|	'public'
-	|	'protected'
-	|	'internal'
-	|	'private'
-	;
-
 structInterfaces
-	:	':' interfaceTypeList
+	:	':' type ( ',' type )*
 	;
 
 structBody
@@ -1194,30 +939,17 @@ structMemberDeclaration
 	|	indexerDeclaration
 	|	operatorDeclaration
 	|	constructorDeclaration
-	|	staticConstructorDeclaration
 	|	typeDeclaration
 	;
 
 interfaceDeclaration
-	:	( attributes )? ( interfaceModifiers )? ( 'partial' )? 'interface' IDENTIFIER
-		( typeParameterList )? ( interfaceBase )? ( typeParameterConstraintsClauses )?
+	:	'interface' IDENTIFIER ( typeParameterList )?
+		( interfaceBase )? ( typeParameterConstraintsClauses )?
 		interfaceBody ( ';' )?
 	;
 
-interfaceModifiers
-	:	( interfaceModifier )+
-	;
-
-interfaceModifier
-	:	'new'
-	|	'public'
-	|	'protected'
-	|	'internal'
-	|	'private'
-	;
-
 interfaceBase
-	:	':' interfaceTypeList
+	:	':' type ( ',' type )*
 	;
 
 interfaceBody
@@ -1229,65 +961,55 @@ interfaceMemberDeclarations
 	;
 
 interfaceMemberDeclaration
-	:	interfaceMethodDeclaration
-	|	interfacePropertyDeclaration
-	|	interfaceEventDeclaration
-	|	interfaceIndexerDeclaration
+	:	( attributes )?
+		(	interfaceMethodDeclaration
+		|	interfacePropertyDeclaration
+		|	interfaceEventDeclaration
+		|	interfaceIndexerDeclaration
+		)
 	;
 
 interfaceMethodDeclaration
-	:	( attributes )? ( 'new' )? returnType IDENTIFIER ( typeParameterList )?
+	:	( 'new' )? returnType IDENTIFIER ( typeParameterList )?
 		'(' ( formalParameterList )? ')' ( typeParameterConstraintsClauses )? ';'
 	;
 
 interfacePropertyDeclaration
-	:	( attributes )? ( 'new' )? type IDENTIFIER '{' interfaceAccessors '}'
+	:	( 'new' )? type IDENTIFIER '{' interfaceAccessors '}'
 	;
 
 interfaceAccessors
-	:	( attributes )? 'get' ';'
-	|	( attributes )? 'set' ';'
-	|	( attributes )? 'set' ';' ( attributes )? 'get' ';'
-	|	( attributes )? 'get' ';' ( attributes )? 'set' ';'
+	:	interfaceAccessor ( interfaceAccessor )?
+	;
+
+interfaceAccessor
+	:	( attributes )? ( 'get' | 'set' ) ';'
 	;
 
 interfaceEventDeclaration
-	:	( attributes )? ( 'new' )? 'event' type IDENTIFIER ';'
+	:	( 'new' )? 'event' type IDENTIFIER ';'
 	;
 
 interfaceIndexerDeclaration
-	:	( attributes )? ( 'new' )? type 'this' '[' formalParameterList ']'
+	:	( 'new' )? type 'this' '[' formalParameterList ']'
 		'{' interfaceAccessors '}'
 	;
 
 enumDeclaration
-	:	( attributes )? ( enumModifiers )? 'enum' IDENTIFIER ( enumBase )?
+	:	'enum' IDENTIFIER ( enumBase )?
 		enumBody ( ';' )?
 	;
 
 enumBase
-	:	':' integralType
+	:	':' type
 	;
 
 enumBody
 	:	'{' ( enumMemberDeclarations )? '}'
-	|	'{' enumMemberDeclarations ',' '}'
-	;
-
-enumModifiers
-	:	( enumModifier )+
-	;
-
-enumModifier
-	:	'new'
-	|	'public'
-	|	'protected'
-	|	'internal'
-	|	'private'
 	;
 
 enumMemberDeclarations
-	:	enumMemberDeclaration ( ',' enumMemberDeclaration )*
+	:	enumMemberDeclaration ( ',' enumMemberDeclaration )* ( ',' )?
 	;
 
 enumMemberDeclaration
@@ -1295,21 +1017,9 @@ enumMemberDeclaration
 	;
 
 delegateDeclaration
-	:	( attributes )? ( delegateModifiers )? 'delegate' returnType IDENTIFIER
+	:	'delegate' returnType IDENTIFIER
 		( typeParameterList )? '(' ( formalParameterList )?
 		( typeParameterConstraintsClauses )? ';'
-	;
-
-delegateModifiers
-	:	( delegateModifier )+
-	;
-
-delegateModifier
-	:	'new'
-	|	'public'
-	|	'protected'
-	|	'internal'
-	|	'private'
 	;
 
 globalAttributes
@@ -1367,29 +1077,7 @@ attributeName
 	;
 
 attributeArguments
-	:	'(' ( positionalArgumentList )? ')'
-	|	'(' positionalArgumentList ',' namedArgumentList ')'
-	|	'(' namedArgumentList ')'
-	;
-
-positionalArgumentList
-	:	positionalArgument ( ',' positionalArgument )*
-	;
-
-positionalArgument
-	:	attributeArgumentExpression
-	;
-
-namedArgumentList
-	:	namedArgument ( ',' namedArgument )*
-	;
-
-namedArgument
-	:	IDENTIFIER '=' attributeArgumentExpression
-	;
-
-attributeArgumentExpression
-	:	expression
+	:	'(' ( argumentList )? ')'
 	;
 
 typeParameterList
@@ -1425,30 +1113,10 @@ typeParameterConstraintsClause
 	;
 
 typeParameterConstraints
-	:	primaryConstraint
-	|	secondaryConstraints
-	|	constructorConstraint
-	|	primaryConstraint ',' secondaryConstraints
-	|	primaryConstraint ',' constructorConstraint
-	|	secondaryConstraints ',' constructorConstraint
-	|	primaryConstraint ',' secondaryConstraints ',' constructorConstraint
+	:	typeParameterConstraint ( ',' typeParameterConstraint )*
 	;
 
-primaryConstraint
-	:	classType
-	|	'class'
-	|	'struct'
-	;
-
-secondaryConstraints
-	:	secondaryConstraint ( ',' secondaryConstraint )*
-	;
-
-secondaryConstraint
-	:	interfaceType
-	|	typeParameter
-	;
-
-constructorConstraint
-	:	'new' '(' ')'
+typeParameterConstraint
+	:	type
+	|	'new' '(' ')'
 	;
