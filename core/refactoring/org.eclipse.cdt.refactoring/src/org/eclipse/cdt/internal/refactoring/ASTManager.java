@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2005 Wind River Systems, Inc.
+ * Copyright (c) 2005, 2006 Wind River Systems, Inc.
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
  * which accompanies this distribution, and is available at 
@@ -889,7 +889,7 @@ public class ASTManager {
                     String nofm= nth_of_m(cc, count);
                     String taskname= MessageFormat.format(Messages.getString("ASTManager.subtask.analyzing"),   //$NON-NLS-1$
                             new Object[] {nofm});
-                    monitor.subTask(taskname); //$NON-NLS-1$
+                    monitor.subTask(taskname); 
                     update= now+1000;
                 }
                 boolean doParse= false;
