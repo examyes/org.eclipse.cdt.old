@@ -36,4 +36,14 @@ public class BaseParserTest extends TestCase {
 			"}\n";
 		parseString(code);
 	}
+	
+	public void test2() throws Exception {
+		String code =
+		"class Hello {\n" +
+		"    static void Main() {\n" +
+		"        Hello ? blah;" +
+		"    }\n" +
+		"}\n";
+		parseString(code);
+	}
 }

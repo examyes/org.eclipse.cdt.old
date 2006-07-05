@@ -362,8 +362,8 @@ nullCoalescingExpression
 
 expression
 	:	nullCoalescingExpression
-		(	( '?' expression ':' expression )
-		|	( assignmentOperator expression )
+		(	'?' expression ':' expression
+		|	assignmentOperator expression
 		)?
 	;
 
