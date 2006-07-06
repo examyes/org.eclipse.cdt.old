@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2004-2005 Wind River Systems, Inc.
+ * Copyright (c) 2004, 2006 Wind River Systems, Inc.
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
  * which accompanies this distribution, and is available at 
@@ -7,23 +7,37 @@
  * 
  * Contributors: 
  * Markus Schorn - initial API and implementation 
+ * IBM Corporation - Bug 112366
  ******************************************************************************/ 
 
 package org.eclipse.cdt.internal.refactoring;
 
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.ltk.core.refactoring.Change;
+import org.eclipse.ltk.core.refactoring.CompositeChange;
+import org.eclipse.ltk.core.refactoring.RefactoringStatus;
+import org.eclipse.ltk.core.refactoring.TextEditChangeGroup;
+import org.eclipse.ltk.core.refactoring.TextFileChange;
+import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
+import org.eclipse.ltk.core.refactoring.participants.ValidateEditChecker;
+import org.eclipse.text.edits.MultiTextEdit;
+import org.eclipse.text.edits.ReplaceEdit;
+import org.eclipse.text.edits.TextEditGroup;
 
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.refactoring.*;
-import org.eclipse.cdt.refactoring.CRefactory;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.*;
-import org.eclipse.ltk.core.refactoring.*;
-import org.eclipse.ltk.core.refactoring.Change;
-import org.eclipse.ltk.core.refactoring.RefactoringStatus;
-import org.eclipse.ltk.core.refactoring.participants.*;
-import org.eclipse.text.edits.*;
 
 /**
  * Abstract base for all different rename processors used by the top 
@@ -278,7 +292,7 @@ public abstract class CRenameProcessorDelegate {
                 if (file==null || !file.equals(mfile)) {
                     file= mfile;
                     fileEdit= new MultiTextEdit();
-                    fileChange= new TextFileChange(file.getName(), file); 
+                    fileChange = new CTextFileChange(file.getName(), file);
                     fileChange.setEdit(fileEdit);
                     overallChange.add(fileChange);
                 }
