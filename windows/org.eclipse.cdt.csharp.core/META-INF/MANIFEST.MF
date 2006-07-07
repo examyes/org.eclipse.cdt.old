@@ -13,6 +13,6 @@ Export-Package: org.antlr.runtime,
  org.antlr.stringtemplate.language,
  org.eclipse.cdt.csharp.core.parser
 Bundle-ClassPath: antlr-2.7.6.jar,
- antlr-3.0b1.jar,
  stringtemplate-2.3b8.jar,
+ antlr-3.0b2.jar,
  .
