@@ -1,6 +1,8 @@
 grammar CSharp;
 options {
-	output = template;
+	k = 2;
+	backtrack = true;
+	memoize = true;
 }
 
 @parser::header {
@@ -141,15 +143,15 @@ compilationUnit
 
 name
 	:	IDENTIFIER ( '::' IDENTIFIER )?
-//		( typeArgumentList | genericDimensionSpecifier )?
+		( typeArgumentList | genericDimensionSpecifier )?
 		(	'.' IDENTIFIER 
-//			( typeArgumentList | genericDimensionSpecifier )? 
+			( typeArgumentList | genericDimensionSpecifier )? 
 		)*
 	;
 
 type
 	:	typeName
-//		( '?' )?
+		( '?' )?
 		( rankSpecifiers )?
 	;
 
@@ -299,7 +301,7 @@ unaryExpression
 	|	'~' unaryExpression
 	|	preIncrementExpression
 	|	preDecrementExpression
-//	|	castExpression
+	|	castExpression
 	;
 
 preIncrementExpression

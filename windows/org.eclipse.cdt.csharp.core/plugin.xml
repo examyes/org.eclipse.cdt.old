@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            base-type="org.eclipse.core.runtime.text"
+            id="cSharpSource"
+            name="C# Source File"
+            priority="high"/>
+      <file-association
+            content-type="org.eclipse.cdt.csharp.core.cSharpSource"
+            file-extensions="cs"/>
+   </extension>
+   <extension
+         point="org.eclipse.cdt.core.language">
+      <language
+            class="org.eclipse.cdt.csharp.core.CSharpLanguage"
+            id="cSharp"
+            name="C#">
+         <contentType id="org.eclipse.cdt.csharp.core.cSharpSource"/>
+      </language>
+   </extension>
+
+</plugin>

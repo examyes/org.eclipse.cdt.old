@@ -22,7 +22,6 @@ public class BaseParserTest extends TestCase {
 		CSharpLexer lexer = new CSharpLexer(input);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		CSharp parser = new CSharp(tokens);
-		parser.setTemplateLib(null);
 		parser.compilationUnit();
 	}
 	
