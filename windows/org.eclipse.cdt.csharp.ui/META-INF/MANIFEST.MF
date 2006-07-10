@@ -8,5 +8,6 @@ Bundle-Vendor: Eclipse.org
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.eclipse.cdt.ui
+ org.eclipse.cdt.ui,
+ org.eclipse.core.filebuffers
 Eclipse-LazyStart: true

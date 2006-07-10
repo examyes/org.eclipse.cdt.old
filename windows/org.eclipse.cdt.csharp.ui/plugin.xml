@@ -14,5 +14,11 @@
          <contentTypeBinding contentTypeId="org.eclipse.cdt.csharp.core.cSharpSource"/>
       </editor>
    </extension>
+   <extension
+         point="org.eclipse.core.filebuffers.documentSetup">
+      <participant
+            class="org.eclipse.cdt.internal.ui.editor.CDocumentSetupParticipant"
+            contentTypeId="org.eclipse.cdt.csharp.core.cSharpSource"/>
+   </extension>
 
 </plugin>
