@@ -4,7 +4,7 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="org.eclipse.cdt.internal.ui.editor.CEditor"
+            class="org.eclipse.cdt.internal.csharp.ui.CSharpEditor"
             contributorClass="org.eclipse.cdt.internal.ui.editor.CEditorActionContributor"
             default="false"
             icon="icons/obj16/cs_file_obj.gif"
@@ -19,6 +19,14 @@
       <participant
             class="org.eclipse.cdt.internal.ui.editor.CDocumentSetupParticipant"
             contentTypeId="org.eclipse.cdt.csharp.core.cSharpSource"/>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="org.eclipse.cdt.csharp.core.CSharpLanguage"
+            class="org.eclipse.cdt.internal.csharp.ui.CSharpLanguageUIAdapterFactory">
+         <adapter type="org.eclipse.cdt.ui.ILanguageUI"/>
+      </factory>
    </extension>
 
 </plugin>

@@ -11,13 +11,15 @@ import org.eclipse.cdt.core.model.IContributedModelBuilder;
 import org.eclipse.cdt.core.model.ILanguage;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.core.model.IWorkingCopy;
+import org.eclipse.core.internal.runtime.AdapterManager;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.PlatformObject;
 
 /**
  * @author DSchaefer
  *
  */
-public class CSharpLanguage implements ILanguage {
+public class CSharpLanguage extends PlatformObject implements ILanguage {
 
 	private static final String ID = Activator.PLUGIN_ID + ".cSharp";
 	
@@ -56,8 +58,7 @@ public class CSharpLanguage implements ILanguage {
 	}
 
 	public Object getAdapter(Class adapter) {
-		// TODO Auto-generated method stub
-		return null;
+		return super.getAdapter(adapter);
 	}
 
 }

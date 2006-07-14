@@ -12,6 +12,7 @@ Eclipse-LazyStart: true
 Export-Package: org.antlr.runtime,
  org.antlr.stringtemplate,
  org.antlr.stringtemplate.language,
+ org.eclipse.cdt.csharp.core,
  org.eclipse.cdt.csharp.core.parser
 Bundle-ClassPath: antlr-2.7.6.jar,
  stringtemplate-2.3b8.jar,
