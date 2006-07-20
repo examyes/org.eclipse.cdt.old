@@ -33,7 +33,7 @@ public class RenameVariableTests extends RenameTests {
         return suite(true);
     }
     public static Test suite( boolean cleanup ) {
-        TestSuite suite = new TestSuite(RenameVariableTests.class); //$NON-NLS-1$
+        TestSuite suite = new TestSuite(RenameVariableTests.class); 
         suite.addTest(new FailingTest(new RenameVariableTests("failReferenceViaMacro3"), 90956) ); //$NON-NLS-1$
 
         if (cleanup) {

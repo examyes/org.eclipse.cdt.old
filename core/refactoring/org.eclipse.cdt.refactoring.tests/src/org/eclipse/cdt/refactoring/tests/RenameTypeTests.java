@@ -32,7 +32,7 @@ public class RenameTypeTests extends RenameTests {
         return suite(true);
     }
     public static Test suite( boolean cleanup ) {
-        TestSuite suite = new TestSuite(RenameTypeTests.class); //$NON-NLS-1$
+        TestSuite suite = new TestSuite(RenameTypeTests.class); 
         if (cleanup) {
             suite.addTest( new RefactoringTests("cleanupProject") );    //$NON-NLS-1$
         }

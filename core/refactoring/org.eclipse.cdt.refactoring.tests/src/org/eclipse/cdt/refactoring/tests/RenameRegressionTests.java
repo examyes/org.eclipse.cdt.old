@@ -99,14 +99,14 @@ public class RenameRegressionTests extends RenameTests {
         String contents = writer.toString();
         int offset= contents.indexOf("boo"); //$NON-NLS-1$
         IFile file = importFile( "t.cpp", contents ); //$NON-NLS-1$
-        Change changes = getRefactorChanges( file, offset, "ooga" ); //$NON-NLS-1$ //$NON-NLS-2$
+        Change changes = getRefactorChanges( file, offset, "ooga" ); //$NON-NLS-1$ 
         
         assertTotalChanges( 3, changes );
         assertChange( changes, file, offset, 3, "ooga" );  //$NON-NLS-1$
         offset= contents.indexOf("boo", offset+1); //$NON-NLS-1$
-        assertChange( changes, file, offset, 3, "ooga" );  //$NON-NLS-1$//$NON-NLS-2$
+        assertChange( changes, file, offset, 3, "ooga" );  //$NON-NLS-1$
         offset= contents.lastIndexOf("boo"); //$NON-NLS-1$
-        assertChange( changes, file, offset, 3, "ooga" );  //$NON-NLS-1$//$NON-NLS-2$
+        assertChange( changes, file, offset, 3, "ooga" );  //$NON-NLS-1$
     }
 
     public void testParameter() throws Exception {
@@ -123,14 +123,14 @@ public class RenameRegressionTests extends RenameTests {
         String contents = writer.toString();
         int offset= contents.indexOf("boo"); //$NON-NLS-1$
         IFile file = importFile( "t.cpp", contents ); //$NON-NLS-1$
-        Change changes = getRefactorChanges( file, offset, "ooga" ); //$NON-NLS-1$ //$NON-NLS-2$
+        Change changes = getRefactorChanges( file, offset, "ooga" ); //$NON-NLS-1$ 
         
         assertTotalChanges( 3, changes );
         assertChange( changes, file, offset, 3, "ooga" );  //$NON-NLS-1$
         offset= contents.indexOf("boo", offset+1); //$NON-NLS-1$
-        assertChange( changes, file, offset, 3, "ooga" );  //$NON-NLS-1$//$NON-NLS-2$
+        assertChange( changes, file, offset, 3, "ooga" );  //$NON-NLS-1$
         offset= contents.lastIndexOf("boo"); //$NON-NLS-1$
-        assertChange( changes, file, offset, 3, "ooga" );  //$NON-NLS-1$//$NON-NLS-2$
+        assertChange( changes, file, offset, 3, "ooga" );  //$NON-NLS-1$
     }
 
     public void testFileStaticVar() throws Exception {
@@ -148,12 +148,12 @@ public class RenameRegressionTests extends RenameTests {
         importFile( "t2.cpp", contents ); //$NON-NLS-1$
         
         int offset= contents.indexOf("boo"); //$NON-NLS-1$
-        Change changes = getRefactorChanges( file, offset, "ooga" ); //$NON-NLS-1$ //$NON-NLS-2$
+        Change changes = getRefactorChanges( file, offset, "ooga" ); //$NON-NLS-1$ 
         
         assertTotalChanges( 2, changes );
         assertChange( changes, file, offset, 3, "ooga" );  //$NON-NLS-1$
         offset= contents.indexOf("boo", offset+1); //$NON-NLS-1$
-        assertChange( changes, file, offset, 3, "ooga" );  //$NON-NLS-1$//$NON-NLS-2$
+        assertChange( changes, file, offset, 3, "ooga" );  //$NON-NLS-1$
     }
 
     public void testClass_1() throws Exception {
@@ -401,13 +401,13 @@ public class RenameRegressionTests extends RenameTests {
         
         Change changes = getRefactorChanges(hFile, hoffset, "ooga" ); //$NON-NLS-1$
         assertTotalChanges( 2, changes );
-        assertChange( changes, hFile, hoffset, 7, "ooga" );  //$NON-NLS-1$//$NON-NLS-2$
-        assertChange( changes, cppfile, cppoffset, 7, "ooga" );  //$NON-NLS-1$//$NON-NLS-2$
+        assertChange( changes, hFile, hoffset, 7, "ooga" );  //$NON-NLS-1$
+        assertChange( changes, cppfile, cppoffset, 7, "ooga" );  //$NON-NLS-1$
 
         changes = getRefactorChanges(cppfile, cppoffset, "ooga" ); //$NON-NLS-1$
         assertTotalChanges( 2, changes );
-        assertChange( changes, hFile, hoffset, 7, "ooga" );  //$NON-NLS-1$//$NON-NLS-2$
-        assertChange( changes, cppfile, cppoffset, 7, "ooga" );  //$NON-NLS-1$//$NON-NLS-2$
+        assertChange( changes, hFile, hoffset, 7, "ooga" );  //$NON-NLS-1$
+        assertChange( changes, cppfile, cppoffset, 7, "ooga" );  //$NON-NLS-1$
     }
 
     public void testMethod_34() throws Exception {
@@ -762,7 +762,7 @@ public class RenameRegressionTests extends RenameTests {
         int offset =  contents.indexOf( "Array" ) ; //$NON-NLS-1$
         Change changes= getRefactorChanges(file, offset, "Arr2" ); //$NON-NLS-1$
         assertTotalChanges( 3, changes );
-        assertChange( changes, file, offset, 5, "Arr2" );  //$NON-NLS-1$//$NON-NLS-2$
+        assertChange( changes, file, offset, 5, "Arr2" );  //$NON-NLS-1$
         assertChange( changes, file, offset=contents.indexOf("Array", offset+1), 5, "Arr2" );  //$NON-NLS-1$//$NON-NLS-2$
         assertChange( changes, file, offset=contents.indexOf("Array", offset+1), 5, "Arr2" );  //$NON-NLS-1$//$NON-NLS-2$
     }

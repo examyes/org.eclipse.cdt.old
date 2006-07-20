@@ -33,7 +33,7 @@ public class RenameMacroTests extends RenameTests {
         return suite(true);
     }
     public static Test suite( boolean cleanup ) {
-        TestSuite suite = new TestSuite(RenameMacroTests.class); //$NON-NLS-1$
+        TestSuite suite = new TestSuite(RenameMacroTests.class); 
         suite.addTest(new FailingTest(new RenameMacroTests("failingRenameMacroAsMacroArgument"), 94673)); //$NON-NLS-1$
         if (cleanup) {
             suite.addTest( new RefactoringTests("cleanupProject") );    //$NON-NLS-1$

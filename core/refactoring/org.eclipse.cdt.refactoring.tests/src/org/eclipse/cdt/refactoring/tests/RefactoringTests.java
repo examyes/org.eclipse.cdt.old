@@ -186,7 +186,7 @@ public class RefactoringTests extends BaseTestFramework {
         writer.write( "int func_proto_ov(int*); \n"); //$NON-NLS-1$
         writer.write( "extern int extern_var;   \n"); //$NON-NLS-1$
         String contents = writer.toString();
-        return importFile(fileName, contents ); //$NON-NLS-1$
+        return importFile(fileName, contents ); 
     }
 
     protected IFile createCFwdDecls(String fileName) throws Exception {
@@ -196,7 +196,7 @@ public class RefactoringTests extends BaseTestFramework {
         writer.write( "int func_proto();        \n"); //$NON-NLS-1$
         writer.write( "extern int extern_var;   \n"); //$NON-NLS-1$
         String contents = writer.toString();
-        return importFile(fileName, contents ); //$NON-NLS-1$
+        return importFile(fileName, contents ); 
     }
 
     protected IFile createCppDefs(String fileName) throws Exception {
@@ -227,7 +227,7 @@ public class RefactoringTests extends BaseTestFramework {
         writer.write( "int func_def_ov(int*){}    \n"); //$NON-NLS-1$
         writer.write( "int var_def;               \n"); //$NON-NLS-1$
         String contents = writer.toString();
-        return importFile(fileName, contents ); //$NON-NLS-1$
+        return importFile(fileName, contents ); 
     }
 
     protected IFile createCDefs(String fileName) throws Exception {
@@ -244,7 +244,7 @@ public class RefactoringTests extends BaseTestFramework {
         writer.write( "int func_def() {}          \n"); //$NON-NLS-1$
         writer.write( "int var_def;               \n"); //$NON-NLS-1$
         String contents = writer.toString();
-        return importFile(fileName, contents ); //$NON-NLS-1$
+        return importFile(fileName, contents ); 
     }
 
     protected void assertRefactoringError(RefactoringStatus status, String msg) {
