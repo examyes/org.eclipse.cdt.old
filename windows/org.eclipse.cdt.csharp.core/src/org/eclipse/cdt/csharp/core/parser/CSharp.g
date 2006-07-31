@@ -13,20 +13,108 @@ package org.eclipse.cdt.csharp.core.parser;
 package org.eclipse.cdt.csharp.core.parser;
 }
 
-WS	:	(	' '
-		|	'\t'
-		|	'\f'
-		|	'\r'
-		|	'\n'
-		)+
-		{ channel=99; }
+NEW_LINE
+	:	'\u000d'
+	|	'\u000a'
+	|	'\u000d' '\u000a'
+	|	'\u2085'
+	|	'\u2028'
+	|	'\u2029'
+	{
+		channel = 99;
+	}
+	;
+	
+WHITESPACE
+	:	WHITESPACE_CHARACTERS
+	{
+		channel = 99;
+	}
 	;
 
-// To do Unicode character classes
-IDENTIFIER
-	:	( '@' )? ( 'a'..'z' | 'A'..'Z' | '_' )
-		( 'a'..'z' | 'A'..'Z' | '_' | '0'..'9' )*
+fragment
+WHITESPACE_CHARACTERS
+	:	WHITESPACE_CHARACTER+
 	;
+
+fragment
+WHITESPACE_CHARACTER
+	:	' '
+	// Any character with Unicode class Zs
+	|	'\u0009'
+	|	'\u000b'
+	|	'\u000c'
+	;
+
+fragment
+UNICODE_ESCAPE_SEQUENCE
+	:	'\\u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
+	|	'\\U' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
+	;
+
+identifier
+	:	availableIdentifier
+	|	'@' identifierOrKeyword
+	;
+
+availableIdentifier
+	:	IDENTIFIER
+	;
+
+identifierOrKeyword
+	:	IDENTIFIER
+	|	keyword
+	;
+
+IDENTIFIER
+	:	IDENTIFIER_START_CHARACTER IDENTIFIER_PART_CHARACTERS?
+	;
+
+fragment
+IDENTIFIER_START_CHARACTER
+	:	LETTER_CHARACTER
+	|	'_'
+	;
+
+fragment
+IDENTIFIER_PART_CHARACTERS
+	:	IDENTIFIER_PART_CHARACTER+
+	;
+
+fragment
+IDENTIFIER_PART_CHARACTER
+	:	LETTER_CHARACTER
+	|	DECIMAL_DIGIT_CHARACTER
+//	|	CONNECTING_CHARACTER
+//	|	COMBINING_CHARACTER
+//	|	FORMATTING_CHARACTER
+	|	'_' // not really covered by one of the above
+	;
+	
+fragment
+LETTER_CHARACTER
+	:	'a' .. 'z' | 'A' .. 'Z'
+	//A Unicode character of classes Lu, Ll, Lt, Lm, Lo, or Nl
+	//A unicode-escape-sequence representing a character of classes Lu, Ll, Lt, Lm, Lo, or Nl
+	;
+
+//COMBINING_CHARACTER
+	//A Unicode character of classes Mn or Mc
+	//A unicode-escape-sequence representing a character of classes Mn or Mc
+
+DECIMAL_DIGIT_CHARACTER
+	:	'0' .. '9'
+	//A Unicode character of the class Nd
+	//A unicode-escape-sequence representing a character of the class Nd
+	;
+
+//CONNECTING_CHARACTER
+	//A Unicode character of the class Pc
+	//A unicode-escape-sequence representing a character of the class Pc
+
+//FORMATTING_CHARACTER
+	//A Unicode character of the class Cf
+	//A unicode-escape-sequence representing a character of the class Cf
 
 keyword
 	:	'abstract' | 'as' | 'base' | 'bool' | 'break'
@@ -46,7 +134,7 @@ keyword
 	|	'unsafe' | 'ushort' | 'using' | 'virtual' | 'void'
 	|	'volatile' | 'while'
 	;
-
+	
 literal
 	:	booleanLiteral
 	|	INTEGER_LITERAL
@@ -55,7 +143,7 @@ literal
 	|	STRING_LITERAL
 	|	nullLiteral
 	;
-
+	
 booleanLiteral
 	:	'true'
 	|	'false'
@@ -68,12 +156,17 @@ INTEGER_LITERAL
 
 fragment
 DECIMAL_INTEGER_LITERAL
-	:	DECIMAL_DIGITS ( INTEGER_TYPE_SUFFIX )?
+	:	DECIMAL_DIGITS INTEGER_TYPE_SUFFIX?
 	;
 
 fragment
 DECIMAL_DIGITS
-	:	( '0'..'9' )+
+	:	DECIMAL_DIGIT+
+	;
+
+fragment
+DECIMAL_DIGIT
+	:	'0' .. '9'
 	;
 
 fragment
@@ -83,18 +176,36 @@ INTEGER_TYPE_SUFFIX
 
 fragment
 HEXADECIMAL_INTEGER_LITERAL
-	:	'0x' ( '0'..'9' | 'a'..'f' | 'A'..'F' )+ ( INTEGER_TYPE_SUFFIX )?
+	:	'0x' HEX_DIGITS INTEGER_TYPE_SUFFIX?
+	|	'0X' HEX_DIGITS INTEGER_TYPE_SUFFIX?
+	;
+
+fragment
+HEX_DIGITS
+	:	HEX_DIGIT+
+	;
+
+fragment
+HEX_DIGIT
+	:	'0' .. '9' | 'A' .. 'F' | 'a' .. 'f'
 	;
 
 REAL_LITERAL
-	:	( DECIMAL_DIGITS )? '.' DECIMAL_DIGITS ( EXPONENT_PART )? ( REAL_TYPE_SUFFIX )?
-	|	DECIMAL_DIGITS EXPONENT_PART ( REAL_TYPE_SUFFIX )?
+	:	DECIMAL_DIGITS '.' DECIMAL_DIGITS EXPONENT_PART? REAL_TYPE_SUFFIX?
+	|	'.' DECIMAL_DIGITS EXPONENT_PART? REAL_TYPE_SUFFIX?
+	|	DECIMAL_DIGITS EXPONENT_PART REAL_TYPE_SUFFIX?
 	|	DECIMAL_DIGITS REAL_TYPE_SUFFIX
 	;
 
 fragment
 EXPONENT_PART
-	:	( 'e' | 'E' ) ( '+' | '-' )? DECIMAL_DIGITS
+	:	'e' SIGN? DECIMAL_DIGITS
+	|	'E' SIGN? DECIMAL_DIGITS
+	;
+	
+fragment
+SIGN
+	:	'+' | '-'
 	;
 
 fragment
@@ -102,42 +213,104 @@ REAL_TYPE_SUFFIX
 	:	'F' | 'f' | 'D' | 'd' | 'M' | 'm'
 	;
 
-// TODO - escape the quote
 CHARACTER_LITERAL
-	:	'\'' ( ~( '\'' ) )* '\'' 
+	:	'\'' CHARACTER '\''
+	;
+
+fragment
+CHARACTER
+	:	SINGLE_CHARACTER
+	|	SIMPLE_ESCAPE_SEQUENCE
+	|	HEXADECIMAL_ESCAPE_SEQUENCE
+	|	UNICODE_ESCAPE_SEQUENCE
+	;
+
+fragment
+SINGLE_CHARACTER
+	:	~( '\'' | '\\' )
+	;
+
+fragment
+SIMPLE_ESCAPE_SEQUENCE
+	:	'\\\'' | '\\"' | '\\\\' | '\\0' | '\\a' | '\\b' | '\\f' | '\\n' | '\\r' | '\\t' | '\\v'
+	;
+
+fragment
+HEXADECIMAL_ESCAPE_SEQUENCE
+	:	'\\x' HEX_DIGIT 
+	|	'\\x' HEX_DIGIT HEX_DIGIT 
+	|	'\\x' HEX_DIGIT HEX_DIGIT HEX_DIGIT
+	|	'\\x' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
 	;
 
 STRING_LITERAL
 	:	REGULAR_STRING_LITERAL
 	|	VERBATIM_STRING_LITERAL
 	;
-
-// TODO - escape the double quote
+	
 fragment
 REGULAR_STRING_LITERAL
-	:	'"' ( ~( '"' ) )* '"'
+	:	'"' REGULAR_STRING_LITERAL_CHARACTERS? '"'
 	;
 
-// TODO - a real verbatim literal
+fragment
+REGULAR_STRING_LITERAL_CHARACTERS
+	:	REGULAR_STRING_LITERAL_CHARACTER+
+	;
+
+fragment
+REGULAR_STRING_LITERAL_CHARACTER
+	:	SINGLE_REGULAR_STRING_LITERAL_CHARACTER
+	|	SIMPLE_ESCAPE_SEQUENCE
+	|	HEXADECIMAL_ESCAPE_SEQUENCE
+	|	UNICODE_ESCAPE_SEQUENCE
+	;
+	
+fragment
+SINGLE_REGULAR_STRING_LITERAL_CHARACTER
+	:	~( '"' | '\\' | '\n' ) // TODO rest of new line characters
+	;
+
 fragment
 VERBATIM_STRING_LITERAL
-	:	'@"' ( ~( '"' ) )* '"'
+	:	'@"' VERBATIM_STRING_LITERAL_CHARACTERS? '"'
+	;
+
+fragment
+VERBATIM_STRING_LITERAL_CHARACTERS
+	:	VERBATIM_STRING_LITERAL_CHARACTER+
+	;
+
+fragment
+VERBATIM_STRING_LITERAL_CHARACTER
+	:	SINGLE_VERBATIM_STRING_LITERAL_CHARACTER
+	|	QUOTE_ESCAPE_SEQUENCE
+	;
+
+fragment	
+SINGLE_VERBATIM_STRING_LITERAL_CHARACTER
+	:	~'"'
+	;
+	
+fragment
+QUOTE_ESCAPE_SEQUENCE
+	:	'""'
 	;
 
 nullLiteral
 	:	'null'
 	;
 
-rightShift
+RIGHT_SHIFT
 	:	'>' '>'
 	;
-
-rightShiftAssignment
-	:	'>' '>='
+	
+RIGHT_SHIFT_ASSIGNMENT
+	:	'>'	'>='
 	;
 
 compilationUnit
-	:	( externAliasDirective )? ( usingDirectives )? /*( globalAttributes )?*/
+	:	( externAliasDirectives )? ( usingDirectives )? ( globalAttributes )?
 		( namespaceMemberDeclarations )?
 	;
 
@@ -325,7 +498,7 @@ additiveExpression
 	;
 
 shiftExpression
-	:	additiveExpression ( ( '<<' | rightShift ) additiveExpression )*
+	:	additiveExpression ( ( '<<' | RIGHT_SHIFT ) additiveExpression )*
 	;
 
 relationalExpression
@@ -371,7 +544,7 @@ expression
 
 assignmentOperator
 	:	'=' | '+=' | '-=' | '*=' | '/=' | '%=' | '&=' | '|=' | '^=' | '<<='
-	|	rightShiftAssignment
+	|	RIGHT_SHIFT_ASSIGNMENT
 	;
 
 constantExpression
@@ -853,7 +1026,7 @@ binaryOperatorDeclarator
 
 overloadableBinaryOperator
 	:	'+' | '-' | '*' | '/' | '%'
-	|	'&' | '|' | '^' | '<<' | rightShift
+	|	'&' | '|' | '^' | '<<' | RIGHT_SHIFT
 	|	'==' | '!=' | '>' | '<' | '>=' | '<='
 	;
 
