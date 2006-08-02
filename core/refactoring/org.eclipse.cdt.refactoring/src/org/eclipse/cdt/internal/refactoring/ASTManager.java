@@ -331,7 +331,7 @@ public class ASTManager {
             if (b2 instanceof ICPPMethod) {                
 //                ICPPMethod m1= (ICPPMethod) b1;
 //                ICPPMethod m2= (ICPPMethod) b2;
-                // mstodo check for const, restrict
+                // todo check for const, restrict
                 return r1;
             }
             else {
