@@ -1,3 +1,8 @@
+2006-08-11  Keith Seitz  <keiths@redhat.com>
+
+	* build.xml (version.suffix): Move underscore from here ...
+	(full.name): ... to here to support building with 3.2.0.
+
 2004-08-11  Ben Konrath  <bkonrath@redhat.com>
 	* raw/oprofile-view-samples.htm:
             o addedd new screenshots, removed old ones
