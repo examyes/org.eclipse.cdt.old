@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.cdt.managedbuilder.core.buildDefinitions">
+      <managedBuildRevision fileVersion="1.0"/>
+      <tool
+            command="cl /c"
+            dependencyCalculator="org.eclipse.cdt.dotnet.build.DependencyGenerator"
+            headerExtensions="h,hpp"
+            id="org.eclipse.cdt.dotnet.cl"
+            isAbstract="false"
+            name="CL Compiler"
+            natureFilter="both"
+            outputFlag="/Fo"
+            outputs="obj"
+            sources="c,cpp">
+         <envVarBuildPath
+               pathDelimiter=";"
+               pathType="buildpathInclude"
+               variableList="INCLUDE"/>
+         <envVarBuildPath
+               pathDelimiter=";"
+               pathType="buildpathLibrary"
+               variableList="LIB"/>
+      </tool>
+      <tool
+            command="link"
+            id="org.eclipse.cdt.dotnet.link"
+            isAbstract="false"
+            name="LINK Linker"
+            natureFilter="both"
+            outputFlag="/OUT:"
+            sources="obj">
+      </tool>
+      <tool
+            id="org.eclipse.cdt.dotnet.link.exe"
+            isAbstract="false"
+            name="LINK Executable Linker"
+            natureFilter="both"
+            outputs="exe"
+            superClass="org.eclipse.cdt.dotnet.link">
+      </tool>
+      <projectType
+            id="org.eclipse.cdt.dotnet.projectType.exe"
+            isAbstract="false"
+            name="C++.Net Executable">
+         <configuration
+               artifactExtension="exe"
+               id="org.eclipse.cdt.dotnet.exe.debug"
+               name="Debug">
+            <toolChain
+                  id="org.eclipse.cdt.dotnet.exe.debug.toolChain"
+                  isAbstract="false">
+               <targetPlatform
+                     archList="all"
+                     binaryParser="org.eclipse.cdt.core.PE"
+                     id="org.eclipse.cdt.dotnet.exe.debug.targetPlatform"
+                     isAbstract="false"
+                     osList="win32"/>
+               <tool
+                     id="org.eclipse.cdt.dotnet.exe.debug.compiler"
+                     isAbstract="false"
+                     superClass="org.eclipse.cdt.dotnet.cl"/>
+               <tool
+                     id="org.eclipse.cdt.dotnet.exe.debug.linker"
+                     isAbstract="false"
+                     superClass="org.eclipse.cdt.dotnet.link.exe"/>
+            </toolChain>
+         </configuration>
+      </projectType>
+   </extension>
+
+</plugin>
