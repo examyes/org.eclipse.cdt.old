@@ -1,6 +1,7 @@
 2006-08-14  Keith Seitz  <keiths@redhat.com>
 
 	* feature.xml: Update version to 1.2.1.
+	Require 1.2.1 for oprofile.core and oprofile.core.linux
 
 2005-05-27  Jeremy Handcock  <handcock@redhat.com>
 
