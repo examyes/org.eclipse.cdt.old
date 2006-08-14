@@ -23,6 +23,275 @@
                pathDelimiter=";"
                pathType="buildpathLibrary"
                variableList="LIB"/>
+         <optionCategory
+               id="org.eclipse.cdt.dotnet.cl.optionCategory.general"
+               name="General"/>
+         <option
+               browseType="directory"
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.general"
+               command="/I"
+               id="org.eclipse.cdt.dotnet.cl.option.includes"
+               isAbstract="false"
+               name="Additional Include Directories"
+               resourceFilter="all"
+               valueType="includePath"/>
+         <option
+               browseType="directory"
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.general"
+               command="/AI"
+               id="org.eclipse.cdt.dotnet.cl.option.using"
+               isAbstract="false"
+               name="Resolve #using References"
+               resourceFilter="all"
+               valueType="stringList"/>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.general"
+               id="org.eclipse.cdt.dotnet.cl.option.debugInfo"
+               isAbstract="false"
+               name="Debug Information Format"
+               resourceFilter="all"
+               valueType="enumerated">
+            <enumeratedOptionValue
+                  id="org.eclipse.cdt.dotnet.cl.option.debugInfo.none"
+                  isDefault="true"
+                  name="Disabled"/>
+            <enumeratedOptionValue
+                  command="/Z7"
+                  id="org.eclipse.cdt.dotnet.cl.option.debugInfo.c7"
+                  isDefault="false"
+                  name="C7 Compatible (/Z7)"/>
+            <enumeratedOptionValue
+                  command="/Zi"
+                  id="org.eclipse.cdt.dotnet.cl.option.debugInfo.pdb"
+                  isDefault="false"
+                  name="Program Database (/Zi)"/>
+         </option>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.general"
+               command="/nologo"
+               defaultValue="true"
+               id="org.eclipse.cdt.dotnet.cl.option.nologo"
+               isAbstract="false"
+               name="Suppress Startup Banner (/nologo)"
+               resourceFilter="all"
+               valueType="boolean"/>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.general"
+               id="org.eclipse.cdt.dotnet.cl.option.warningLevel"
+               isAbstract="false"
+               name="Warning Level"
+               resourceFilter="all"
+               valueType="enumerated">
+            <enumeratedOptionValue
+                  command="/W0"
+                  id="org.eclipse.cdt.dotnet.cl.option.warningLevel.none"
+                  isDefault="false"
+                  name="Off: Turn Off All Warnings (/W0)"/>
+            <enumeratedOptionValue
+                  command="/W1"
+                  id="org.eclipse.cdt.dotnet.cl.option.warningLevel.1"
+                  isDefault="true"
+                  name="Level 1 (/W1)"/>
+            <enumeratedOptionValue
+                  command="/W2"
+                  id="org.eclipse.cdt.dotnet.cl.option.warningLevel.2"
+                  isDefault="false"
+                  name="Level 2 (/W2)"/>
+            <enumeratedOptionValue
+                  command="/W3"
+                  id="org.eclipse.cdt.dotnet.cl.option.warningLevel.2"
+                  isDefault="false"
+                  name="Level 3 (/W3)"/>
+            <enumeratedOptionValue
+                  command="/W4"
+                  id="org.eclipse.cdt.dotnet.cl.option.warningLevel.4"
+                  isDefault="false"
+                  name="Level 4 (/W4)"/>
+         </option>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.general"
+               command="/Wp64"
+               defaultValue="false"
+               id="org.eclipse.cdt.dotnet.cl.option.warning64bit"
+               isAbstract="false"
+               name="Detect 64-bit Portability Issues (/Wp64)"
+               resourceFilter="all"
+               valueType="boolean"/>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.general"
+               command="/WX"
+               defaultValue="false"
+               id="org.eclipse.cdt.dotnet.cl.option.warningAsErrors"
+               isAbstract="false"
+               name="Treat Warnings As Errors (/WX)"
+               resourceFilter="all"
+               valueType="boolean"/>
+         <optionCategory
+               id="org.eclipse.cdt.dotnet.cl.optionCategory.optimization"
+               name="Optimization"/>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.optimization"
+               id="org.eclipse.cdt.dotnet.cl.option.optimization"
+               isAbstract="false"
+               name="Optimization"
+               resourceFilter="all"
+               valueType="enumerated">
+            <enumeratedOptionValue
+                  id="org.eclipse.cdt.dotnet.cl.option.optimization.default"
+                  isDefault="false"
+                  name="Custom"/>
+            <enumeratedOptionValue
+                  command="/Od"
+                  id="org.eclipse.cdt.dotnet.cl.option.optimization.default"
+                  isDefault="false"
+                  name="Disabled (/Od)"/>
+            <enumeratedOptionValue
+                  command="/O1"
+                  id="org.eclipse.cdt.dotnet.cl.option.optimization.1"
+                  isDefault="false"
+                  name="Minimum Size (/O1)"/>
+            <enumeratedOptionValue
+                  command="/O2"
+                  id="org.eclipse.cdt.dotnet.cl.option.optimization.2"
+                  isDefault="true"
+                  name="Maximize Speed (/O2)"/>
+            <enumeratedOptionValue
+                  command="/Ox"
+                  id="org.eclipse.cdt.dotnet.cl.option.optimization.full"
+                  isDefault="false"
+                  name="Full Optimization (/Ox)"/>
+         </option>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.optimization"
+               id="org.eclipse.cdt.dotnet.cl.option.inlineExpansion"
+               isAbstract="false"
+               name="Inline Function Expansion"
+               resourceFilter="all"
+               valueType="enumerated">
+            <enumeratedOptionValue
+                  id="org.eclipse.cdt.dotnet.cl.option.inlineExpansion.none"
+                  isDefault="true"
+                  name="Default"/>
+            <enumeratedOptionValue
+                  command="/Ob1"
+                  id="org.eclipse.cdt.dotnet.cl.option.inlineExpansion.1"
+                  isDefault="false"
+                  name="Only __inline (/Ob1)"/>
+            <enumeratedOptionValue
+                  command="/Ob2"
+                  id="org.eclipse.cdt.dotnet.cl.option.inlineExpansion.2"
+                  isDefault="false"
+                  name="Any suitable (/Ob2)"/>
+         </option>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.optimization"
+               command="/Oi"
+               defaultValue="false"
+               id="org.eclipse.cdt.dotnet.cl.option.enableIntrinsics"
+               isAbstract="false"
+               name="Enable Intrinsic Functions (/Oi)"
+               resourceFilter="all"
+               valueType="boolean"/>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.optimization"
+               id="org.eclipse.cdt.dotnet.cl.option.sizeOrSpeed"
+               isAbstract="false"
+               name="Favor Size or Speed"
+               resourceFilter="all"
+               valueType="enumerated">
+            <enumeratedOptionValue
+                  id="org.eclipse.cdt.dotnet.cl.option.sizeOrSpeed.neither"
+                  isDefault="true"
+                  name="Neither"/>
+            <enumeratedOptionValue
+                  command="/Ot"
+                  id="org.eclipse.cdt.dotnet.cl.option.sizeOrSpeed.fast"
+                  isDefault="false"
+                  name="Favor Fast Code (/Ot)"/>
+            <enumeratedOptionValue
+                  command="/Os"
+                  id="org.eclipse.cdt.dotnet.cl.option.sizeOrSpeed.fast"
+                  isDefault="false"
+                  name="Favor Small Code (/Os)"/>
+         </option>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.optimization"
+               command="/Oy"
+               defaultValue="false"
+               id="org.eclipse.cdt.dotnet.cl.option.omitFrames"
+               isAbstract="false"
+               name="Omit Frame Pointers (/Oy)"
+               resourceFilter="all"
+               valueType="boolean"/>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.optimization"
+               command="/GT"
+               defaultValue="false"
+               id="org.eclipse.cdt.dotnet.cl.option.fiberSafe"
+               isAbstract="false"
+               name="Enable Fiber-safe Optimizations (/GT)"
+               resourceFilter="all"
+               valueType="boolean"/>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.optimization"
+               command="/GL"
+               defaultValue="false"
+               id="org.eclipse.cdt.dotnet.cl.option.wholeProgram"
+               isAbstract="false"
+               name="Whole Program Optimization (/GL)"
+               resourceFilter="all"
+               valueType="boolean"/>
+         <optionCategory
+               id="org.eclipse.cdt.dotnet.cl.optionCategory.preprocessor"
+               name="Preprocessor"/>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.preprocessor"
+               command="/D"
+               id="org.eclipse.cdt.dotnet.cl.option.preprocessor"
+               isAbstract="false"
+               name="Preprocessor Definitions"
+               resourceFilter="all"
+               valueType="definedSymbols"/>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.preprocessor"
+               command="/X"
+               defaultValue="false"
+               id="org.eclipse.cdt.dotnet.cl.option.ignoreStdInc"
+               isAbstract="false"
+               name="Ignore Standard Include Path (/X)"
+               resourceFilter="all"
+               valueType="boolean"/>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.preprocessor"
+               id="org.eclipse.cdt.dotnet.cl.option.genPPFile"
+               isAbstract="false"
+               name="Generate Preprocessed File"
+               resourceFilter="all"
+               valueType="enumerated">
+            <enumeratedOptionValue
+                  id="org.eclipse.cdt.dotnet.cl.option.genPPFile.no"
+                  isDefault="true"
+                  name="No"/>
+            <enumeratedOptionValue
+                  command="/P"
+                  id="org.eclipse.cdt.dotnet.cl.option.genPPFile.lineno"
+                  isDefault="false"
+                  name="With Line Numbers (/P)"/>
+            <enumeratedOptionValue
+                  command="/EP /P"
+                  id="org.eclipse.cdt.dotnet.cl.option.genPPFile.nolineno"
+                  isDefault="false"
+                  name="Without Line Numbers (/EP /P)"/>
+         </option>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.preprocessor"
+               command="/C"
+               defaultValue="false"
+               id="org.eclipse.cdt.dotnet.cl.option.keepComments"
+               isAbstract="false"
+               name="Keep Comments (/C)"
+               resourceFilter="all"
+               valueType="boolean"/>
       </tool>
       <tool
             command="link"
