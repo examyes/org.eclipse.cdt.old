@@ -292,6 +292,209 @@
                name="Keep Comments (/C)"
                resourceFilter="all"
                valueType="boolean"/>
+         <optionCategory
+               id="org.eclipse.cdt.dotnet.cl.optionCategory.codeGeneration"
+               name="Code Generation"/>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.codeGeneration"
+               command="/GF"
+               defaultValue="false"
+               id="org.eclipse.cdt.dotnet.cl.option.stringPooling"
+               isAbstract="false"
+               name="Enable String Pooling (/GF)"
+               resourceFilter="all"
+               valueType="boolean"/>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.codeGeneration"
+               command="/Gm"
+               defaultValue="false"
+               id="org.eclipse.cdt.dotnet.cl.option.minimalRebuild"
+               isAbstract="false"
+               name="Enable Minimal Rebuild (/Gm)"
+               resourceFilter="all"
+               valueType="boolean"/>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.codeGeneration"
+               command="/EHsc"
+               defaultValue="true"
+               id="org.eclipse.cdt.dotnet.cl.option.exceptions"
+               isAbstract="false"
+               name="Enable C++ Exceptions (/EHsc)"
+               resourceFilter="all"
+               valueType="boolean"/>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.codeGeneration"
+               command="/RTCc"
+               defaultValue="false"
+               id="org.eclipse.cdt.dotnet.cl.option.smallerTypeCheck"
+               isAbstract="false"
+               name="Smaller Type Check (/RTCc)"
+               resourceFilter="all"
+               valueType="boolean"/>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.codeGeneration"
+               id="org.eclipse.cdt.dotnet.cl.option.basicRuntimeChecks"
+               isAbstract="false"
+               name="Basic Runtime Checks"
+               resourceFilter="all"
+               valueType="includePath">
+            <enumeratedOptionValue
+                  id="org.eclipse.cdt.dotnet.cl.option.basicRuntimeChecks.default"
+                  isDefault="true"
+                  name="Default"/>
+            <enumeratedOptionValue
+                  command="/RTCs"
+                  id="org.eclipse.cdt.dotnet.cl.option.basicRuntimeChecks.stack"
+                  isDefault="false"
+                  name="Stack Frames (/RTCs)"/>
+            <enumeratedOptionValue
+                  command="/RTCu"
+                  id="org.eclipse.cdt.dotnet.cl.option.basicRuntimeChecks.uninit"
+                  isDefault="false"
+                  name="Unitialized Variables (/RTCu)"/>
+            <enumeratedOptionValue
+                  command="/RTC1"
+                  id="org.eclipse.cdt.dotnet.cl.option.basicRuntimeChecks.both"
+                  isDefault="false"
+                  name="Both (/RTC1)"/>
+         </option>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.codeGeneration"
+               id="org.eclipse.cdt.dotnet.cl.option.runtime"
+               isAbstract="false"
+               name="Runtime Library"
+               resourceFilter="all"
+               valueType="enumerated">
+            <enumeratedOptionValue
+                  command="/MT"
+                  id="org.eclipse.cdt.dotnet.cl.option.runtime.mt"
+                  isDefault="true"
+                  name="Multi-threaded (/MT)"/>
+            <enumeratedOptionValue
+                  command="/MTd"
+                  id="org.eclipse.cdt.dotnet.cl.option.runtime.mtd"
+                  isDefault="false"
+                  name="Multi-threaded Debug (/MTd)"/>
+            <enumeratedOptionValue
+                  command="/MD"
+                  id="org.eclipse.cdt.dotnet.cl.option.runtime.md"
+                  isDefault="false"
+                  name="Multi-threaded DLL (/MD)"/>
+            <enumeratedOptionValue
+                  command="/MDd"
+                  id="org.eclipse.cdt.dotnet.cl.option.runtime.mtdd"
+                  isDefault="false"
+                  name="Multi-threaded DLL Debug (/MDd)"/>
+         </option>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.codeGeneration"
+               id="org.eclipse.cdt.dotnet.cl.option.alignment"
+               isAbstract="false"
+               name="Struct Member Alignment"
+               resourceFilter="all"
+               valueType="enumerated">
+            <enumeratedOptionValue
+                  id="org.eclipse.cdt.dotnet.cl.option.alignment.default"
+                  isDefault="true"
+                  name="Default"/>
+            <enumeratedOptionValue
+                  command="/Zp1"
+                  id="org.eclipse.cdt.dotnet.cl.option.alignment.1"
+                  isDefault="false"
+                  name="1 byte (/Zp1)"/>
+            <enumeratedOptionValue
+                  command="/Zp2"
+                  id="org.eclipse.cdt.dotnet.cl.option.alignment.2"
+                  isDefault="false"
+                  name="2 byte (/Zp2)"/>
+            <enumeratedOptionValue
+                  command="/Zp4"
+                  id="org.eclipse.cdt.dotnet.cl.option.alignment.4"
+                  isDefault="false"
+                  name="4 byte (/Zp4)"/>
+            <enumeratedOptionValue
+                  command="/Zp8"
+                  id="org.eclipse.cdt.dotnet.cl.option.alignment.8"
+                  isDefault="false"
+                  name="8 byte (/Zp8)"/>
+            <enumeratedOptionValue
+                  command="/Zp16"
+                  id="org.eclipse.cdt.dotnet.cl.option.alignment.16"
+                  isDefault="false"
+                  name="16 byte (/Zp16)"/>
+         </option>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.codeGeneration"
+               command="/GS-"
+               defaultValue="true"
+               id="org.eclipse.cdt.dotnet.cl.option.bufferOverrun"
+               isAbstract="false"
+               name="Buffer Security Check (/GS-)"
+               resourceFilter="all"
+               valueType="boolean"/>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.codeGeneration"
+               command="/Gy"
+               defaultValue="false"
+               id="org.eclipse.cdt.dotnet.cl.option.funcLinking"
+               isAbstract="false"
+               name="Enable Function-Level Linking (/Gy)"
+               resourceFilter="all"
+               valueType="boolean"/>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.codeGeneration"
+               id="org.eclipse.cdt.dotnet.cl.option.sse"
+               isAbstract="false"
+               name="Enable Enhanced Instruction Set"
+               resourceFilter="all"
+               valueType="enumerated">
+            <enumeratedOptionValue
+                  id="org.eclipse.cdt.dotnet.cl.option.sse.none"
+                  isDefault="true"
+                  name="Not Set"/>
+            <enumeratedOptionValue
+                  command="/arch:SSE"
+                  id="org.eclipse.cdt.dotnet.cl.option.sse.sse"
+                  isDefault="false"
+                  name="Streaming SIMD Extensions (/arch:SSE)"/>
+            <enumeratedOptionValue
+                  command="/arch:SSE2"
+                  id="org.eclipse.cdt.dotnet.cl.option.sse.sse2"
+                  isDefault="false"
+                  name="Streaming SIMD Extensions 2 (/arch:SSE2)"/>
+         </option>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.codeGeneration"
+               id="org.eclipse.cdt.dotnet.cl.option.floatingPoint"
+               isAbstract="false"
+               name="Floating Point Model"
+               resourceFilter="all"
+               valueType="enumerated">
+            <enumeratedOptionValue
+                  command="/fp:precise"
+                  id="org.eclipse.cdt.dotnet.cl.option.floatingPoint.precise"
+                  isDefault="true"
+                  name="Presize (/fp:precise)"/>
+            <enumeratedOptionValue
+                  command="/fp:strict"
+                  id="org.eclipse.cdt.dotnet.cl.option.floatingPoint.strict"
+                  isDefault="false"
+                  name="Strict (/fp:strict)"/>
+            <enumeratedOptionValue
+                  command="/fp:fast"
+                  id="org.eclipse.cdt.dotnet.cl.option.floatingPoint.fast"
+                  isDefault="false"
+                  name="Fast (/fp:fast)"/>
+         </option>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.codeGeneration"
+               command="/fp:except"
+               defaultValue="false"
+               id="org.eclipse.cdt.dotnet.cl.option.fpExceptions"
+               isAbstract="false"
+               name="Enable Floating Point Exceptions (/fp:except)"
+               resourceFilter="all"
+               valueType="boolean"/>
       </tool>
       <tool
             command="link"
