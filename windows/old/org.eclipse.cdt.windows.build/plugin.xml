@@ -495,6 +495,63 @@
                name="Enable Floating Point Exceptions (/fp:except)"
                resourceFilter="all"
                valueType="boolean"/>
+         <optionCategory
+               id="org.eclipse.cdt.dotnet.cl.optionCategory.language"
+               name="Language"/>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.language"
+               command="/Za"
+               defaultValue="false"
+               id="org.eclipse.cdt.dotnet.cl.option.langExtensions"
+               isAbstract="false"
+               name="Disable Language Extensions (/Za)"
+               resourceFilter="all"
+               valueType="boolean"/>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.language"
+               command="/J"
+               defaultValue="false"
+               id="org.eclipse.cdt.dotnet.cl.option.charUnsigned"
+               isAbstract="false"
+               name="Default Char Unsigned (/J)"
+               resourceFilter="all"
+               valueType="boolean"/>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.language"
+               commandFalse="/Zc:wchar_t-"
+               defaultValue="true"
+               id="org.eclipse.cdt.dotnet.cl.option.wchar_t"
+               isAbstract="false"
+               name="Treat wchar_t as Built-in Type (/Zc:wchar_t)"
+               resourceFilter="all"
+               valueType="boolean"/>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.language"
+               commandFalse="/Zc:forScope-"
+               defaultValue="true"
+               id="org.eclipse.cdt.dotnet.cl.option.forLoopScope"
+               isAbstract="false"
+               name="Force Conformance In For Loop Scope (/Zc:forScope)"
+               resourceFilter="all"
+               valueType="boolean"/>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.language"
+               commandFalse="/GR-"
+               defaultValue="true"
+               id="org.eclipse.cdt.dotnet.cl.option.rtti"
+               isAbstract="false"
+               name="Enable Run-Time Type Info (/GS)"
+               resourceFilter="all"
+               valueType="boolean"/>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.language"
+               command="/openmp"
+               defaultValue="false"
+               id="org.eclipse.cdt.dotnet.cl.option.openmp"
+               isAbstract="false"
+               name="OpenMP Support (/openmp)"
+               resourceFilter="all"
+               valueType="boolean"/>
       </tool>
       <tool
             command="link"
