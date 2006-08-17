@@ -24,109 +24,6 @@
                pathType="buildpathLibrary"
                variableList="LIB"/>
          <optionCategory
-               id="org.eclipse.cdt.dotnet.cl.optionCategory.general"
-               name="General"/>
-         <option
-               browseType="directory"
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.general"
-               command="/I"
-               id="org.eclipse.cdt.dotnet.cl.option.includes"
-               isAbstract="false"
-               name="Additional Include Directories"
-               resourceFilter="all"
-               valueType="includePath"/>
-         <option
-               browseType="directory"
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.general"
-               command="/AI"
-               id="org.eclipse.cdt.dotnet.cl.option.using"
-               isAbstract="false"
-               name="Resolve #using References"
-               resourceFilter="all"
-               valueType="stringList"/>
-         <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.general"
-               id="org.eclipse.cdt.dotnet.cl.option.debugInfo"
-               isAbstract="false"
-               name="Debug Information Format"
-               resourceFilter="all"
-               valueType="enumerated">
-            <enumeratedOptionValue
-                  id="org.eclipse.cdt.dotnet.cl.option.debugInfo.none"
-                  isDefault="true"
-                  name="Disabled"/>
-            <enumeratedOptionValue
-                  command="/Z7"
-                  id="org.eclipse.cdt.dotnet.cl.option.debugInfo.c7"
-                  isDefault="false"
-                  name="C7 Compatible (/Z7)"/>
-            <enumeratedOptionValue
-                  command="/Zi"
-                  id="org.eclipse.cdt.dotnet.cl.option.debugInfo.pdb"
-                  isDefault="false"
-                  name="Program Database (/Zi)"/>
-         </option>
-         <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.general"
-               command="/nologo"
-               defaultValue="true"
-               id="org.eclipse.cdt.dotnet.cl.option.nologo"
-               isAbstract="false"
-               name="Suppress Startup Banner (/nologo)"
-               resourceFilter="all"
-               valueType="boolean"/>
-         <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.general"
-               id="org.eclipse.cdt.dotnet.cl.option.warningLevel"
-               isAbstract="false"
-               name="Warning Level"
-               resourceFilter="all"
-               valueType="enumerated">
-            <enumeratedOptionValue
-                  command="/W0"
-                  id="org.eclipse.cdt.dotnet.cl.option.warningLevel.none"
-                  isDefault="false"
-                  name="Off: Turn Off All Warnings (/W0)"/>
-            <enumeratedOptionValue
-                  command="/W1"
-                  id="org.eclipse.cdt.dotnet.cl.option.warningLevel.1"
-                  isDefault="true"
-                  name="Level 1 (/W1)"/>
-            <enumeratedOptionValue
-                  command="/W2"
-                  id="org.eclipse.cdt.dotnet.cl.option.warningLevel.2"
-                  isDefault="false"
-                  name="Level 2 (/W2)"/>
-            <enumeratedOptionValue
-                  command="/W3"
-                  id="org.eclipse.cdt.dotnet.cl.option.warningLevel.2"
-                  isDefault="false"
-                  name="Level 3 (/W3)"/>
-            <enumeratedOptionValue
-                  command="/W4"
-                  id="org.eclipse.cdt.dotnet.cl.option.warningLevel.4"
-                  isDefault="false"
-                  name="Level 4 (/W4)"/>
-         </option>
-         <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.general"
-               command="/Wp64"
-               defaultValue="false"
-               id="org.eclipse.cdt.dotnet.cl.option.warning64bit"
-               isAbstract="false"
-               name="Detect 64-bit Portability Issues (/Wp64)"
-               resourceFilter="all"
-               valueType="boolean"/>
-         <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.general"
-               command="/WX"
-               defaultValue="false"
-               id="org.eclipse.cdt.dotnet.cl.option.warningAsErrors"
-               isAbstract="false"
-               name="Treat Warnings As Errors (/WX)"
-               resourceFilter="all"
-               valueType="boolean"/>
-         <optionCategory
                id="org.eclipse.cdt.dotnet.cl.optionCategory.optimization"
                name="Optimization"/>
          <option
@@ -139,419 +36,180 @@
             <enumeratedOptionValue
                   id="org.eclipse.cdt.dotnet.cl.option.optimization.default"
                   isDefault="false"
-                  name="Custom"/>
-            <enumeratedOptionValue
-                  command="/Od"
-                  id="org.eclipse.cdt.dotnet.cl.option.optimization.default"
-                  isDefault="false"
-                  name="Disabled (/Od)"/>
+                  name="Default"/>
             <enumeratedOptionValue
                   command="/O1"
                   id="org.eclipse.cdt.dotnet.cl.option.optimization.1"
                   isDefault="false"
-                  name="Minimum Size (/O1)"/>
+                  name="Minimize Size (/O1)"/>
             <enumeratedOptionValue
                   command="/O2"
                   id="org.eclipse.cdt.dotnet.cl.option.optimization.2"
                   isDefault="true"
                   name="Maximize Speed (/O2)"/>
-            <enumeratedOptionValue
-                  command="/Ox"
-                  id="org.eclipse.cdt.dotnet.cl.option.optimization.full"
-                  isDefault="false"
-                  name="Full Optimization (/Ox)"/>
          </option>
+         <optionCategory
+               id="org.eclipse.cdt.dotnet.cl.optionCategory.codegen"
+               name="Code Generation"/>
          <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.optimization"
-               id="org.eclipse.cdt.dotnet.cl.option.inlineExpansion"
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.codegen"
+               id="org.eclipse.cdt.dotnet.cl.option.arch"
                isAbstract="false"
-               name="Inline Function Expansion"
+               name="Minimum CPU Architecture"
                resourceFilter="all"
                valueType="enumerated">
             <enumeratedOptionValue
-                  id="org.eclipse.cdt.dotnet.cl.option.inlineExpansion.none"
+                  id="org.eclipse.cdt.dotnet.cl.option.arch.default"
                   isDefault="true"
                   name="Default"/>
             <enumeratedOptionValue
-                  command="/Ob1"
-                  id="org.eclipse.cdt.dotnet.cl.option.inlineExpansion.1"
+                  command="/arch:SSE"
+                  id="org.eclipse.cdt.dotnet.cl.option.arch.sse"
                   isDefault="false"
-                  name="Only __inline (/Ob1)"/>
+                  name="SSE (/arch:SSE)"/>
             <enumeratedOptionValue
-                  command="/Ob2"
-                  id="org.eclipse.cdt.dotnet.cl.option.inlineExpansion.2"
+                  id="org.eclipse.cdt.dotnet.cl.option.arch.sse2"
                   isDefault="false"
-                  name="Any suitable (/Ob2)"/>
+                  name="SSE2 (/arch:SSE2)"/>
          </option>
          <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.optimization"
-               command="/Oi"
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.codegen"
+               command="/clr"
                defaultValue="false"
-               id="org.eclipse.cdt.dotnet.cl.option.enableIntrinsics"
+               id="org.eclipse.cdt.dotnet.cl.option.clr"
                isAbstract="false"
-               name="Enable Intrinsic Functions (/Oi)"
+               name="Common Language Runtime (/clr)"
                resourceFilter="all"
                valueType="boolean"/>
          <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.optimization"
-               id="org.eclipse.cdt.dotnet.cl.option.sizeOrSpeed"
-               isAbstract="false"
-               name="Favor Size or Speed"
-               resourceFilter="all"
-               valueType="enumerated">
-            <enumeratedOptionValue
-                  id="org.eclipse.cdt.dotnet.cl.option.sizeOrSpeed.neither"
-                  isDefault="true"
-                  name="Neither"/>
-            <enumeratedOptionValue
-                  command="/Ot"
-                  id="org.eclipse.cdt.dotnet.cl.option.sizeOrSpeed.fast"
-                  isDefault="false"
-                  name="Favor Fast Code (/Ot)"/>
-            <enumeratedOptionValue
-                  command="/Os"
-                  id="org.eclipse.cdt.dotnet.cl.option.sizeOrSpeed.fast"
-                  isDefault="false"
-                  name="Favor Small Code (/Os)"/>
-         </option>
-         <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.optimization"
-               command="/Oy"
-               defaultValue="false"
-               id="org.eclipse.cdt.dotnet.cl.option.omitFrames"
-               isAbstract="false"
-               name="Omit Frame Pointers (/Oy)"
-               resourceFilter="all"
-               valueType="boolean"/>
-         <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.optimization"
-               command="/GT"
-               defaultValue="false"
-               id="org.eclipse.cdt.dotnet.cl.option.fiberSafe"
-               isAbstract="false"
-               name="Enable Fiber-safe Optimizations (/GT)"
-               resourceFilter="all"
-               valueType="boolean"/>
-         <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.optimization"
-               command="/GL"
-               defaultValue="false"
-               id="org.eclipse.cdt.dotnet.cl.option.wholeProgram"
-               isAbstract="false"
-               name="Whole Program Optimization (/GL)"
-               resourceFilter="all"
-               valueType="boolean"/>
-         <optionCategory
-               id="org.eclipse.cdt.dotnet.cl.optionCategory.preprocessor"
-               name="Preprocessor"/>
-         <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.preprocessor"
-               command="/D"
-               id="org.eclipse.cdt.dotnet.cl.option.preprocessor"
-               isAbstract="false"
-               name="Preprocessor Definitions"
-               resourceFilter="all"
-               valueType="definedSymbols"/>
-         <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.preprocessor"
-               command="/X"
-               defaultValue="false"
-               id="org.eclipse.cdt.dotnet.cl.option.ignoreStdInc"
-               isAbstract="false"
-               name="Ignore Standard Include Path (/X)"
-               resourceFilter="all"
-               valueType="boolean"/>
-         <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.preprocessor"
-               id="org.eclipse.cdt.dotnet.cl.option.genPPFile"
-               isAbstract="false"
-               name="Generate Preprocessed File"
-               resourceFilter="all"
-               valueType="enumerated">
-            <enumeratedOptionValue
-                  id="org.eclipse.cdt.dotnet.cl.option.genPPFile.no"
-                  isDefault="true"
-                  name="No"/>
-            <enumeratedOptionValue
-                  command="/P"
-                  id="org.eclipse.cdt.dotnet.cl.option.genPPFile.lineno"
-                  isDefault="false"
-                  name="With Line Numbers (/P)"/>
-            <enumeratedOptionValue
-                  command="/EP /P"
-                  id="org.eclipse.cdt.dotnet.cl.option.genPPFile.nolineno"
-                  isDefault="false"
-                  name="Without Line Numbers (/EP /P)"/>
-         </option>
-         <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.preprocessor"
-               command="/C"
-               defaultValue="false"
-               id="org.eclipse.cdt.dotnet.cl.option.keepComments"
-               isAbstract="false"
-               name="Keep Comments (/C)"
-               resourceFilter="all"
-               valueType="boolean"/>
-         <optionCategory
-               id="org.eclipse.cdt.dotnet.cl.optionCategory.codeGeneration"
-               name="Code Generation"/>
-         <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.codeGeneration"
-               command="/GF"
-               defaultValue="false"
-               id="org.eclipse.cdt.dotnet.cl.option.stringPooling"
-               isAbstract="false"
-               name="Enable String Pooling (/GF)"
-               resourceFilter="all"
-               valueType="boolean"/>
-         <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.codeGeneration"
-               command="/Gm"
-               defaultValue="false"
-               id="org.eclipse.cdt.dotnet.cl.option.minimalRebuild"
-               isAbstract="false"
-               name="Enable Minimal Rebuild (/Gm)"
-               resourceFilter="all"
-               valueType="boolean"/>
-         <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.codeGeneration"
-               command="/EHsc"
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.codegen"
+               command="/EHs"
                defaultValue="true"
                id="org.eclipse.cdt.dotnet.cl.option.exceptions"
                isAbstract="false"
-               name="Enable C++ Exceptions (/EHsc)"
+               name="Enable C++ Exception Handling (/EHs)"
                resourceFilter="all"
                valueType="boolean"/>
          <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.codeGeneration"
-               command="/RTCc"
-               defaultValue="false"
-               id="org.eclipse.cdt.dotnet.cl.option.smallerTypeCheck"
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.codegen"
+               commandFalse="/GR-"
+               defaultValue="true"
+               id="org.eclipse.cdt.dotnet.cl.option.rtti"
                isAbstract="false"
-               name="Smaller Type Check (/RTCc)"
+               name="Enable Run-Time Type Information (/GR)"
                resourceFilter="all"
                valueType="boolean"/>
          <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.codeGeneration"
-               id="org.eclipse.cdt.dotnet.cl.option.basicRuntimeChecks"
-               isAbstract="false"
-               name="Basic Runtime Checks"
-               resourceFilter="all"
-               valueType="includePath">
-            <enumeratedOptionValue
-                  id="org.eclipse.cdt.dotnet.cl.option.basicRuntimeChecks.default"
-                  isDefault="true"
-                  name="Default"/>
-            <enumeratedOptionValue
-                  command="/RTCs"
-                  id="org.eclipse.cdt.dotnet.cl.option.basicRuntimeChecks.stack"
-                  isDefault="false"
-                  name="Stack Frames (/RTCs)"/>
-            <enumeratedOptionValue
-                  command="/RTCu"
-                  id="org.eclipse.cdt.dotnet.cl.option.basicRuntimeChecks.uninit"
-                  isDefault="false"
-                  name="Unitialized Variables (/RTCu)"/>
-            <enumeratedOptionValue
-                  command="/RTC1"
-                  id="org.eclipse.cdt.dotnet.cl.option.basicRuntimeChecks.both"
-                  isDefault="false"
-                  name="Both (/RTC1)"/>
-         </option>
-         <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.codeGeneration"
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.codegen"
                id="org.eclipse.cdt.dotnet.cl.option.runtime"
                isAbstract="false"
-               name="Runtime Library"
+               name="Run-Time Library"
                resourceFilter="all"
                valueType="enumerated">
             <enumeratedOptionValue
                   command="/MT"
                   id="org.eclipse.cdt.dotnet.cl.option.runtime.mt"
                   isDefault="true"
-                  name="Multi-threaded (/MT)"/>
+                  name="Multi-Threaded Static (/MT)"/>
             <enumeratedOptionValue
                   command="/MTd"
                   id="org.eclipse.cdt.dotnet.cl.option.runtime.mtd"
                   isDefault="false"
-                  name="Multi-threaded Debug (/MTd)"/>
+                  name="Multi-Threaded Static Debug (/MTd)"/>
             <enumeratedOptionValue
                   command="/MD"
                   id="org.eclipse.cdt.dotnet.cl.option.runtime.md"
                   isDefault="false"
-                  name="Multi-threaded DLL (/MD)"/>
+                  name="Multi-Threaded DLL (/MD)"/>
             <enumeratedOptionValue
                   command="/MDd"
-                  id="org.eclipse.cdt.dotnet.cl.option.runtime.mtdd"
+                  id="org.eclipse.cdt.dotnet.cl.option.runtime.mdd"
                   isDefault="false"
-                  name="Multi-threaded DLL Debug (/MDd)"/>
+                  name="Multi-Threaded DLL Debug (/MDd)"/>
          </option>
+         <optionCategory
+               id="org.eclipse.cdt.dotnet.cl.optionCategory.debug"
+               name="Debugging"/>
          <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.codeGeneration"
-               id="org.eclipse.cdt.dotnet.cl.option.alignment"
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.debug"
+               id="org.eclipse.cdt.dotnet.cl.option.debugFormat"
                isAbstract="false"
-               name="Struct Member Alignment"
+               name="Debug Information Format"
                resourceFilter="all"
                valueType="enumerated">
             <enumeratedOptionValue
-                  id="org.eclipse.cdt.dotnet.cl.option.alignment.default"
+                  id="org.eclipse.cdt.dotnet.cl.option.debugFormat.none"
                   isDefault="true"
-                  name="Default"/>
+                  name="None"/>
             <enumeratedOptionValue
-                  command="/Zp1"
-                  id="org.eclipse.cdt.dotnet.cl.option.alignment.1"
+                  command="/Z7"
+                  id="org.eclipse.cdt.dotnet.cl.option.debugFormat.c7"
                   isDefault="false"
-                  name="1 byte (/Zp1)"/>
+                  name="C7 Compatible (/Z7)"/>
             <enumeratedOptionValue
-                  command="/Zp2"
-                  id="org.eclipse.cdt.dotnet.cl.option.alignment.2"
+                  command="/Zi"
+                  id="org.eclipse.cdt.dotnet.cl.option.debugFormat.complete"
                   isDefault="false"
-                  name="2 byte (/Zp2)"/>
-            <enumeratedOptionValue
-                  command="/Zp4"
-                  id="org.eclipse.cdt.dotnet.cl.option.alignment.4"
-                  isDefault="false"
-                  name="4 byte (/Zp4)"/>
-            <enumeratedOptionValue
-                  command="/Zp8"
-                  id="org.eclipse.cdt.dotnet.cl.option.alignment.8"
-                  isDefault="false"
-                  name="8 byte (/Zp8)"/>
-            <enumeratedOptionValue
-                  command="/Zp16"
-                  id="org.eclipse.cdt.dotnet.cl.option.alignment.16"
-                  isDefault="false"
-                  name="16 byte (/Zp16)"/>
+                  name="Complete (/Zi)"/>
          </option>
+         <optionCategory
+               id="org.eclipse.cdt.dotnet.cl.optionCategory.preprocessor"
+               name="Preprocessor"/>
          <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.codeGeneration"
-               command="/GS-"
-               defaultValue="true"
-               id="org.eclipse.cdt.dotnet.cl.option.bufferOverrun"
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.preprocessor"
+               id="org.eclipse.cdt.dotnet.cl.option.macros"
                isAbstract="false"
-               name="Buffer Security Check (/GS-)"
+               name="Defines (/D)"
                resourceFilter="all"
-               valueType="boolean"/>
+               valueType="definedSymbols"/>
          <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.codeGeneration"
-               command="/Gy"
-               defaultValue="false"
-               id="org.eclipse.cdt.dotnet.cl.option.funcLinking"
+               browseType="directory"
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.preprocessor"
+               id="org.eclipse.cdt.dotnet.cl.option.includes"
                isAbstract="false"
-               name="Enable Function-Level Linking (/Gy)"
+               name="Include Path (/I)"
                resourceFilter="all"
-               valueType="boolean"/>
-         <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.codeGeneration"
-               id="org.eclipse.cdt.dotnet.cl.option.sse"
-               isAbstract="false"
-               name="Enable Enhanced Instruction Set"
-               resourceFilter="all"
-               valueType="enumerated">
-            <enumeratedOptionValue
-                  id="org.eclipse.cdt.dotnet.cl.option.sse.none"
-                  isDefault="true"
-                  name="Not Set"/>
-            <enumeratedOptionValue
-                  command="/arch:SSE"
-                  id="org.eclipse.cdt.dotnet.cl.option.sse.sse"
-                  isDefault="false"
-                  name="Streaming SIMD Extensions (/arch:SSE)"/>
-            <enumeratedOptionValue
-                  command="/arch:SSE2"
-                  id="org.eclipse.cdt.dotnet.cl.option.sse.sse2"
-                  isDefault="false"
-                  name="Streaming SIMD Extensions 2 (/arch:SSE2)"/>
-         </option>
-         <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.codeGeneration"
-               id="org.eclipse.cdt.dotnet.cl.option.floatingPoint"
-               isAbstract="false"
-               name="Floating Point Model"
-               resourceFilter="all"
-               valueType="enumerated">
-            <enumeratedOptionValue
-                  command="/fp:precise"
-                  id="org.eclipse.cdt.dotnet.cl.option.floatingPoint.precise"
-                  isDefault="true"
-                  name="Presize (/fp:precise)"/>
-            <enumeratedOptionValue
-                  command="/fp:strict"
-                  id="org.eclipse.cdt.dotnet.cl.option.floatingPoint.strict"
-                  isDefault="false"
-                  name="Strict (/fp:strict)"/>
-            <enumeratedOptionValue
-                  command="/fp:fast"
-                  id="org.eclipse.cdt.dotnet.cl.option.floatingPoint.fast"
-                  isDefault="false"
-                  name="Fast (/fp:fast)"/>
-         </option>
-         <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.codeGeneration"
-               command="/fp:except"
-               defaultValue="false"
-               id="org.eclipse.cdt.dotnet.cl.option.fpExceptions"
-               isAbstract="false"
-               name="Enable Floating Point Exceptions (/fp:except)"
-               resourceFilter="all"
-               valueType="boolean"/>
+               valueType="includePath"/>
          <optionCategory
                id="org.eclipse.cdt.dotnet.cl.optionCategory.language"
                name="Language"/>
-         <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.language"
-               command="/Za"
-               defaultValue="false"
-               id="org.eclipse.cdt.dotnet.cl.option.langExtensions"
-               isAbstract="false"
-               name="Disable Language Extensions (/Za)"
-               resourceFilter="all"
-               valueType="boolean"/>
-         <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.language"
-               command="/J"
-               defaultValue="false"
-               id="org.eclipse.cdt.dotnet.cl.option.charUnsigned"
-               isAbstract="false"
-               name="Default Char Unsigned (/J)"
-               resourceFilter="all"
-               valueType="boolean"/>
-         <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.language"
-               commandFalse="/Zc:wchar_t-"
-               defaultValue="true"
-               id="org.eclipse.cdt.dotnet.cl.option.wchar_t"
-               isAbstract="false"
-               name="Treat wchar_t as Built-in Type (/Zc:wchar_t)"
-               resourceFilter="all"
-               valueType="boolean"/>
-         <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.language"
-               commandFalse="/Zc:forScope-"
-               defaultValue="true"
-               id="org.eclipse.cdt.dotnet.cl.option.forLoopScope"
-               isAbstract="false"
-               name="Force Conformance In For Loop Scope (/Zc:forScope)"
-               resourceFilter="all"
-               valueType="boolean"/>
-         <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.language"
-               commandFalse="/GR-"
-               defaultValue="true"
-               id="org.eclipse.cdt.dotnet.cl.option.rtti"
-               isAbstract="false"
-               name="Enable Run-Time Type Info (/GS)"
-               resourceFilter="all"
-               valueType="boolean"/>
          <option
                category="org.eclipse.cdt.dotnet.cl.optionCategory.language"
                command="/openmp"
                defaultValue="false"
                id="org.eclipse.cdt.dotnet.cl.option.openmp"
                isAbstract="false"
-               name="OpenMP Support (/openmp)"
+               name="Enable OpenMP (/openmp)"
                resourceFilter="all"
                valueType="boolean"/>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.language"
+               commandFalse="/Za"
+               defaultValue="true"
+               id="org.eclipse.cdt.dotnet.cl.option.langExtensions"
+               isAbstract="false"
+               name="Enable Language Extensions (/Ze,/Za)"
+               resourceFilter="all"
+               valueType="boolean"/>
+         <optionCategory
+               id="org.eclipse.cdt.dotnet.cl.optionCategory.miscellaneous"
+               name="Miscellaneous"/>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.miscellaneous"
+               command="/nologo"
+               defaultValue="true"
+               id="org.eclipse.cdt.dotnet.cl.option.nologo"
+               isAbstract="false"
+               name="Suppress Banner (/nologo)"
+               resourceFilter="all"
+               valueType="boolean"/>
+         <option
+               category="org.eclipse.cdt.dotnet.cl.optionCategory.miscellaneous"
+               id="org.eclipse.cdt.dotnet.cl.option.others"
+               isAbstract="false"
+               name="Other Options"
+               resourceFilter="all"
+               valueType="stringList"/>
       </tool>
       <tool
             command="link"
