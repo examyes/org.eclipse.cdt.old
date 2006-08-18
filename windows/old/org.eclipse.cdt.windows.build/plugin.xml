@@ -19,10 +19,6 @@
                pathDelimiter=";"
                pathType="buildpathInclude"
                variableList="INCLUDE"/>
-         <envVarBuildPath
-               pathDelimiter=";"
-               pathType="buildpathLibrary"
-               variableList="LIB"/>
          <optionCategory
                id="org.eclipse.cdt.dotnet.cl.optionCategory.optimization"
                name="Optimization"/>
@@ -218,7 +214,67 @@
             name="LINK Linker"
             natureFilter="both"
             outputFlag="/OUT:"
+            sibling_order="org.eclipse.pde.internal.core.text.plugin.PluginElementNode@1016505"
             sources="obj">
+         <envVarBuildPath
+               pathType="buildpathLibrary"
+               variableList="LIBS"/>
+         <option
+               command="/DLL"
+               defaultValue="false"
+               id="org.eclipse.cdt.dotnet.link.option.dll"
+               isAbstract="false"
+               name="Build a DLL"
+               resourceFilter="all"
+               valueType="boolean"/>
+         <optionCategory
+               id="org.eclipse.cdt.dotnet.link.optionCategory.general"
+               name="General"/>
+         <option
+               category="org.eclipse.cdt.dotnet.link.optionCategory.general"
+               command="/debug"
+               defaultValue="false"
+               id="org.eclipse.cdt.dotnet.link.option.debug"
+               isAbstract="false"
+               name="Generate Debug Info (/debug)"
+               resourceFilter="all"
+               valueType="boolean"/>
+         <option
+               category="org.eclipse.cdt.dotnet.link.optionCategory.general"
+               command="/nologo"
+               defaultValue="true"
+               id="org.eclipse.cdt.dotnet.link.option.nologo"
+               isAbstract="false"
+               name="Suppress Banner (/nologo)"
+               resourceFilter="all"
+               valueType="boolean"/>
+         <option
+               category="org.eclipse.cdt.dotnet.link.optionCategory.general"
+               id="org.eclipse.cdt.dotnet.link.option.others"
+               isAbstract="false"
+               name="Other Options"
+               resourceFilter="all"
+               valueType="stringList"/>
+         <optionCategory
+               id="org.eclipse.cdt.dotnet.link.optionCategory.libraries"
+               name="Libraries"/>
+         <option
+               browseType="directory"
+               category="org.eclipse.cdt.dotnet.link.optionCategory.libraries"
+               command="/libpath:"
+               id="org.eclipse.cdt.dotnet.link.option.libpath"
+               isAbstract="false"
+               name="Additional Libpath (/libpath)"
+               resourceFilter="all"
+               valueType="stringList"/>
+         <option
+               browseType="file"
+               category="org.eclipse.cdt.dotnet.link.optionCategory.libraries"
+               id="org.eclipse.cdt.dotnet.link.option.libraries"
+               isAbstract="false"
+               name="Libraries"
+               resourceFilter="all"
+               valueType="stringList"/>
       </tool>
       <tool
             id="org.eclipse.cdt.dotnet.link.exe"
