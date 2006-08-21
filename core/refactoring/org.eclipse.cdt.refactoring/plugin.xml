@@ -1,53 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.0"?>
 <plugin>
-   <extension point="org.eclipse.ui.popupMenus">
-      <viewerContribution 
-            targetID="#CEditorContext" 
-            id="org.eclipse.cdt.refactoring.rename"
-      >
-         <menu
-               id="org.eclipse.cdt.ui.refactoring.menu"
-               label="%Refactoring.menu.label"
-               path="group.reorganize">
-            <separator name="reorgGroup"/>
-            <separator name="typeGroup"/>
-            <separator name="codingGroup"/>
-            <separator name="undoRedoGroup"/>
-         </menu>
-         <action 
-               label="%Refactoring.renameAction.label" 
-               class="org.eclipse.cdt.refactoring.actions.CRenameEditorActionDelegate" 
-               menubarPath="org.eclipse.cdt.ui.refactoring.menu/reorgGroup" 
-               id="org.eclipse.cdt.refactoring.rename"
-               definitionId="org.eclipse.cdt.ui.edit.text.c.rename.element"
-         />
-      </viewerContribution>
-      <objectContribution 
-            id="org.eclipse.cdt.refactoring.contrib"
-            objectClass="org.eclipse.cdt.core.model.ICElement"
-      > 
-         <visibility>
-            <objectClass name="org.eclipse.cdt.core.model.ISourceReference"/>
-         </visibility>
-         <menu
-               id="org.eclipse.cdt.ui.refactoring.menu"
-               label="%Refactoring.menu.label"
-               path="group.reorganize">
-            <separator name="reorgGroup"/>
-            <separator name="typeGroup"/>
-            <separator name="codingGroup"/>
-         </menu> 
-         <action 
-               label="%Refactoring.renameAction.label" 
-               class="org.eclipse.cdt.refactoring.actions.CRenameViewActionDelegate" 
-               menubarPath="org.eclipse.cdt.ui.refactoring.menu/reorgGroup" 
-               id="org.eclipse.cdt.refactoring.rename"
-               definitionId="org.eclipse.cdt.ui.edit.text.c.rename.element"
-         />
-      </objectContribution>
-   </extension>
-
    <!-- Action set for refactoring menu                                                            -->
    <extension
          point="org.eclipse.ui.actionSets">
@@ -68,9 +21,9 @@
          <action
                definitionId="org.eclipse.cdt.ui.edit.text.c.rename.element"
                label="%Refactoring.renameAction.label"
-               class="org.eclipse.cdt.refactoring.actions.CRenameWorkbenchActionDelegate"
                menubarPath="org.eclipse.jdt.ui.refactoring.menu/reorgGroup"
-               id="org.eclipse.cdt.ui.actions.Rename">
+               id="org.eclipse.cdt.ui.actions.Rename"
+               retarget="true">
          </action>
       </actionSet>
    </extension>      

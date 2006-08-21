@@ -24,11 +24,11 @@ public class CRenameViewActionDelegate implements IViewActionDelegate, IObjectAc
     CRenameAction fAction= new CRenameAction();
     // IViewActionDelegate
     public void init(IViewPart view) {
-        fAction.setWorkbenchPart(view);
+        fAction.setSite(view.getSite());
     }
     // IObjectActionDelegate
     public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-        fAction.setWorkbenchPart(targetPart);
+        fAction.setSite(targetPart.getSite());
     }
     public void run(IAction action) {
         fAction.run();

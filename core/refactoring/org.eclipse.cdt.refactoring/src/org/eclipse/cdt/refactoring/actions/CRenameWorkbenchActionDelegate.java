@@ -43,7 +43,7 @@ public class CRenameWorkbenchActionDelegate implements IWorkbenchWindowActionDel
         if (!handled && workbenchPart != null && selection instanceof IStructuredSelection) {
             Object o= ((IStructuredSelection) selection).getFirstElement();
             if (o != null) {
-                fAction.setWorkbenchPart(workbenchPart);
+                fAction.setSite(workbenchPart.getSite());
                 handled= CRefactory.getInstance().providePosition(o, fAction);
             }
         }

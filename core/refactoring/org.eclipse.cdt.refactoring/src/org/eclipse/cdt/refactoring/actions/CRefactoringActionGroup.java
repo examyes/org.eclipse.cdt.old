@@ -12,14 +12,30 @@
 
 package org.eclipse.cdt.refactoring.actions;
 
-import org.eclipse.cdt.internal.refactoring.Messages;
-import org.eclipse.cdt.refactoring.IPositionConsumer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.jface.action.*;
-import org.eclipse.ui.*;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchSite;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.actions.ActionContext;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.ActionGroup;
+import org.eclipse.ui.part.Page;
 import org.eclipse.ui.texteditor.ITextEditor;
+
+import org.eclipse.cdt.core.model.ICElement;
+import org.eclipse.cdt.core.model.IInclude;
+import org.eclipse.cdt.core.model.ISourceReference;
+import org.eclipse.cdt.refactoring.CRefactory;
+import org.eclipse.cdt.refactoring.IPositionConsumer;
+
+import org.eclipse.cdt.internal.refactoring.Messages;
 
 /**
  * Action group that adds refactor actions (for example Rename..., Move..., etc)
@@ -73,8 +89,8 @@ public class CRefactoringActionGroup extends ActionGroup implements IPositionCon
 
     private String fGroupName= IWorkbenchActionConstants.GROUP_REORGANIZE;
     private CRenameAction fRenameAction;
-//    private CUndoAction fUndoAction;
-//    private CRedoAction fRedoAction;
+
+	private boolean fIsEditor;
 
     
     /**
@@ -85,22 +101,32 @@ public class CRefactoringActionGroup extends ActionGroup implements IPositionCon
             fGroupName= groupName;
         }
         fRenameAction = new CRenameAction();
-//        fUndoAction= new CUndoAction(ww); //$NON-NLS-1$
-//        fRedoAction= new CRedoAction(ww); //$NON-NLS-1$
+    }
+
+    public CRefactoringActionGroup(IWorkbenchPart part) {
+        fRenameAction = new CRenameAction();
+        if (part instanceof ITextEditor) {
+        	setEditor((ITextEditor) part);
+        }
+        else {
+        	init(part.getSite());
+        }
     }
     
-    public void init(IWorkbenchPartSite site) {
-        fRenameAction.setWorkbenchPart(site.getPart());
+    public CRefactoringActionGroup(Page part) {
+    	fRenameAction= new CRenameAction();
+    	init(part.getSite());
+    }
+
+    public void init(IWorkbenchSite site) {
+        fRenameAction.setSite(site);
     }
     
-    public void setEditor(ITextEditor textEditor) {
+	public void setEditor(ITextEditor textEditor) {
+		fIsEditor= true;
         fRenameAction.setEditor(textEditor);
-//        ISelection sel= null;
-//        if (textEditor != null) {
-//            sel= textEditor.getSelectionProvider().getSelection();
-//        }
-//        fUndoAction.selectionChanged(sel);
-//        fRedoAction.selectionChanged(sel);
+        textEditor.setAction("Rename", fRenameAction); //$NON-NLS-1$
+        fillActionBars(textEditor.getEditorSite().getActionBars());
     }
 
 
@@ -109,25 +135,56 @@ public class CRefactoringActionGroup extends ActionGroup implements IPositionCon
      */
     public void fillActionBars(IActionBars actionBars) {
         super.fillActionBars(actionBars);
+        actionBars.setGlobalActionHandler("org.eclipse.cdt.ui.actions.Rename", fRenameAction); //$NON-NLS-1$
         actionBars.setGlobalActionHandler(ActionFactory.RENAME.getId(), fRenameAction);
+        actionBars.updateActionBars();
     }
 
     /* (non-Javadoc)
      * Method declared in ActionGroup
      */
     public void fillContextMenu(IMenuManager menu) {
-        super.fillContextMenu(menu);
-        IMenuManager refactorSubmenu = new MenuManager(Messages.getString("CRefactoringActionGroup.RefactorMenu"), MENU_ID); //$NON-NLS-1$
-        refactorSubmenu.add(new Separator(GROUP_REORG));
-        refactorSubmenu.add(fRenameAction);
-        refactorSubmenu.add(new Separator(GROUP_UNDO));
-//        refactorSubmenu.add(fUndoAction);
-//        refactorSubmenu.add(fRedoAction);
+    	updateActionBars();
+		if (fRenameAction.isEnabled()) {
+			IMenuManager refactorSubmenu = new MenuManager(Messages.getString("CRefactoringActionGroup.RefactorMenu"), MENU_ID); //$NON-NLS-1$
+			refactorSubmenu.add(new Separator(GROUP_REORG));
+			refactorSubmenu.add(fRenameAction);
+			refactorSubmenu.add(new Separator(GROUP_UNDO));
         
-        menu.appendToGroup(fGroupName, refactorSubmenu);
+			menu.appendToGroup(fGroupName, refactorSubmenu);
+		}
     }
 
+	private boolean isApplicableFor(IStructuredSelection selection) {
+		if (selection != null && selection.size() == 1) {
+			Object o= selection.getFirstElement();
+			if (o instanceof ICElement && o instanceof ISourceReference) {
+				return !(o instanceof IInclude);
+			}
+		}
+		return false;
+	}
+
+	private IStructuredSelection getStructuredSelection() {
+		ActionContext context= getContext();
+		if (context != null) {
+			ISelection selection= getContext().getSelection();
+			if (selection instanceof IStructuredSelection)
+				return (IStructuredSelection)selection;
+		}
+		return null;
+	}
+
     public void updateActionBars() {
+    	if (!fIsEditor) {
+    		IStructuredSelection selection= getStructuredSelection();
+    		if (isApplicableFor(selection)) {
+    			CRefactory.getInstance().providePosition(selection.getFirstElement(), fRenameAction);
+    		}
+    		else {
+    			fRenameAction.setEnabled(false);
+    		}
+    	}
     }
 
 //    /*

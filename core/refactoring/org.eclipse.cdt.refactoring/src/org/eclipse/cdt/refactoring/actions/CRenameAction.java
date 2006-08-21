@@ -11,8 +11,6 @@
 
 package org.eclipse.cdt.refactoring.actions;
 
-import org.eclipse.cdt.internal.refactoring.Messages;
-import org.eclipse.cdt.refactoring.*;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.text.ITextSelection;
@@ -20,7 +18,14 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.texteditor.ITextEditor;
+
+import org.eclipse.cdt.refactoring.CRefactory;
+import org.eclipse.cdt.refactoring.ICRefactoringArgument;
+import org.eclipse.cdt.refactoring.IPositionConsumer;
+
+import org.eclipse.cdt.internal.refactoring.Messages;
 
 /**
  * Launches a rename refactoring.
@@ -28,7 +33,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 public class CRenameAction extends Action implements IPositionConsumer {
     private ITextEditor fEditor;
     private IFile fFile;
-    private IWorkbenchPart fWorkbenchPart;
+    private IWorkbenchSite fSite;
     private int fOffset;
     private String  fText;
     
@@ -39,17 +44,24 @@ public class CRenameAction extends Action implements IPositionConsumer {
     
     public void setEditor(IEditorPart editor) {
         fEditor= null;
-        fWorkbenchPart= null;
+        fSite= null;
         if (editor instanceof ITextEditor) {
             fEditor= (ITextEditor) editor;
         }
         setEnabled(fEditor!=null);
     }
 
+    /**
+     * @deprecated use {@link CRenameAction#setSite(IWorkbenchSite).}
+     */
     public void setWorkbenchPart(IWorkbenchPart part) {
-        fEditor= null;
-        fWorkbenchPart= part;
+    	setSite(part.getSite());
     }
+
+	public void setSite(IWorkbenchSite site) {
+        fEditor= null;
+        fSite= site;
+	}
 
     public void run() {
         if (fEditor != null) {
@@ -64,10 +76,10 @@ public class CRenameAction extends Action implements IPositionConsumer {
                 }
             }
         }
-        else if (fWorkbenchPart != null) {
+        else if (fSite != null) {
             ICRefactoringArgument arg= CRefactory.createArgument(fFile, fOffset, fText);
             if (arg != null) {
-                CRefactory.getInstance().rename(fWorkbenchPart.getSite().getShell(), arg);
+                CRefactory.getInstance().rename(fSite.getShell(), arg);
             }                        
         }            
     }
