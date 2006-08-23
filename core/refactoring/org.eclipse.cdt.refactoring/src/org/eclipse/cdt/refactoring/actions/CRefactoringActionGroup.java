@@ -23,7 +23,6 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.actions.ActionContext;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.part.Page;
@@ -32,6 +31,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.IInclude;
 import org.eclipse.cdt.core.model.ISourceReference;
+import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.refactoring.CRefactory;
 import org.eclipse.cdt.refactoring.IPositionConsumer;
 
@@ -91,10 +91,12 @@ public class CRefactoringActionGroup extends ActionGroup implements IPositionCon
     private CRenameAction fRenameAction;
 
 	private boolean fIsEditor;
+	private IWorkbenchSite fSite;
 
     
     /**
      * Creates a new <code>RefactorActionGroup</code>. 
+     * @deprecated
      */
     public CRefactoringActionGroup(IWorkbenchWindow ww, String groupName) {
         if (groupName != null && groupName.length() > 0) {
@@ -120,6 +122,7 @@ public class CRefactoringActionGroup extends ActionGroup implements IPositionCon
 
     public void init(IWorkbenchSite site) {
         fRenameAction.setSite(site);
+        fSite= site;
     }
     
 	public void setEditor(ITextEditor textEditor) {
@@ -155,31 +158,29 @@ public class CRefactoringActionGroup extends ActionGroup implements IPositionCon
 		}
     }
 
-	private boolean isApplicableFor(IStructuredSelection selection) {
-		if (selection != null && selection.size() == 1) {
-			Object o= selection.getFirstElement();
-			if (o instanceof ICElement && o instanceof ISourceReference) {
-				return !(o instanceof IInclude);
+	private boolean isApplicableFor(ISelection selection) {
+		if (selection instanceof IStructuredSelection) {
+			IStructuredSelection ss= (IStructuredSelection) selection;
+			if (ss.size() == 1) {
+				Object o= ss.getFirstElement();
+				if (o instanceof ICElement && o instanceof ISourceReference) {
+					return !(o instanceof IInclude) && !(o instanceof ITranslationUnit);
+				}
 			}
 		}
 		return false;
 	}
 
-	private IStructuredSelection getStructuredSelection() {
-		ActionContext context= getContext();
-		if (context != null) {
-			ISelection selection= getContext().getSelection();
-			if (selection instanceof IStructuredSelection)
-				return (IStructuredSelection)selection;
-		}
-		return null;
-	}
-
     public void updateActionBars() {
     	if (!fIsEditor) {
-    		IStructuredSelection selection= getStructuredSelection();
-    		if (isApplicableFor(selection)) {
-    			CRefactory.getInstance().providePosition(selection.getFirstElement(), fRenameAction);
+    		if (fSite != null) {
+    			ISelection sel= fSite.getSelectionProvider().getSelection();
+    			if (isApplicableFor(sel)) {
+    				CRefactory.getInstance().providePosition(((IStructuredSelection) sel).getFirstElement(), fRenameAction);
+    			}
+    			else {
+    				fRenameAction.setEnabled(false);
+    			}
     		}
     		else {
     			fRenameAction.setEnabled(false);
@@ -187,17 +188,7 @@ public class CRefactoringActionGroup extends ActionGroup implements IPositionCon
     	}
     }
 
-//    /*
-//     * @see ActionGroup#dispose()
-//     */
-//    public void dispose() {
-//        fUndoAction.dispose();
-//        super.dispose();
-//    }
-
     public void setPosition(IFile file, int startPos, String text) {
         fRenameAction.setPosition(file, startPos, text);
-//        fUndoAction.selectionChanged(null);
-//        fRedoAction.selectionChanged(null);
     }
 }
