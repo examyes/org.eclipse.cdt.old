@@ -284,10 +284,24 @@
             outputs="exe"
             superClass="org.eclipse.cdt.dotnet.link">
       </tool>
+      <tool
+            id="org.eclipse.cdt.dotnet.link.dll"
+            isAbstract="false"
+            name="LINK DLL Linker"
+            natureFilter="both"
+            outputs="dll"
+            superClass="org.eclipse.cdt.dotnet.link">
+         <option
+               defaultValue="true"
+               id="org.eclipse.cdt.dotnet.link.dll.option.dll"
+               isAbstract="false"
+               resourceFilter="all"
+               superClass="org.eclipse.cdt.dotnet.link.option.dll"/>
+      </tool>
       <projectType
             id="org.eclipse.cdt.dotnet.projectType.exe"
             isAbstract="false"
-            name="C++.Net Executable">
+            name="C++.Net Executable (EXE)">
          <configuration
                artifactExtension="exe"
                id="org.eclipse.cdt.dotnet.exe.debug"
@@ -309,6 +323,123 @@
                      id="org.eclipse.cdt.dotnet.exe.debug.linker"
                      isAbstract="false"
                      superClass="org.eclipse.cdt.dotnet.link.exe"/>
+            </toolChain>
+         </configuration>
+         <configuration
+               artifactExtension="exe"
+               id="org.eclipse.cdt.dotnet.exe.release"
+               name="Release">
+            <toolChain
+                  id="org.eclipse.cdt.dotnet.exe.release.toolChain"
+                  isAbstract="false">
+               <targetPlatform
+                     archList="all"
+                     binaryParser="org.eclipse.cdt.core.PE"
+                     id="org.eclipse.cdt.dotnet.exe.release.targetPlatform"
+                     isAbstract="false"
+                     osList="win32"/>
+               <tool
+                     id="org.eclipse.cdt.dotnet.exe.release.compiler"
+                     isAbstract="false"
+                     superClass="org.eclipse.cdt.dotnet.cl"/>
+               <tool
+                     id="org.eclipse.cdt.dotnet.exe.release.linker"
+                     isAbstract="false"
+                     superClass="org.eclipse.cdt.dotnet.link.exe"/>
+            </toolChain>
+         </configuration>
+      </projectType>
+      <projectType
+            id="org.eclipse.cdt.dotnet.projectType.dll"
+            isAbstract="false"
+            name="C++.Net Shared Library (DLL)">
+         <configuration
+               artifactExtension="dll"
+               id="org.eclipse.cdt.dotnet.dll.debug"
+               name="Debug">
+            <toolChain
+                  id="org.eclipse.cdt.dotnet.dll.debug.toolChain"
+                  isAbstract="false">
+               <targetPlatform
+                     archList="all"
+                     binaryParser="org.eclipse.cdt.core.PE"
+                     id="org.eclipse.cdt.dotnet.dll.debug.targetPlatform"
+                     isAbstract="false"
+                     osList="win32"/>
+               <tool
+                     id="org.eclipse.cdt.dotnet.dll.debug.compiler"
+                     isAbstract="false"
+                     superClass="org.eclipse.cdt.dotnet.cl"/>
+               <tool
+                     id="org.eclipse.cdt.dotnet.dll.debug.linker"
+                     isAbstract="false"
+                     superClass="org.eclipse.cdt.dotnet.link.dll"/>
+            </toolChain>
+         </configuration>
+         <configuration
+               artifactExtension="dll"
+               id="org.eclipse.cdt.dotnet.dll.release"
+               name="Release">
+            <toolChain
+                  id="org.eclipse.cdt.dotnet.dll.release.toolChain"
+                  isAbstract="false">
+               <targetPlatform
+                     archList="all"
+                     binaryParser="org.eclipse.cdt.core.PE"
+                     id="org.eclipse.cdt.dotnet.dll.release.targetPlatform"
+                     isAbstract="false"
+                     osList="win32"/>
+               <tool
+                     id="org.eclipse.cdt.dotnet.dll.release.compiler"
+                     isAbstract="false"
+                     superClass="org.eclipse.cdt.dotnet.cl"/>
+               <tool
+                     id="org.eclipse.cdt.dotnet.dll.release.linker"
+                     isAbstract="false"
+                     superClass="org.eclipse.cdt.dotnet.link.dll"/>
+            </toolChain>
+         </configuration>
+      </projectType>
+      <projectType
+            id="org.eclipse.cdt.dotnet.projectType.lib"
+            isAbstract="false"
+            name="C++.Net Static Library (LIB)">
+         <configuration
+               artifactExtension="lib"
+               id="org.eclipse.cdt.dotnet.lib.debug"
+               name="Debug">
+            <toolChain
+                  id="org.eclipse.cdt.dotnet.lib.debug.toolChain"
+                  isAbstract="false">
+               <targetPlatform
+                     archList="all"
+                     binaryParser="org.eclipse.cdt.core.PE"
+                     id="org.eclipse.cdt.dotnet.lib.debug.targetPlatform"
+                     isAbstract="false"
+                     osList="win32"/>
+               <tool
+                     id="org.eclipse.cdt.dotnet.lib.debug.compiler"
+                     isAbstract="false"
+                     superClass="org.eclipse.cdt.dotnet.cl"/>
+            </toolChain>
+         </configuration>
+         <configuration
+               artifactExtension="lib"
+               id="org.eclipse.cdt.dotnet.lib.release"
+               name="Release">
+            <toolChain
+                  id="org.eclipse.cdt.dotnet.lib.release.toolChain"
+                  isAbstract="false">
+               <targetPlatform
+                     archList="all"
+                     binaryParser="org.eclipse.cdt.core.PE"
+                     id="org.eclipse.cdt.dotnet.lib.release.targetPlatform"
+                     isAbstract="false"
+                     osList="win32"/>
+               <tool
+                     id="org.eclipse.cdt.dotnet.lib.release.compiler"
+                     isAbstract="false"
+                     superClass="org.eclipse.cdt.dotnet.cl"/>
             </toolChain>
          </configuration>
       </projectType>
