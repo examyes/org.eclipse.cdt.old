@@ -298,6 +298,28 @@
                resourceFilter="all"
                superClass="org.eclipse.cdt.dotnet.link.option.dll"/>
       </tool>
+      <tool
+            command="lib"
+            id="org.eclipse.cdt.dotnet.lib"
+            isAbstract="false"
+            name="LIB Library Manager"
+            natureFilter="both"
+            outputFlag="/OUT:"
+            outputs="lib"
+            sources="obj">
+         <optionCategory
+               id="org.eclipse.cdt.dotnet.lib.optionCategory.general"
+               name="General"/>
+         <option
+               category="org.eclipse.cdt.dotnet.lib.optionCategory.general"
+               command="/nologo"
+               defaultValue="true"
+               id="org.eclipse.cdt.dotnet.lib.option.nologo"
+               isAbstract="false"
+               name="Suppress Banner (/nologo)"
+               resourceFilter="all"
+               valueType="boolean"/>
+      </tool>
       <projectType
             id="org.eclipse.cdt.dotnet.projectType.exe"
             isAbstract="false"
@@ -421,6 +443,10 @@
                      id="org.eclipse.cdt.dotnet.lib.debug.compiler"
                      isAbstract="false"
                      superClass="org.eclipse.cdt.dotnet.cl"/>
+               <tool
+                     id="org.eclipse.cdt.dotnet.lib.debug.lib"
+                     isAbstract="false"
+                     superClass="org.eclipse.cdt.dotnet.lib"/>
             </toolChain>
          </configuration>
          <configuration
@@ -440,6 +466,10 @@
                      id="org.eclipse.cdt.dotnet.lib.release.compiler"
                      isAbstract="false"
                      superClass="org.eclipse.cdt.dotnet.cl"/>
+               <tool
+                     id="org.eclipse.cdt.dotnet.lib.release.lib"
+                     isAbstract="false"
+                     superClass="org.eclipse.cdt.dotnet.lib"/>
             </toolChain>
          </configuration>
       </projectType>
