@@ -105,7 +105,7 @@
             <enumeratedOptionValue
                   command="/MT"
                   id="org.eclipse.cdt.dotnet.cl.option.runtime.mt"
-                  isDefault="true"
+                  isDefault="false"
                   name="Multi-Threaded Static (/MT)"/>
             <enumeratedOptionValue
                   command="/MTd"
@@ -115,7 +115,7 @@
             <enumeratedOptionValue
                   command="/MD"
                   id="org.eclipse.cdt.dotnet.cl.option.runtime.md"
-                  isDefault="false"
+                  isDefault="true"
                   name="Multi-Threaded DLL (/MD)"/>
             <enumeratedOptionValue
                   command="/MDd"
@@ -206,6 +206,21 @@
                name="Other Options"
                resourceFilter="all"
                valueType="stringList"/>
+      </tool>
+      <tool
+            id="org.eclipse.cdt.dotnet.cl.debug"
+            isAbstract="false"
+            superClass="org.eclipse.cdt.dotnet.cl">
+         <option
+               defaultValue="org.eclipse.cdt.dotnet.cl.option.debugFormat.complete"
+               id="org.eclipse.cdt.dotnet.cl.debug.option.debugFormat"
+               isAbstract="false"
+               superClass="org.eclipse.cdt.dotnet.cl.option.debugFormat"/>
+         <option
+               defaultValue="org.eclipse.cdt.dotnet.cl.option.runtime.mdd"
+               id="org.eclipse.cdt.dotnet.cl.debug.option.runtime"
+               isAbstract="false"
+               superClass="org.eclipse.cdt.dotnet.cl.option.runtime"/>
       </tool>
       <tool
             command="link"
@@ -340,11 +355,17 @@
                <tool
                      id="org.eclipse.cdt.dotnet.exe.debug.compiler"
                      isAbstract="false"
-                     superClass="org.eclipse.cdt.dotnet.cl"/>
+                     superClass="org.eclipse.cdt.dotnet.cl.debug"/>
                <tool
                      id="org.eclipse.cdt.dotnet.exe.debug.linker"
                      isAbstract="false"
-                     superClass="org.eclipse.cdt.dotnet.link.exe"/>
+                     superClass="org.eclipse.cdt.dotnet.link.exe">
+                  <option
+                        defaultValue="true"
+                        id="org.eclipse.cdt.dotnet.exe.debug.linker.option.debug"
+                        isAbstract="false"
+                        superClass="org.eclipse.cdt.dotnet.link.option.debug"/>
+               </tool>
             </toolChain>
          </configuration>
          <configuration
@@ -391,11 +412,17 @@
                <tool
                      id="org.eclipse.cdt.dotnet.dll.debug.compiler"
                      isAbstract="false"
-                     superClass="org.eclipse.cdt.dotnet.cl"/>
+                     superClass="org.eclipse.cdt.dotnet.cl.debug"/>
                <tool
                      id="org.eclipse.cdt.dotnet.dll.debug.linker"
                      isAbstract="false"
-                     superClass="org.eclipse.cdt.dotnet.link.dll"/>
+                     superClass="org.eclipse.cdt.dotnet.link.dll">
+                  <option
+                        defaultValue="true"
+                        id="org.eclipse.cdt.dotnet.dll.debug.linker.option.debug"
+                        isAbstract="false"
+                        superClass="org.eclipse.cdt.dotnet.link.option.debug"/>
+               </tool>
             </toolChain>
          </configuration>
          <configuration
@@ -442,7 +469,7 @@
                <tool
                      id="org.eclipse.cdt.dotnet.lib.debug.compiler"
                      isAbstract="false"
-                     superClass="org.eclipse.cdt.dotnet.cl"/>
+                     superClass="org.eclipse.cdt.dotnet.cl.debug"/>
                <tool
                      id="org.eclipse.cdt.dotnet.lib.debug.lib"
                      isAbstract="false"
