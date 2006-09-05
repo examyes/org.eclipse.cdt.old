@@ -9,7 +9,7 @@
  *     QNX Software Systems - Initial API and implementation
  **********************************************************************/
 
-package org.eclipse.cdt.dotnet.build;
+package org.eclipse.cdt.windows.build;
 
 import java.util.ArrayList;
 import java.util.List;

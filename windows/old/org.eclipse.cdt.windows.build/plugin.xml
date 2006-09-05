@@ -6,9 +6,9 @@
       <managedBuildRevision fileVersion="1.0"/>
       <tool
             command="cl /c"
-            dependencyCalculator="org.eclipse.cdt.dotnet.build.DependencyGenerator"
+            dependencyCalculator="org.eclipse.cdt.windows.build.DependencyGenerator"
             headerExtensions="h,hpp"
-            id="org.eclipse.cdt.dotnet.cl"
+            id="org.eclipse.cdt.windows.cl"
             isAbstract="false"
             name="CL Compiler"
             natureFilter="both"
@@ -20,211 +20,211 @@
                pathType="buildpathInclude"
                variableList="INCLUDE"/>
          <optionCategory
-               id="org.eclipse.cdt.dotnet.cl.optionCategory.optimization"
+               id="org.eclipse.cdt.windows.cl.optionCategory.optimization"
                name="Optimization"/>
          <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.optimization"
-               id="org.eclipse.cdt.dotnet.cl.option.optimization"
+               category="org.eclipse.cdt.windows.cl.optionCategory.optimization"
+               id="org.eclipse.cdt.windows.cl.option.optimization"
                isAbstract="false"
                name="Optimization"
                resourceFilter="all"
                valueType="enumerated">
             <enumeratedOptionValue
-                  id="org.eclipse.cdt.dotnet.cl.option.optimization.default"
+                  id="org.eclipse.cdt.windows.cl.option.optimization.default"
                   isDefault="false"
                   name="Default"/>
             <enumeratedOptionValue
                   command="/O1"
-                  id="org.eclipse.cdt.dotnet.cl.option.optimization.1"
+                  id="org.eclipse.cdt.windows.cl.option.optimization.1"
                   isDefault="false"
                   name="Minimize Size (/O1)"/>
             <enumeratedOptionValue
                   command="/O2"
-                  id="org.eclipse.cdt.dotnet.cl.option.optimization.2"
+                  id="org.eclipse.cdt.windows.cl.option.optimization.2"
                   isDefault="true"
                   name="Maximize Speed (/O2)"/>
          </option>
          <optionCategory
-               id="org.eclipse.cdt.dotnet.cl.optionCategory.codegen"
+               id="org.eclipse.cdt.windows.cl.optionCategory.codegen"
                name="Code Generation"/>
          <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.codegen"
-               id="org.eclipse.cdt.dotnet.cl.option.arch"
+               category="org.eclipse.cdt.windows.cl.optionCategory.codegen"
+               id="org.eclipse.cdt.windows.cl.option.arch"
                isAbstract="false"
                name="Minimum CPU Architecture"
                resourceFilter="all"
                valueType="enumerated">
             <enumeratedOptionValue
-                  id="org.eclipse.cdt.dotnet.cl.option.arch.default"
+                  id="org.eclipse.cdt.windows.cl.option.arch.default"
                   isDefault="true"
                   name="Default"/>
             <enumeratedOptionValue
                   command="/arch:SSE"
-                  id="org.eclipse.cdt.dotnet.cl.option.arch.sse"
+                  id="org.eclipse.cdt.windows.cl.option.arch.sse"
                   isDefault="false"
                   name="SSE (/arch:SSE)"/>
             <enumeratedOptionValue
-                  id="org.eclipse.cdt.dotnet.cl.option.arch.sse2"
+                  id="org.eclipse.cdt.windows.cl.option.arch.sse2"
                   isDefault="false"
                   name="SSE2 (/arch:SSE2)"/>
          </option>
          <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.codegen"
+               category="org.eclipse.cdt.windows.cl.optionCategory.codegen"
                command="/clr"
                defaultValue="false"
-               id="org.eclipse.cdt.dotnet.cl.option.clr"
+               id="org.eclipse.cdt.windows.cl.option.clr"
                isAbstract="false"
                name="Common Language Runtime (/clr)"
                resourceFilter="all"
                valueType="boolean"/>
          <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.codegen"
+               category="org.eclipse.cdt.windows.cl.optionCategory.codegen"
                command="/EHs"
                defaultValue="true"
-               id="org.eclipse.cdt.dotnet.cl.option.exceptions"
+               id="org.eclipse.cdt.windows.cl.option.exceptions"
                isAbstract="false"
                name="Enable C++ Exception Handling (/EHs)"
                resourceFilter="all"
                valueType="boolean"/>
          <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.codegen"
+               category="org.eclipse.cdt.windows.cl.optionCategory.codegen"
                commandFalse="/GR-"
                defaultValue="true"
-               id="org.eclipse.cdt.dotnet.cl.option.rtti"
+               id="org.eclipse.cdt.windows.cl.option.rtti"
                isAbstract="false"
                name="Enable Run-Time Type Information (/GR)"
                resourceFilter="all"
                valueType="boolean"/>
          <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.codegen"
-               id="org.eclipse.cdt.dotnet.cl.option.runtime"
+               category="org.eclipse.cdt.windows.cl.optionCategory.codegen"
+               id="org.eclipse.cdt.windows.cl.option.runtime"
                isAbstract="false"
                name="Run-Time Library"
                resourceFilter="all"
                valueType="enumerated">
             <enumeratedOptionValue
                   command="/MT"
-                  id="org.eclipse.cdt.dotnet.cl.option.runtime.mt"
+                  id="org.eclipse.cdt.windows.cl.option.runtime.mt"
                   isDefault="false"
                   name="Multi-Threaded Static (/MT)"/>
             <enumeratedOptionValue
                   command="/MTd"
-                  id="org.eclipse.cdt.dotnet.cl.option.runtime.mtd"
+                  id="org.eclipse.cdt.windows.cl.option.runtime.mtd"
                   isDefault="false"
                   name="Multi-Threaded Static Debug (/MTd)"/>
             <enumeratedOptionValue
                   command="/MD"
-                  id="org.eclipse.cdt.dotnet.cl.option.runtime.md"
+                  id="org.eclipse.cdt.windows.cl.option.runtime.md"
                   isDefault="true"
                   name="Multi-Threaded DLL (/MD)"/>
             <enumeratedOptionValue
                   command="/MDd"
-                  id="org.eclipse.cdt.dotnet.cl.option.runtime.mdd"
+                  id="org.eclipse.cdt.windows.cl.option.runtime.mdd"
                   isDefault="false"
                   name="Multi-Threaded DLL Debug (/MDd)"/>
          </option>
          <optionCategory
-               id="org.eclipse.cdt.dotnet.cl.optionCategory.debug"
+               id="org.eclipse.cdt.windows.cl.optionCategory.debug"
                name="Debugging"/>
          <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.debug"
-               id="org.eclipse.cdt.dotnet.cl.option.debugFormat"
+               category="org.eclipse.cdt.windows.cl.optionCategory.debug"
+               id="org.eclipse.cdt.windows.cl.option.debugFormat"
                isAbstract="false"
                name="Debug Information Format"
                resourceFilter="all"
                valueType="enumerated">
             <enumeratedOptionValue
-                  id="org.eclipse.cdt.dotnet.cl.option.debugFormat.none"
+                  id="org.eclipse.cdt.windows.cl.option.debugFormat.none"
                   isDefault="true"
                   name="None"/>
             <enumeratedOptionValue
                   command="/Z7"
-                  id="org.eclipse.cdt.dotnet.cl.option.debugFormat.c7"
+                  id="org.eclipse.cdt.windows.cl.option.debugFormat.c7"
                   isDefault="false"
                   name="C7 Compatible (/Z7)"/>
             <enumeratedOptionValue
                   command="/Zi"
-                  id="org.eclipse.cdt.dotnet.cl.option.debugFormat.complete"
+                  id="org.eclipse.cdt.windows.cl.option.debugFormat.complete"
                   isDefault="false"
                   name="Complete (/Zi)"/>
          </option>
          <optionCategory
-               id="org.eclipse.cdt.dotnet.cl.optionCategory.preprocessor"
+               id="org.eclipse.cdt.windows.cl.optionCategory.preprocessor"
                name="Preprocessor"/>
          <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.preprocessor"
-               id="org.eclipse.cdt.dotnet.cl.option.macros"
+               category="org.eclipse.cdt.windows.cl.optionCategory.preprocessor"
+               id="org.eclipse.cdt.windows.cl.option.macros"
                isAbstract="false"
                name="Defines (/D)"
                resourceFilter="all"
                valueType="definedSymbols"/>
          <option
                browseType="directory"
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.preprocessor"
-               id="org.eclipse.cdt.dotnet.cl.option.includes"
+               category="org.eclipse.cdt.windows.cl.optionCategory.preprocessor"
+               id="org.eclipse.cdt.windows.cl.option.includes"
                isAbstract="false"
                name="Include Path (/I)"
                resourceFilter="all"
                valueType="includePath"/>
          <optionCategory
-               id="org.eclipse.cdt.dotnet.cl.optionCategory.language"
+               id="org.eclipse.cdt.windows.cl.optionCategory.language"
                name="Language"/>
          <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.language"
+               category="org.eclipse.cdt.windows.cl.optionCategory.language"
                command="/openmp"
                defaultValue="false"
-               id="org.eclipse.cdt.dotnet.cl.option.openmp"
+               id="org.eclipse.cdt.windows.cl.option.openmp"
                isAbstract="false"
                name="Enable OpenMP (/openmp)"
                resourceFilter="all"
                valueType="boolean"/>
          <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.language"
+               category="org.eclipse.cdt.windows.cl.optionCategory.language"
                commandFalse="/Za"
                defaultValue="true"
-               id="org.eclipse.cdt.dotnet.cl.option.langExtensions"
+               id="org.eclipse.cdt.windows.cl.option.langExtensions"
                isAbstract="false"
                name="Enable Language Extensions (/Ze,/Za)"
                resourceFilter="all"
                valueType="boolean"/>
          <optionCategory
-               id="org.eclipse.cdt.dotnet.cl.optionCategory.miscellaneous"
+               id="org.eclipse.cdt.windows.cl.optionCategory.miscellaneous"
                name="Miscellaneous"/>
          <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.miscellaneous"
+               category="org.eclipse.cdt.windows.cl.optionCategory.miscellaneous"
                command="/nologo"
                defaultValue="true"
-               id="org.eclipse.cdt.dotnet.cl.option.nologo"
+               id="org.eclipse.cdt.windows.cl.option.nologo"
                isAbstract="false"
                name="Suppress Banner (/nologo)"
                resourceFilter="all"
                valueType="boolean"/>
          <option
-               category="org.eclipse.cdt.dotnet.cl.optionCategory.miscellaneous"
-               id="org.eclipse.cdt.dotnet.cl.option.others"
+               category="org.eclipse.cdt.windows.cl.optionCategory.miscellaneous"
+               id="org.eclipse.cdt.windows.cl.option.others"
                isAbstract="false"
                name="Other Options"
                resourceFilter="all"
                valueType="stringList"/>
       </tool>
       <tool
-            id="org.eclipse.cdt.dotnet.cl.debug"
+            id="org.eclipse.cdt.windows.cl.debug"
             isAbstract="false"
-            superClass="org.eclipse.cdt.dotnet.cl">
+            superClass="org.eclipse.cdt.windows.cl">
          <option
-               defaultValue="org.eclipse.cdt.dotnet.cl.option.debugFormat.complete"
-               id="org.eclipse.cdt.dotnet.cl.debug.option.debugFormat"
+               defaultValue="org.eclipse.cdt.windows.cl.option.debugFormat.complete"
+               id="org.eclipse.cdt.windows.cl.debug.option.debugFormat"
                isAbstract="false"
-               superClass="org.eclipse.cdt.dotnet.cl.option.debugFormat"/>
+               superClass="org.eclipse.cdt.windows.cl.option.debugFormat"/>
          <option
-               defaultValue="org.eclipse.cdt.dotnet.cl.option.runtime.mdd"
-               id="org.eclipse.cdt.dotnet.cl.debug.option.runtime"
+               defaultValue="org.eclipse.cdt.windows.cl.option.runtime.mdd"
+               id="org.eclipse.cdt.windows.cl.debug.option.runtime"
                isAbstract="false"
-               superClass="org.eclipse.cdt.dotnet.cl.option.runtime"/>
+               superClass="org.eclipse.cdt.windows.cl.option.runtime"/>
       </tool>
       <tool
             command="link"
-            id="org.eclipse.cdt.dotnet.link"
+            id="org.eclipse.cdt.windows.link"
             isAbstract="false"
             name="LINK Linker"
             natureFilter="both"
@@ -237,85 +237,85 @@
          <option
                command="/DLL"
                defaultValue="false"
-               id="org.eclipse.cdt.dotnet.link.option.dll"
+               id="org.eclipse.cdt.windows.link.option.dll"
                isAbstract="false"
                name="Build a DLL"
                resourceFilter="all"
                valueType="boolean"/>
          <optionCategory
-               id="org.eclipse.cdt.dotnet.link.optionCategory.general"
+               id="org.eclipse.cdt.windows.link.optionCategory.general"
                name="General"/>
          <option
-               category="org.eclipse.cdt.dotnet.link.optionCategory.general"
+               category="org.eclipse.cdt.windows.link.optionCategory.general"
                command="/debug"
                defaultValue="false"
-               id="org.eclipse.cdt.dotnet.link.option.debug"
+               id="org.eclipse.cdt.windows.link.option.debug"
                isAbstract="false"
                name="Generate Debug Info (/debug)"
                resourceFilter="all"
                valueType="boolean"/>
          <option
-               category="org.eclipse.cdt.dotnet.link.optionCategory.general"
+               category="org.eclipse.cdt.windows.link.optionCategory.general"
                command="/nologo"
                defaultValue="true"
-               id="org.eclipse.cdt.dotnet.link.option.nologo"
+               id="org.eclipse.cdt.windows.link.option.nologo"
                isAbstract="false"
                name="Suppress Banner (/nologo)"
                resourceFilter="all"
                valueType="boolean"/>
          <option
-               category="org.eclipse.cdt.dotnet.link.optionCategory.general"
-               id="org.eclipse.cdt.dotnet.link.option.others"
+               category="org.eclipse.cdt.windows.link.optionCategory.general"
+               id="org.eclipse.cdt.windows.link.option.others"
                isAbstract="false"
                name="Other Options"
                resourceFilter="all"
                valueType="stringList"/>
          <optionCategory
-               id="org.eclipse.cdt.dotnet.link.optionCategory.libraries"
+               id="org.eclipse.cdt.windows.link.optionCategory.libraries"
                name="Libraries"/>
          <option
                browseType="directory"
-               category="org.eclipse.cdt.dotnet.link.optionCategory.libraries"
+               category="org.eclipse.cdt.windows.link.optionCategory.libraries"
                command="/libpath:"
-               id="org.eclipse.cdt.dotnet.link.option.libpath"
+               id="org.eclipse.cdt.windows.link.option.libpath"
                isAbstract="false"
                name="Additional Libpath (/libpath)"
                resourceFilter="all"
                valueType="stringList"/>
          <option
                browseType="file"
-               category="org.eclipse.cdt.dotnet.link.optionCategory.libraries"
-               id="org.eclipse.cdt.dotnet.link.option.libraries"
+               category="org.eclipse.cdt.windows.link.optionCategory.libraries"
+               id="org.eclipse.cdt.windows.link.option.libraries"
                isAbstract="false"
                name="Libraries"
                resourceFilter="all"
                valueType="stringList"/>
       </tool>
       <tool
-            id="org.eclipse.cdt.dotnet.link.exe"
+            id="org.eclipse.cdt.windows.link.exe"
             isAbstract="false"
             name="LINK Executable Linker"
             natureFilter="both"
             outputs="exe"
-            superClass="org.eclipse.cdt.dotnet.link">
+            superClass="org.eclipse.cdt.windows.link">
       </tool>
       <tool
-            id="org.eclipse.cdt.dotnet.link.dll"
+            id="org.eclipse.cdt.windows.link.dll"
             isAbstract="false"
             name="LINK DLL Linker"
             natureFilter="both"
             outputs="dll"
-            superClass="org.eclipse.cdt.dotnet.link">
+            superClass="org.eclipse.cdt.windows.link">
          <option
                defaultValue="true"
-               id="org.eclipse.cdt.dotnet.link.dll.option.dll"
+               id="org.eclipse.cdt.windows.link.dll.option.dll"
                isAbstract="false"
                resourceFilter="all"
-               superClass="org.eclipse.cdt.dotnet.link.option.dll"/>
+               superClass="org.eclipse.cdt.windows.link.option.dll"/>
       </tool>
       <tool
             command="lib"
-            id="org.eclipse.cdt.dotnet.lib"
+            id="org.eclipse.cdt.windows.lib"
             isAbstract="false"
             name="LIB Library Manager"
             natureFilter="both"
@@ -323,180 +323,226 @@
             outputs="lib"
             sources="obj">
          <optionCategory
-               id="org.eclipse.cdt.dotnet.lib.optionCategory.general"
+               id="org.eclipse.cdt.windows.lib.optionCategory.general"
                name="General"/>
          <option
-               category="org.eclipse.cdt.dotnet.lib.optionCategory.general"
+               category="org.eclipse.cdt.windows.lib.optionCategory.general"
                command="/nologo"
                defaultValue="true"
-               id="org.eclipse.cdt.dotnet.lib.option.nologo"
+               id="org.eclipse.cdt.windows.lib.option.nologo"
                isAbstract="false"
                name="Suppress Banner (/nologo)"
                resourceFilter="all"
                valueType="boolean"/>
       </tool>
-      <projectType
-            id="org.eclipse.cdt.dotnet.projectType.exe"
+      <builder
+            arguments="/nologo /k"
+            buildfileGenerator="org.eclipse.cdt.windows.build.NMakefileGenerator"
+            command="nmake"
+            id="org.eclipse.cdt.windows.nmake"
             isAbstract="false"
-            name="C++.Net Executable (EXE)">
+            isVariableCaseSensitive="false"
+            name="NMAKE"/>
+      <projectType
+            id="org.eclipse.cdt.windows.projectType.exe"
+            isAbstract="false"
+            name="C++.Net Executable (EXE)"
+            projectEnvironmentSupplier="org.eclipse.cdt.windows.build.WindowsProjectEnvironmentVariableSupplier">
          <configuration
                artifactExtension="exe"
-               id="org.eclipse.cdt.dotnet.exe.debug"
+               id="org.eclipse.cdt.windows.exe.debug"
                name="Debug">
             <toolChain
-                  id="org.eclipse.cdt.dotnet.exe.debug.toolChain"
+                  id="org.eclipse.cdt.windows.exe.debug.toolChain"
                   isAbstract="false">
                <targetPlatform
                      archList="all"
                      binaryParser="org.eclipse.cdt.core.PE"
-                     id="org.eclipse.cdt.dotnet.exe.debug.targetPlatform"
+                     id="org.eclipse.cdt.windows.exe.debug.targetPlatform"
                      isAbstract="false"
                      osList="win32"/>
                <tool
-                     id="org.eclipse.cdt.dotnet.exe.debug.compiler"
+                     id="org.eclipse.cdt.windows.exe.debug.compiler"
                      isAbstract="false"
-                     superClass="org.eclipse.cdt.dotnet.cl.debug"/>
+                     superClass="org.eclipse.cdt.windows.cl.debug"/>
                <tool
-                     id="org.eclipse.cdt.dotnet.exe.debug.linker"
+                     id="org.eclipse.cdt.windows.exe.debug.linker"
                      isAbstract="false"
-                     superClass="org.eclipse.cdt.dotnet.link.exe">
+                     superClass="org.eclipse.cdt.windows.link.exe">
                   <option
                         defaultValue="true"
-                        id="org.eclipse.cdt.dotnet.exe.debug.linker.option.debug"
+                        id="org.eclipse.cdt.windows.exe.debug.linker.option.debug"
                         isAbstract="false"
-                        superClass="org.eclipse.cdt.dotnet.link.option.debug"/>
+                        superClass="org.eclipse.cdt.windows.link.option.debug"/>
                </tool>
+               <builder
+                     command="nmake"
+                     id="org.eclipse.cdt.windows.exe.debug.nmake"
+                     buildfileGenerator="org.eclipse.cdt.windows.build.NMakefileGenerator"
+                     isAbstract="false"
+                     isVariableCaseSensitive="false"
+                     superClass="org.eclipse.cdt.windows.nmake"/>
             </toolChain>
          </configuration>
          <configuration
                artifactExtension="exe"
-               id="org.eclipse.cdt.dotnet.exe.release"
+               id="org.eclipse.cdt.windows.exe.release"
                name="Release">
             <toolChain
-                  id="org.eclipse.cdt.dotnet.exe.release.toolChain"
+                  id="org.eclipse.cdt.windows.exe.release.toolChain"
                   isAbstract="false">
                <targetPlatform
                      archList="all"
                      binaryParser="org.eclipse.cdt.core.PE"
-                     id="org.eclipse.cdt.dotnet.exe.release.targetPlatform"
+                     id="org.eclipse.cdt.windows.exe.release.targetPlatform"
                      isAbstract="false"
                      osList="win32"/>
                <tool
-                     id="org.eclipse.cdt.dotnet.exe.release.compiler"
+                     id="org.eclipse.cdt.windows.exe.release.compiler"
                      isAbstract="false"
-                     superClass="org.eclipse.cdt.dotnet.cl"/>
+                     superClass="org.eclipse.cdt.windows.cl"/>
                <tool
-                     id="org.eclipse.cdt.dotnet.exe.release.linker"
+                     id="org.eclipse.cdt.windows.exe.release.linker"
                      isAbstract="false"
-                     superClass="org.eclipse.cdt.dotnet.link.exe"/>
+                     superClass="org.eclipse.cdt.windows.link.exe"/>
+               <builder
+                     id="org.eclipse.cdt.windows.exe.release.nmake"
+                     buildfileGenerator="org.eclipse.cdt.windows.build.NMakefileGenerator"
+                     isAbstract="false"
+                     isVariableCaseSensitive="false"
+                     superClass="org.eclipse.cdt.windows.nmake"/>
             </toolChain>
          </configuration>
       </projectType>
       <projectType
-            id="org.eclipse.cdt.dotnet.projectType.dll"
+            id="org.eclipse.cdt.windows.projectType.dll"
             isAbstract="false"
             name="C++.Net Shared Library (DLL)">
          <configuration
                artifactExtension="dll"
-               id="org.eclipse.cdt.dotnet.dll.debug"
+               id="org.eclipse.cdt.windows.dll.debug"
                name="Debug">
             <toolChain
-                  id="org.eclipse.cdt.dotnet.dll.debug.toolChain"
+                  id="org.eclipse.cdt.windows.dll.debug.toolChain"
                   isAbstract="false">
                <targetPlatform
                      archList="all"
                      binaryParser="org.eclipse.cdt.core.PE"
-                     id="org.eclipse.cdt.dotnet.dll.debug.targetPlatform"
+                     id="org.eclipse.cdt.windows.dll.debug.targetPlatform"
                      isAbstract="false"
                      osList="win32"/>
                <tool
-                     id="org.eclipse.cdt.dotnet.dll.debug.compiler"
+                     id="org.eclipse.cdt.windows.dll.debug.compiler"
                      isAbstract="false"
-                     superClass="org.eclipse.cdt.dotnet.cl.debug"/>
+                     superClass="org.eclipse.cdt.windows.cl.debug"/>
                <tool
-                     id="org.eclipse.cdt.dotnet.dll.debug.linker"
+                     id="org.eclipse.cdt.windows.dll.debug.linker"
                      isAbstract="false"
-                     superClass="org.eclipse.cdt.dotnet.link.dll">
+                     superClass="org.eclipse.cdt.windows.link.dll">
                   <option
                         defaultValue="true"
-                        id="org.eclipse.cdt.dotnet.dll.debug.linker.option.debug"
+                        id="org.eclipse.cdt.windows.dll.debug.linker.option.debug"
                         isAbstract="false"
-                        superClass="org.eclipse.cdt.dotnet.link.option.debug"/>
+                        superClass="org.eclipse.cdt.windows.link.option.debug"/>
                </tool>
+               <builder
+                     id="org.eclipse.cdt.windows.dll.debug.nmake"
+                     buildfileGenerator="org.eclipse.cdt.windows.build.NMakefileGenerator"
+                     isAbstract="false"
+                     isVariableCaseSensitive="false"
+                     superClass="org.eclipse.cdt.windows.nmake"/>
             </toolChain>
          </configuration>
          <configuration
                artifactExtension="dll"
-               id="org.eclipse.cdt.dotnet.dll.release"
+               id="org.eclipse.cdt.windows.dll.release"
                name="Release">
             <toolChain
-                  id="org.eclipse.cdt.dotnet.dll.release.toolChain"
+                  id="org.eclipse.cdt.windows.dll.release.toolChain"
                   isAbstract="false">
                <targetPlatform
                      archList="all"
                      binaryParser="org.eclipse.cdt.core.PE"
-                     id="org.eclipse.cdt.dotnet.dll.release.targetPlatform"
+                     id="org.eclipse.cdt.windows.dll.release.targetPlatform"
                      isAbstract="false"
                      osList="win32"/>
                <tool
-                     id="org.eclipse.cdt.dotnet.dll.release.compiler"
+                     id="org.eclipse.cdt.windows.dll.release.compiler"
                      isAbstract="false"
-                     superClass="org.eclipse.cdt.dotnet.cl"/>
+                     superClass="org.eclipse.cdt.windows.cl"/>
                <tool
-                     id="org.eclipse.cdt.dotnet.dll.release.linker"
+                     id="org.eclipse.cdt.windows.dll.release.linker"
                      isAbstract="false"
-                     superClass="org.eclipse.cdt.dotnet.link.dll"/>
+                     superClass="org.eclipse.cdt.windows.link.dll"/>
+               <builder
+                     id="org.eclipse.cdt.windows.dll.release.nmake"
+                     buildfileGenerator="org.eclipse.cdt.windows.build.NMakefileGenerator"
+                     isAbstract="false"
+                     isVariableCaseSensitive="false"
+                     superClass="org.eclipse.cdt.windows.nmake"/>
             </toolChain>
          </configuration>
       </projectType>
       <projectType
-            id="org.eclipse.cdt.dotnet.projectType.lib"
+            id="org.eclipse.cdt.windows.projectType.lib"
             isAbstract="false"
             name="C++.Net Static Library (LIB)">
          <configuration
                artifactExtension="lib"
-               id="org.eclipse.cdt.dotnet.lib.debug"
+               id="org.eclipse.cdt.windows.lib.debug"
                name="Debug">
             <toolChain
-                  id="org.eclipse.cdt.dotnet.lib.debug.toolChain"
+                  id="org.eclipse.cdt.windows.lib.debug.toolChain"
                   isAbstract="false">
                <targetPlatform
                      archList="all"
                      binaryParser="org.eclipse.cdt.core.PE"
-                     id="org.eclipse.cdt.dotnet.lib.debug.targetPlatform"
+                     id="org.eclipse.cdt.windows.lib.debug.targetPlatform"
                      isAbstract="false"
                      osList="win32"/>
                <tool
-                     id="org.eclipse.cdt.dotnet.lib.debug.compiler"
+                     id="org.eclipse.cdt.windows.lib.debug.compiler"
                      isAbstract="false"
-                     superClass="org.eclipse.cdt.dotnet.cl.debug"/>
+                     superClass="org.eclipse.cdt.windows.cl.debug"/>
                <tool
-                     id="org.eclipse.cdt.dotnet.lib.debug.lib"
+                     id="org.eclipse.cdt.windows.lib.debug.lib"
                      isAbstract="false"
-                     superClass="org.eclipse.cdt.dotnet.lib"/>
+                     superClass="org.eclipse.cdt.windows.lib"/>
+               <builder
+                     id="org.eclipse.cdt.windows.lib.debug.nmake"
+                     buildfileGenerator="org.eclipse.cdt.windows.build.NMakefileGenerator"
+                     isAbstract="false"
+                     isVariableCaseSensitive="false"
+                     superClass="org.eclipse.cdt.windows.nmake"/>
             </toolChain>
          </configuration>
          <configuration
                artifactExtension="lib"
-               id="org.eclipse.cdt.dotnet.lib.release"
+               id="org.eclipse.cdt.windows.lib.release"
                name="Release">
             <toolChain
-                  id="org.eclipse.cdt.dotnet.lib.release.toolChain"
+                  id="org.eclipse.cdt.windows.lib.release.toolChain"
                   isAbstract="false">
                <targetPlatform
                      archList="all"
                      binaryParser="org.eclipse.cdt.core.PE"
-                     id="org.eclipse.cdt.dotnet.lib.release.targetPlatform"
+                     id="org.eclipse.cdt.windows.lib.release.targetPlatform"
                      isAbstract="false"
                      osList="win32"/>
                <tool
-                     id="org.eclipse.cdt.dotnet.lib.release.compiler"
+                     id="org.eclipse.cdt.windows.lib.release.compiler"
                      isAbstract="false"
-                     superClass="org.eclipse.cdt.dotnet.cl"/>
+                     superClass="org.eclipse.cdt.windows.cl"/>
                <tool
-                     id="org.eclipse.cdt.dotnet.lib.release.lib"
+                     id="org.eclipse.cdt.windows.lib.release.lib"
                      isAbstract="false"
-                     superClass="org.eclipse.cdt.dotnet.lib"/>
+                     superClass="org.eclipse.cdt.windows.lib"/>
+               <builder
+                     id="org.eclipse.cdt.windows.lib.release.nmake"
+                     buildfileGenerator="org.eclipse.cdt.windows.build.NMakefileGenerator"
+                     isAbstract="false"
+                     isVariableCaseSensitive="false"
+                     superClass="org.eclipse.cdt.windows.nmake"/>
             </toolChain>
          </configuration>
       </projectType>
