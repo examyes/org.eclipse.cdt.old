@@ -34,7 +34,7 @@ public class RenameVariableTests extends RenameTests {
     }
     public static Test suite( boolean cleanup ) {
         TestSuite suite = new TestSuite(RenameVariableTests.class); 
-        suite.addTest(new FailingTest(new RenameVariableTests("failReferenceViaMacro3"), 90956) ); //$NON-NLS-1$
+        suite.addTest(new FailingTest(new RenameVariableTests("_referenceViaMacro3"), 90956) ); //$NON-NLS-1$
 
         if (cleanup) {
             suite.addTest( new RefactoringTests("cleanupProject") );    //$NON-NLS-1$
@@ -1377,7 +1377,7 @@ public class RenameVariableTests extends RenameTests {
         assertChange( changes, cpp, offset2, 2, "z" );  //$NON-NLS-1$
     }
 
-    public void failReferenceViaMacro3() throws Exception {
+    public void _referenceViaMacro3() throws Exception {
         StringWriter writer = new StringWriter();
         writer.write("#define INC(x,y) x+=y      \n"); //$NON-NLS-1$
         writer.write("void f() {                 \n"); //$NON-NLS-1$

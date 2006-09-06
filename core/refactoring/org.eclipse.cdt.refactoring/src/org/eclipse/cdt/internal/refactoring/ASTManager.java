@@ -24,6 +24,7 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPImplicitMethod;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPMethod;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVisitor;
 import org.eclipse.cdt.refactoring.CRefactoringMatch;
+import org.eclipse.cdt.refactoring.CRefactoringPlugin;
 import org.eclipse.cdt.refactoring.CRefactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.*;
@@ -1159,7 +1160,7 @@ public class ASTManager {
                     try {
                         conflicting= findInScope(scope, fRenameTo, true);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                    	CRefactoringPlugin.log(e);
                     }
                     if (conflicting != null && conflicting.length > 0) {
                         fConflictingBinding.addAll(Arrays.asList(conflicting));

@@ -34,7 +34,7 @@ public class RenameMacroTests extends RenameTests {
     }
     public static Test suite( boolean cleanup ) {
         TestSuite suite = new TestSuite(RenameMacroTests.class); 
-        suite.addTest(new FailingTest(new RenameMacroTests("failingRenameMacroAsMacroArgument"), 94673)); //$NON-NLS-1$
+        suite.addTest(new FailingTest(new RenameMacroTests("_renameMacroAsMacroArgument"), 94673)); //$NON-NLS-1$
         if (cleanup) {
             suite.addTest( new RefactoringTests("cleanupProject") );    //$NON-NLS-1$
         }
@@ -194,7 +194,7 @@ public class RenameMacroTests extends RenameTests {
         assertTotalChanges(1, 1, 0, ch);
     }
 
-    public void failingRenameMacroAsMacroArgument() throws Exception {
+    public void _renameMacroAsMacroArgument() throws Exception {
         StringWriter writer = new StringWriter();
         writer.write("#define M1(var) var       \n"); //$NON-NLS-1$
         writer.write("#define M2 1              \n"); //$NON-NLS-1$

@@ -44,7 +44,7 @@ public class RenameRegressionTests extends RenameTests {
     public static Test suite( boolean cleanup ) {
         
         TestSuite innerSuite= new TestSuite(RenameRegressionTests.class);
-        innerSuite.addTest( new FailingTest(new RenameRegressionTests("failing_testMethod_35_72726"),72726) ); //$NON-NLS-1$
+        innerSuite.addTest( new FailingTest(new RenameRegressionTests("_testMethod_35_72726"),72726) ); //$NON-NLS-1$
         
         TestSuite suite = new TestSuite("RenameRegressionTests"); //$NON-NLS-1$
         suite.addTest( new RenameRegressionTests("disableIndexer")); //$NON-NLS-1$
@@ -428,7 +428,7 @@ public class RenameRegressionTests extends RenameTests {
         
     }
     // defect is input for new name is not allowed
-    public void failing_testMethod_35_72726() throws Exception {
+    public void _testMethod_35_72726() throws Exception {
         StringWriter writer = new StringWriter();
         writer.write( "class Foo{                               \n" ); //$NON-NLS-1$
         writer.write( "  Foo& operator *=/*vp1*/(const Foo &rhs);\n" ); //$NON-NLS-1$

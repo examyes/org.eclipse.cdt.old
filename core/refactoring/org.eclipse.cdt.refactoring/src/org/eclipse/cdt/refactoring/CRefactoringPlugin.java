@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2004-2005 Wind River Systems, Inc.
+ * Copyright (c) 2004, 2006 Wind River Systems, Inc.
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
  * which accompanies this distribution, and is available at 
@@ -11,9 +11,13 @@
 
 package org.eclipse.cdt.refactoring;
 
-import org.eclipse.ui.plugin.*;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
-import java.util.*;
 
 public class CRefactoringPlugin extends AbstractUIPlugin {
 	//The shared instance.
@@ -21,6 +25,8 @@ public class CRefactoringPlugin extends AbstractUIPlugin {
 	//Resource bundle.
 	private ResourceBundle resourceBundle;
 	
+	public static final String PLUGIN_ID = "org.eclipse.cdt.refactoring"; //$NON-NLS-1$
+
 	/**
 	 * The constructor.
 	 */
@@ -66,6 +72,18 @@ public class CRefactoringPlugin extends AbstractUIPlugin {
 		} catch (MissingResourceException e) {
 			return key;
 		}
+	}
+
+	public static void log(Throwable e) {
+		log(new Status(IStatus.ERROR, PLUGIN_ID, IStatus.ERROR, "Error", e)); //$NON-NLS-1$
+	}
+
+	public static void log(IStatus status) {
+		log(status);
+	}
+	
+	public static void logErrorMessage(String message) {
+		log(new Status(IStatus.ERROR, PLUGIN_ID, 1, message, null));
 	}
 
 	/**
