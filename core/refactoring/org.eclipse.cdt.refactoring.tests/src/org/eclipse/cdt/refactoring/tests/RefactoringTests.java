@@ -44,6 +44,7 @@ public class RefactoringTests extends BaseTestFramework {
 
     protected void setUp() throws Exception {
         super.setUp();
+        disableIndexing();
         fBufferSize= FileCharSequenceProvider.BUFFER_SIZE;
         FileCharSequenceProvider.BUFFER_SIZE= 1024*4;
     }

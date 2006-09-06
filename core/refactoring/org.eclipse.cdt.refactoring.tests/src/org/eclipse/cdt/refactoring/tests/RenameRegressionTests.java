@@ -47,7 +47,6 @@ public class RenameRegressionTests extends RenameTests {
         innerSuite.addTest( new FailingTest(new RenameRegressionTests("_testMethod_35_72726"),72726) ); //$NON-NLS-1$
         
         TestSuite suite = new TestSuite("RenameRegressionTests"); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("disableIndexer")); //$NON-NLS-1$
         suite.addTest( innerSuite );
         suite.addTest( RenameVariableTests.suite(false));
         suite.addTest( RenameFunctionTests.suite(false));
@@ -61,10 +60,6 @@ public class RenameRegressionTests extends RenameTests {
         return suite;
     }
     
-    public void disableIndexer() throws Exception {
-        disableIndexing();
-    }
-
     public void testSimpleRename() throws Exception {
         StringWriter writer = new StringWriter();
         writer.write( "int boo;    // boo  \n" ); //$NON-NLS-1$

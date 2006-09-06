@@ -79,7 +79,7 @@ public class CRefactoringPlugin extends AbstractUIPlugin {
 	}
 
 	public static void log(IStatus status) {
-		log(status);
+		getDefault().getLog().log(status);
 	}
 	
 	public static void logErrorMessage(String message) {
