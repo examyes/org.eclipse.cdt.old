@@ -31,41 +31,48 @@ import org.eclipse.core.runtime.Path;
  */
 public class NMakefileGenerator implements IManagedBuilderMakefileGenerator {
 
-	private String configName;
+	private IPath buildWorkingDir;
+	
+	private static final String makefileName = "Makefile";
 	
 	public void generateDependencies() throws CoreException {
 	}
 
 	public MultiStatus generateMakefiles(IResourceDelta delta) throws CoreException {
+		// for now regenerate the makefiles every time
+		// later we'll check so that we only generate them if we need to
+		return regenerateMakefiles();
+	}
+
+	public IPath getBuildWorkingDir() {
+		return buildWorkingDir;
+	}
+
+	public String getMakefileName() {
+		return makefileName;
+	}
+
+	public void initialize(IProject project, IManagedBuildInfo info, IProgressMonitor monitor) {
+		IConfiguration config = info.getDefaultConfiguration();
+		buildWorkingDir = new Path(config.getName());
+	}
+
+	public boolean isGeneratedResource(IResource resource) {
+		return buildWorkingDir.isPrefixOf(resource.getFullPath());
+	}
+
+	public void regenerateDependencies(boolean force) throws CoreException {
+		// dependencies are in the makefile
+		// which gets generated every time for now
+		// so do nothing
+	}
+
+	public MultiStatus regenerateMakefiles() throws CoreException {
 		return new MultiStatus(
 				ManagedBuilderCorePlugin.getUniqueIdentifier(),
 				IStatus.OK,
 				new String(),
 				null);
-	}
-
-	public IPath getBuildWorkingDir() {
-		return new Path(configName);
-	}
-
-	public String getMakefileName() {
-		return null;
-	}
-
-	public void initialize(IProject project, IManagedBuildInfo info, IProgressMonitor monitor) {
-		IConfiguration config = info.getDefaultConfiguration();
-		configName = config.getName();
-	}
-
-	public boolean isGeneratedResource(IResource resource) {
-		return false;
-	}
-
-	public void regenerateDependencies(boolean force) throws CoreException {
-	}
-
-	public MultiStatus regenerateMakefiles() throws CoreException {
-		return null;
 	}
 
 }
