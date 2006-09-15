@@ -106,6 +106,13 @@ public class CRefactoringActionGroup extends ActionGroup implements IPositionCon
     }
 
     public CRefactoringActionGroup(IWorkbenchPart part) {
+    	this(part, null);
+    }
+    
+    public CRefactoringActionGroup(IWorkbenchPart part, String groupName) {
+        if (groupName != null && groupName.length() > 0) {
+            fGroupName= groupName;
+        }
         fRenameAction = new CRenameAction();
         if (part instanceof ITextEditor) {
         	setEditor((ITextEditor) part);
