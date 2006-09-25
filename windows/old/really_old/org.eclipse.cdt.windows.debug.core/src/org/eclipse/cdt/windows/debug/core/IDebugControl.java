@@ -11,31 +11,24 @@
 
 package org.eclipse.cdt.windows.debug.core;
 
-import java.util.Map;
-
 /**
  * @author Doug Schaefer
- * 
- * This is actually IDebugClient5.
- * 
+ *
  */
-public class IDebugClient {
-
+public class IDebugControl {
+	
 	@SuppressWarnings("unused")
 	private long p;
 	
 	@SuppressWarnings("unused")
-	private IDebugClient(long p) {
+	private IDebugControl(long p) {
 		this.p = p;
 	}
 	
-	public native static IDebugClient debugCreate() throws HRESULTFailure;
+	public native static IDebugControl debugCreate() throws HRESULTFailure;
 
-	public native String getIdentity();
+	public static final int INFINITE = 0xffffffff;
 
-	public native void createProcess2(long server, String commandLine,
-			DebugCreateProcessOptions options,
-			String initialDirectory,
-			Map<String, String> environment);
+	public native int waitForEvent(int flags, int timeout) throws HRESULTFailure;
 	
 }

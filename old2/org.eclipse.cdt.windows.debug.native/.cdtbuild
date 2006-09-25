@@ -13,6 +13,9 @@
 <listOptionValue builtIn="false" value="&quot;C:\Program Files\Java\jdk1.5.0_08\include\win32&quot;"/>
 </option>
 <option id="org.eclipse.cdt.windows.cl.debug.option.runtime.1824786" superClass="org.eclipse.cdt.windows.cl.debug.option.runtime" value="org.eclipse.cdt.windows.cl.option.runtime.mtd" valueType="enumerated"/>
+<option id="org.eclipse.cdt.windows.cl.option.macros.982994079" superClass="org.eclipse.cdt.windows.cl.option.macros" valueType="definedSymbols">
+<listOptionValue builtIn="false" value="_UNICODE"/>
+</option>
 </tool>
 <tool id="org.eclipse.cdt.windows.dll.debug.linker.728808516" name="LINK DLL Linker" superClass="org.eclipse.cdt.windows.dll.debug.linker">
 <option id="org.eclipse.cdt.windows.link.option.libraries.1808354509" superClass="org.eclipse.cdt.windows.link.option.libraries" valueType="stringList">

@@ -1,0 +1,6 @@
+#ifndef DEBUGCREATEPROCESSOPTIONS_H_
+#define DEBUGCREATEPROCESSOPTIONS_H_
+
+void getDebugCreateProcessOptions(JNIEnv * env, jobject obj, DEBUG_CREATE_PROCESS_OPTIONS & options);
+
+#endif /*DEBUGCREATEPROCESSOPTIONS_H_*/

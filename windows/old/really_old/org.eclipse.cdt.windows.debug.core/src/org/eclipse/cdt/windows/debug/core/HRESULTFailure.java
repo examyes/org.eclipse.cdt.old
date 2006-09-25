@@ -22,6 +22,12 @@ public class HRESULTFailure extends Exception {
 	
 	private int HRESULT;
 	
+	@SuppressWarnings("unused")
+	private HRESULTFailure(int hr, String message) {
+		super(message);
+		HRESULT = hr;
+	}
+	
 	public int getHRESULT() {
 		return HRESULT;
 	}
