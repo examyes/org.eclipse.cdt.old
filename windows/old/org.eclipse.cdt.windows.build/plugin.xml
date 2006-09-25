@@ -161,6 +161,7 @@
          <option
                browseType="directory"
                category="org.eclipse.cdt.windows.cl.optionCategory.preprocessor"
+               command="/I"
                id="org.eclipse.cdt.windows.cl.option.includes"
                isAbstract="false"
                name="Include Path (/I)"
@@ -346,7 +347,7 @@
       <projectType
             id="org.eclipse.cdt.windows.projectType.exe"
             isAbstract="false"
-            name="C++.Net Executable (EXE)"
+            name="Windows Executable (EXE)"
             projectEnvironmentSupplier="org.eclipse.cdt.windows.build.WindowsProjectEnvironmentVariableSupplier">
          <configuration
                artifactExtension="exe"
@@ -417,7 +418,8 @@
       <projectType
             id="org.eclipse.cdt.windows.projectType.dll"
             isAbstract="false"
-            name="C++.Net Shared Library (DLL)">
+            name="Windows Shared Library (DLL)"
+            projectEnvironmentSupplier="org.eclipse.cdt.windows.build.WindowsProjectEnvironmentVariableSupplier">
          <configuration
                artifactExtension="dll"
                id="org.eclipse.cdt.windows.dll.debug"
@@ -486,7 +488,8 @@
       <projectType
             id="org.eclipse.cdt.windows.projectType.lib"
             isAbstract="false"
-            name="C++.Net Static Library (LIB)">
+            name="Windows Static Library (LIB)"
+            projectEnvironmentSupplier="org.eclipse.cdt.windows.build.WindowsProjectEnvironmentVariableSupplier">
          <configuration
                artifactExtension="lib"
                id="org.eclipse.cdt.windows.lib.debug"
