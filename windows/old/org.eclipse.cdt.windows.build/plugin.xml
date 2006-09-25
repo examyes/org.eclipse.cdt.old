@@ -153,6 +153,7 @@
                name="Preprocessor"/>
          <option
                category="org.eclipse.cdt.windows.cl.optionCategory.preprocessor"
+               command="/D"
                id="org.eclipse.cdt.windows.cl.option.macros"
                isAbstract="false"
                name="Defines (/D)"
