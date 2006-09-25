@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?fileVersion 3.1.0?>
+
+<ManagedProjectBuildInfo>
+<project id="org.eclipse.cdt.windows.debug.native.org.eclipse.cdt.windows.projectType.dll.395496396" name="Windows Shared Library (DLL)" projectType="org.eclipse.cdt.windows.projectType.dll">
+<configuration artifactExtension="dll" artifactName="cdtwindbg" description="" id="org.eclipse.cdt.windows.dll.debug.1552793551" name="Debug" parent="org.eclipse.cdt.windows.dll.debug">
+<toolChain id="org.eclipse.cdt.windows.dll.debug.toolChain.149358986" superClass="org.eclipse.cdt.windows.dll.debug.toolChain">
+<builder arguments="" command="nmake /nologo /k" id="org.eclipse.cdt.windows.dll.debug.nmake.1771938657" name="NMAKE.Debug" superClass="org.eclipse.cdt.windows.dll.debug.nmake"/>
+<tool id="org.eclipse.cdt.windows.dll.debug.compiler.1871258226" name="CL Compiler" superClass="org.eclipse.cdt.windows.dll.debug.compiler">
+<option id="org.eclipse.cdt.windows.cl.option.includes.567513790" superClass="org.eclipse.cdt.windows.cl.option.includes" valueType="includePath">
+<listOptionValue builtIn="false" value="&quot;C:\Program Files\Debugging Tools for Windows\sdk\inc&quot;"/>
+<listOptionValue builtIn="false" value="&quot;C:\Program Files\Java\jdk1.5.0_08\include&quot;"/>
+<listOptionValue builtIn="false" value="&quot;C:\Program Files\Java\jdk1.5.0_08\include\win32&quot;"/>
+</option>
+<option id="org.eclipse.cdt.windows.cl.debug.option.runtime.1824786" superClass="org.eclipse.cdt.windows.cl.debug.option.runtime" value="org.eclipse.cdt.windows.cl.option.runtime.mtd" valueType="enumerated"/>
+</tool>
+<tool id="org.eclipse.cdt.windows.dll.debug.linker.728808516" name="LINK DLL Linker" superClass="org.eclipse.cdt.windows.dll.debug.linker">
+<option id="org.eclipse.cdt.windows.link.option.libraries.1808354509" superClass="org.eclipse.cdt.windows.link.option.libraries" valueType="stringList">
+<listOptionValue builtIn="false" value="&quot;C:\Program Files\Debugging Tools for Windows\sdk\lib\i386\dbgeng.lib&quot;"/>
+</option>
+</tool>
+<macros expandEnvironmentMacros="true"/>
+</toolChain>
+</configuration>
+<configuration artifactExtension="dll" artifactName="org.eclipse.cdt.windows.debug.native" description="" id="org.eclipse.cdt.windows.dll.release.2050125539" name="Release" parent="org.eclipse.cdt.windows.dll.release">
+<toolChain id="org.eclipse.cdt.windows.dll.release.toolChain.978030134" superClass="org.eclipse.cdt.windows.dll.release.toolChain">
+<tool id="org.eclipse.cdt.windows.dll.release.compiler.1543697730" name="CL Compiler" superClass="org.eclipse.cdt.windows.dll.release.compiler"/>
+<tool id="org.eclipse.cdt.windows.dll.release.linker.1372265821" name="LINK DLL Linker" superClass="org.eclipse.cdt.windows.dll.release.linker"/>
+</toolChain>
+</configuration>
+<macros/>
+</project>
+</ManagedProjectBuildInfo>
