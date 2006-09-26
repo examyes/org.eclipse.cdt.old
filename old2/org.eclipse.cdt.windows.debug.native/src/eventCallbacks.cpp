@@ -8,9 +8,16 @@
  * Contributors: 
  *     QNX Software Systems - Initial API and implementation
  **********************************************************************/
-#ifndef DEBUGCREATEPROCESSOPTIONS_H_
-#define DEBUGCREATEPROCESSOPTIONS_H_
+#include <windows.h>
+#include <dbgeng.h>
+#include <jni.h>
 
-void getDebugCreateProcessOptions(JNIEnv * env, jobject obj, DEBUG_CREATE_PROCESS_OPTIONS & options);
+#include "eventCallbacks.h"
 
-#endif /*DEBUGCREATEPROCESSOPTIONS_H_*/
+EventCallbacks::EventCallbacks()
+{
+}
+
+EventCallbacks::~EventCallbacks()
+{
+}

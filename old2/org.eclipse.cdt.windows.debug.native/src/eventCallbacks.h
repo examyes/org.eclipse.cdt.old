@@ -8,9 +8,13 @@
  * Contributors: 
  *     QNX Software Systems - Initial API and implementation
  **********************************************************************/
-#ifndef DEBUGCREATEPROCESSOPTIONS_H_
-#define DEBUGCREATEPROCESSOPTIONS_H_
+#ifndef EVENTCALLBACKS_H_
+#define EVENTCALLBACKS_H_
 
-void getDebugCreateProcessOptions(JNIEnv * env, jobject obj, DEBUG_CREATE_PROCESS_OPTIONS & options);
+class EventCallbacks : public DebugBaseEventCallbacksWide {
+public:
+	EventCallbacks();
+	virtual ~EventCallbacks();
+};
 
-#endif /*DEBUGCREATEPROCESSOPTIONS_H_*/
+#endif /*EVENTCALLBACKS_H_*/
