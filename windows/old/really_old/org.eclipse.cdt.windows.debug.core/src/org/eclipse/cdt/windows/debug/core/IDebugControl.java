@@ -20,13 +20,12 @@ public class IDebugControl {
 	@SuppressWarnings("unused")
 	private long p;
 	
-	@SuppressWarnings("unused")
-	private IDebugControl(long p) {
-		this.p = p;
+	private native long init() throws HRESULTFailure;
+
+	public IDebugControl() throws HRESULTFailure {
+		p = init();
 	}
 	
-	public native static IDebugControl debugCreate() throws HRESULTFailure;
-
 	public static final int INFINITE = 0xffffffff;
 
 	public native int waitForEvent(int flags, int timeout) throws HRESULTFailure;

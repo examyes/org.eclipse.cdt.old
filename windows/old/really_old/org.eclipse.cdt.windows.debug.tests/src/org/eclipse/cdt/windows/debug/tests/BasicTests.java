@@ -9,13 +9,15 @@ import junit.framework.TestCase;
 public class BasicTests extends TestCase {
 
 	public void testDebugClient() throws Exception {
-		IDebugClient debugClient = IDebugClient.debugCreate();
-		assertNotNull(debugClient);
-		IDebugControl debugControl = IDebugControl.debugCreate();
-		assertNotNull(debugControl);
+		IDebugClient debugClient = new IDebugClient();
+		IDebugControl debugControl = new IDebugControl();
+		// Register callbacks
+		debugClient.setEventCallbacks(new TestEventCallbacks());
+		// Create Process
 		DebugCreateProcessOptions options = new DebugCreateProcessOptions();
 		options.setCreateFlags(DebugCreateProcessOptions.DEBUG_ONLY_THIS_PROCESS);
 		debugClient.createProcess2(0, "C:\\cygwin\\bin\\ls", options, "C:\\cygwin", null);
+		// Event loop
 		while (true)
 			debugControl.waitForEvent(0, IDebugControl.INFINITE);
 	}

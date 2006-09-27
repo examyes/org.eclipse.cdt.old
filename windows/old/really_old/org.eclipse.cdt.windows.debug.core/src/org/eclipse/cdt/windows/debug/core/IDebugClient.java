@@ -24,18 +24,19 @@ public class IDebugClient {
 	@SuppressWarnings("unused")
 	private long p;
 	
-	@SuppressWarnings("unused")
-	private IDebugClient(long p) {
-		this.p = p;
+	private native long init() throws HRESULTFailure;
+
+	public IDebugClient() throws HRESULTFailure {
+		p = init();
 	}
 	
-	public native static IDebugClient debugCreate() throws HRESULTFailure;
-
 	public native String getIdentity();
 
 	public native void createProcess2(long server, String commandLine,
 			DebugCreateProcessOptions options,
 			String initialDirectory,
-			Map<String, String> environment);
+			Map<String, String> environment) throws HRESULTFailure;
+	
+	public native void setEventCallbacks(IDebugEventCallbacks callbacks) throws HRESULTFailure;
 	
 }

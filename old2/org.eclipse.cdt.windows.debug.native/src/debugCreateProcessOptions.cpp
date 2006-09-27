@@ -24,27 +24,27 @@ void getDebugCreateProcessOptions(JNIEnv * env, jobject obj, DEBUG_CREATE_PROCES
 
 	jclass cls = env->GetObjectClass(obj);
 	if (cls == NULL) {
-		throwHRESULT(env, E_FAIL);
+		throwHRESULT(env, E_FAIL, __FILE__, __LINE__);
 		return;
 	}
 	
 	jfieldID createFlagsID = env->GetFieldID(cls, "createFlags", "I");
 	if (createFlagsID == 0) {
-		throwHRESULT(env, E_FAIL);
+		throwHRESULT(env, E_FAIL, __FILE__, __LINE__);
 		return;
 	}
 	options.CreateFlags = env->GetIntField(obj, createFlagsID);
 	
 	jfieldID engCreateFlagsID = env->GetFieldID(cls, "engCreateFlags", "I");
 	if (engCreateFlagsID == 0) {
-		throwHRESULT(env, E_FAIL);
+		throwHRESULT(env, E_FAIL, __FILE__, __LINE__);
 		return;
 	}
 	options.EngCreateFlags = env->GetIntField(obj, engCreateFlagsID);
 	
 	jfieldID verifierFlagsID = env->GetFieldID(cls, "verifierFlags", "I");
 	if (verifierFlagsID == 0) {
-		throwHRESULT(env, E_FAIL);
+		throwHRESULT(env, E_FAIL, __FILE__, __LINE__);
 		return;
 	}
 	options.VerifierFlags = env->GetIntField(obj, verifierFlagsID);

@@ -20,16 +20,19 @@ public class HRESULTFailure extends Exception {
 
 	private static final long serialVersionUID = 1;
 	
-	private int HRESULT;
+	@SuppressWarnings("unused")
+	private int hr;
+	@SuppressWarnings("unused")
+	private String file;
+	@SuppressWarnings("unused")
+	private int line;
 	
 	@SuppressWarnings("unused")
-	private HRESULTFailure(int hr, String message) {
+	private HRESULTFailure(int hr, String message, String file, int line) {
 		super(message);
-		HRESULT = hr;
+		this.hr = hr;
+		this.file = file;
+		this.line = line;
 	}
 	
-	public int getHRESULT() {
-		return HRESULT;
-	}
-
 }

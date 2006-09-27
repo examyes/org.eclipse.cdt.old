@@ -8,16 +8,21 @@
  * Contributors: 
  *     QNX Software Systems - Initial API and implementation
  **********************************************************************/
-#include <windows.h>
-#include <dbgeng.h>
-#include <jni.h>
 
-#include "eventCallbacks.h"
+package org.eclipse.cdt.windows.debug.tests;
 
-EventCallbacks::EventCallbacks()
-{
-}
+import org.eclipse.cdt.windows.debug.core.HRESULTFailure;
+import org.eclipse.cdt.windows.debug.core.IDebugEventCallbacks;
 
-EventCallbacks::~EventCallbacks()
-{
+/**
+ * @author Doug Schaefer
+ *
+ */
+public class TestEventCallbacks extends IDebugEventCallbacks {
+
+	@Override
+	protected int getInterestMask() throws HRESULTFailure {
+		return 0;
+	}
+	
 }

@@ -11,6 +11,6 @@
 #ifndef HRESULTFAILURE_H_
 #define HRESULTFAILURE_H_
 
-void throwHRESULT(JNIEnv * env, HRESULT hr);
+void throwHRESULT(JNIEnv * env, HRESULT hr, char * file, int line);
 
 #endif /*HRESULTFAILURE_H_*/

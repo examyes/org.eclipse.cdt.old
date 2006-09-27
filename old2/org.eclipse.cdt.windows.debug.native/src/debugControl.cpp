@@ -19,50 +19,42 @@
 
 #define JNINAME(name) Java_org_eclipse_cdt_windows_debug_core_IDebugControl_## name
 
+static jfieldID pID;
+
 static IDebugControl4 * getObject(JNIEnv * env, jobject obj) {
-	jclass cls = env->GetObjectClass(obj);
-	if (cls == NULL) {
-		throwHRESULT(env, E_FAIL);
-		return NULL;
-	}
-	
-	jfieldID fieldID = env->GetFieldID(cls, "p", "J");
-	if (fieldID == 0) {
-		throwHRESULT(env, E_FAIL);
-		return NULL;
-	}
-	
-	jlong p = env->GetLongField(obj, fieldID);
+	jlong p = env->GetLongField(obj, pID);
 	return (IDebugControl4 *)p;
 }
 
-extern "C" JNIEXPORT jobject JNINAME(debugCreate)(JNIEnv * env, jclass cls) {
-	IDebugControl4 * debugControl;
-	HRESULT hr = DebugCreate(__uuidof(IDebugControl4), (void **)&debugControl);
-	if (hr != S_OK) {
-		throwHRESULT(env, hr);
-		return NULL;
-	}
-
-	jmethodID constructor = env->GetMethodID(cls, "<init>", "(J)V");
-	if (constructor == 0) {
-		throwHRESULT(env, E_FAIL);
+extern "C" JNIEXPORT jlong JNINAME(init)(JNIEnv * env, jobject obj) {
+	jclass cls = env->GetObjectClass(obj);
+	if (cls == NULL) {
+		throwHRESULT(env, E_FAIL, __FILE__, __LINE__);
 		return NULL;
 	}
 	
-	return env->NewObject(cls, constructor, (jlong)debugControl);
+	pID = env->GetFieldID(cls, "p", "J");
+	if (pID == 0) {
+		throwHRESULT(env, E_FAIL, __FILE__, __LINE__);
+		return NULL;
+	}
+	
+	IDebugControl4 * debugControl;
+	HRESULT hr = DebugCreate(__uuidof(IDebugControl4), (void **)&debugControl);
+	if (hr != S_OK) {
+		throwHRESULT(env, hr, __FILE__, __LINE__);
+		return NULL;
+	}
+
+	return (jlong)debugControl;
 }
 
 extern "C" JNIEXPORT jint JNINAME(waitForEvent)(JNIEnv * env, jobject obj,
 		jint flags, jint timeout) {
 	IDebugControl4 * debugControl = getObject(env, obj);
-	printf("debugControl %x\n", debugControl);
-	printf("flags %d\n", flags);
-	printf("timeout %d\n", timeout);
 	HRESULT hr = debugControl->WaitForEvent(flags, timeout);
 	if (FAILED(hr)) {
-		printf("Failed %x\n", hr);
-		throwHRESULT(env, hr);
+		throwHRESULT(env, hr, __FILE__, __LINE__);
 	}
 	return hr;
 }

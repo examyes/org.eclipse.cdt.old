@@ -14,17 +14,18 @@
 
 #include "HRESULTFailure.h"
 
-void throwHRESULT(JNIEnv * env, HRESULT hr) {
+void throwHRESULT(JNIEnv * env, HRESULT hr, char * file, int line) {
 	jclass cls = env->FindClass("org/eclipse/cdt/windows/debug/core/HRESULTFailure");
 	if (cls == NULL)
 		return;
 	
-	jmethodID constructor = env->GetMethodID(cls, "<init>", "(ILjava/lang/String;)V");
+	jmethodID constructor = env->GetMethodID(cls, "<init>", "(ILjava/lang/String;Ljava/lang/String;I)V");
 	if (constructor == NULL)
 		return;
 
 	_com_error error(hr);
 	jstring message = env->NewStringUTF(error.ErrorMessage());
+	jstring _file = env->NewStringUTF(file);
 	
-	env->Throw((jthrowable)env->NewObject(cls, constructor, (jint)hr, message)); 
+	env->Throw((jthrowable)env->NewObject(cls, constructor, (jint)hr, message, _file, line)); 
 }
