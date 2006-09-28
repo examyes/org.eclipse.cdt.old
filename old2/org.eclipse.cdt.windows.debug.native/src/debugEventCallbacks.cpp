@@ -1,3 +1,13 @@
+/**********************************************************************
+ * Copyright (c) 2006 QNX Software Systems and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors: 
+ *     QNX Software Systems - Initial API and implementation
+ **********************************************************************/
 #include <windows.h>
 #include <dbgeng.h>
 #include <jni.h>
@@ -15,6 +25,8 @@ static jfieldID pID;
 static jmethodID getInterestMaskID;
 static jmethodID createProcessID;
 static jmethodID exitProcessID;
+static jmethodID createThreadID;
+static jmethodID exitThreadID;
 
 DebugEventCallbacks * DebugEventCallbacks::getObject(JNIEnv * env, jobject obj) {
 	jlong p = env->GetLongField(obj, pID);
@@ -56,7 +68,19 @@ extern "C" JNIEXPORT jlong JNINAME(init)(JNIEnv * env, jobject obj) {
 		throwHRESULT(env, E_FAIL, __FILE__, __LINE__);
 		return NULL;
 	}
+
+	createThreadID = env->GetMethodID(cls, "createThread", "(JJJ)I");
+	if (createThreadID == 0) {
+		throwHRESULT(env, E_FAIL, __FILE__, __LINE__);
+		return NULL;
+	}
 		
+	exitThreadID = env->GetMethodID(cls, "exitThread", "(I)I");
+	if (exitThreadID == 0) {
+		throwHRESULT(env, E_FAIL, __FILE__, __LINE__);
+		return NULL;
+	}
+
 	return (jlong)new DebugEventCallbacks(env, obj);
 }
 
@@ -126,4 +150,27 @@ HRESULT __stdcall DebugEventCallbacks::ExitProcess(ULONG ExitCode) {
 	}
 	
 	return env->CallIntMethod(ref, exitProcessID, ExitCode);
+}
+
+HRESULT __stdcall DebugEventCallbacks::CreateThread(
+		ULONG64 Handle,
+		ULONG64 DataOffset,
+		ULONG64 StartOffset) {
+	JNIEnv * env;
+	if (vm->GetEnv((void **)&env, JNI_VERSION_1_4) != JNI_OK) {
+		fprintf(stderr, "DebugEventCallbacks: Failed to get env\n");
+		return E_FAIL;
+	}
+
+	return env->CallIntMethod(ref, createThreadID, Handle, DataOffset, StartOffset);
+}
+
+HRESULT __stdcall DebugEventCallbacks::ExitThread(ULONG ExitCode) {
+	JNIEnv * env;
+	if (vm->GetEnv((void **)&env, JNI_VERSION_1_4) != JNI_OK) {
+		fprintf(stderr, "DebugEventCallbacks: Failed to get env\n");
+		return E_FAIL;
+	}
+	
+	return env->CallIntMethod(ref, exitThreadID, ExitCode);
 }

@@ -81,4 +81,16 @@ public abstract class IDebugEventCallbacks {
 	protected int exitProcess(int exitCode) {
 		return DEBUG_STATUS_NO_CHANGE;
 	}
+	
+	protected int createThread(
+			long handle,
+			long dataOffset,
+			long startOffset) {
+		return DEBUG_STATUS_NO_CHANGE;
+	}
+	
+	protected int exitThread(int exitCode) {
+		return DEBUG_STATUS_NO_CHANGE;
+	}
+	
 }

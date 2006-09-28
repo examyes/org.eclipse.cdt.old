@@ -23,7 +23,9 @@ public class TestEventCallbacks extends IDebugEventCallbacks {
 	@Override
 	protected int getInterestMask() throws HRESULTFailure {
 		return DEBUG_EVENT_CREATE_PROCESS
-			 | DEBUG_EVENT_EXIT_PROCESS;
+			 | DEBUG_EVENT_EXIT_PROCESS
+			 | DEBUG_EVENT_CREATE_THREAD
+			 | DEBUG_EVENT_EXIT_THREAD;
 	}
 
 	@Override
@@ -33,6 +35,16 @@ public class TestEventCallbacks extends IDebugEventCallbacks {
 	
 	@Override
 	protected int exitProcess(int exitCode) {
+		return DEBUG_STATUS_NO_CHANGE;
+	}
+	
+	@Override
+	protected int createThread(long handle, long dataOffset, long startOffset) {
+		return DEBUG_STATUS_NO_CHANGE;
+	}
+
+	@Override
+	protected int exitThread(int exitCode) {
 		return DEBUG_STATUS_NO_CHANGE;
 	}
 	
