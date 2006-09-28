@@ -35,4 +35,12 @@ public class HRESULTFailure extends Exception {
 		this.line = line;
 	}
 	
+	public static final int S_OK = 0;
+	public static final int S_FALSE = 1;
+	public static final int E_UNEXPECTED = 0x8000FFFF;
+	
+	public int getHR() {
+		return hr;
+	}
+	
 }

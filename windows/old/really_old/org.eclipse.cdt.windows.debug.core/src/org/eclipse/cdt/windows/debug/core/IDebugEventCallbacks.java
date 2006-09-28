@@ -41,6 +41,44 @@ public abstract class IDebugEventCallbacks {
 	public static final int DEBUG_EVENT_CHANGE_ENGINE_STATE = 0x00000800;
 	public static final int DEBUG_EVENT_CHANGE_SYMBOL_STATE = 0x00001000;
 	
-	protected abstract int getInterestMask() throws HRESULTFailure;
+	protected int getInterestMask() throws HRESULTFailure {
+		return 0;
+	}
 	
+	// Execution status codes used for waiting, for returning current status
+	// and for event method return values.
+	public static final int DEBUG_STATUS_NO_CHANGE = 0;
+	public static final int DEBUG_STATUS_GO = 1;
+	public static final int DEBUG_STATUS_GO_HANDLED = 2;
+	public static final int DEBUG_STATUS_GO_NOT_HANDLED = 3;
+	public static final int DEBUG_STATUS_STEP_OVER = 4;
+	public static final int DEBUG_STATUS_STEP_INTO = 5;
+	public static final int DEBUG_STATUS_BREAK = 6;
+	public static final int DEBUG_STATUS_NO_DEBUGGEE = 7;
+	public static final int DEBUG_STATUS_STEP_BRANCH = 8;
+	public static final int DEBUG_STATUS_IGNORE_EVENT = 9;
+	public static final int DEBUG_STATUS_RESTART_REQUESTED = 10;
+	public static final int DEBUG_STATUS_REVERSE_GO = 11;
+	public static final int DEBUG_STATUS_REVERSE_STEP_BRANCH = 12;
+	public static final int DEBUG_STATUS_REVERSE_STEP_OVER = 13;
+	public static final int DEBUG_STATUS_REVERSE_STEP_INTO = 14;
+	
+	protected int createProcess(
+			long imageFileHandle,
+		    long handle,
+		    long baseOffset,
+		    int moduleSize,
+		    String moduleName,
+		    String imageName,
+		    int checkSum,
+		    int timeDateStamp,
+		    long initialThreadHandle,
+		    long threadDataOffset,
+		    long startOffset) {
+		return DEBUG_STATUS_NO_CHANGE;
+	}
+
+	protected int exitProcess(int exitCode) {
+		return DEBUG_STATUS_NO_CHANGE;
+	}
 }

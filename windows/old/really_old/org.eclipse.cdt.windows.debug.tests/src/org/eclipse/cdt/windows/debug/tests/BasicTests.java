@@ -1,6 +1,7 @@
 package org.eclipse.cdt.windows.debug.tests;
 
 import org.eclipse.cdt.windows.debug.core.DebugCreateProcessOptions;
+import org.eclipse.cdt.windows.debug.core.HRESULTFailure;
 import org.eclipse.cdt.windows.debug.core.IDebugClient;
 import org.eclipse.cdt.windows.debug.core.IDebugControl;
 
@@ -19,7 +20,13 @@ public class BasicTests extends TestCase {
 		debugClient.createProcess2(0, "C:\\cygwin\\bin\\ls", options, "C:\\cygwin", null);
 		// Event loop
 		while (true)
-			debugControl.waitForEvent(0, IDebugControl.INFINITE);
+			try {
+				debugControl.waitForEvent(0, IDebugControl.INFINITE);
+			} catch (HRESULTFailure e) {
+				if (e.getHR() == HRESULTFailure.E_UNEXPECTED)
+					// Could mean we're done
+					break;
+			}
 	}
 	
 }
