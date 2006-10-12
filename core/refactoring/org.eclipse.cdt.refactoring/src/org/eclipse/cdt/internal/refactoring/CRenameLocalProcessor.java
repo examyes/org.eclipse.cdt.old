@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2004-2005 Wind River Systems, Inc.
+ * Copyright (c) 2004, 2006 Wind River Systems, Inc.
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
  * which accompanies this distribution, and is available at 
@@ -10,12 +10,22 @@
  ******************************************************************************/ 
 package org.eclipse.cdt.internal.refactoring;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
 
-import org.eclipse.cdt.core.dom.ast.*;
-import org.eclipse.cdt.refactoring.*;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
+
+import org.eclipse.cdt.core.dom.ast.DOMException;
+import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
+import org.eclipse.cdt.core.dom.ast.IASTNode;
+import org.eclipse.cdt.core.dom.ast.IParameter;
+import org.eclipse.cdt.core.dom.ast.IScope;
+import org.eclipse.cdt.refactoring.CRefactoringMatch;
+import org.eclipse.cdt.refactoring.CRefactory;
+import org.eclipse.cdt.refactoring.ICRefactoringSearch;
+
+import org.eclipse.cdt.internal.core.dom.parser.ASTInternal;
 
 /**
  * Rename processor, setting up input page for a local rename.
@@ -48,7 +58,7 @@ public class CRenameLocalProcessor extends CRenameProcessorDelegate {
             IScope scope= argument.getScope();
             IASTNode node= null;
             try {
-                node = scope.getPhysicalNode();
+                node = ASTInternal.getPhysicalNodeOfScope(scope);
                 if (argument.getBinding() instanceof IParameter) {
                     node= node.getParent();
                 }

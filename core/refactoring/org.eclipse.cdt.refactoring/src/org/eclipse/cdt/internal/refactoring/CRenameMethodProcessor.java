@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2005 Wind River Systems, Inc.
+ * Copyright (c) 2005, 2006 Wind River Systems, Inc.
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
  * which accompanies this distribution, and is available at 
@@ -10,12 +10,22 @@
  ******************************************************************************/ 
 package org.eclipse.cdt.internal.refactoring;
 
-import org.eclipse.cdt.core.dom.ast.*;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
-import org.eclipse.cdt.refactoring.CRefactory;
-import org.eclipse.core.runtime.*;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
+
+import org.eclipse.cdt.core.dom.ast.DOMException;
+import org.eclipse.cdt.core.dom.ast.IASTCompositeTypeSpecifier;
+import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IASTNode;
+import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.IScope;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
+import org.eclipse.cdt.refactoring.CRefactory;
+
+import org.eclipse.cdt.internal.core.dom.parser.ASTInternal;
 
 /**
  * Rename processor for methods.
@@ -53,7 +63,7 @@ public class CRenameMethodProcessor extends CRenameGlobalProcessor {
         if (scope != null) {
             IASTNode node= null;
             try {
-                node = scope.getPhysicalNode();
+                node = ASTInternal.getPhysicalNodeOfScope(scope);
             } catch (DOMException e) {
                 getAstManager().handleDOMException(argument.getTranslationUnit(), e, result);
             }
