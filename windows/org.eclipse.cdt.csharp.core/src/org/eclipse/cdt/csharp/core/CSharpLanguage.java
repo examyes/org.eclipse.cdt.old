@@ -7,36 +7,24 @@ import org.eclipse.cdt.core.dom.ICodeReaderFactory;
 import org.eclipse.cdt.core.dom.ast.ASTCompletionNode;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.index.IIndex;
+import org.eclipse.cdt.core.model.AbstractLanguage;
 import org.eclipse.cdt.core.model.IContributedModelBuilder;
-import org.eclipse.cdt.core.model.ILanguage;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.core.model.IWorkingCopy;
-import org.eclipse.core.internal.runtime.AdapterManager;
+import org.eclipse.cdt.core.parser.CodeReader;
+import org.eclipse.cdt.core.parser.IScannerInfo;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.PlatformObject;
 
 /**
  * @author DSchaefer
  *
  */
-public class CSharpLanguage extends PlatformObject implements ILanguage {
+public class CSharpLanguage extends AbstractLanguage {
 
 	private static final String ID = Activator.PLUGIN_ID + ".cSharp";
 	
 	public IContributedModelBuilder createModelBuilder(ITranslationUnit tu) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public IASTTranslationUnit getASTTranslationUnit(ITranslationUnit file,
-			int style) throws CoreException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public IASTTranslationUnit getASTTranslationUnit(ITranslationUnit file,
-			ICodeReaderFactory codeReaderFactory, int style)
-			throws CoreException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -59,6 +47,11 @@ public class CSharpLanguage extends PlatformObject implements ILanguage {
 
 	public Object getAdapter(Class adapter) {
 		return super.getAdapter(adapter);
+	}
+
+	public IASTTranslationUnit getASTTranslationUnit(CodeReader reader, IScannerInfo scanInfo, ICodeReaderFactory fileCreator, IIndex index) throws CoreException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
