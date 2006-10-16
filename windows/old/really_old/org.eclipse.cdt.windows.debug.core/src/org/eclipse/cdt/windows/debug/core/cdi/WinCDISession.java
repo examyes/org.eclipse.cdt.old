@@ -28,6 +28,11 @@ public class WinCDISession implements ICDISession {
 
 	private Map<String, String> attributes = new HashMap<String, String>();
 	
+	// We only have on target, I think...
+	private WinCDITarget target = new WinCDITarget(this);
+	
+	private WinCDIEventManager eventManager = new WinCDIEventManager(this);
+	
 	public String getAttribute(String key) {
 		return attributes.get(key);
 	}
@@ -42,8 +47,7 @@ public class WinCDISession implements ICDISession {
 	}
 
 	public ICDIEventManager getEventManager() {
-		// TODO Auto-generated method stub
-		return null;
+		return eventManager;
 	}
 
 	public Process getSessionProcess() throws CDIException {
@@ -53,7 +57,7 @@ public class WinCDISession implements ICDISession {
 
 	public ICDITarget[] getTargets() {
 		// TODO create the targets
-		return new ICDITarget[0];
+		return new ICDITarget[] { target };
 	}
 
 	public void terminate() throws CDIException {
