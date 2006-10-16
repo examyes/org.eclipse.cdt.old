@@ -13,7 +13,6 @@
 #include <jni.h>
 
 #include "util.h"
-#include "HRESULTFailure.h"
 
 // Class IDebugControl
 
@@ -26,35 +25,27 @@ static IDebugControl4 * getObject(JNIEnv * env, jobject obj) {
 	return (IDebugControl4 *)p;
 }
 
-extern "C" JNIEXPORT jlong JNINAME(init)(JNIEnv * env, jobject obj) {
+extern "C" JNIEXPORT jint JNINAME(init)(JNIEnv * env, jobject obj) {
 	jclass cls = env->GetObjectClass(obj);
-	if (cls == NULL) {
-		throwHRESULT(env, E_FAIL, __FILE__, __LINE__);
-		return NULL;
-	}
+	if (cls == NULL)
+		return E_FAIL;
 	
 	pID = env->GetFieldID(cls, "p", "J");
-	if (pID == 0) {
-		throwHRESULT(env, E_FAIL, __FILE__, __LINE__);
-		return NULL;
-	}
+	if (pID == 0)
+		return E_FAIL;
 	
 	IDebugControl4 * debugControl;
 	HRESULT hr = DebugCreate(__uuidof(IDebugControl4), (void **)&debugControl);
-	if (hr != S_OK) {
-		throwHRESULT(env, hr, __FILE__, __LINE__);
-		return NULL;
-	}
+	if (FAILED(hr))
+		return hr;
 
-	return (jlong)debugControl;
+	env->SetLongField(obj, pID, (jlong)debugControl);
+	
+	return S_OK;
 }
 
 extern "C" JNIEXPORT jint JNINAME(waitForEvent)(JNIEnv * env, jobject obj,
 		jint flags, jint timeout) {
 	IDebugControl4 * debugControl = getObject(env, obj);
-	HRESULT hr = debugControl->WaitForEvent(flags, timeout);
-	if (FAILED(hr)) {
-		throwHRESULT(env, hr, __FILE__, __LINE__);
-	}
-	return hr;
+	return debugControl->WaitForEvent(flags, timeout);
 }

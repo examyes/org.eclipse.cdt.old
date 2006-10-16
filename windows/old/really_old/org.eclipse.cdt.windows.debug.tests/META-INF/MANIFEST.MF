@@ -9,5 +9,6 @@ Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.cdt.windows.debug.core,
- org.junit
+ org.junit,
+ org.eclipse.core.resources
 Eclipse-LazyStart: true

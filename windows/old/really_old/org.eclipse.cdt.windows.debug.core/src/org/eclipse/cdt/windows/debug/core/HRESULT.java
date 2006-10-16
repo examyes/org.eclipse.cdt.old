@@ -8,9 +8,21 @@
  * Contributors: 
  *     QNX Software Systems - Initial API and implementation
  **********************************************************************/
-#ifndef HRESULTFAILURE_H_
-#define HRESULTFAILURE_H_
 
-void throwHRESULT(JNIEnv * env, HRESULT hr, char * file, int line);
+package org.eclipse.cdt.windows.debug.core;
 
-#endif /*HRESULTFAILURE_H_*/
+/**
+ * @author Doug Schaefer
+ *
+ * Collection of static methods and constants for dealing with HRESULT
+ * return values.
+ */
+public abstract class HRESULT {
+	
+	public static final int S_OK = 0;
+	public static final int S_FALSE = 1;
+	public static final int E_UNEXPECTED = 0x8000FFFF;
+
+	public static native boolean FAILED(int hr);
+	
+}

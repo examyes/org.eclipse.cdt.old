@@ -12,13 +12,18 @@
 #include <dbgeng.h>
 #include <jni.h>
 
-#include "HRESULTFailure.h"
 #include "debugEventCallbacks.h"
 
 // Class IDebugEventCallbacks
 #define JNINAME(name) Java_org_eclipse_cdt_windows_debug_core_IDebugEventCallbacks_## name
 
 static JavaVM * vm;
+
+#define VMENV(env) JNIEnv * env; \
+	if (vm->GetEnv((void **)&env, JNI_VERSION_1_4) != JNI_OK) { \
+		fprintf(stderr, "DebugEventCallbacks: Failed to get env\n"); \
+		return E_FAIL; \
+	}
 
 static jfieldID pID;
 
@@ -33,55 +38,41 @@ DebugEventCallbacks * DebugEventCallbacks::getObject(JNIEnv * env, jobject obj) 
 	return (DebugEventCallbacks *)p;
 }
 
-extern "C" JNIEXPORT jlong JNINAME(init)(JNIEnv * env, jobject obj) {
-	if (env->GetJavaVM(&vm)) {
-		throwHRESULT(env, E_FAIL, __FILE__, __LINE__);
-		return NULL;
-	}		
+extern "C" JNIEXPORT jint JNINAME(init)(JNIEnv * env, jobject obj) {
+	if (env->GetJavaVM(&vm))
+		return E_FAIL;
 	
 	jclass cls = env->GetObjectClass(obj);
-	if (cls == NULL) {
-		throwHRESULT(env, E_FAIL, __FILE__, __LINE__);
-		return NULL;
-	}
+	if (cls == NULL)
+		return E_FAIL;
 	
 	pID = env->GetFieldID(cls, "p", "J");
-	if (pID == 0) {
-		throwHRESULT(env, E_FAIL, __FILE__, __LINE__);
-		return NULL;
-	}
+	if (pID == 0)
+		return E_FAIL;
 	
 	getInterestMaskID = env->GetMethodID(cls, "getInterestMask", "()I");
-	if (getInterestMaskID == 0) {
-		throwHRESULT(env, E_FAIL, __FILE__, __LINE__);
-		return NULL;
-	}
+	if (getInterestMaskID == 0)
+		return E_FAIL;
 	
 	createProcessID = env->GetMethodID(cls, "createProcess", "(JJJILjava/lang/String;Ljava/lang/String;IIJJJ)I");
-	if (createProcessID == 0) {
-		throwHRESULT(env, E_FAIL, __FILE__, __LINE__);
-		return NULL;
-	}
+	if (createProcessID == 0)
+		return E_FAIL;
 	
 	exitProcessID = env->GetMethodID(cls, "exitProcess", "(I)I");
-	if (exitProcessID == 0) {
-		throwHRESULT(env, E_FAIL, __FILE__, __LINE__);
-		return NULL;
-	}
+	if (exitProcessID == 0)
+		return E_FAIL;
 
 	createThreadID = env->GetMethodID(cls, "createThread", "(JJJ)I");
-	if (createThreadID == 0) {
-		throwHRESULT(env, E_FAIL, __FILE__, __LINE__);
-		return NULL;
-	}
+	if (createThreadID == 0)
+		return E_FAIL;
 		
 	exitThreadID = env->GetMethodID(cls, "exitThread", "(I)I");
-	if (exitThreadID == 0) {
-		throwHRESULT(env, E_FAIL, __FILE__, __LINE__);
-		return NULL;
-	}
+	if (exitThreadID == 0)
+		return E_FAIL;
 
-	return (jlong)new DebugEventCallbacks(env, obj);
+	env->SetLongField(obj, pID, (jlong)new DebugEventCallbacks(env, obj));
+	
+	return S_OK; 
 }
 
 DebugEventCallbacks::DebugEventCallbacks(JNIEnv * env, jobject obj)
@@ -102,16 +93,9 @@ ULONG __stdcall DebugEventCallbacks::Release() {
 	return 1;
 }
 
-static JNIEnv * getEnv() {
-}
-
 HRESULT __stdcall DebugEventCallbacks::GetInterestMask(ULONG * Mask) {
-	JNIEnv * env;
-	if (vm->GetEnv((void **)&env, JNI_VERSION_1_4) != JNI_OK) {
-		fprintf(stderr, "DebugEventCallbacks: Failed to get env\n");
-		return E_FAIL;
-	}
-
+	VMENV(env)
+	
 	*Mask = env->CallIntMethod(ref, getInterestMaskID);
 	return S_OK;
 }
@@ -128,11 +112,7 @@ HRESULT __stdcall DebugEventCallbacks::CreateProcess(
 		ULONG64 InitialThreadHandle,
 		ULONG64 ThreadDataOffset,
 		ULONG64 StartOffset) {
-	JNIEnv * env;
-	if (vm->GetEnv((void **)&env, JNI_VERSION_1_4) != JNI_OK) {
-		fprintf(stderr, "DebugEventCallbacks: Failed to get env\n");
-		return E_FAIL;
-	}
+	VMENV(env)
 	
 	jstring moduleName = env->NewString((const jchar *)ModuleName, wcslen(ModuleName));
 	jstring imageName = env->NewString((const jchar *)ImageName, wcslen(ImageName));
@@ -143,11 +123,7 @@ HRESULT __stdcall DebugEventCallbacks::CreateProcess(
 }
 
 HRESULT __stdcall DebugEventCallbacks::ExitProcess(ULONG ExitCode) {
-	JNIEnv * env;
-	if (vm->GetEnv((void **)&env, JNI_VERSION_1_4) != JNI_OK) {
-		fprintf(stderr, "DebugEventCallbacks: Failed to get env\n");
-		return E_FAIL;
-	}
+	VMENV(env)
 	
 	return env->CallIntMethod(ref, exitProcessID, ExitCode);
 }
@@ -156,21 +132,13 @@ HRESULT __stdcall DebugEventCallbacks::CreateThread(
 		ULONG64 Handle,
 		ULONG64 DataOffset,
 		ULONG64 StartOffset) {
-	JNIEnv * env;
-	if (vm->GetEnv((void **)&env, JNI_VERSION_1_4) != JNI_OK) {
-		fprintf(stderr, "DebugEventCallbacks: Failed to get env\n");
-		return E_FAIL;
-	}
+	VMENV(env)
 
 	return env->CallIntMethod(ref, createThreadID, Handle, DataOffset, StartOffset);
 }
 
 HRESULT __stdcall DebugEventCallbacks::ExitThread(ULONG ExitCode) {
-	JNIEnv * env;
-	if (vm->GetEnv((void **)&env, JNI_VERSION_1_4) != JNI_OK) {
-		fprintf(stderr, "DebugEventCallbacks: Failed to get env\n");
-		return E_FAIL;
-	}
+	VMENV(env)
 	
 	return env->CallIntMethod(ref, exitThreadID, ExitCode);
 }

@@ -11,8 +11,8 @@
 
 package org.eclipse.cdt.windows.debug.tests;
 
-import org.eclipse.cdt.windows.debug.core.HRESULTFailure;
 import org.eclipse.cdt.windows.debug.core.IDebugEventCallbacks;
+import org.eclipse.core.runtime.CoreException;
 
 /**
  * @author Doug Schaefer
@@ -20,8 +20,11 @@ import org.eclipse.cdt.windows.debug.core.IDebugEventCallbacks;
  */
 public class TestEventCallbacks extends IDebugEventCallbacks {
 
+	public TestEventCallbacks() throws CoreException {
+	}
+	
 	@Override
-	protected int getInterestMask() throws HRESULTFailure {
+	protected int getInterestMask() {
 		return DEBUG_EVENT_CREATE_PROCESS
 			 | DEBUG_EVENT_EXIT_PROCESS
 			 | DEBUG_EVENT_CREATE_THREAD

@@ -8,9 +8,12 @@
  * Contributors: 
  *     QNX Software Systems - Initial API and implementation
  **********************************************************************/
-#ifndef DEBUGCREATEPROCESSOPTIONS_H_
-#define DEBUGCREATEPROCESSOPTIONS_H_
+#include <windows.h>
+#include <dbgeng.h>
+#include <jni.h>
 
-jint getDebugCreateProcessOptions(JNIEnv * env, jobject obj, DEBUG_CREATE_PROCESS_OPTIONS & options);
+#define JNINAME(name) Java_org_eclipse_cdt_windows_debug_core_HRESULT_ ## name
 
-#endif /*DEBUGCREATEPROCESSOPTIONS_H_*/
+extern "C" JNIEXPORT jboolean JNINAME(FAILED)(JNIEnv * env, jclass cls, jint hr) {
+	return FAILED(hr) ? JNI_TRUE : JNI_FALSE;
+}

@@ -13,7 +13,6 @@
 #include <jni.h>
 
 #include "util.h"
-#include "HRESULTFailure.h"
 #include "debugCreateProcessOptions.h"
 #include "debugEventCallbacks.h"
 
@@ -28,66 +27,56 @@ static IDebugClient5 * getObject(JNIEnv * env, jobject obj) {
 	return (IDebugClient5 *)p;
 }
 
-extern "C" JNIEXPORT jlong JNINAME(init)(JNIEnv * env, jobject obj) {
+extern "C" JNIEXPORT jint JNINAME(init)(JNIEnv * env, jobject obj) {
 	// Initialize the field IDs
 	jclass cls = env->GetObjectClass(obj);
-	if (cls == NULL) {
-		throwHRESULT(env, E_FAIL, __FILE__, __LINE__);
-		return NULL;
-	}
+	if (cls == NULL)
+		return E_FAIL;
 	
 	pID = env->GetFieldID(cls, "p", "J");
-	if (pID == 0) {
-		throwHRESULT(env, E_FAIL, __FILE__, __LINE__);
-		return NULL;
-	}
+	if (pID == 0)
+		return E_FAIL;
 	
 	IDebugClient5 * debugClient;
 	HRESULT hr = DebugCreate(__uuidof(IDebugClient5), (void **)&debugClient);
-	if (hr != S_OK) {
-		throwHRESULT(env, hr, __FILE__, __LINE__);
-		return NULL;
-	}
+	if (FAILED(hr))
+		return hr;
 
-	return (jlong)debugClient;	
+	env->SetLongField(obj, pID, (jlong)debugClient);
+	
+	return S_OK;
 }
 
-extern "C" JNIEXPORT jstring JNINAME(getIdentity)(JNIEnv * env, jobject obj) {
+extern "C" JNIEXPORT jint JNINAME(getIdentity)(JNIEnv * env, jobject obj, jobjectArray identity) {
 	IDebugClient5 * debugClient = getObject(env, obj);
-	if (debugClient == NULL) {
-		throwHRESULT(env, E_FAIL, __FILE__, __LINE__);
-		return NULL;
-	}
+	if (debugClient == NULL)
+		return E_FAIL;
 	
 	ULONG size;
 	HRESULT hr = debugClient->GetIdentityWide(NULL, 0, &size);
-	if (FAILED(hr)) {
-		throwHRESULT(env, hr, __FILE__, __LINE__);
-		return NULL;
-	}
+	if (FAILED(hr))
+		return hr;
 	
 	if (size == 0)
-		return NULL;
+		return E_FAIL;
 	
 	wchar_t * str = new wchar_t[size];
 	hr = debugClient->GetIdentityWide(str, size, NULL);
 	delete str;
-	if (FAILED(hr)) {
-		throwHRESULT(env, hr, __FILE__, __LINE__);
-		return NULL;
-	}
+	if (FAILED(hr))
+		return hr;
 
-	return env->NewString((jchar *)str, size - 1);
+	env->SetObjectArrayElement(identity, 0, env->NewString((jchar *)str, size - 1));
+	
+	return S_OK;
 }
 
-extern "C" JNIEXPORT void JNINAME(createProcess2)(JNIEnv * env, jobject obj,
+extern "C" JNIEXPORT jint JNINAME(createProcess2)(JNIEnv * env, jobject obj,
 		jlong server, jstring commandLine, jobject options, jstring initialDirectory,
 		jobject environment) {
 	IDebugClient5 * debugClient = getObject(env, obj);
-	if (debugClient == NULL) {
-		throwHRESULT(env, E_FAIL, __FILE__, __LINE__);
-		return;
-	}
+	if (debugClient == NULL)
+		return E_FAIL;
 	
 	wchar_t * _commandLine = getString(env, commandLine);
 	
@@ -103,15 +92,12 @@ extern "C" JNIEXPORT void JNINAME(createProcess2)(JNIEnv * env, jobject obj,
 	delete _commandLine;
 	delete _initialDirectory;
 	
-	if (FAILED(hr))
-		throwHRESULT(env, hr, __FILE__, __LINE__);
+	return hr;
 }
 
-extern "C" JNIEXPORT void JNINAME(setEventCallbacks)(JNIEnv * env, jobject obj,
+extern "C" JNIEXPORT jint JNINAME(setEventCallbacks)(JNIEnv * env, jobject obj,
 		jobject callbacks) {
 	IDebugClient5 * debugClient = getObject(env, obj);
 	DebugEventCallbacks * _callbacks = DebugEventCallbacks::getObject(env, callbacks);
-	HRESULT hr = debugClient->SetEventCallbacksWide(_callbacks);
-	if (FAILED(hr))
-		throwHRESULT(env, hr, __FILE__, __LINE__);
+	return debugClient->SetEventCallbacksWide(_callbacks);
 }

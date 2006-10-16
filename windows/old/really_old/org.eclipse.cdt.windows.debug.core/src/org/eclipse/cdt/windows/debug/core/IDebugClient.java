@@ -13,6 +13,10 @@ package org.eclipse.cdt.windows.debug.core;
 
 import java.util.Map;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+
 /**
  * @author Doug Schaefer
  * 
@@ -24,19 +28,21 @@ public class IDebugClient {
 	@SuppressWarnings("unused")
 	private long p;
 	
-	private native long init() throws HRESULTFailure;
+	private native int init();
 
-	public IDebugClient() throws HRESULTFailure {
-		p = init();
+	public IDebugClient() throws CoreException {
+		if (HRESULT.FAILED(init()))
+			throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID,
+					"Failed to init"));
 	}
 	
-	public native String getIdentity();
+	public native int getIdentity(String[] identity);
 
-	public native void createProcess2(long server, String commandLine,
+	public native int createProcess2(long server, String commandLine,
 			DebugCreateProcessOptions options,
 			String initialDirectory,
-			Map<String, String> environment) throws HRESULTFailure;
+			Map<String, String> environment);
 	
-	public native void setEventCallbacks(IDebugEventCallbacks callbacks) throws HRESULTFailure;
+	public native int setEventCallbacks(IDebugEventCallbacks callbacks);
 	
 }

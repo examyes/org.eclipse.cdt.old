@@ -1,5 +1,10 @@
 package org.eclipse.cdt.windows.debug.tests;
 
+import java.io.IOException;
+import java.net.URL;
+
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -45,6 +50,18 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public static Activator getDefault() {
 		return plugin;
+	}
+
+	public String getFileNameInPlugin(IPath path) throws IOException {
+		URL[] urls = FileLocator.findEntries(getBundle(), path);
+		if (urls.length == 0)
+			return null;
+		URL url = FileLocator.toFileURL(urls[0]);
+		String filename = url.getPath();
+		if (filename.matches("/.:.*"))
+			return filename.substring(1);
+		else
+			return filename;
 	}
 
 }

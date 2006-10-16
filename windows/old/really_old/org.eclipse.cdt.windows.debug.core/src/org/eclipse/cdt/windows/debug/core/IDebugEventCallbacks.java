@@ -11,6 +11,10 @@
 
 package org.eclipse.cdt.windows.debug.core;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+
 /**
  * @author Doug Schaefer
  *
@@ -20,10 +24,12 @@ public abstract class IDebugEventCallbacks {
 	@SuppressWarnings("unused")
 	private long p;
 	
-	private native long init();
+	private native int init();
 
-	protected IDebugEventCallbacks() {
-		p = init();
+	protected IDebugEventCallbacks() throws CoreException {
+		if (HRESULT.FAILED(init()))
+			throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID,
+					"Failed to init"));
 	}
 
 	//	 Interest mask bits.
@@ -41,7 +47,7 @@ public abstract class IDebugEventCallbacks {
 	public static final int DEBUG_EVENT_CHANGE_ENGINE_STATE = 0x00000800;
 	public static final int DEBUG_EVENT_CHANGE_SYMBOL_STATE = 0x00001000;
 	
-	protected int getInterestMask() throws HRESULTFailure {
+	protected int getInterestMask() {
 		return 0;
 	}
 	

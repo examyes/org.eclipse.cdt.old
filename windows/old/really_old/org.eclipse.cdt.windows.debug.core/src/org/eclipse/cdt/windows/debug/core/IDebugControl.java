@@ -11,6 +11,10 @@
 
 package org.eclipse.cdt.windows.debug.core;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+
 /**
  * @author Doug Schaefer
  *
@@ -20,14 +24,16 @@ public class IDebugControl {
 	@SuppressWarnings("unused")
 	private long p;
 	
-	private native long init() throws HRESULTFailure;
+	private native int init();
 
-	public IDebugControl() throws HRESULTFailure {
-		p = init();
+	public IDebugControl() throws CoreException {
+		if (HRESULT.FAILED(init()))
+				throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID,
+						"Failed to init"));
 	}
 	
 	public static final int INFINITE = 0xffffffff;
 
-	public native int waitForEvent(int flags, int timeout) throws HRESULTFailure;
+	public native int waitForEvent(int flags, int timeout);
 	
 }

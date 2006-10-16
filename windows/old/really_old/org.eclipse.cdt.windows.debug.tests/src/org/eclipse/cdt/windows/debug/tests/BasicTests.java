@@ -1,11 +1,12 @@
 package org.eclipse.cdt.windows.debug.tests;
 
+import junit.framework.TestCase;
+
 import org.eclipse.cdt.windows.debug.core.DebugCreateProcessOptions;
-import org.eclipse.cdt.windows.debug.core.HRESULTFailure;
+import org.eclipse.cdt.windows.debug.core.HRESULT;
 import org.eclipse.cdt.windows.debug.core.IDebugClient;
 import org.eclipse.cdt.windows.debug.core.IDebugControl;
-
-import junit.framework.TestCase;
+import org.eclipse.core.runtime.Path;
 
 public class BasicTests extends TestCase {
 
@@ -13,20 +14,22 @@ public class BasicTests extends TestCase {
 		IDebugClient debugClient = new IDebugClient();
 		IDebugControl debugControl = new IDebugControl();
 		// Register callbacks
-		debugClient.setEventCallbacks(new TestEventCallbacks());
+		assertFalse(HRESULT.FAILED(debugClient.setEventCallbacks(new TestEventCallbacks())));
 		// Create Process
 		DebugCreateProcessOptions options = new DebugCreateProcessOptions();
 		options.setCreateFlags(DebugCreateProcessOptions.DEBUG_ONLY_THIS_PROCESS);
-		debugClient.createProcess2(0, "C:\\cygwin\\bin\\ls", options, "C:\\cygwin", null);
+		
+		String dir = Activator.getDefault().getFileNameInPlugin(new Path("resources"));
+		String app = dir + "/testApp.exe";
+		assertNotNull(dir);
+		assertFalse(HRESULT.FAILED(debugClient.createProcess2(0, app, options, dir, null)));
 		// Event loop
-		while (true)
-			try {
-				debugControl.waitForEvent(0, IDebugControl.INFINITE);
-			} catch (HRESULTFailure e) {
-				if (e.getHR() == HRESULTFailure.E_UNEXPECTED)
-					// Could mean we're done
-					break;
-			}
+		while (true) {
+			int hr = debugControl.waitForEvent(0, IDebugControl.INFINITE);
+			if (hr == HRESULT.E_UNEXPECTED)
+				break;
+			assertFalse(HRESULT.FAILED(hr));
+		}
 	}
 	
 }
