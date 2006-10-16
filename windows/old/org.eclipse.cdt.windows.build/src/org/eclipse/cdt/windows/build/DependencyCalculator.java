@@ -52,31 +52,7 @@ public class DependencyCalculator implements IManagedDependencyCalculator {
 	}
 
 	public IPath[] getDependencies() {
-		if (dependencies == null) {
-			if (resource != null) {
-				ICProject project = CoreModel.getDefault().create(resource.getProject());
-				try {
-					PDOM pdom = (PDOM)CCorePlugin.getPDOMManager().getPDOM(project);
-					PDOMFile file = pdom.getFile(resource.getLocation());
-					if (file != null) {
-						PDOMFile[] includes = file.getAllIncludes();
-						
-						List<IPath> list = new ArrayList<IPath>();
-						for (int i = 0; i < includes.length; ++i)
-							list.add(new Path(includes[i].getFileName().getString()));
-						
-						dependencies = list.toArray(new IPath[list.size()]);
-					} else
-						dependencies = new IPath[0];
-				} catch (CoreException e) {
-					Activator.getDefault().getLog().log(e.getStatus());
-					dependencies = new IPath[0];
-				}
-			} else
-				dependencies = new IPath[0];
-		}
-		
-		return dependencies;
+		return new IPath[0];
 	}
 
 	public IBuildObject getBuildContext() {
