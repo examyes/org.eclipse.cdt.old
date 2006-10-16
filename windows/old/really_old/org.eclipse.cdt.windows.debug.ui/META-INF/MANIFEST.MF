@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Ui Plug-in
+Bundle-SymbolicName: org.eclipse.cdt.windows.debug.ui
+Bundle-Version: 1.0.0
+Bundle-Activator: org.eclipse.cdt.windows.debug.ui.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.cdt.debug.core,
+ org.eclipse.cdt.debug.ui
+Eclipse-LazyStart: true

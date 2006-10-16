@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.cdt.debug.core.CDebugger">
+      <debugger
+            class="org.eclipse.cdt.windows.debug.core.cdi.WinDebugger"
+            cpu="native"
+            id="org.eclipse.cdt.windows.debug.core.debugger"
+            modes="run"
+            name="Windows Debugger"
+            platform="win32">
+      </debugger>
+   </extension>
+
+</plugin>
