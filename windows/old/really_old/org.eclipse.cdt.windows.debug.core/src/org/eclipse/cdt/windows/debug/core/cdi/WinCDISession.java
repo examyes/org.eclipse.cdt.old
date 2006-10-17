@@ -11,6 +11,7 @@
 
 package org.eclipse.cdt.windows.debug.core.cdi;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +20,8 @@ import org.eclipse.cdt.debug.core.cdi.ICDIEventManager;
 import org.eclipse.cdt.debug.core.cdi.ICDISession;
 import org.eclipse.cdt.debug.core.cdi.ICDISessionConfiguration;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.debug.core.ILaunch;
 
 /**
  * @author Doug Schaefer
@@ -29,10 +32,14 @@ public class WinCDISession implements ICDISession {
 	private Map<String, String> attributes = new HashMap<String, String>();
 	
 	// We only have on target, I think...
-	private WinCDITarget target = new WinCDITarget(this);
+	private final WinCDITarget target;
 	
 	private WinCDIEventManager eventManager = new WinCDIEventManager(this);
 	
+	public WinCDISession(ILaunch launch, File executable) throws CoreException {
+		target = new WinCDITarget(this, launch, executable);
+	}
+
 	public String getAttribute(String key) {
 		return attributes.get(key);
 	}

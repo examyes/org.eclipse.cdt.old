@@ -12,10 +12,12 @@
 package org.eclipse.cdt.windows.debug.core.cdi;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.eclipse.cdt.core.IBinaryParser.IBinaryObject;
 import org.eclipse.cdt.debug.core.ICDIDebugger2;
 import org.eclipse.cdt.debug.core.cdi.ICDISession;
+import org.eclipse.cdt.windows.debug.core.Activator;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
@@ -29,7 +31,12 @@ public class WinDebugger implements ICDIDebugger2 {
 	public ICDISession createSession(ILaunch launch, File executable,
 			IProgressMonitor monitor) throws CoreException {
 		// TODO Auto-generated method stub
-		return new WinCDISession();
+		try {
+			return new WinCDISession(launch, executable);
+		} catch (CoreException e) {
+			Activator.getDefault().getLog().log(e.getStatus());
+			return null;
+		}
 	}
 
 	public ICDISession createDebuggerSession(ILaunch launch, IBinaryObject exe,

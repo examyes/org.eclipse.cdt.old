@@ -11,10 +11,15 @@
 
 package org.eclipse.cdt.windows.debug.core.cdi;
 
+import java.io.File;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.eclipse.cdt.debug.core.ICDTLaunchConfigurationConstants;
 import org.eclipse.cdt.debug.core.cdi.CDIException;
 import org.eclipse.cdt.debug.core.cdi.ICDIAddressLocation;
 import org.eclipse.cdt.debug.core.cdi.ICDICondition;
@@ -44,6 +49,13 @@ import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITargetConfiguration;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIThread;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIWatchpoint;
+import org.eclipse.cdt.windows.debug.core.Activator;
+import org.eclipse.cdt.windows.debug.core.DebugEngine;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.debug.core.ILaunch;
+import org.eclipse.debug.core.ILaunchConfiguration;
 
 /**
  * @author Doug Schaefer
@@ -60,8 +72,23 @@ public class WinCDITarget implements ICDITarget {
 	
 	private List<ICDIBreakpoint> breakpoints = new ArrayList<ICDIBreakpoint>();
 	
-	public WinCDITarget(WinCDISession session) {
+	private final DebugEngine debugEngine;
+	
+	public WinCDITarget(WinCDISession session, ILaunch launch,
+			File executable) throws CoreException {
 		this.session = session;
+		String commandLine;
+		try {
+			commandLine = executable.getCanonicalPath();
+		} catch (IOException e) {
+			throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID,
+					"Failed to get executable path", e));
+		}
+		ILaunchConfiguration config = launch.getLaunchConfiguration();
+		String initialDirectory = config.getAttribute(ICDTLaunchConfigurationConstants.ATTR_WORKING_DIRECTORY, ".");
+		Map<String, String> environment = new HashMap<String, String>();
+		debugEngine = new DebugEngine(commandLine, initialDirectory, environment);
+		debugEngine.schedule();
 	}
 	
 	public ICDIAddressLocation createAddressLocation(BigInteger address) {
