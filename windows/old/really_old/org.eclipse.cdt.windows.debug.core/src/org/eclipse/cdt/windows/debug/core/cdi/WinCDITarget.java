@@ -12,6 +12,8 @@
 package org.eclipse.cdt.windows.debug.core.cdi;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.cdt.debug.core.cdi.CDIException;
 import org.eclipse.cdt.debug.core.cdi.ICDIAddressLocation;
@@ -51,10 +53,12 @@ public class WinCDITarget implements ICDITarget {
 
 	private final WinCDISession session;
 	private final WinCDIRuntimeOptions runtimeOptions = new WinCDIRuntimeOptions(this);
-	private final WinCDITargetConfiguration config = new WinCDITargetConfiguration();
+	private final WinCDITargetConfiguration config = new WinCDITargetConfiguration(this);
 	
 	// There is a default thread that we don't get an event when created
 	private WinCDIThread[] threads = new WinCDIThread[] { new WinCDIThread(this) };
+	
+	private List<ICDIBreakpoint> breakpoints = new ArrayList<ICDIBreakpoint>();
 	
 	public WinCDITarget(WinCDISession session) {
 		this.session = session;
@@ -78,8 +82,7 @@ public class WinCDITarget implements ICDITarget {
 
 	public ICDIFunctionLocation createFunctionLocation(String file,
 			String function) {
-		// TODO Auto-generated method stub
-		return null;
+		return new WinCDIFunctionLocation(file, function);
 	}
 
 	public ICDIGlobalVariable createGlobalVariable(
@@ -201,7 +204,7 @@ public class WinCDITarget implements ICDITarget {
 
 	public ICDIThread getCurrentThread() throws CDIException {
 		// TODO Auto-generated method stub
-		return null;
+		return threads[0];
 	}
 
 	public ICDIThread[] getThreads() throws CDIException {
@@ -220,8 +223,7 @@ public class WinCDITarget implements ICDITarget {
 	}
 
 	public ICDIBreakpoint[] getBreakpoints() throws CDIException {
-		// TODO Auto-generated method stub
-		return null;
+		return breakpoints.toArray(new ICDIBreakpoint[breakpoints.size()]);
 	}
 
 	public ICDIAddressBreakpoint setAddressBreakpoint(int type,
@@ -240,8 +242,10 @@ public class WinCDITarget implements ICDITarget {
 	public ICDIFunctionBreakpoint setFunctionBreakpoint(int type,
 			ICDIFunctionLocation location, ICDICondition condition,
 			boolean deferred) throws CDIException {
-		// TODO Auto-generated method stub
-		return null;
+		WinCDIFunctionBreakpoint bp
+			= new WinCDIFunctionBreakpoint(this, type, location, condition, deferred);
+		breakpoints.add(bp);
+		return bp;
 	}
 
 	public ICDILineBreakpoint setLineBreakpoint(int type,
@@ -299,7 +303,7 @@ public class WinCDITarget implements ICDITarget {
 
 	public boolean isSuspended() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	public void suspend() throws CDIException {

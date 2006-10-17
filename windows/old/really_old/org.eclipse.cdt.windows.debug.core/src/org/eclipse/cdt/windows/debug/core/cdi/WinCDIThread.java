@@ -38,9 +38,8 @@ public class WinCDIThread implements ICDIThread {
 		return null;
 	}
 
-	public boolean equals(ICDIThread thead) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean equals(ICDIThread thread) {
+		return super.equals(thread);
 	}
 
 	public int getStackFrameCount() throws CDIException {
@@ -157,7 +156,7 @@ public class WinCDIThread implements ICDIThread {
 
 	public boolean isSuspended() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	public void suspend() throws CDIException {

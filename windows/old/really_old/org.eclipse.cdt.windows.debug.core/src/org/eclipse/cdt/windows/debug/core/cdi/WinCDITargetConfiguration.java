@@ -20,9 +20,14 @@ import org.eclipse.cdt.debug.core.cdi.model.ICDITargetConfiguration;
  */
 public class WinCDITargetConfiguration implements ICDITargetConfiguration {
 
+	private final WinCDITarget target;
+	
+	public WinCDITargetConfiguration(WinCDITarget target) {
+		this.target = target;
+	}
+	
 	public boolean supportsBreakpoints() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	public boolean supportsDisconnect() {
@@ -66,8 +71,7 @@ public class WinCDITargetConfiguration implements ICDITargetConfiguration {
 	}
 
 	public boolean supportsResume() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	public boolean supportsSharedLibrary() {
@@ -76,23 +80,19 @@ public class WinCDITargetConfiguration implements ICDITargetConfiguration {
 	}
 
 	public boolean supportsStepping() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	public boolean supportsSuspend() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	public boolean supportsTerminate() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	public ICDITarget getTarget() {
-		// TODO Auto-generated method stub
-		return null;
+		return target;
 	}
 
 }
