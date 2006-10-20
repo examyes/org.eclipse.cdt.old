@@ -17,6 +17,7 @@ import org.eclipse.cdt.debug.core.cdi.ICDIFunctionLocation;
 import org.eclipse.cdt.debug.core.cdi.ICDILocator;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIFunctionBreakpoint;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
+import org.eclipse.cdt.windows.debug.core.IDebugBreakpoint;
 
 /**
  * @author Doug Schaefer
@@ -28,18 +29,23 @@ public class WinCDIFunctionBreakpoint implements ICDIFunctionBreakpoint {
 	private final int type;
 	private final ICDIFunctionLocation location;
 	private ICDICondition condition;
-	private final boolean deferred;
 	
-	private boolean enabled = false;
+	private boolean enabled = true;
+	
+	private IDebugBreakpoint bp;
 	
 	public WinCDIFunctionBreakpoint(WinCDITarget target, int type,
 			ICDIFunctionLocation location, ICDICondition condition,
-			boolean deferred){
+			boolean deferred) {
 		this.target = target;
 		this.type = type;
 		this.location = location;
 		this.condition = condition;
-		this.deferred = deferred;
+		// deferred doesn't seem to matter
+	}
+
+	public void setDebugBreakpoint(IDebugBreakpoint bp) {
+		this.bp = bp;
 	}
 	
 	public ICDILocator getLocator() {

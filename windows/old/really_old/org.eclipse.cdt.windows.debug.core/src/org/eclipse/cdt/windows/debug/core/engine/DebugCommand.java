@@ -9,22 +9,18 @@
  *     QNX Software Systems - Initial API and implementation
  **********************************************************************/
 
-package org.eclipse.cdt.windows.debug.core;
+package org.eclipse.cdt.windows.debug.core.engine;
 
 /**
  * @author Doug Schaefer
  *
- * Collection of static methods and constants for dealing with HRESULT
- * return values.
  */
-public abstract class HRESULT {
-	
-	public static final int S_OK = 0;
-	public static final int S_FALSE = 1;
-	public static final int E_UNEXPECTED = 0x8000FFFF;
+public abstract class DebugCommand {
 
-	public static native boolean FAILED(int hr);
-
-	public static native String getMessage(int hr);
+	/**
+	 * Run the command
+	 * @return HRESULT of command
+	 */
+	public abstract int run(DebugEngine engine);
 	
 }

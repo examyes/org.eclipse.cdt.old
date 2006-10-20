@@ -13,6 +13,7 @@
 #include <jni.h>
 
 #include "debugEventCallbacks.h"
+#include "debugBreakpoint.h"
 
 // Class IDebugEventCallbacks
 #define JNINAME(name) Java_org_eclipse_cdt_windows_debug_core_IDebugEventCallbacks_## name
@@ -32,6 +33,7 @@ static jmethodID createProcessID;
 static jmethodID exitProcessID;
 static jmethodID createThreadID;
 static jmethodID exitThreadID;
+static jmethodID breakpointID;
 
 DebugEventCallbacks * DebugEventCallbacks::getObject(JNIEnv * env, jobject obj) {
 	jlong p = env->GetLongField(obj, pID);
@@ -70,6 +72,10 @@ extern "C" JNIEXPORT jint JNINAME(init)(JNIEnv * env, jobject obj) {
 	if (exitThreadID == 0)
 		return E_FAIL;
 
+	breakpointID = env->GetMethodID(cls, "breakpoint", "(Lorg/eclipse/cdt/windows/debug/core/IDebugBreakpoint;)I");
+	if (breakpointID == 0)
+		return E_FAIL;
+	
 	env->SetLongField(obj, pID, (jlong)new DebugEventCallbacks(env, obj));
 	
 	return S_OK; 
@@ -113,7 +119,7 @@ HRESULT __stdcall DebugEventCallbacks::CreateProcess(
 		ULONG64 ThreadDataOffset,
 		ULONG64 StartOffset) {
 	VMENV(env)
-	
+
 	jstring moduleName = env->NewString((const jchar *)ModuleName, wcslen(ModuleName));
 	jstring imageName = env->NewString((const jchar *)ImageName, wcslen(ImageName));
 	
@@ -141,4 +147,11 @@ HRESULT __stdcall DebugEventCallbacks::ExitThread(ULONG ExitCode) {
 	VMENV(env)
 	
 	return env->CallIntMethod(ref, exitThreadID, ExitCode);
+}
+
+HRESULT __stdcall DebugEventCallbacks::Breakpoint(IDebugBreakpoint2 * Bp) {
+	VMENV(env)
+	
+	jobject bpobj = createBreakpoint(env, Bp);
+	return env->CallIntMethod(ref, breakpointID, bpobj);
 }

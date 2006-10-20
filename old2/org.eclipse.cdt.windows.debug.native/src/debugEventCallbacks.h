@@ -51,6 +51,8 @@ public:
 
 	virtual HRESULT __stdcall ExitThread(ULONG ExitCode);
 
+	virtual HRESULT __stdcall Breakpoint(IDebugBreakpoint2 * Bp);
+	
 };
 
 #endif /*DEBUGEVENTCALLBACKS_H_*/

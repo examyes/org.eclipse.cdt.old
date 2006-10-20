@@ -99,4 +99,8 @@ public abstract class IDebugEventCallbacks {
 		return DEBUG_STATUS_NO_CHANGE;
 	}
 	
+	protected int breakpoint(IDebugBreakpoint bp) {
+		return DEBUG_STATUS_NO_CHANGE;
+	}
+
 }

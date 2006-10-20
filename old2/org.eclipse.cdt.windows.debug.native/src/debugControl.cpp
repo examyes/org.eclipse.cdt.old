@@ -13,6 +13,7 @@
 #include <jni.h>
 
 #include "util.h"
+#include "debugBreakpoint.h"
 
 // Class IDebugControl
 
@@ -48,4 +49,18 @@ extern "C" JNIEXPORT jint JNINAME(waitForEvent)(JNIEnv * env, jobject obj,
 		jint flags, jint timeout) {
 	IDebugControl4 * debugControl = getObject(env, obj);
 	return debugControl->WaitForEvent(flags, timeout);
+}
+
+extern "C" JNIEXPORT jint JNINAME(addBreakpoint)(JNIEnv * env, jobject obj,
+		jint type, jint desiredId, jobjectArray bp) {
+	IDebugControl4 * debugControl = getObject(env, obj);
+	IDebugBreakpoint2 * bpcom;
+	HRESULT hr = debugControl->AddBreakpoint2(type, desiredId, &bpcom);
+	if (FAILED(hr))
+		return hr;
+	
+	jobject bpobj = createBreakpoint(env, bpcom);
+	env->SetObjectArrayElement(bp, 0, bpobj);
+	
+	return S_OK;
 }

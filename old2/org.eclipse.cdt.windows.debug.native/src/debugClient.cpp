@@ -57,16 +57,14 @@ extern "C" JNIEXPORT jint JNINAME(getIdentity)(JNIEnv * env, jobject obj, jobjec
 	if (FAILED(hr))
 		return hr;
 	
-	if (size == 0)
-		return E_FAIL;
-	
 	wchar_t * str = new wchar_t[size];
 	hr = debugClient->GetIdentityWide(str, size, NULL);
-	delete str;
-	if (FAILED(hr))
+	if (FAILED(hr)) {
+		delete str;
 		return hr;
-
+	}
 	env->SetObjectArrayElement(identity, 0, env->NewString((jchar *)str, size - 1));
+	delete str;
 	
 	return S_OK;
 }

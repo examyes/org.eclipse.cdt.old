@@ -50,7 +50,12 @@ import org.eclipse.cdt.debug.core.cdi.model.ICDITargetConfiguration;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIThread;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIWatchpoint;
 import org.eclipse.cdt.windows.debug.core.Activator;
-import org.eclipse.cdt.windows.debug.core.DebugEngine;
+import org.eclipse.cdt.windows.debug.core.HRESULT;
+import org.eclipse.cdt.windows.debug.core.IDebugBreakpoint;
+import org.eclipse.cdt.windows.debug.core.IDebugControl;
+import org.eclipse.cdt.windows.debug.core.engine.DebugEngine;
+import org.eclipse.cdt.windows.debug.core.engine.ResumeCommand;
+import org.eclipse.cdt.windows.debug.core.engine.SetBreakpointCommand;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -89,6 +94,10 @@ public class WinCDITarget implements ICDITarget {
 		Map<String, String> environment = new HashMap<String, String>();
 		debugEngine = new DebugEngine(commandLine, initialDirectory, environment);
 		debugEngine.schedule();
+	}
+	
+	public DebugEngine getDebugEngine() {
+		return debugEngine;
 	}
 	
 	public ICDIAddressLocation createAddressLocation(BigInteger address) {
@@ -185,8 +194,7 @@ public class WinCDITarget implements ICDITarget {
 	}
 
 	public void resume() throws CDIException {
-		// TODO Auto-generated method stub
-
+		debugEngine.scheduleCommand(new ResumeCommand());
 	}
 
 	public void runUntil(ICDILocation location) throws CDIException {
@@ -269,8 +277,17 @@ public class WinCDITarget implements ICDITarget {
 	public ICDIFunctionBreakpoint setFunctionBreakpoint(int type,
 			ICDIFunctionLocation location, ICDICondition condition,
 			boolean deferred) throws CDIException {
-		WinCDIFunctionBreakpoint bp
+		final WinCDIFunctionBreakpoint bp
 			= new WinCDIFunctionBreakpoint(this, type, location, condition, deferred);
+		debugEngine.scheduleCommand(new SetBreakpointCommand(location.getFunction()) {
+			@Override
+			public int run(DebugEngine engine) {
+				int hr = super.run(engine);
+				if (!HRESULT.FAILED(hr))
+					bp.setDebugBreakpoint(getBreakpoint());
+				return hr;
+			}
+		});
 		breakpoints.add(bp);
 		return bp;
 	}
@@ -314,8 +331,8 @@ public class WinCDITarget implements ICDITarget {
 	}
 
 	public void resume(boolean passSignal) throws CDIException {
-		// TODO Auto-generated method stub
-
+		// No signals here...
+		resume();
 	}
 
 	public void resume(ICDILocation location) throws CDIException {

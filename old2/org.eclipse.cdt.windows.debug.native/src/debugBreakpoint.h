@@ -1,3 +1,6 @@
+#ifndef DEBUGBREAKPOINT_H_
+#define DEBUGBREAKPOINT_H_
+
 /**********************************************************************
  * Copyright (c) 2006 QNX Software Systems and others.
  * All rights reserved. This program and the accompanying materials
@@ -9,22 +12,6 @@
  *     QNX Software Systems - Initial API and implementation
  **********************************************************************/
 
-package org.eclipse.cdt.windows.debug.core;
+jobject createBreakpoint(JNIEnv * env, IDebugBreakpoint2 * bp);
 
-/**
- * @author Doug Schaefer
- *
- * Collection of static methods and constants for dealing with HRESULT
- * return values.
- */
-public abstract class HRESULT {
-	
-	public static final int S_OK = 0;
-	public static final int S_FALSE = 1;
-	public static final int E_UNEXPECTED = 0x8000FFFF;
-
-	public static native boolean FAILED(int hr);
-
-	public static native String getMessage(int hr);
-	
-}
+#endif /*DEBUGBREAKPOINT_H_*/

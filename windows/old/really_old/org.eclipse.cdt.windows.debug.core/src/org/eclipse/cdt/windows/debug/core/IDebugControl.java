@@ -35,5 +35,12 @@ public class IDebugControl {
 	public static final int INFINITE = 0xffffffff;
 
 	public native int waitForEvent(int flags, int timeout);
+
+	public static final int DEBUG_BREAKPOINT_CODE = 0;
+	public static final int DEBUG_BREAKPOINT_DATA = 1;
+	public static final int DEBUG_ANY_ID = 0xffffffff;
+	
+	public native int addBreakpoint(int type, int desiredId,
+			IDebugBreakpoint[] bp);
 	
 }

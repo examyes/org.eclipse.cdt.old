@@ -12,7 +12,6 @@
 package org.eclipse.cdt.windows.debug.core.cdi;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.eclipse.cdt.core.IBinaryParser.IBinaryObject;
 import org.eclipse.cdt.debug.core.ICDIDebugger2;
