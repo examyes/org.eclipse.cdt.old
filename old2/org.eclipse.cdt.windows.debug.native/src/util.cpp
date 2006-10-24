@@ -31,3 +31,49 @@ void checkNull(JNIEnv * env, void * ptr) {
 	jobject npe = env->NewObject(npecls, cons);
 	throw npe;
 }
+
+static jfieldID stringID = NULL;
+
+void setString(JNIEnv * env, jobject obj, wchar_t * string) {
+	if (stringID == NULL) {
+		stringID = env->GetFieldID(env->GetObjectClass(obj), "string", "Ljava/lang/String;");
+		checkNull(env, stringID);
+	}
+	
+	env->SetObjectField(obj, stringID, env->NewString((jchar *)string, wcslen(string)));
+}
+
+static jfieldID longID = NULL;
+
+void setLong(JNIEnv * env, jobject obj, jlong l) {
+	if (longID == NULL) {
+		longID = env->GetFieldID(env->GetObjectClass(obj), "l", "J");
+		checkNull(env, longID);
+	}
+	
+	env->SetLongField(obj, longID, l);
+}
+
+static jfieldID intID = NULL;
+
+void setInt(JNIEnv * env, jobject obj, jint i) {
+	if (intID == NULL) {
+		intID = env->GetFieldID(env->GetObjectClass(obj), "i", "I");
+		checkNull(env, intID);
+	}
+	
+	env->SetIntField(obj, intID, i);
+}
+
+static jfieldID intArrayID = NULL;
+
+void setIntArray(JNIEnv * env, jobject obj, jint * i, int count) {
+	if (intArrayID == NULL) {
+		intArrayID = env->GetFieldID(env->GetObjectClass(obj), "ints", "[I");
+		checkNull(env, intArrayID);
+	}
+	
+	jintArray intArray = env->NewIntArray(count);
+	env->SetIntArrayRegion(intArray, 0, count, i);
+	env->SetObjectField(obj, intArrayID, intArray);
+}

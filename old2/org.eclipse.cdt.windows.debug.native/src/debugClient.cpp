@@ -20,6 +20,10 @@
 // Class IDebugClient
 
 #define JNINAME(name) Java_org_eclipse_cdt_windows_debug_core_IDebugClient_ ## name
+#define JNISTDMETHOD(name, ...) extern "C" JNIEXPORT jint JNINAME(name)(JNIEnv * env, jobject obj, __VA_ARGS__ ) { \
+	try { IDebugClient5 * client = getObject(env, obj);
+#define JNISTDEND } catch (jobject e) { env->Throw((jthrowable)e); return E_FAIL; } }
+
 
 static jfieldID pID = NULL;
 
@@ -55,31 +59,78 @@ extern "C" JNIEXPORT jobject JNINAME(create)(JNIEnv * env, jclass cls) {
 	return obj;
 }
 
-//	public native int createControl(IDebugControl control);
-extern "C" JNIEXPORT jint JNINAME(createControl)(JNIEnv * env, jobject obj, jobject control) {
-	try {
-		IDebugClient5 * debugClient = getObject(env, obj);
-		
-		IDebugControl4 * debugControl;
-		HRESULT hr = debugClient->QueryInterface(__uuidof(IDebugControl4), ((void **)&debugControl));
-		if (FAILED(hr))
-			return hr;
-		
-		setObject(env, control, debugControl);
-		
-		return hr;
-	} catch (jobject e) {
-		env->Throw((jthrowable)e);
-	}
-}
-
 //	public native int attachKernel(int flags, String connectOptions);
+JNISTDMETHOD(attachKernel, jint flags, jstring connectOptions)
+	wchar_t * _connectOptions = getString(env, connectOptions);
+	HRESULT hr = client->AttachKernelWide(flags, _connectOptions);
+	delete[] _connectOptions;
+	return hr;
+JNISTDEND
+
 //	public native int getKernelConnectionOptions(IDebugString options);
+JNISTDMETHOD(getKernelConnectionOptions, jobject options)
+	ULONG size;
+	HRESULT hr = client->GetKernelConnectionOptionsWide(NULL, 0, &size);
+	if (FAILED(hr))
+		return hr;
+	
+	wchar_t * str = new wchar_t[size];
+	hr = client->GetKernelConnectionOptionsWide(str, size, NULL);
+	if (!FAILED(hr))
+		setString(env, options, str);
+
+	delete[] str;
+	return hr;
+JNISTDEND
+
 //	public native int setKernelConnectionOptions(String options);
+JNISTDMETHOD(setKernelConnectionOptions, jstring options)
+	wchar_t * _options = getString(env, options);
+	HRESULT hr = client->SetKernelConnectionOptionsWide(_options);
+	delete[] _options;
+	return hr;
+JNISTDEND
+
 //	public native int startProcessServer(int flags, String options);
+JNISTDMETHOD(startProcessServer, jint flags, jstring options)
+	wchar_t * _options = getString(env, options);
+	HRESULT hr = client->StartProcessServerWide(flags, _options, NULL);
+	delete[] _options;
+	return hr;
+JNISTDEND
+
 //	public native int connectProcessServer(String remoteOptions, IDebugLong server);
+JNISTDMETHOD(connectProcessServer, jstring remoteOptions, jobject server)
+	wchar_t * _remoteOptions = getString(env, remoteOptions);
+	ULONG64 _server;
+	HRESULT hr = client->ConnectProcessServerWide(_remoteOptions, &_server);
+	if (!FAILED(hr))
+		setLong(env, server, _server);
+	delete[] _remoteOptions;
+	return hr;
+JNISTDEND
+
 //	public native int disconnectProcessServer(long server);
+JNISTDMETHOD(disconnectProcessServer, jlong server)
+	return client->DisconnectProcessServer(server);
+JNISTDEND
+
 //	public native int getRunningProcessSystemIds(long server, IDebugIntArray ids);
+JNISTDMETHOD(getRunningProcessSystemIds, jlong server, jobject ids)
+	ULONG count;
+	HRESULT hr = client->GetRunningProcessSystemIds(server, NULL, 0, &count);
+	if (FAILED(hr))
+		return hr;
+	ULONG * _ids = new ULONG[count];
+	hr = client->GetRunningProcessSystemIds(server, _ids, count, NULL);
+	if (!FAILED(hr)) {
+		// The cast to jint just removes the signedness
+		setIntArray(env, ids, (jint *)_ids, count);
+	}
+	delete[] _ids;
+	return hr;
+JNISTDEND
+
 //	public native int getRunningProcessSystemIdByExecutableName(
 //			long server, String exeName, int flags, IDebugInt id);
 //	public native int getRunningProcessDescription(
@@ -166,10 +217,9 @@ extern "C" JNIEXPORT jint JNINAME(getIdentity)(JNIEnv * env, jobject obj, jobjec
 		return hr;
 	}
 	
-	jfieldID strID = env->GetFieldID(env->GetObjectClass(identity), "str", "Ljava/lang/String;");
-	env->SetObjectField(identity, strID, env->NewString((jchar *)str, size - 1));
-	delete str;
-	
+	setString(env, identity, str);
+	delete[] str;
+
 	return S_OK;
 }
 
@@ -236,3 +286,22 @@ extern "C" JNIEXPORT jint JNINAME(createProcess2)(JNIEnv * env, jobject obj,
 //	public native int getNumberEventCallbacks(int eventFlags, IDebugInt count);
 //	public native int getQuitLockString(IDebugString string);
 //	public native int setQuitLockString(String string);
+
+//public native int createControl(IDebugControl control);
+extern "C" JNIEXPORT jint JNINAME(createControl)(JNIEnv * env, jobject obj, jobject control) {
+	try {
+		IDebugClient5 * debugClient = getObject(env, obj);
+		
+		IDebugControl4 * debugControl;
+		HRESULT hr = debugClient->QueryInterface(__uuidof(IDebugControl4), ((void **)&debugControl));
+		if (FAILED(hr))
+			return hr;
+		
+		setObject(env, control, debugControl);
+		
+		return hr;
+	} catch (jobject e) {
+		env->Throw((jthrowable)e);
+		return E_FAIL;
+	}
+}
