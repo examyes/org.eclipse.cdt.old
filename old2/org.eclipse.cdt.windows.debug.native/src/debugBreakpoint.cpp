@@ -35,11 +35,7 @@ jobject createBreakpoint(JNIEnv * env, IDebugBreakpoint2 * bp) {
 	if (constructor == NULL)
 		return NULL;
 	
-	jobject bpobj = env->NewObject(cls, constructor, (jlong)bp);
-	if (bpobj == NULL)
-		return NULL;
-	
-	return bpobj;
+	return env->NewObject(cls, constructor, (jlong)bp);
 }
 
 extern "C" JNIEXPORT jint JNINAME(getId)(JNIEnv * env, jobject obj,

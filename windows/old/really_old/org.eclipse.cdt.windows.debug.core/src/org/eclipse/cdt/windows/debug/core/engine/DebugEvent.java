@@ -20,6 +20,8 @@ package org.eclipse.cdt.windows.debug.core.engine;
 public abstract class DebugEvent {
 
 	public static final int UNKNOWN = 0;
+	public static final int BREAKPOINT = 1;
+	public static final int EXIT_PROCESS = 2;
 	
 	public int getType() {
 		return UNKNOWN;

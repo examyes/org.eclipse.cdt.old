@@ -9,20 +9,26 @@
  *     QNX Software Systems - Initial API and implementation
  **********************************************************************/
 
-package org.eclipse.cdt.windows.debug.core.engine;
+package org.eclipse.cdt.windows.debug.core.cdi;
 
-import org.eclipse.cdt.windows.debug.core.IDebugControl;
+import org.eclipse.cdt.debug.core.cdi.event.ICDIResumedEvent;
+import org.eclipse.cdt.debug.core.cdi.model.ICDIObject;
 
 /**
  * @author Doug Schaefer
  *
  */
-public class ResumeCommand extends DebugCommand {
+public class WinCDIResumedEvent extends WinCDIEvent implements ICDIResumedEvent {
 
-	@Override
-	public int run(DebugEngine engine) {
-		int hr = engine.getDebugControl().waitForEvent(0, IDebugControl.INFINITE);
-		return hr;
+	private final int type;
+	
+	public WinCDIResumedEvent(ICDIObject source, int type) {
+		super(null, source);
+		this.type = type;
+	}
+
+	public int getType() {
+		return type;
 	}
 
 }

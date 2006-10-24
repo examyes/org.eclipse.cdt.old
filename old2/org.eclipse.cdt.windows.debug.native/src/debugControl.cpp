@@ -12,6 +12,7 @@
 #include <dbgeng.h>
 #include <jni.h>
 
+#include "debugControl.h"
 #include "util.h"
 #include "debugBreakpoint.h"
 
@@ -19,30 +20,24 @@
 
 #define JNINAME(name) Java_org_eclipse_cdt_windows_debug_core_IDebugControl_## name
 
-static jfieldID pID;
+static jfieldID pID = NULL;
+
+static jfieldID getPID(JNIEnv * env, jobject obj) {
+	if (pID == NULL) {
+		jclass cls = env->GetObjectClass(obj);
+		pID = env->GetFieldID(cls, "p", "J");
+		checkNull(env, pID);
+	}
+	return pID;
+}
 
 static IDebugControl4 * getObject(JNIEnv * env, jobject obj) {
-	jlong p = env->GetLongField(obj, pID);
+	jlong p = env->GetLongField(obj, getPID(env, obj));
 	return (IDebugControl4 *)p;
 }
 
-extern "C" JNIEXPORT jint JNINAME(init)(JNIEnv * env, jobject obj) {
-	jclass cls = env->GetObjectClass(obj);
-	if (cls == NULL)
-		return E_FAIL;
-	
-	pID = env->GetFieldID(cls, "p", "J");
-	if (pID == 0)
-		return E_FAIL;
-	
-	IDebugControl4 * debugControl;
-	HRESULT hr = DebugCreate(__uuidof(IDebugControl4), (void **)&debugControl);
-	if (FAILED(hr))
-		return hr;
-
-	env->SetLongField(obj, pID, (jlong)debugControl);
-	
-	return S_OK;
+void setObject(JNIEnv * env, jobject obj, IDebugControl4 * debugControl) {
+	env->SetLongField(obj, getPID(env, obj), (jlong)debugControl);
 }
 
 extern "C" JNIEXPORT jint JNINAME(waitForEvent)(JNIEnv * env, jobject obj,

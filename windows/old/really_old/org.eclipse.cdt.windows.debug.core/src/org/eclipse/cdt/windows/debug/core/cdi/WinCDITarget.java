@@ -14,9 +14,7 @@ package org.eclipse.cdt.windows.debug.core.cdi;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.cdt.debug.core.ICDTLaunchConfigurationConstants;
@@ -27,6 +25,8 @@ import org.eclipse.cdt.debug.core.cdi.ICDIFunctionLocation;
 import org.eclipse.cdt.debug.core.cdi.ICDILineLocation;
 import org.eclipse.cdt.debug.core.cdi.ICDILocation;
 import org.eclipse.cdt.debug.core.cdi.ICDISession;
+import org.eclipse.cdt.debug.core.cdi.event.ICDIEvent;
+import org.eclipse.cdt.debug.core.cdi.event.ICDIResumedEvent;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIAddressBreakpoint;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIBreakpoint;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIExceptionpoint;
@@ -52,7 +52,6 @@ import org.eclipse.cdt.debug.core.cdi.model.ICDIWatchpoint;
 import org.eclipse.cdt.windows.debug.core.Activator;
 import org.eclipse.cdt.windows.debug.core.HRESULT;
 import org.eclipse.cdt.windows.debug.core.IDebugBreakpoint;
-import org.eclipse.cdt.windows.debug.core.IDebugControl;
 import org.eclipse.cdt.windows.debug.core.engine.DebugEngine;
 import org.eclipse.cdt.windows.debug.core.engine.ResumeCommand;
 import org.eclipse.cdt.windows.debug.core.engine.SetBreakpointCommand;
@@ -75,9 +74,10 @@ public class WinCDITarget implements ICDITarget {
 	// There is a default thread that we don't get an event when created
 	private WinCDIThread[] threads = new WinCDIThread[] { new WinCDIThread(this) };
 	
-	private List<ICDIBreakpoint> breakpoints = new ArrayList<ICDIBreakpoint>();
+	private Map<Integer, ICDIBreakpoint> breakpoints = new HashMap<Integer, ICDIBreakpoint>();
 	
 	private final DebugEngine debugEngine;
+	private WinProcess process = new WinProcess();
 	
 	public WinCDITarget(WinCDISession session, ILaunch launch,
 			File executable) throws CoreException {
@@ -98,6 +98,10 @@ public class WinCDITarget implements ICDITarget {
 	
 	public DebugEngine getDebugEngine() {
 		return debugEngine;
+	}
+	
+	public void terminated(int exitValue) {
+		process.terminated(exitValue);
 	}
 	
 	public ICDIAddressLocation createAddressLocation(BigInteger address) {
@@ -160,8 +164,7 @@ public class WinCDITarget implements ICDITarget {
 	}
 
 	public Process getProcess() {
-		// TODO Auto-generated method stub
-		return null;
+		return process;
 	}
 
 	public ICDIRegisterGroup[] getRegisterGroups() throws CDIException {
@@ -179,8 +182,7 @@ public class WinCDITarget implements ICDITarget {
 	}
 
 	public boolean isTerminated() {
-		// TODO Auto-generated method stub
-		return false;
+		return process.isTerminated();
 	}
 
 	public void jump(ICDILocation location) throws CDIException {
@@ -195,6 +197,9 @@ public class WinCDITarget implements ICDITarget {
 
 	public void resume() throws CDIException {
 		debugEngine.scheduleCommand(new ResumeCommand());
+		session.fireEvents(new ICDIEvent[] {
+				new WinCDIResumedEvent(this, ICDIResumedEvent.CONTINUE)
+			});
 	}
 
 	public void runUntil(ICDILocation location) throws CDIException {
@@ -258,9 +263,17 @@ public class WinCDITarget implements ICDITarget {
 	}
 
 	public ICDIBreakpoint[] getBreakpoints() throws CDIException {
-		return breakpoints.toArray(new ICDIBreakpoint[breakpoints.size()]);
+		return breakpoints.values().toArray(new ICDIBreakpoint[breakpoints.size()]);
 	}
 
+	public ICDIBreakpoint getBreakpoint(IDebugBreakpoint wbp) {
+		int[] idin = new int[1];
+		int hr = wbp.getId(idin);
+		if (HRESULT.FAILED(hr))
+			return null;
+		return breakpoints.get(idin[0]);
+	}
+	
 	public ICDIAddressBreakpoint setAddressBreakpoint(int type,
 			ICDIAddressLocation location, ICDICondition condition,
 			boolean deferred) throws CDIException {
@@ -283,12 +296,18 @@ public class WinCDITarget implements ICDITarget {
 			@Override
 			public int run(DebugEngine engine) {
 				int hr = super.run(engine);
-				if (!HRESULT.FAILED(hr))
-					bp.setDebugBreakpoint(getBreakpoint());
+				IDebugBreakpoint wbp = getBreakpoint();
+				if (HRESULT.FAILED(hr))
+					return hr;
+				int[] idin = new int[1];
+				hr = wbp.getId(idin);
+				if (HRESULT.FAILED(hr))
+					return hr;
+				bp.setDebugBreakpoint(wbp);
+				breakpoints.put(idin[0], bp);
 				return hr;
 			}
 		});
-		breakpoints.add(bp);
 		return bp;
 	}
 
@@ -361,8 +380,7 @@ public class WinCDITarget implements ICDITarget {
 	}
 
 	public ICDITarget getTarget() {
-		// TODO Auto-generated method stub
-		return null;
+		return this;
 	}
 
 	public ICDIExpression createExpression(String code) throws CDIException {

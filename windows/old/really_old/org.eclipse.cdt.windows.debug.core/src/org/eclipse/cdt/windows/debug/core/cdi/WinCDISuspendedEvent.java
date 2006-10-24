@@ -9,20 +9,20 @@
  *     QNX Software Systems - Initial API and implementation
  **********************************************************************/
 
-package org.eclipse.cdt.windows.debug.core.engine;
+package org.eclipse.cdt.windows.debug.core.cdi;
 
-import org.eclipse.cdt.windows.debug.core.IDebugControl;
+import org.eclipse.cdt.debug.core.cdi.ICDISessionObject;
+import org.eclipse.cdt.debug.core.cdi.event.ICDISuspendedEvent;
+import org.eclipse.cdt.debug.core.cdi.model.ICDIObject;
 
 /**
  * @author Doug Schaefer
  *
  */
-public class ResumeCommand extends DebugCommand {
+public class WinCDISuspendedEvent extends WinCDIEvent implements ICDISuspendedEvent {
 
-	@Override
-	public int run(DebugEngine engine) {
-		int hr = engine.getDebugControl().waitForEvent(0, IDebugControl.INFINITE);
-		return hr;
+	WinCDISuspendedEvent(ICDISessionObject reason, ICDIObject source) {
+		super(reason, source);
 	}
-
+	
 }

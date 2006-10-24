@@ -11,8 +11,9 @@ import org.eclipse.core.runtime.Path;
 public class BasicTests extends TestCase {
 
 	public void testDebugClient() throws Exception {
-		IDebugClient debugClient = new IDebugClient();
+		IDebugClient debugClient = IDebugClient.create();
 		IDebugControl debugControl = new IDebugControl();
+		assertFalse(HRESULT.FAILED(debugClient.createControl(debugControl)));
 		// Register callbacks
 		assertFalse(HRESULT.FAILED(debugClient.setEventCallbacks(new TestEventCallbacks())));
 		// Create Process

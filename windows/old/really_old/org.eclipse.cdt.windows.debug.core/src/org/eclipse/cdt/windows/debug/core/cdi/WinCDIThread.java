@@ -70,8 +70,7 @@ public class WinCDIThread implements ICDIThread {
 	}
 
 	public void resume() throws CDIException {
-		// TODO Auto-generated method stub
-
+		target.resume();
 	}
 
 	public void runUntil(ICDILocation location) throws CDIException {
@@ -140,18 +139,15 @@ public class WinCDIThread implements ICDIThread {
 	}
 
 	public void resume(boolean passSignal) throws CDIException {
-		// TODO Auto-generated method stub
-
+		target.resume(passSignal);
 	}
 
 	public void resume(ICDILocation location) throws CDIException {
-		// TODO Auto-generated method stub
-
+		target.resume(location);
 	}
 
 	public void resume(ICDISignal signal) throws CDIException {
-		// TODO Auto-generated method stub
-
+		target.resume(signal);
 	}
 
 	public boolean isSuspended() {

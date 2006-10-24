@@ -20,3 +20,14 @@ wchar_t * getString(JNIEnv * env, jstring string) {
 	env->ReleaseStringChars(string, jchars);
 	return _string;
 }
+
+void checkNull(JNIEnv * env, void * ptr) {
+	if (ptr != NULL)
+		return;
+	
+	// Throw an NPE
+	jclass npecls = env->FindClass("java/lang/NullPointerException");
+	jmethodID cons = env->GetMethodID(npecls, "<init>", "()V");
+	jobject npe = env->NewObject(npecls, cons);
+	throw npe;
+}

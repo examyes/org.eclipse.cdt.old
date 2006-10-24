@@ -11,18 +11,27 @@
 
 package org.eclipse.cdt.windows.debug.core.engine;
 
-import org.eclipse.cdt.windows.debug.core.IDebugControl;
+import org.eclipse.cdt.windows.debug.core.IDebugBreakpoint;
 
 /**
  * @author Doug Schaefer
  *
  */
-public class ResumeCommand extends DebugCommand {
+public class BreakpointEvent extends DebugEvent {
 
-	@Override
-	public int run(DebugEngine engine) {
-		int hr = engine.getDebugControl().waitForEvent(0, IDebugControl.INFINITE);
-		return hr;
+	private final IDebugBreakpoint bp;
+	
+	public BreakpointEvent(IDebugBreakpoint bp) {
+		this.bp = bp;
+	}
+	
+	public IDebugBreakpoint getBreakpoint() {
+		return bp;
 	}
 
+	@Override
+	public int getType() {
+		return BREAKPOINT;
+	}
+	
 }

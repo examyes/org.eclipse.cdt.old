@@ -35,8 +35,16 @@ import org.eclipse.core.runtime.jobs.Job;
  */
 public class DebugEngine extends Job {
 
-	private IDebugClient debugClient;
-	private IDebugControl debugControl;
+	static private IDebugClient masterClient;
+	static {
+		masterClient = IDebugClient.create();
+		if (masterClient == null)
+			Activator.getDefault().getLog().log(new Status(
+					IStatus.ERROR, Activator.PLUGIN_ID, "Failed to create master client"));
+	}
+	
+	private IDebugClient debugClient = new IDebugClient();
+	private IDebugControl debugControl = new IDebugControl();
 
 	private final String commandLine;
 	private final String initialDirectory;
@@ -47,8 +55,7 @@ public class DebugEngine extends Job {
 	private final List<DebugEvent> eventQueue = new LinkedList<DebugEvent>();
 	private final List<DebugCommand> commandQueue = new LinkedList<DebugCommand>();
 	
-	private boolean processStarted = false;
-	private boolean go = false;
+	private boolean processRunning = true;
 	
 	public DebugEngine(String commandLine,
 			String initialDirectory,
@@ -58,6 +65,11 @@ public class DebugEngine extends Job {
 		this.initialDirectory = initialDirectory;
 		this.environment = environment;
 	}
+	
+	private String getEnvironmentString() {
+		// TODO - walk the map and create the string
+		return null;
+	};
 	
 	public IDebugClient getDebugClient() {
 		return debugClient;
@@ -69,80 +81,67 @@ public class DebugEngine extends Job {
 	
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
+		// Set up the debug interface
 		try {
-			debugClient = new IDebugClient();
-			debugControl = new IDebugControl();
-			
-			debugClient.setEventCallbacks(new EventCallbacks(this));
+			if (HRESULT.FAILED(masterClient.createClient(debugClient)))
+				return new Status(IStatus.ERROR, Activator.PLUGIN_ID,
+					"Failed to create client");
+			if (HRESULT.FAILED(debugClient.createControl(debugControl)))
+				return new Status(IStatus.ERROR, Activator.PLUGIN_ID,
+					"Failed to create control");
+			if (HRESULT.FAILED(debugClient.setEventCallbacks(new EventCallbacks(this))))
+				return new Status(IStatus.ERROR, Activator.PLUGIN_ID,
+					"Failed to register callbacks");
 		} catch (CoreException e) {
 			return e.getStatus();
 		}
+		
+		// Create the process
 		DebugCreateProcessOptions options = new DebugCreateProcessOptions();
 		options.setCreateFlags(DebugCreateProcessOptions.DEBUG_ONLY_THIS_PROCESS);
-
 		if (HRESULT.FAILED(debugClient.createProcess2(
-				0, commandLine, options, initialDirectory, environment)))
+				0L, commandLine, options, initialDirectory, getEnvironmentString())))
 			return new Status(IStatus.ERROR, Activator.PLUGIN_ID,
 					"Failed to launch: " + commandLine);
 
-		// my internal command queue
-		List<DebugCommand> commands = new LinkedList<DebugCommand>();
-		
-		// Event loop
-		while (true) {
-			int hr = debugControl.waitForEvent(0, IDebugControl.INFINITE);
-			if (hr == HRESULT.E_UNEXPECTED)
-				break;
-			if (HRESULT.FAILED(hr))
-				return new Status(IStatus.ERROR, Activator.PLUGIN_ID,
-						"Failed waiting for event");
-			
-			// Dispatch any events that have been queued up in the callbacks
-			synchronized (eventQueue) {
-				while (eventQueue.size() > 0) {
-					DebugEvent debugEvent = eventQueue.remove(0);
-					Iterator<IDebugListener> i = listeners.iterator();
-					while (i.hasNext()) {
-						i.next().handleDebugEvent(debugEvent);
-					}
-				}
-			}
-			
-			// Execute any queued up commands
-			synchronized (this) {
-				if (!commandQueue.isEmpty()) {
-					commands.addAll(commandQueue);
-					commandQueue.clear();
-				}
-			}
-			while (!commands.isEmpty()) {
-				DebugCommand command = commands.remove(0);
-				command.run(this);
-			}
-			
-			// Wait for a continue command
-			waitForGo();
+		// Insert the resume command into the beginning of the queue
+		synchronized (commandQueue) {
+			commandQueue.add(0, new ResumeCommand());
 		}
-
-		return Status.OK_STATUS;
-	}
-	
-	private synchronized void waitForGo() {
-		if (!go)
-			try {
-				wait();
-			} catch (InterruptedException e) {
+		
+		// Command processing loop
+		while (processRunning) {
+			// Execute next command
+			DebugCommand command = null;
+			synchronized (commandQueue) {
+				if (commandQueue.isEmpty())
+					try {
+						commandQueue.wait();
+					} catch (InterruptedException e) {
+						continue;
+					}
+				command = commandQueue.remove(0);
 			}
-		go = false;
-	}
-	
-	synchronized void go() {
-		go = true;
-		notifyAll();
-	}
-	
-	synchronized void processStarted() {
-		processStarted = true;
+			int hr = command.run(this);
+			if (hr == HRESULT.E_UNEXPECTED)
+				processRunning = false;
+			
+			// Dispatch any events that have been queued up
+			while (true) {
+				DebugEvent event;
+				synchronized (eventQueue) {
+					if (eventQueue.isEmpty())
+						break;
+					event = eventQueue.remove(0);
+				}
+
+				Iterator<IDebugListener> i = listeners.iterator();
+				while (i.hasNext())
+					i.next().handleDebugEvent(event);
+			}
+		}
+		
+		return Status.OK_STATUS;
 	}
 	
 	public void addListener(IDebugListener listener) {
@@ -155,16 +154,17 @@ public class DebugEngine extends Job {
 	}
 	
 	public void scheduleCommand(DebugCommand command) {
-		synchronized (this) {
-			if (!processStarted) {
-				// queue up the command
-				commandQueue.add(command);
-				return;
-			}
+		// TODO - might need to interrupt the debugger
+		synchronized (commandQueue) {
+			commandQueue.add(command);
+			commandQueue.notifyAll();
 		}
-
-		// run it
-		command.run(this);
+	}
+	
+	public void fireEvent(DebugEvent event) {
+		synchronized (eventQueue) {
+			eventQueue.add(event);
+		}
 	}
 	
 }

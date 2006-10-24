@@ -13,4 +13,7 @@
 
 wchar_t * getString(JNIEnv * env, jstring string);
 
+// Throws a NullPointerException if the ptr is NULL
+void checkNull(JNIEnv * env, void * ptr);
+
 #endif /*UTIL_H_*/

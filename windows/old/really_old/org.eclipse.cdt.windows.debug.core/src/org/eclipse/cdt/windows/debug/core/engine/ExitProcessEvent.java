@@ -11,18 +11,25 @@
 
 package org.eclipse.cdt.windows.debug.core.engine;
 
-import org.eclipse.cdt.windows.debug.core.IDebugControl;
-
 /**
  * @author Doug Schaefer
  *
  */
-public class ResumeCommand extends DebugCommand {
+public class ExitProcessEvent extends DebugEvent {
 
-	@Override
-	public int run(DebugEngine engine) {
-		int hr = engine.getDebugControl().waitForEvent(0, IDebugControl.INFINITE);
-		return hr;
+	private final int exitCode;
+	
+	public ExitProcessEvent(int exitCode) {
+		this.exitCode = exitCode;
 	}
-
+	
+	public int getExitCode() {
+		return exitCode;
+	}
+	
+	@Override
+	public int getType() {
+		return EXIT_PROCESS;
+	}
+	
 }

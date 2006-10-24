@@ -9,30 +9,32 @@
  *     QNX Software Systems - Initial API and implementation
  **********************************************************************/
 
-package org.eclipse.cdt.windows.debug.core;
+package org.eclipse.cdt.windows.debug.core.cdi;
 
+import org.eclipse.cdt.debug.core.cdi.ICDIBreakpointHit;
+import org.eclipse.cdt.debug.core.cdi.ICDISession;
+import org.eclipse.cdt.debug.core.cdi.model.ICDIBreakpoint;
 
 /**
  * @author Doug Schaefer
  *
  */
-public class IDebugControl {
+public class WinCDIBreakpointHit implements ICDIBreakpointHit {
+
+	private final ICDISession session;
+	private final ICDIBreakpoint bp;
 	
-	@SuppressWarnings("unused")
-	private long p;
-	
-	public IDebugControl() {
+	public WinCDIBreakpointHit(ICDISession session, ICDIBreakpoint bp) {
+		this.session = session;
+		this.bp = bp;
 	}
 	
-	public static final int INFINITE = 0xffffffff;
+	public ICDIBreakpoint getBreakpoint() {
+		return bp;
+	}
 
-	public native int waitForEvent(int flags, int timeout);
+	public ICDISession getSession() {
+		return session;
+	}
 
-	public static final int DEBUG_BREAKPOINT_CODE = 0;
-	public static final int DEBUG_BREAKPOINT_DATA = 1;
-	public static final int DEBUG_ANY_ID = 0xffffffff;
-	
-	public native int addBreakpoint(int type, int desiredId,
-			IDebugBreakpoint[] bp);
-	
 }
