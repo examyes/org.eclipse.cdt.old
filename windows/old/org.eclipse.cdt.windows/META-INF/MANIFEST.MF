@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: CDT for Windows Plug-in
+Bundle-SymbolicName: org.eclipse.cdt.windows
+Bundle-Version: 1.0.0.qualifier
