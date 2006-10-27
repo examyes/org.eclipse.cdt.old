@@ -139,7 +139,9 @@ public class IDebugClient {
 	public native int removeProcessOptions(int options);
 	public native int setProcessOptions(int options);
 	public native int openDumpFile(String dumpFile);
-	public native int writeDumpFile(String dumpFile, int qualifier);
+	
+	// use writeDumpFile2 since there is no UNICODE version of this one
+//	public native int writeDumpFile(String dumpFile, int qualifier);
 	public native int connectSession(int flags, int historyLimit);
 	public native int startServer(String options);
 	public native int outputServers(int outputControl, String machine, int flags);

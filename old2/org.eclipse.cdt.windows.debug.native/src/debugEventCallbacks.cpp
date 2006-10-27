@@ -40,6 +40,10 @@ DebugEventCallbacks * DebugEventCallbacks::getObject(JNIEnv * env, jobject obj) 
 	return (DebugEventCallbacks *)p;
 }
 
+void DebugEventCallbacks::setObject(JNIEnv * env, jobject obj, DebugEventCallbacks * callbacks) {
+	env->SetLongField(obj, pID, (jlong)callbacks);
+}
+
 extern "C" JNIEXPORT jint JNINAME(init)(JNIEnv * env, jobject obj) {
 	if (env->GetJavaVM(&vm))
 		return E_FAIL;

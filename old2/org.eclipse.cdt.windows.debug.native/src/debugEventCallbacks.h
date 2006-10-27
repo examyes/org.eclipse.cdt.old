@@ -21,6 +21,10 @@ public:
 	virtual ~DebugEventCallbacks();
 	
 	static DebugEventCallbacks * getObject(JNIEnv * env, jobject obj);
+	static void setObject(JNIEnv * env, jobject obj, DebugEventCallbacks * callbacks);
+	jobject getObject() {
+		return ref;
+	}
 	
 	// IUnknown.
 	virtual ULONG __stdcall AddRef();
