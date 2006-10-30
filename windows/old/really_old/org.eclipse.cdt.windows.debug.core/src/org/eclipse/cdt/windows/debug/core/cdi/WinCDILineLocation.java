@@ -11,54 +11,41 @@
 
 package org.eclipse.cdt.windows.debug.core.cdi;
 
-import java.math.BigInteger;
-
-import org.eclipse.cdt.debug.core.cdi.ICDIFunctionLocation;
 import org.eclipse.cdt.debug.core.cdi.ICDILineLocation;
 import org.eclipse.cdt.debug.core.cdi.ICDILocation;
-import org.eclipse.cdt.debug.core.cdi.ICDILocator;
 
 /**
  * @author Doug Schaefer
  *
- * Merges all the location types.
  */
-public class WinCDILocator implements ICDILocator {
-	
-	private String file;
-	private int lineNumber;
-	private String function;
-	private BigInteger address;
+public class WinCDILineLocation implements ICDILineLocation {
 
-	public WinCDILocator(ICDIFunctionLocation floc) {
-		file = floc.getFile();
-		function = floc.getFunction();
+	private final String file;
+	private final int lineNumber;
+	
+	public WinCDILineLocation(String file, int lineNumber) {
+		this.file = file;
+		this.lineNumber = lineNumber;
 	}
 	
-	public WinCDILocator(ICDILineLocation lloc) {
-		file = lloc.getFile();
-		lineNumber = lloc.getLineNumber();
-	}
-	
-	public String getFile() {
-		return file;
-	}
-
 	public int getLineNumber() {
 		return lineNumber;
 	}
 
-	public String getFunction() {
-		return function;
+	public String getFile() {
+		return file;
 	}
 
-	public BigInteger getAddress() {
-		return address;
-	}
-
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.ICDILocation#equals(org.eclipse.cdt.debug.core.cdi.ICDILocation)
+	 */
 	public boolean equals(ICDILocation location) {
-		// TODO
-		return false;
+		if (location instanceof ICDILineLocation) {
+			ICDILineLocation lineloc = (ICDILineLocation)location;
+			return lineNumber == lineloc.getLineNumber()
+				&& file.equals(lineloc.getFile());
+		} else
+			return false;
 	}
 
 }

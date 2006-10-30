@@ -52,6 +52,7 @@ import org.eclipse.cdt.debug.core.cdi.model.ICDIWatchpoint;
 import org.eclipse.cdt.windows.debug.core.Activator;
 import org.eclipse.cdt.windows.debug.core.HRESULT;
 import org.eclipse.cdt.windows.debug.core.IDebugBreakpoint;
+import org.eclipse.cdt.windows.debug.core.engine.CreateProcessCommand;
 import org.eclipse.cdt.windows.debug.core.engine.DebugEngine;
 import org.eclipse.cdt.windows.debug.core.engine.ResumeCommand;
 import org.eclipse.cdt.windows.debug.core.engine.SetBreakpointCommand;
@@ -60,6 +61,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
+
+import com.sun.org.apache.bcel.internal.classfile.LineNumber;
 
 /**
  * @author Doug Schaefer
@@ -92,8 +95,9 @@ public class WinCDITarget implements ICDITarget {
 		ILaunchConfiguration config = launch.getLaunchConfiguration();
 		String initialDirectory = config.getAttribute(ICDTLaunchConfigurationConstants.ATTR_WORKING_DIRECTORY, ".");
 		Map<String, String> environment = new HashMap<String, String>();
-		debugEngine = new DebugEngine(commandLine, initialDirectory, environment);
-		debugEngine.schedule();
+		debugEngine = DebugEngine.get();
+		debugEngine.scheduleCommand(new CreateProcessCommand(
+			commandLine, initialDirectory, environment));
 	}
 	
 	public DebugEngine getDebugEngine() {
@@ -132,8 +136,7 @@ public class WinCDITarget implements ICDITarget {
 	}
 
 	public ICDILineLocation createLineLocation(String file, int line) {
-		// TODO Auto-generated method stub
-		return null;
+		return new WinCDILineLocation(file, line);
 	}
 
 	public ICDIRegister createRegister(ICDIRegisterDescriptor varDesc)
@@ -296,9 +299,9 @@ public class WinCDITarget implements ICDITarget {
 			@Override
 			public int run(DebugEngine engine) {
 				int hr = super.run(engine);
-				IDebugBreakpoint wbp = getBreakpoint();
 				if (HRESULT.FAILED(hr))
 					return hr;
+				IDebugBreakpoint wbp = getBreakpoint();
 				int[] idin = new int[1];
 				hr = wbp.getId(idin);
 				if (HRESULT.FAILED(hr))
@@ -314,8 +317,26 @@ public class WinCDITarget implements ICDITarget {
 	public ICDILineBreakpoint setLineBreakpoint(int type,
 			ICDILineLocation location, ICDICondition condition, boolean deferred)
 			throws CDIException {
-		// TODO Auto-generated method stub
-		return null;
+		final WinCDILineBreakpoint bp = new WinCDILineBreakpoint(location);
+		String expression = "`" + location.getFile()
+			+ ":" + location.getLineNumber() + "`";
+		debugEngine.scheduleCommand(new SetBreakpointCommand(expression) {
+			@Override
+			public int run(DebugEngine engine) {
+				int hr = super.run(engine);
+				if (HRESULT.FAILED(hr))
+					return hr;
+				IDebugBreakpoint wbp = getBreakpoint();
+				int[] idin = new int[1];
+				hr = wbp.getId(idin);
+				if (HRESULT.FAILED(hr))
+					return hr;
+				bp.setDebugBreakpoint(wbp);
+				breakpoints.put(idin[0], bp);
+				return hr;
+			}
+		});
+		return bp;
 	}
 
 	public ICDIWatchpoint setWatchpoint(int type, int watchType,

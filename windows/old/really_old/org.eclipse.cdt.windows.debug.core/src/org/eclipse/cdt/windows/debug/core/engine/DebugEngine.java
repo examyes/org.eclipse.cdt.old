@@ -14,10 +14,8 @@ package org.eclipse.cdt.windows.debug.core.engine;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.cdt.windows.debug.core.Activator;
-import org.eclipse.cdt.windows.debug.core.DebugCreateProcessOptions;
 import org.eclipse.cdt.windows.debug.core.HRESULT;
 import org.eclipse.cdt.windows.debug.core.IDebugClient;
 import org.eclipse.cdt.windows.debug.core.IDebugControl;
@@ -35,41 +33,30 @@ import org.eclipse.core.runtime.jobs.Job;
  */
 public class DebugEngine extends Job {
 
-	static private IDebugClient masterClient;
-	static {
-		masterClient = IDebugClient.create();
-		if (masterClient == null)
-			Activator.getDefault().getLog().log(new Status(
-					IStatus.ERROR, Activator.PLUGIN_ID, "Failed to create master client"));
-	}
-	
-	private IDebugClient debugClient = new IDebugClient();
-	private IDebugControl debugControl = new IDebugControl();
+	private IDebugClient debugClient;
+	private IDebugControl debugControl;
 
-	private final String commandLine;
-	private final String initialDirectory;
-	private final Map<String, String> environment;
-	
 	private final List<IDebugListener> listeners = new LinkedList<IDebugListener>();
 	
 	private final List<DebugEvent> eventQueue = new LinkedList<DebugEvent>();
 	private final List<DebugCommand> commandQueue = new LinkedList<DebugCommand>();
 	
-	private boolean processRunning = true;
+	private boolean processRunning = false;
 	
-	public DebugEngine(String commandLine,
-			String initialDirectory,
-			Map<String, String> environment) throws CoreException {
-		super("Windows Debug Engine");
-		this.commandLine = commandLine;
-		this.initialDirectory = initialDirectory;
-		this.environment = environment;
+	private static DebugEngine singleton;
+	
+	public static DebugEngine get() {
+		if (singleton == null) {
+			singleton = new DebugEngine();
+			singleton.setSystem(true); // hide me
+			singleton.schedule();
+		}
+		return singleton;
 	}
 	
-	private String getEnvironmentString() {
-		// TODO - walk the map and create the string
-		return null;
-	};
+	private DebugEngine() {
+		super("Windows Debugger");
+	}
 	
 	public IDebugClient getDebugClient() {
 		return debugClient;
@@ -83,9 +70,11 @@ public class DebugEngine extends Job {
 	protected IStatus run(IProgressMonitor monitor) {
 		// Set up the debug interface
 		try {
-			if (HRESULT.FAILED(masterClient.createClient(debugClient)))
+			debugClient = IDebugClient.create();
+			if (debugClient == null)
 				return new Status(IStatus.ERROR, Activator.PLUGIN_ID,
 					"Failed to create client");
+			debugControl = new IDebugControl();
 			if (HRESULT.FAILED(debugClient.createControl(debugControl)))
 				return new Status(IStatus.ERROR, Activator.PLUGIN_ID,
 					"Failed to create control");
@@ -96,21 +85,13 @@ public class DebugEngine extends Job {
 			return e.getStatus();
 		}
 		
-		// Create the process
-		DebugCreateProcessOptions options = new DebugCreateProcessOptions();
-		options.setCreateFlags(DebugCreateProcessOptions.DEBUG_ONLY_THIS_PROCESS);
-		if (HRESULT.FAILED(debugClient.createProcess2(
-				0L, commandLine, options, initialDirectory, getEnvironmentString())))
-			return new Status(IStatus.ERROR, Activator.PLUGIN_ID,
-					"Failed to launch: " + commandLine);
-
 		// Insert the resume command into the beginning of the queue
 		synchronized (commandQueue) {
 			commandQueue.add(0, new ResumeCommand());
 		}
 		
 		// Command processing loop
-		while (processRunning) {
+		while (true) {
 			// Execute next command
 			DebugCommand command = null;
 			synchronized (commandQueue) {
@@ -123,8 +104,7 @@ public class DebugEngine extends Job {
 				command = commandQueue.remove(0);
 			}
 			int hr = command.run(this);
-			if (hr == HRESULT.E_UNEXPECTED)
-				processRunning = false;
+			processRunning = (hr != HRESULT.E_UNEXPECTED);
 			
 			// Dispatch any events that have been queued up
 			while (true) {
@@ -140,8 +120,6 @@ public class DebugEngine extends Job {
 					i.next().handleDebugEvent(event);
 			}
 		}
-		
-		return Status.OK_STATUS;
 	}
 	
 	public void addListener(IDebugListener listener) {
@@ -151,6 +129,10 @@ public class DebugEngine extends Job {
 	
 	public void removeListener(IDebugListener listener) {
 		listeners.remove(listener);
+	}
+	
+	public boolean isProcessRunning() {
+		return processRunning;
 	}
 	
 	public void scheduleCommand(DebugCommand command) {

@@ -21,8 +21,7 @@ public class ResumeCommand extends DebugCommand {
 
 	@Override
 	public int run(DebugEngine engine) {
-		int hr = engine.getDebugControl().waitForEvent(0, IDebugControl.INFINITE);
-		return hr;
+		return engine.getDebugControl().waitForEvent(0, IDebugControl.INFINITE);
 	}
 
 }
