@@ -15,27 +15,39 @@
 #include "util.h"
 #define JNINAME(name) Java_org_eclipse_cdt_windows_debug_core_IDebugBreakpoint_## name
 
-static jfieldID pID;
+static jfieldID pID = NULL;
+
+static jfieldID getPID(JNIEnv * env, jobject obj) {
+	if (pID == NULL) {
+		jclass cls = env->GetObjectClass(obj);
+		pID = env->GetFieldID(cls, "p", "J");
+		checkNull(env, pID);
+	}
+	return pID;
+}
 
 static IDebugBreakpoint2 * getObject(JNIEnv * env, jobject obj) {
-	jlong p = env->GetLongField(obj, pID);
-	return (IDebugBreakpoint2 *)p;
+	IDebugBreakpoint2 * bp = (IDebugBreakpoint2 *)env->GetLongField(obj, getPID(env, obj));
+	checkNull(env, bp);
+	return bp;
+}
+
+void setObject(JNIEnv * env, jobject obj, IDebugBreakpoint2 * bp) {
+	env->SetLongField(obj, getPID(env, obj), (jlong)bp);
 }
 
 jobject createBreakpoint(JNIEnv * env, IDebugBreakpoint2 * bp) {
 	jclass cls = env->FindClass("org/eclipse/cdt/windows/debug/core/IDebugBreakpoint");
-	if (cls == NULL)
-		return NULL;
-
-	pID = env->GetFieldID(cls, "p", "J");
-	if (pID == NULL)
-		return NULL;
+	checkNull(env, cls);
 	
-	jmethodID constructor = env->GetMethodID(cls, "<init>", "(J)V");
-	if (constructor == NULL)
-		return NULL;
+	jmethodID constructor = env->GetMethodID(cls, "<init>", "()V");
+	checkNull(env, constructor);
 	
-	return env->NewObject(cls, constructor, (jlong)bp);
+	jobject bpobj = env->NewObject(cls, constructor, (jlong)bp);
+	checkNull(env, bpobj);
+	
+	setObject(env, bpobj, bp);
+	return bpobj;
 }
 
 extern "C" JNIEXPORT jint JNINAME(getId)(JNIEnv * env, jobject obj,

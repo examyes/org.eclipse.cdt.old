@@ -11,28 +11,21 @@
 
 package org.eclipse.cdt.windows.debug.core;
 
-
 /**
  * @author Doug Schaefer
  *
  */
-public class IDebugBreakpoint {
+public class DebugLastEventInfoUnloadModule {
+
+	private long base;
 
 	@SuppressWarnings("unused")
-	private long p;
+	private DebugLastEventInfoUnloadModule(long base) {
+		this.base = base;
+	}
 	
-	public native int getId(int[] id);
-	
-	public native int setOffsetExpression(String expression);
-
-	public native int getOffsetExpression(String[] expression);
-	
-	public static final int DEBUG_BREAKPOINT_GO_ONLY =		0x00000001;
-	public static final int DEBUG_BREAKPOINT_DEFERRED =		0x00000002;
-	public static final int DEBUG_BREAKPOINT_ENABLED =		0x00000004;
-	public static final int DEBUG_BREAKPOINT_ADDER_ONLY =	0x00000008;
-	public static final int DEBUG_BREAKPOINT_ONE_SHOT =		0x00000010;
-	
-	public native int addFlags(int flags);
+	public long getBase() {
+		return base;
+	}
 	
 }

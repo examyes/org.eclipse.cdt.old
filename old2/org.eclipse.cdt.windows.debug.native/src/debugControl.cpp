@@ -32,8 +32,9 @@ static jfieldID getPID(JNIEnv * env, jobject obj) {
 }
 
 static IDebugControl4 * getObject(JNIEnv * env, jobject obj) {
-	jlong p = env->GetLongField(obj, getPID(env, obj));
-	return (IDebugControl4 *)p;
+	IDebugControl4 * control = (IDebugControl4 *)env->GetLongField(obj, getPID(env, obj));
+	checkNull(env, control);
+	return control;
 }
 
 void setObject(JNIEnv * env, jobject obj, IDebugControl4 * debugControl) {
@@ -47,15 +48,13 @@ extern "C" JNIEXPORT jint JNINAME(waitForEvent)(JNIEnv * env, jobject obj,
 }
 
 extern "C" JNIEXPORT jint JNINAME(addBreakpoint)(JNIEnv * env, jobject obj,
-		jint type, jint desiredId, jobjectArray bp) {
+		jint type, jint desiredId, jobject bp) {
 	IDebugControl4 * debugControl = getObject(env, obj);
 	IDebugBreakpoint2 * bpcom;
 	HRESULT hr = debugControl->AddBreakpoint2(type, desiredId, &bpcom);
 	if (FAILED(hr))
 		return hr;
-	
-	jobject bpobj = createBreakpoint(env, bpcom);
-	env->SetObjectArrayElement(bp, 0, bpobj);
-	
-	return S_OK;
+
+	setObject(env, bp, bpcom);
+	return hr;
 }

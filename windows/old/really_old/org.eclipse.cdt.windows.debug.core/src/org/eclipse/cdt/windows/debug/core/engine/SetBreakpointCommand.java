@@ -35,13 +35,12 @@ public class SetBreakpointCommand extends DebugCommand {
 	@Override
 	public int run(DebugEngine engine) {
 		IDebugControl control = engine.getDebugControl();
-		IDebugBreakpoint [] bpin = new IDebugBreakpoint[1];
+		bp = new IDebugBreakpoint();
 		int hr = control.addBreakpoint(
 				IDebugControl.DEBUG_BREAKPOINT_CODE,
-				IDebugControl.DEBUG_ANY_ID, bpin);
+				IDebugControl.DEBUG_ANY_ID, bp);
 		if (HRESULT.FAILED(hr))
 			return hr;
-		bp = bpin[0];
 		bp.setOffsetExpression(expression);
 		bp.addFlags(IDebugBreakpoint.DEBUG_BREAKPOINT_ENABLED);
 		return HRESULT.S_OK;

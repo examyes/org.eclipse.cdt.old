@@ -1,6 +1,3 @@
-#ifndef DEBUGBREAKPOINT_H_
-#define DEBUGBREAKPOINT_H_
-
 /**********************************************************************
  * Copyright (c) 2006 QNX Software Systems and others.
  * All rights reserved. This program and the accompanying materials
@@ -11,6 +8,10 @@
  * Contributors: 
  *     QNX Software Systems - Initial API and implementation
  **********************************************************************/
+#ifndef DEBUGBREAKPOINT_H_
+#define DEBUGBREAKPOINT_H_
+
+void setObject(JNIEnv * env, jobject obj, IDebugBreakpoint2 * bp);
 
 jobject createBreakpoint(JNIEnv * env, IDebugBreakpoint2 * bp);
 

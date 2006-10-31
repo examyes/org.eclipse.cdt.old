@@ -15,14 +15,12 @@ package org.eclipse.cdt.windows.debug.core;
  * @author Doug Schaefer
  *
  */
-public class IDebugInt {
+public class DebugBoolean {
 
-	private int i;
-	
-	private IDebugInt() {
+	private boolean b;
+
+	public boolean getBoolean() {
+		return b;
 	}
 	
-	public int getInt() {
-		return i;
-	}
 }

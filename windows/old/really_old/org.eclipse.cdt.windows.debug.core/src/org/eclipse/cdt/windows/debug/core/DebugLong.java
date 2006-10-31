@@ -15,12 +15,9 @@ package org.eclipse.cdt.windows.debug.core;
  * @author Doug Schaefer
  *
  */
-public class IDebugLong {
+public class DebugLong {
 
 	private long l;
-	
-	private IDebugLong() {
-	}
 	
 	public long getLong() {
 		return l;

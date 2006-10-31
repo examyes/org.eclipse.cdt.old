@@ -15,14 +15,17 @@ package org.eclipse.cdt.windows.debug.core;
  * @author Doug Schaefer
  *
  */
-public class IDebugString {
+public class DebugLastEventInfoBreakpoint {
 
-	private String string;
+	private int id;
 
-	private IDebugString() {
+	@SuppressWarnings("unused")
+	private DebugLastEventInfoBreakpoint(int id) {
+		this.id = id;
 	}
 	
-	public String getString() {
-		return string;
+	public int getId() {
+		return id;
 	}
+	
 }

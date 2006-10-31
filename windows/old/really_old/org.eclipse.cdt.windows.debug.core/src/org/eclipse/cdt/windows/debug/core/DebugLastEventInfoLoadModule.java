@@ -15,15 +15,17 @@ package org.eclipse.cdt.windows.debug.core;
  * @author Doug Schaefer
  *
  */
-public class IDebugIntArray {
+public class DebugLastEventInfoLoadModule {
 
-	private int[] ints;
+	private long base;
 
-	private IDebugIntArray() {
+	@SuppressWarnings("unused")
+	public DebugLastEventInfoLoadModule(long base) {
+		this.base = base;
 	}
 	
-	public int[] getIntArray() {
-		return ints;
+	public long getBase() {
+		return base;
 	}
 	
 }

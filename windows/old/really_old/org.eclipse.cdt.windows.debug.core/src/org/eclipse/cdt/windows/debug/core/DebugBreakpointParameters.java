@@ -8,9 +8,13 @@
  * Contributors: 
  *     QNX Software Systems - Initial API and implementation
  **********************************************************************/
-#ifndef DEBUGCONTROL_H_
-#define DEBUGCONTROL_H_
 
-void setObject(JNIEnv * env, jobject obj, IDebugControl4 * debugControl);
+package org.eclipse.cdt.windows.debug.core;
 
-#endif /*DEBUGCONTROL_H_*/
+/**
+ * @author Doug Schaefer
+ *
+ */
+public class DebugBreakpointParameters {
+
+}
