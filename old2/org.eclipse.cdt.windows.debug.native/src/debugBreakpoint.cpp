@@ -36,7 +36,7 @@ void setObject(JNIEnv * env, jobject obj, IDebugBreakpoint2 * bp) {
 	env->SetLongField(obj, getPID(env, obj), (jlong)bp);
 }
 
-jobject createBreakpoint(JNIEnv * env, IDebugBreakpoint2 * bp) {
+jobject createObject(JNIEnv * env, IDebugBreakpoint2 * bp) {
 	jclass cls = env->FindClass("org/eclipse/cdt/windows/debug/core/IDebugBreakpoint");
 	checkNull(env, cls);
 	

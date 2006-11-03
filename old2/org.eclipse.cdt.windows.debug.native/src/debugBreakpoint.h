@@ -13,6 +13,6 @@
 
 void setObject(JNIEnv * env, jobject obj, IDebugBreakpoint2 * bp);
 
-jobject createBreakpoint(JNIEnv * env, IDebugBreakpoint2 * bp);
+jobject createObject(JNIEnv * env, IDebugBreakpoint2 * bp);
 
 #endif /*DEBUGBREAKPOINT_H_*/

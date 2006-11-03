@@ -30,6 +30,9 @@ public class WinCDILocator implements ICDILocator {
 	private String function;
 	private BigInteger address;
 
+	public WinCDILocator() {
+	}
+	
 	public WinCDILocator(ICDIFunctionLocation floc) {
 		file = floc.getFile();
 		function = floc.getFunction();
@@ -44,16 +47,32 @@ public class WinCDILocator implements ICDILocator {
 		return file;
 	}
 
+	public void setFile(String file) {
+		this.file = file;
+	}
+
 	public int getLineNumber() {
 		return lineNumber;
+	}
+
+	public void setLineNumber(int lineNumber) {
+		this.lineNumber = lineNumber;
 	}
 
 	public String getFunction() {
 		return function;
 	}
 
+	public void setFunction(String function) {
+		this.function = function;
+	}
+
 	public BigInteger getAddress() {
 		return address;
+	}
+
+	public void setAddress(BigInteger address) {
+		this.address = address;
 	}
 
 	public boolean equals(ICDILocation location) {

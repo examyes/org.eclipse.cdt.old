@@ -10,6 +10,7 @@
  **********************************************************************/
 #include <windows.h>
 #include <jni.h>
+#include <dbgeng.h>
 
 wchar_t * getString(JNIEnv * env, jstring string) {
 	jsize length = env->GetStringLength(string);
@@ -34,7 +35,7 @@ void checkNull(JNIEnv * env, void * ptr) {
 
 static jfieldID stringID = NULL;
 
-void setString(JNIEnv * env, jobject obj, wchar_t * string) {
+void setObject(JNIEnv * env, jobject obj, wchar_t * string) {
 	if (stringID == NULL) {
 		stringID = env->GetFieldID(env->GetObjectClass(obj), "string", "Ljava/lang/String;");
 		checkNull(env, stringID);
@@ -45,7 +46,7 @@ void setString(JNIEnv * env, jobject obj, wchar_t * string) {
 
 static jfieldID longID = NULL;
 
-void setLong(JNIEnv * env, jobject obj, jlong l) {
+void setObject(JNIEnv * env, jobject obj, jlong l) {
 	if (longID == NULL) {
 		longID = env->GetFieldID(env->GetObjectClass(obj), "l", "J");
 		checkNull(env, longID);
@@ -56,7 +57,7 @@ void setLong(JNIEnv * env, jobject obj, jlong l) {
 
 static jfieldID intID = NULL;
 
-void setInt(JNIEnv * env, jobject obj, jint i) {
+void setObject(JNIEnv * env, jobject obj, jint i) {
 	if (intID == NULL) {
 		intID = env->GetFieldID(env->GetObjectClass(obj), "i", "I");
 		checkNull(env, intID);
@@ -67,7 +68,7 @@ void setInt(JNIEnv * env, jobject obj, jint i) {
 
 static jfieldID intArrayID = NULL;
 
-void setIntArray(JNIEnv * env, jobject obj, jint * i, int count) {
+void setObject(JNIEnv * env, jobject obj, jint * i, int count) {
 	if (intArrayID == NULL) {
 		intArrayID = env->GetFieldID(env->GetObjectClass(obj), "ints", "[I");
 		checkNull(env, intArrayID);
@@ -76,4 +77,28 @@ void setIntArray(JNIEnv * env, jobject obj, jint * i, int count) {
 	jintArray intArray = env->NewIntArray(count);
 	env->SetIntArrayRegion(intArray, 0, count, i);
 	env->SetObjectField(obj, intArrayID, intArray);
+}
+
+static jclass classDebugStackFrame = NULL;
+static jmethodID initDebugStackFrameID = NULL;
+
+jobject createObject(JNIEnv * env, DEBUG_STACK_FRAME & frame) {
+	classDebugStackFrame = env->FindClass("org/eclipse/cdt/windows/debug/core/DebugStackFrame");
+	checkNull(env, classDebugStackFrame);
+	if (initDebugStackFrameID == NULL) {
+		initDebugStackFrameID = env->GetMethodID(classDebugStackFrame, "<init>", "(JJJJJ[JZI)V");
+		checkNull(env, initDebugStackFrameID);
+	}
+	
+	// TODO create the params array
+	jobject obj = env->NewObject(classDebugStackFrame, initDebugStackFrameID,
+			frame.InstructionOffset,
+			frame.ReturnOffset,
+			frame.FrameOffset,
+			frame.StackOffset,
+			frame.FuncTableEntry,
+			NULL,
+			frame.Virtual ? JNI_TRUE : JNI_FALSE,
+			frame.FrameNumber);
+	return obj;
 }

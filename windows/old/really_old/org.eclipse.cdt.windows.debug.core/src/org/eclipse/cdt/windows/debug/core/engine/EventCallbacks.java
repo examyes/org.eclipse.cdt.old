@@ -11,6 +11,7 @@
 
 package org.eclipse.cdt.windows.debug.core.engine;
 
+import org.eclipse.cdt.windows.debug.core.DebugStackFrame;
 import org.eclipse.cdt.windows.debug.core.IDebugBreakpoint;
 import org.eclipse.cdt.windows.debug.core.IDebugEventCallbacks;
 import org.eclipse.core.runtime.CoreException;

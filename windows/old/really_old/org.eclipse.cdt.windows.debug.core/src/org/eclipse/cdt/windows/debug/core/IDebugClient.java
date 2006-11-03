@@ -199,5 +199,6 @@ public class IDebugClient {
 	
 	// QueryInterface shortcuts
 	public native int createControl(IDebugControl control);
-
+	public native int createSymbols(IDebugSymbols symbols);
+	
 }

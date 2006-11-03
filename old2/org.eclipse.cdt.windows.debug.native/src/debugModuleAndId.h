@@ -8,23 +8,11 @@
  * Contributors: 
  *     QNX Software Systems - Initial API and implementation
  **********************************************************************/
+#ifndef DEBUGMODULEANDID_H_
+#define DEBUGMODULEANDID_H_
 
-package org.eclipse.cdt.windows.debug.core.engine;
+jobject createObject(JNIEnv * env, DEBUG_MODULE_AND_ID & mid);
 
-import org.eclipse.cdt.windows.debug.core.IDebugControl;
+void getObject(JNIEnv * env, jobject obj, DEBUG_MODULE_AND_ID & mid);
 
-/**
- * @author Doug Schaefer
- *
- */
-public class ResumeCommand extends DebugCommand {
-
-	public ResumeCommand() {
-	}
-	
-	@Override
-	public int run(DebugEngine engine) {
-		return engine.getDebugControl().waitForEvent(0, IDebugControl.INFINITE);
-	}
-
-}
+#endif /*DEBUGMODULEANDID_H_*/

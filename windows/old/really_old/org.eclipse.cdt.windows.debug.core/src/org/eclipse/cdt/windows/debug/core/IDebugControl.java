@@ -258,8 +258,7 @@ public class IDebugControl {
     public native int getNearInstruction(long offset, int delta,
     		DebugLong nearOffset);
     public native int getStrackTrace(long frameOffset, long stackOffset,
-    		long instructionOffset, DebugStackFrame[] frames,
-    		DebugInt framesFilled);
+    		long instructionOffset, DebugStackFrame[] frames);
     public native int getReturnOffset(DebugLong offset);
     public native int outputStackTrace(int outputControl,
     		DebugStackFrame[] frames, int flags);

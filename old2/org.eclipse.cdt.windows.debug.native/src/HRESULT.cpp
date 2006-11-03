@@ -22,5 +22,5 @@ extern "C" JNIEXPORT jboolean JNINAME(FAILED)(JNIEnv * env, jclass cls, jint hr)
 
 extern "C" JNIEXPORT jstring JNINAME(getMessage)(JNIEnv * env, jclass cls, jint hr) {
 	const wchar_t * msg = _com_error(hr).ErrorMessage();
-	return env->NewString((const jchar *)msg, wcslen(msg) - 1);
+	return env->NewString((const jchar *)(msg + 2), wcslen(msg) - 1);
 }

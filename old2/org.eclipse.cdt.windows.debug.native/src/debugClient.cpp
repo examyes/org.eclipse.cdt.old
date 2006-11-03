@@ -16,6 +16,7 @@
 #include "debugCreateProcessOptions.h"
 #include "debugEventCallbacks.h"
 #include "debugControl.h"
+#include "debugSymbols.h"
 
 // Class IDebugClient
 
@@ -23,7 +24,6 @@
 #define JNISTDMETHOD(name, ...) extern "C" JNIEXPORT jint JNINAME(name)(JNIEnv * env, jobject obj, __VA_ARGS__ ) { \
 	try { IDebugClient5 * client = getObject(env, obj);
 #define JNISTDEND } catch (jobject e) { env->Throw((jthrowable)e); return E_FAIL; } }
-
 
 static jfieldID pID = NULL;
 
@@ -77,7 +77,7 @@ JNISTDMETHOD(getKernelConnectionOptions, jobject options)
 	wchar_t * str = new wchar_t[size];
 	hr = client->GetKernelConnectionOptionsWide(str, size, NULL);
 	if (!FAILED(hr))
-		setString(env, options, str);
+		setObject(env, options, str);
 
 	delete[] str;
 	return hr;
@@ -105,7 +105,7 @@ JNISTDMETHOD(connectProcessServer, jstring remoteOptions, jobject server)
 	ULONG64 _server;
 	HRESULT hr = client->ConnectProcessServerWide(_remoteOptions, &_server);
 	if (!FAILED(hr))
-		setLong(env, server, _server);
+		setObject(env, server, (jlong)_server);
 	delete[] _remoteOptions;
 	return hr;
 JNISTDEND
@@ -125,7 +125,7 @@ JNISTDMETHOD(getRunningProcessSystemIds, jlong server, jobject ids)
 	hr = client->GetRunningProcessSystemIds(server, _ids, count, NULL);
 	if (!FAILED(hr)) {
 		// The cast to jint just removes the signedness
-		setIntArray(env, ids, (jint *)_ids, count);
+		setObject(env, ids, (jint *)_ids, count);
 	}
 	delete[] _ids;
 	return hr;
@@ -142,7 +142,7 @@ JNISTDMETHOD(getRunningProcessSystemIdByExecutableName,
 	delete[] _exeName;
 	if (FAILED(hr))
 		return hr;
-	setInt(env, id, _id);
+	setObject(env, id, (jint)_id);
 	return hr;
 JNISTDEND
 
@@ -198,7 +198,7 @@ JNISTDMETHOD(getProcessOptions, jobject options)
 	HRESULT hr = client->GetProcessOptions(&_options);
 	if (FAILED(hr))
 		return hr;
-	setInt(env, options, _options);
+	setObject(env, options, (jint)_options);
 JNISTDEND
 
 //	public native int addProcessOptions(int options);
@@ -266,7 +266,7 @@ JNISTDMETHOD(getExitCode, jobject code)
 	HRESULT hr = client->GetExitCode(&_code);
 	if (FAILED(hr))
 		return hr;
-	setInt(env, code, _code);
+	setObject(env, code, (jint)_code);
 	return hr;
 JNISTDEND
 
@@ -319,7 +319,7 @@ JNISTDMETHOD(getIdentity, jobject identity)
 	wchar_t * str = new wchar_t[size];
 	hr = client->GetIdentityWide(str, size, NULL);
 	if (!FAILED(hr))
-		setString(env, identity, str);
+		setObject(env, identity, str);
 	delete[] str;
 	return hr;
 JNISTDEND
@@ -411,7 +411,7 @@ JNISTDMETHOD(getNumberDumpFiles, jobject number)
 	HRESULT hr = client->GetNumberDumpFiles(&_number);
 	if (FAILED(hr))
 		return hr;
-	setInt(env, number, _number);
+	setObject(env, number, (jint)_number);
 	return hr;
 JNISTDEND
 
@@ -448,12 +448,20 @@ JNISTDEND
 //	public native int getQuitLockString(IDebugString string);
 //	public native int setQuitLockString(String string);
 
-//public native int createControl(IDebugControl control);
+//	public native int createControl(IDebugControl control);
 JNISTDMETHOD(createControl, jobject control)
 	IDebugControl4 * _control;
 	HRESULT hr = client->QueryInterface(__uuidof(IDebugControl4), ((void **)&_control));
-	if (FAILED(hr))
-		return hr;
-	setObject(env, control, _control);
+	if (!FAILED(hr))
+		setObject(env, control, _control);
+	return hr;
+JNISTDEND
+
+//	public native int createSymbols(IDebugSymbols symbols);
+JNISTDMETHOD(createSymbols, jobject symbols)
+	IDebugSymbols3 * _symbols;
+	HRESULT hr = client->QueryInterface(__uuidof(IDebugSymbols3), ((void **)&_symbols));
+	if (!FAILED(hr))
+		setObject(env, symbols, _symbols);
 	return hr;
 JNISTDEND

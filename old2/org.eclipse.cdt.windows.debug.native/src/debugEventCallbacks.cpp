@@ -156,6 +156,6 @@ HRESULT __stdcall DebugEventCallbacks::ExitThread(ULONG ExitCode) {
 HRESULT __stdcall DebugEventCallbacks::Breakpoint(IDebugBreakpoint2 * Bp) {
 	VMENV(env)
 	
-	jobject bpobj = createBreakpoint(env, Bp);
+	jobject bpobj = createObject(env, Bp);
 	return env->CallIntMethod(ref, breakpointID, bpobj);
 }

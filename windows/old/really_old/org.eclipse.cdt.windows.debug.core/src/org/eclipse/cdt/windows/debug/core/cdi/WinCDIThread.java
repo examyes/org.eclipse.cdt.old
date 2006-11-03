@@ -13,12 +13,17 @@ package org.eclipse.cdt.windows.debug.core.cdi;
 
 import org.eclipse.cdt.debug.core.cdi.CDIException;
 import org.eclipse.cdt.debug.core.cdi.ICDILocation;
+import org.eclipse.cdt.debug.core.cdi.event.ICDIEvent;
 import org.eclipse.cdt.debug.core.cdi.model.ICDISignal;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIStackFrame;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIThread;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIThreadStorage;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIThreadStorageDescriptor;
+import org.eclipse.cdt.windows.debug.core.DebugStackFrame;
+import org.eclipse.cdt.windows.debug.core.HRESULT;
+import org.eclipse.cdt.windows.debug.core.engine.DebugEngine;
+import org.eclipse.cdt.windows.debug.core.engine.GetStackFramesCommand;
 
 /**
  * @author Doug Schaefer
@@ -28,6 +33,10 @@ public class WinCDIThread implements ICDIThread {
 
 	private final WinCDITarget target;
 	
+	private WinCDIStackFrame[] stackFrames = null;
+	private boolean stackFramesRequested = false;
+	private Object stackFramesMutex = new Object();
+
 	public WinCDIThread(WinCDITarget target) {
 		this.target = target;
 	}
@@ -42,20 +51,57 @@ public class WinCDIThread implements ICDIThread {
 		return super.equals(thread);
 	}
 
+	private void requestStackFrames() {
+		if (stackFramesRequested)
+			return;
+		stackFramesRequested = true;
+		target.getDebugEngine().scheduleCommand(
+				new GetStackFramesCommand(new DebugStackFrame[10]) {
+					@Override
+					public int run(DebugEngine engine) {
+						int hr = super.run(engine);
+						if (HRESULT.FAILED(hr))
+							return hr;
+						int n = 0;
+						while (n < frames.length)
+							if (frames[n] == null)
+								break;
+							else
+								++n;
+						synchronized (stackFramesMutex) {
+							stackFrames = new WinCDIStackFrame[n - 1];
+							// The last stack frame has offset 0
+							for (int i = 0; i < n - 1; ++i)
+								stackFrames[i] = new WinCDIStackFrame(target, WinCDIThread.this,
+										engine, frames[i]);
+							stackFramesRequested = false;
+							stackFramesMutex.notifyAll();
+						}
+						return HRESULT.S_OK;
+					}
+				});
+		try {
+			stackFramesMutex.wait();
+		} catch (InterruptedException e) {
+		}
+	}
+	
 	public int getStackFrameCount() throws CDIException {
-		// TODO Auto-generated method stub
-		return 0;
+		synchronized (stackFramesMutex) {
+			requestStackFrames();
+			return stackFrames.length;
+		}
 	}
 
 	public ICDIStackFrame[] getStackFrames() throws CDIException {
-		// TODO Auto-generated method stub
-		return null;
+		synchronized (stackFramesMutex) {
+			return stackFrames;
+		}
 	}
 
-	public ICDIStackFrame[] getStackFrames(int fromIndex, int len)
+	public ICDIStackFrame[] getStackFrames(int fromIndex, int toIndex)
 			throws CDIException {
-		// TODO Auto-generated method stub
-		return null;
+		return stackFrames;
 	}
 
 	public ICDIThreadStorageDescriptor[] getThreadStorageDescriptors()
@@ -152,7 +198,7 @@ public class WinCDIThread implements ICDIThread {
 
 	public boolean isSuspended() {
 		// TODO Auto-generated method stub
-		return true;
+		return false;
 	}
 
 	public void suspend() throws CDIException {

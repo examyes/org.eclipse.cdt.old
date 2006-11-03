@@ -11,20 +11,25 @@
 
 package org.eclipse.cdt.windows.debug.core.engine;
 
-import org.eclipse.cdt.windows.debug.core.IDebugControl;
+import org.eclipse.cdt.windows.debug.core.DebugStackFrame;
+import org.eclipse.cdt.windows.debug.core.HRESULT;
 
 /**
  * @author Doug Schaefer
  *
  */
-public class ResumeCommand extends DebugCommand {
+public class GetStackFramesCommand extends DebugCommand {
 
-	public ResumeCommand() {
+	protected final DebugStackFrame[] frames;
+	
+	public GetStackFramesCommand(DebugStackFrame[] frames) {
+		this.frames = frames;
 	}
 	
 	@Override
 	public int run(DebugEngine engine) {
-		return engine.getDebugControl().waitForEvent(0, IDebugControl.INFINITE);
+		engine.getDebugControl().getStrackTrace(0, 0, 0, frames);
+		return HRESULT.S_OK;
 	}
 
 }

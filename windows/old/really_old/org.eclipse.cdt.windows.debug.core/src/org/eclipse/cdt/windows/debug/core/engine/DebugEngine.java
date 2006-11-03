@@ -19,6 +19,7 @@ import org.eclipse.cdt.windows.debug.core.Activator;
 import org.eclipse.cdt.windows.debug.core.HRESULT;
 import org.eclipse.cdt.windows.debug.core.IDebugClient;
 import org.eclipse.cdt.windows.debug.core.IDebugControl;
+import org.eclipse.cdt.windows.debug.core.IDebugSymbols;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -35,6 +36,7 @@ public class DebugEngine extends Job {
 
 	private IDebugClient debugClient;
 	private IDebugControl debugControl;
+	private IDebugSymbols debugSymbols;
 
 	private final List<IDebugListener> listeners = new LinkedList<IDebugListener>();
 	
@@ -66,6 +68,10 @@ public class DebugEngine extends Job {
 		return debugControl;
 	}
 	
+	public IDebugSymbols getDebugSymbols() {
+		return debugSymbols;
+	}
+	
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
 		// Set up the debug interface
@@ -74,13 +80,19 @@ public class DebugEngine extends Job {
 			if (debugClient == null)
 				return new Status(IStatus.ERROR, Activator.PLUGIN_ID,
 					"Failed to create client");
+			
 			debugControl = new IDebugControl();
 			if (HRESULT.FAILED(debugClient.createControl(debugControl)))
 				return new Status(IStatus.ERROR, Activator.PLUGIN_ID,
 					"Failed to create control");
 			if (HRESULT.FAILED(debugClient.setEventCallbacks(new EventCallbacks(this))))
 				return new Status(IStatus.ERROR, Activator.PLUGIN_ID,
-					"Failed to register callbacks");
+				"Failed to register callbacks");
+			
+			debugSymbols = new IDebugSymbols();
+			if (HRESULT.FAILED(debugClient.createSymbols(debugSymbols)))
+				return new Status(IStatus.ERROR, Activator.PLUGIN_ID,
+					"Failed to create symbols interface");
 		} catch (CoreException e) {
 			return e.getStatus();
 		}

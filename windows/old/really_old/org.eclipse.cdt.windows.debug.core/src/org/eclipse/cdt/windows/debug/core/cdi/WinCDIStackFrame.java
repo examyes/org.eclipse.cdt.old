@@ -11,6 +11,8 @@
 
 package org.eclipse.cdt.windows.debug.core.cdi;
 
+import java.math.BigInteger;
+
 import org.eclipse.cdt.debug.core.cdi.CDIException;
 import org.eclipse.cdt.debug.core.cdi.ICDILocator;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIArgument;
@@ -21,6 +23,12 @@ import org.eclipse.cdt.debug.core.cdi.model.ICDIStackFrame;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIThread;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIValue;
+import org.eclipse.cdt.windows.debug.core.DebugInt;
+import org.eclipse.cdt.windows.debug.core.DebugStackFrame;
+import org.eclipse.cdt.windows.debug.core.DebugString;
+import org.eclipse.cdt.windows.debug.core.HRESULT;
+import org.eclipse.cdt.windows.debug.core.IDebugSymbols;
+import org.eclipse.cdt.windows.debug.core.engine.DebugEngine;
 
 /**
  * @author Doug Schaefer
@@ -30,12 +38,34 @@ public class WinCDIStackFrame implements ICDIStackFrame {
 
 	private final WinCDITarget target;
 	private final WinCDIThread thread;
-	private final ICDILocator locator;
+	private final WinCDILocator locator;
 	
-	public WinCDIStackFrame(WinCDITarget target, WinCDIThread thread, ICDILocator locator) {
+	public WinCDIStackFrame(WinCDITarget target, WinCDIThread thread,
+			DebugEngine engine, DebugStackFrame frame) {
 		this.target = target;
 		this.thread = thread;
-		this.locator = locator;
+		this.locator = new WinCDILocator();
+
+		long offset = frame.getInstructionOffset();
+		IDebugSymbols symbols = engine.getDebugSymbols();
+		DebugString name = new DebugString();
+		int hr = symbols.getNameByOffset(offset, name, null);
+		if (!HRESULT.FAILED(hr))
+			locator.setFunction(name.getString());
+		else {
+			locator.setFunction(HRESULT.getMessage(hr));
+		}
+		DebugInt line = new DebugInt();
+		DebugString file = new DebugString();
+		hr = symbols.getLineByOffset(offset, line, file, null);
+		if (!HRESULT.FAILED(hr)) {
+			locator.setFile(file.getString());
+			locator.setLineNumber(line.getInt());
+			locator.setAddress(new BigInteger(String.valueOf(offset)));
+		} else {
+			locator.setFile("<unknown>");
+			locator.setAddress(new BigInteger("0"));
+		}
 	}
 	
 	public ICDIArgument createArgument(ICDIArgumentDescriptor varDesc)
@@ -57,8 +87,8 @@ public class WinCDIStackFrame implements ICDIStackFrame {
 
 	public ICDIArgumentDescriptor[] getArgumentDescriptors()
 			throws CDIException {
-		// TODO Auto-generated method stub
-		return null;
+		// TODO
+		return new ICDIArgumentDescriptor[0];
 	}
 
 	public int getLevel() {
@@ -69,7 +99,7 @@ public class WinCDIStackFrame implements ICDIStackFrame {
 	public ICDILocalVariableDescriptor[] getLocalVariableDescriptors()
 			throws CDIException {
 		// TODO Auto-generated method stub
-		return null;
+		return new ICDILocalVariableDescriptor[0];
 	}
 
 	public ICDILocator getLocator() {

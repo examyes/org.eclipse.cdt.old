@@ -62,8 +62,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 
-import com.sun.org.apache.bcel.internal.classfile.LineNumber;
-
 /**
  * @author Doug Schaefer
  *
@@ -199,6 +197,7 @@ public class WinCDITarget implements ICDITarget {
 	}
 
 	public void resume() throws CDIException {
+		// Mark stack frames out of date
 		debugEngine.scheduleCommand(new ResumeCommand());
 		session.fireEvents(new ICDIEvent[] {
 				new WinCDIResumedEvent(this, ICDIResumedEvent.CONTINUE)
@@ -391,8 +390,6 @@ public class WinCDITarget implements ICDITarget {
 	}
 
 	public void suspend() throws CDIException {
-		// TODO Auto-generated method stub
-
 	}
 
 	public ICDISignal[] getSignals() throws CDIException {

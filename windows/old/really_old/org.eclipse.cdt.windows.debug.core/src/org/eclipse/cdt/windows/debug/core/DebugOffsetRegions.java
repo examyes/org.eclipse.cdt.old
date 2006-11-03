@@ -9,22 +9,12 @@
  *     QNX Software Systems - Initial API and implementation
  **********************************************************************/
 
-package org.eclipse.cdt.windows.debug.core.engine;
-
-import org.eclipse.cdt.windows.debug.core.IDebugControl;
+package org.eclipse.cdt.windows.debug.core;
 
 /**
  * @author Doug Schaefer
  *
  */
-public class ResumeCommand extends DebugCommand {
-
-	public ResumeCommand() {
-	}
-	
-	@Override
-	public int run(DebugEngine engine) {
-		return engine.getDebugControl().waitForEvent(0, IDebugControl.INFINITE);
-	}
+public class DebugOffsetRegions {
 
 }

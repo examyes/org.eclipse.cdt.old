@@ -8,23 +8,9 @@
  * Contributors: 
  *     QNX Software Systems - Initial API and implementation
  **********************************************************************/
+#ifndef DEBUGSYMBOLS_H_
+#define DEBUGSYMBOLS_H_
 
-package org.eclipse.cdt.windows.debug.core.engine;
+void setObject(JNIEnv * env, jobject obj, IDebugSymbols3 * debugControl);
 
-import org.eclipse.cdt.windows.debug.core.IDebugControl;
-
-/**
- * @author Doug Schaefer
- *
- */
-public class ResumeCommand extends DebugCommand {
-
-	public ResumeCommand() {
-	}
-	
-	@Override
-	public int run(DebugEngine engine) {
-		return engine.getDebugControl().waitForEvent(0, IDebugControl.INFINITE);
-	}
-
-}
+#endif /*DEBUGSYMBOLS_H_*/
