@@ -9,24 +9,20 @@
  *     QNX Software Systems - Initial API and implementation
  **********************************************************************/
 
-package org.eclipse.cdt.windows.debug.core.engine;
+package org.eclipse.cdt.windows.debug.core.cdi;
 
-import org.eclipse.cdt.windows.debug.core.HRESULT;
-import org.eclipse.cdt.windows.debug.core.IDebugControl;
+import org.eclipse.cdt.debug.core.cdi.ICDIEndSteppingRange;
+import org.eclipse.cdt.debug.core.cdi.ICDISession;
 
 /**
  * @author Doug Schaefer
  *
  */
-public class ResumeCommand extends DebugCommand {
+public class WinCDIEndSteppingRange implements ICDIEndSteppingRange {
 
-	@Override
-	public int run(DebugEngine engine) {
-		IDebugControl control = engine.getDebugControl();
-		int hr = control.setExecutionStatus(IDebugControl.DEBUG_STATUS_GO);
-		if (HRESULT.FAILED(hr))
-			return hr;
-		return control.waitForEvent(0, IDebugControl.INFINITE);
+	public ICDISession getSession() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

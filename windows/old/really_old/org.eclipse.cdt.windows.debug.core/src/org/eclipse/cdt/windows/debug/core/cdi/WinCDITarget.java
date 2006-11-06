@@ -56,6 +56,7 @@ import org.eclipse.cdt.windows.debug.core.engine.CreateProcessCommand;
 import org.eclipse.cdt.windows.debug.core.engine.DebugEngine;
 import org.eclipse.cdt.windows.debug.core.engine.ResumeCommand;
 import org.eclipse.cdt.windows.debug.core.engine.SetBreakpointCommand;
+import org.eclipse.cdt.windows.debug.core.engine.StepOverCommand;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -80,8 +81,7 @@ public class WinCDITarget implements ICDITarget {
 	private final DebugEngine debugEngine;
 	private WinProcess process = new WinProcess();
 	
-	public WinCDITarget(WinCDISession session, ILaunch launch,
-			File executable) throws CoreException {
+	public WinCDITarget(WinCDISession session, ILaunch launch, File executable) throws CoreException {
 		this.session = session;
 		String commandLine;
 		try {
@@ -230,8 +230,7 @@ public class WinCDITarget implements ICDITarget {
 	}
 
 	public void stepOver() throws CDIException {
-		// TODO Auto-generated method stub
-
+		stepOver(1);
 	}
 
 	public void stepOverInstruction() throws CDIException {
@@ -355,8 +354,23 @@ public class WinCDITarget implements ICDITarget {
 	}
 
 	public void stepOver(int count) throws CDIException {
-		// TODO Auto-generated method stub
-
+		debugEngine.scheduleCommand(new StepOverCommand() {
+			@Override
+			public int run(DebugEngine engine) {
+				int hr = super.run(engine);
+				if (HRESULT.FAILED(hr))
+					return hr;
+				WinCDIEventManager em = (WinCDIEventManager)session.getEventManager();
+				em.fireEvents(new ICDIEvent[] {
+						new WinCDISuspendedEvent(
+								new WinCDIEndSteppingRange(), WinCDITarget.this)
+				});
+				return hr;
+			}
+		});
+		session.fireEvents(new ICDIEvent[] {
+				new WinCDIResumedEvent(this, ICDIResumedEvent.STEP_OVER)
+			});
 	}
 
 	public void stepOverInstruction(int count) throws CDIException {

@@ -23,7 +23,6 @@
 	try { IDebugControl4 * control = getObject(env, obj);
 #define JNISTDEND } catch (jobject e) { env->Throw((jthrowable)e); return E_FAIL; } }
 
-
 static jfieldID pID = NULL;
 
 static jfieldID getPID(JNIEnv * env, jobject obj) {
@@ -45,8 +44,7 @@ void setObject(JNIEnv * env, jobject obj, IDebugControl4 * debugControl) {
 	env->SetLongField(obj, getPID(env, obj), (jlong)debugControl);
 }
 
-
-    // IDebugControl.
+// IDebugControl.
 
 //	public native int getInterrupt();
 //	public native int setInterrupt(int flags);
@@ -124,7 +122,12 @@ JNISTDEND
 //    public native int getEffectiveProcessorType(DebugInt type);
 //    public native int setEffectiveProcessorType(int type);
 //    public native int getExecutionStatus(DebugInt status);
+
 //    public native int setExecutionStatus(int status);
+JNISTDMETHOD(setExecutionStatus, jint status)
+	return control->SetExecutionStatus(status);
+JNISTDEND
+
 //    public native int getCodeLevel(DebugInt level);
 //    public native int setCodeLevel(int level);
 //    public native int getEngineOptions(DebugInt options);

@@ -8,25 +8,9 @@
  * Contributors: 
  *     QNX Software Systems - Initial API and implementation
  **********************************************************************/
+#ifndef DEBUGREGISTERS_H_
+#define DEBUGREGISTERS_H_
 
-package org.eclipse.cdt.windows.debug.core.engine;
+void setObject(JNIEnv * env, jobject obj, IDebugRegisters2 * registers);
 
-import org.eclipse.cdt.windows.debug.core.HRESULT;
-import org.eclipse.cdt.windows.debug.core.IDebugControl;
-
-/**
- * @author Doug Schaefer
- *
- */
-public class ResumeCommand extends DebugCommand {
-
-	@Override
-	public int run(DebugEngine engine) {
-		IDebugControl control = engine.getDebugControl();
-		int hr = control.setExecutionStatus(IDebugControl.DEBUG_STATUS_GO);
-		if (HRESULT.FAILED(hr))
-			return hr;
-		return control.waitForEvent(0, IDebugControl.INFINITE);
-	}
-
-}
+#endif /*DEBUGREGISTERS_H_*/

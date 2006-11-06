@@ -17,6 +17,7 @@
 #include "debugEventCallbacks.h"
 #include "debugControl.h"
 #include "debugSymbols.h"
+#include "debugRegisters.h"
 
 // Class IDebugClient
 
@@ -463,5 +464,14 @@ JNISTDMETHOD(createSymbols, jobject symbols)
 	HRESULT hr = client->QueryInterface(__uuidof(IDebugSymbols3), ((void **)&_symbols));
 	if (!FAILED(hr))
 		setObject(env, symbols, _symbols);
+	return hr;
+JNISTDEND
+
+//	public native int createRegisters(IDebugRegisters registers);
+JNISTDMETHOD(createRegisters, jobject registers)
+	IDebugRegisters2 * _registers;
+	HRESULT hr = client->QueryInterface(__uuidof(IDebugRegisters2), ((void **)&_registers));
+	if (!FAILED(hr))
+		setObject(env, registers, _registers);
 	return hr;
 JNISTDEND

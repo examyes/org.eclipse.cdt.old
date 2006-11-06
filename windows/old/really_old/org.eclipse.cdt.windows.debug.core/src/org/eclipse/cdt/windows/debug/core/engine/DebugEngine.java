@@ -19,6 +19,7 @@ import org.eclipse.cdt.windows.debug.core.Activator;
 import org.eclipse.cdt.windows.debug.core.HRESULT;
 import org.eclipse.cdt.windows.debug.core.IDebugClient;
 import org.eclipse.cdt.windows.debug.core.IDebugControl;
+import org.eclipse.cdt.windows.debug.core.IDebugRegisters;
 import org.eclipse.cdt.windows.debug.core.IDebugSymbols;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -37,6 +38,7 @@ public class DebugEngine extends Job {
 	private IDebugClient debugClient;
 	private IDebugControl debugControl;
 	private IDebugSymbols debugSymbols;
+	private IDebugRegisters debugRegisters;
 
 	private final List<IDebugListener> listeners = new LinkedList<IDebugListener>();
 	
@@ -72,6 +74,10 @@ public class DebugEngine extends Job {
 		return debugSymbols;
 	}
 	
+	public IDebugRegisters getDebugRegisters() {
+		return debugRegisters;
+	}
+	
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
 		// Set up the debug interface
@@ -93,6 +99,11 @@ public class DebugEngine extends Job {
 			if (HRESULT.FAILED(debugClient.createSymbols(debugSymbols)))
 				return new Status(IStatus.ERROR, Activator.PLUGIN_ID,
 					"Failed to create symbols interface");
+			
+			debugRegisters = new IDebugRegisters();
+			if (HRESULT.FAILED(debugClient.createRegisters(debugRegisters)))
+				return new Status(IStatus.ERROR, Activator.PLUGIN_ID,
+					"Failed to create registers interface");
 		} catch (CoreException e) {
 			return e.getStatus();
 		}

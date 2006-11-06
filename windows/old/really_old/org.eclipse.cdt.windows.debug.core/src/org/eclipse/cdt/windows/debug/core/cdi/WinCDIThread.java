@@ -145,8 +145,7 @@ public class WinCDIThread implements ICDIThread {
 	}
 
 	public void stepOver() throws CDIException {
-		// TODO Auto-generated method stub
-
+		target.stepOver();
 	}
 
 	public void stepOverInstruction() throws CDIException {
@@ -170,8 +169,7 @@ public class WinCDIThread implements ICDIThread {
 	}
 
 	public void stepOver(int count) throws CDIException {
-		// TODO Auto-generated method stub
-
+		target.stepOver(count);
 	}
 
 	public void stepOverInstruction(int count) throws CDIException {
