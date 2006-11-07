@@ -46,7 +46,7 @@ public class EventCallbacks extends IDebugEventCallbacks {
 		// resume after event handling to clean up anything else
 		engine.scheduleCommand(new ResumeCommand());
 		// break to handle the event
-		return DEBUG_STATUS_BREAK;
+		return DEBUG_STATUS_NO_CHANGE;
 	}
 	
 	@Override

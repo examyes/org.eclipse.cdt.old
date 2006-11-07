@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Windows Debugger CDI Plug-in
-Bundle-SymbolicName: org.eclipse.cdt.windows.debug.core.cdi
+Bundle-SymbolicName: org.eclipse.cdt.windows.debug.core.cdi;singleton:=true
 Bundle-Version: 1.0.0
 Bundle-Activator: org.eclipse.cdt.windows.debug.core.cdi.Activator
 Bundle-Vendor: Eclipse.org

@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Windows Debug Core Plug-in
-Bundle-SymbolicName: org.eclipse.cdt.windows.debug.core;singleton:=true
+Bundle-SymbolicName: org.eclipse.cdt.windows.debug.core
 Bundle-Version: 1.0.0
 Bundle-Activator: org.eclipse.cdt.windows.debug.core.Activator
 Bundle-Vendor: Eclipse.org
