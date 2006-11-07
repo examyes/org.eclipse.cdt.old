@@ -22,5 +22,16 @@ public abstract class DebugCommand {
 	 * @return HRESULT of command
 	 */
 	public abstract int run(DebugEngine engine);
+
+	/**
+	 * For tracing.
+	 * 
+	 * @return name of command
+	 */
+	protected abstract String getName();
 	
+	@Override
+	public String toString() {
+		return getName() + "@" + hashCode();
+	}
 }

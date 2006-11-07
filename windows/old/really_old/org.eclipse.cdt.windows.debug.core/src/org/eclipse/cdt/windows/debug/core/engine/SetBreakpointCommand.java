@@ -28,6 +28,11 @@ public class SetBreakpointCommand extends DebugCommand {
 		this.expression = expression;
 	}
 	
+	@Override
+	protected String getName() {
+		return "SetBreakpoint";
+	}
+	
 	public IDebugBreakpoint getBreakpoint() {
 		return bp;
 	}

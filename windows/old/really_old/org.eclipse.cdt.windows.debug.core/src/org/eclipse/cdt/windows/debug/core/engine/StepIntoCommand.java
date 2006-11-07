@@ -11,27 +11,22 @@
 
 package org.eclipse.cdt.windows.debug.core.engine;
 
+import org.eclipse.cdt.windows.debug.core.IDebugControl;
+
 /**
  * @author Doug Schaefer
  *
- * The root class for debugger events that are raised by the
- * engine and passed to any listeners.
  */
-public abstract class DebugEvent {
+public class StepIntoCommand extends StepCommand {
 
-	public static final int UNKNOWN = 0;
-	public static final int BREAKPOINT = 1;
-	public static final int EXIT_PROCESS = 2;
-	
-	public int getType() {
-		return UNKNOWN;
+	@Override
+	protected String getName() {
+		return "StepInto";
 	}
-	
-	protected abstract String getName();
 	
 	@Override
-	public String toString() {
-		return getName() + "@" + hashCode();
+	protected int getExecutionStatus() {
+		return IDebugControl.DEBUG_STATUS_STEP_INTO;
 	}
-	
+
 }

@@ -13,7 +13,6 @@ package org.eclipse.cdt.windows.debug.core.cdi;
 
 import org.eclipse.cdt.debug.core.cdi.CDIException;
 import org.eclipse.cdt.debug.core.cdi.ICDILocation;
-import org.eclipse.cdt.debug.core.cdi.event.ICDIEvent;
 import org.eclipse.cdt.debug.core.cdi.model.ICDISignal;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIStackFrame;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
@@ -135,8 +134,7 @@ public class WinCDIThread implements ICDIThread {
 	}
 
 	public void stepInto() throws CDIException {
-		// TODO Auto-generated method stub
-
+		stepInto(1);
 	}
 
 	public void stepIntoInstruction() throws CDIException {
@@ -145,7 +143,7 @@ public class WinCDIThread implements ICDIThread {
 	}
 
 	public void stepOver() throws CDIException {
-		target.stepOver();
+		stepOver(1);
 	}
 
 	public void stepOverInstruction() throws CDIException {
@@ -159,8 +157,7 @@ public class WinCDIThread implements ICDIThread {
 	}
 
 	public void stepInto(int count) throws CDIException {
-		// TODO Auto-generated method stub
-
+		target.stepInto(count);
 	}
 
 	public void stepIntoInstruction(int count) throws CDIException {

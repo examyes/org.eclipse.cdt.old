@@ -12,7 +12,6 @@
 package org.eclipse.cdt.windows.debug.core.engine;
 
 import org.eclipse.cdt.windows.debug.core.DebugStackFrame;
-import org.eclipse.cdt.windows.debug.core.HRESULT;
 
 /**
  * @author Doug Schaefer
@@ -27,9 +26,13 @@ public class GetStackFramesCommand extends DebugCommand {
 	}
 	
 	@Override
+	protected String getName() {
+		return "GetStackFrames";
+	}
+	
+	@Override
 	public int run(DebugEngine engine) {
-		engine.getDebugControl().getStrackTrace(0, 0, 0, frames);
-		return HRESULT.S_OK;
+		return engine.getDebugControl().getStrackTrace(0, 0, 0, frames, null);
 	}
 
 }

@@ -80,18 +80,20 @@ void setObject(JNIEnv * env, jobject obj, IDebugControl4 * debugControl) {
 //	public native int getStrackTrace(long frameOffset, long stackOffset,
 //			long instructionOffset, DebugStackFrame[] frames);
 JNISTDMETHOD(getStrackTrace, jlong frameOffset, jlong stackOffset, jlong instructionOffset,
-		jobjectArray frames)
+		jobjectArray frames, jobject framesFilled)
 	jsize framesSize = env->GetArrayLength(frames);
 	DEBUG_STACK_FRAME * _frames = new DEBUG_STACK_FRAME[framesSize];
-	ULONG framesFilled;
+	ULONG _framesFilled;
 	HRESULT hr = control->GetStackTrace(frameOffset, stackOffset, instructionOffset,
-			_frames, framesSize, &framesFilled);
+			_frames, framesSize, &_framesFilled);
 	if (!FAILED(hr)) {
-		for (int i = 0; i < framesFilled; ++i) {
+		for (int i = 0; i < _framesFilled; ++i) {
 			env->SetObjectArrayElement(frames, i, createObject(env, _frames[i]));
 		}
 	}
 	delete[] _frames;
+	if (framesFilled != NULL)
+		setObject(env, framesFilled, (jint)_framesFilled);
 	return hr;
 JNISTDEND
 

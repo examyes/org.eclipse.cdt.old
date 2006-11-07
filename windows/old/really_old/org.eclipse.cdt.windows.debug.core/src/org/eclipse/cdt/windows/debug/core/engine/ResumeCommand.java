@@ -21,6 +21,11 @@ import org.eclipse.cdt.windows.debug.core.IDebugControl;
 public class ResumeCommand extends DebugCommand {
 
 	@Override
+	protected String getName() {
+		return "Resume";
+	}
+	
+	@Override
 	public int run(DebugEngine engine) {
 		IDebugControl control = engine.getDebugControl();
 		int hr = control.setExecutionStatus(IDebugControl.DEBUG_STATUS_GO);

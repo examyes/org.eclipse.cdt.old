@@ -16,6 +16,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.cdt.windows.debug.core.Activator;
+import org.eclipse.cdt.windows.debug.core.DebugInt;
+import org.eclipse.cdt.windows.debug.core.DebugStackFrame;
 import org.eclipse.cdt.windows.debug.core.HRESULT;
 import org.eclipse.cdt.windows.debug.core.IDebugClient;
 import org.eclipse.cdt.windows.debug.core.IDebugControl;
@@ -49,6 +51,8 @@ public class DebugEngine extends Job {
 	
 	private static DebugEngine singleton;
 	
+	private final boolean debug;
+	
 	public static DebugEngine get() {
 		if (singleton == null) {
 			singleton = new DebugEngine();
@@ -60,6 +64,7 @@ public class DebugEngine extends Job {
 	
 	private DebugEngine() {
 		super("Windows Debugger");
+		debug = Activator.getDefault().isDebugging();
 	}
 	
 	public IDebugClient getDebugClient() {
@@ -76,6 +81,10 @@ public class DebugEngine extends Job {
 	
 	public IDebugRegisters getDebugRegisters() {
 		return debugRegisters;
+	}
+	
+	public boolean isDebug() {
+		return debug;
 	}
 	
 	@Override
@@ -120,12 +129,16 @@ public class DebugEngine extends Job {
 			synchronized (commandQueue) {
 				if (commandQueue.isEmpty())
 					try {
+						if (debug)
+							System.out.println("WinDbg waiting");
 						commandQueue.wait();
 					} catch (InterruptedException e) {
 						continue;
 					}
 				command = commandQueue.remove(0);
 			}
+			if (debug)
+				System.out.println("WinDbg running: " + command);
 			int hr = command.run(this);
 			processRunning = (hr != HRESULT.E_UNEXPECTED);
 			
@@ -137,10 +150,14 @@ public class DebugEngine extends Job {
 						break;
 					event = eventQueue.remove(0);
 				}
+				
+				if (debug)
+					System.out.println("WinDbg dispatching: " + event);
 
 				Iterator<IDebugListener> i = listeners.iterator();
-				while (i.hasNext())
+				while (i.hasNext()) {
 					i.next().handleDebugEvent(event);
+				}
 			}
 		}
 	}
@@ -159,6 +176,8 @@ public class DebugEngine extends Job {
 	}
 	
 	public void scheduleCommand(DebugCommand command) {
+		if (Activator.getDefault().isDebugging())
+			System.out.println("WinDbg schedule: " + command);
 		// TODO - might need to interrupt the debugger
 		synchronized (commandQueue) {
 			commandQueue.add(command);
@@ -167,9 +186,33 @@ public class DebugEngine extends Job {
 	}
 	
 	public void fireEvent(DebugEvent event) {
+		if (Activator.getDefault().isDebugging())
+			System.out.println("WinDbg event: " + event);
 		synchronized (eventQueue) {
 			eventQueue.add(event);
 		}
+	}
+
+	public int stepReturn(int targetStatus) {
+		DebugStackFrame[] frames = new DebugStackFrame[10];
+		DebugInt framesFilled = new DebugInt();
+		int hr = debugControl.getStrackTrace(0, 0, 0, frames, framesFilled);
+		if (HRESULT.FAILED(hr))
+			return hr;
+		int level = framesFilled.getInt();
+		hr = debugControl.setExecutionStatus(IDebugControl.DEBUG_STATUS_STEP_OVER);
+		if (HRESULT.FAILED(hr))
+			return hr;
+		while (framesFilled.getInt() >= level) {
+			hr = debugControl.waitForEvent(0, IDebugControl.INFINITE);
+			if (HRESULT.FAILED(hr))
+				return hr;
+			hr = debugControl.getStrackTrace(0, 0, 0, frames, framesFilled);
+			if (HRESULT.FAILED(hr))
+				return hr;
+		}
+		debugControl.setExecutionStatus(targetStatus);
+		return hr;
 	}
 	
 }

@@ -32,4 +32,9 @@ public class ExitProcessEvent extends DebugEvent {
 		return EXIT_PROCESS;
 	}
 	
+	@Override
+	protected String getName() {
+		return "ExitProcess";
+	}
+	
 }

@@ -37,6 +37,11 @@ public class CreateProcessCommand extends DebugCommand {
 		this.environment = environment;
 	}
 	
+	@Override
+	protected String getName() {
+		return "CreateProcess";
+	}
+	
 	private String getEnvironmentString() {
 		// TODO - walk the map and create the string
 		return null;

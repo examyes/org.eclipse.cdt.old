@@ -34,4 +34,9 @@ public class BreakpointEvent extends DebugEvent {
 		return BREAKPOINT;
 	}
 	
+	@Override
+	protected String getName() {
+		return "Breakpoint";
+	}
+	
 }
