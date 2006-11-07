@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Windows Debugger CDI Plug-in
+Bundle-SymbolicName: org.eclipse.cdt.windows.debug.core.cdi
+Bundle-Version: 1.0.0
+Bundle-Activator: org.eclipse.cdt.windows.debug.core.cdi.Activator
+Bundle-Vendor: Eclipse.org
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.cdt.debug.core,
+ org.eclipse.debug.core,
+ org.eclipse.cdt.core,
+ org.eclipse.cdt.launch,
+ org.eclipse.cdt.windows.debug.core
+Eclipse-LazyStart: true
