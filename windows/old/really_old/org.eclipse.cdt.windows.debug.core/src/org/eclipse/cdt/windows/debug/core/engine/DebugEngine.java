@@ -16,8 +16,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.cdt.windows.debug.core.Activator;
+import org.eclipse.cdt.windows.debug.core.DebugCreateProcessOptions;
 import org.eclipse.cdt.windows.debug.core.DebugInt;
+import org.eclipse.cdt.windows.debug.core.DebugLong;
 import org.eclipse.cdt.windows.debug.core.DebugStackFrame;
+import org.eclipse.cdt.windows.debug.core.DebugString;
 import org.eclipse.cdt.windows.debug.core.HRESULT;
 import org.eclipse.cdt.windows.debug.core.IDebugClient;
 import org.eclipse.cdt.windows.debug.core.IDebugControl;
@@ -37,10 +40,10 @@ import org.eclipse.core.runtime.jobs.Job;
  */
 public class DebugEngine extends Job {
 
-	private IDebugClient debugClient;
-	private IDebugControl debugControl;
-	private IDebugSymbols debugSymbols;
-	private IDebugRegisters debugRegisters;
+	private IDebugClient client;
+	private IDebugControl control;
+	private IDebugSymbols symbols;
+	private IDebugRegisters registers;
 
 	private final List<IDebugListener> listeners = new LinkedList<IDebugListener>();
 	
@@ -67,20 +70,16 @@ public class DebugEngine extends Job {
 		debug = Activator.getDefault().isDebugging();
 	}
 	
-	public IDebugClient getDebugClient() {
-		return debugClient;
-	}
-	
 	public IDebugControl getDebugControl() {
-		return debugControl;
+		return control;
 	}
 	
 	public IDebugSymbols getDebugSymbols() {
-		return debugSymbols;
+		return symbols;
 	}
 	
 	public IDebugRegisters getDebugRegisters() {
-		return debugRegisters;
+		return registers;
 	}
 	
 	public boolean isDebug() {
@@ -91,26 +90,29 @@ public class DebugEngine extends Job {
 	protected IStatus run(IProgressMonitor monitor) {
 		// Set up the debug interface
 		try {
-			debugClient = IDebugClient.create();
-			if (debugClient == null)
+			client = IDebugClient.create();
+			if (client == null)
 				return new Status(IStatus.ERROR, Activator.PLUGIN_ID,
 					"Failed to create client");
+			if (HRESULT.FAILED(client.setEventCallbacks(new EventCallbacks(this))))
+				return new Status(IStatus.ERROR, Activator.PLUGIN_ID,
+					"Failed to register callbacks");
 			
-			debugControl = new IDebugControl();
-			if (HRESULT.FAILED(debugClient.createControl(debugControl)))
+			control = new IDebugControl();
+			if (HRESULT.FAILED(client.createControl(control)))
 				return new Status(IStatus.ERROR, Activator.PLUGIN_ID,
 					"Failed to create control");
-			if (HRESULT.FAILED(debugClient.setEventCallbacks(new EventCallbacks(this))))
+			if (HRESULT.FAILED(control.setCodeLevel(IDebugControl.DEBUG_LEVEL_SOURCE)))
 				return new Status(IStatus.ERROR, Activator.PLUGIN_ID,
-				"Failed to register callbacks");
+					"Failed to set code level");
 			
-			debugSymbols = new IDebugSymbols();
-			if (HRESULT.FAILED(debugClient.createSymbols(debugSymbols)))
+			symbols = new IDebugSymbols();
+			if (HRESULT.FAILED(client.createSymbols(symbols)))
 				return new Status(IStatus.ERROR, Activator.PLUGIN_ID,
 					"Failed to create symbols interface");
 			
-			debugRegisters = new IDebugRegisters();
-			if (HRESULT.FAILED(debugClient.createRegisters(debugRegisters)))
+			registers = new IDebugRegisters();
+			if (HRESULT.FAILED(client.createRegisters(registers)))
 				return new Status(IStatus.ERROR, Activator.PLUGIN_ID,
 					"Failed to create registers interface");
 		} catch (CoreException e) {
@@ -171,10 +173,6 @@ public class DebugEngine extends Job {
 		listeners.remove(listener);
 	}
 	
-	public boolean isProcessRunning() {
-		return processRunning;
-	}
-	
 	public void scheduleCommand(DebugCommand command) {
 		if (Activator.getDefault().isDebugging())
 			System.out.println("WinDbg schedule: " + command);
@@ -193,26 +191,87 @@ public class DebugEngine extends Job {
 		}
 	}
 
-	public int stepReturn(int targetStatus) {
+	private void debugDumpStack(DebugStackFrame[] frames, int len) {
+		System.out.println("Stack:");
+		for (int i = 0; i < len; ++i) {
+			DebugString _name = new DebugString();
+			symbols.getNameByOffset(frames[i].getInstructionOffset(), _name, null);
+			System.out.println("    " + _name.getString());
+		}
+	}
+	
+	public int createProcess(String commandLine, String initialDirectory,
+			String environment) {
+		// Create the process
+		DebugCreateProcessOptions options = new DebugCreateProcessOptions();
+		options.setCreateFlags(DebugCreateProcessOptions.DEBUG_ONLY_THIS_PROCESS);
+		int hr = client.createProcess2(
+				0L, commandLine, options,
+				initialDirectory, environment);
+		if (HRESULT.FAILED(hr) | processRunning)
+			return hr;
+		
+		// Run to create the process
+		return control.waitForEvent(0, IDebugControl.INFINITE);
+	}
+	
+	public int resume() {
+		int hr;
+		if (HRESULT.FAILED(hr = control.setExecutionStatus(IDebugControl.DEBUG_STATUS_GO)))
+			return hr;
+		return control.waitForEvent(0, IDebugControl.INFINITE);
+	}
+	
+	public int stepReturn() {
 		DebugStackFrame[] frames = new DebugStackFrame[10];
 		DebugInt framesFilled = new DebugInt();
-		int hr = debugControl.getStrackTrace(0, 0, 0, frames, framesFilled);
+		int hr = control.getStrackTrace(0, 0, 0, frames, framesFilled);
 		if (HRESULT.FAILED(hr))
 			return hr;
 		int level = framesFilled.getInt();
-		hr = debugControl.setExecutionStatus(IDebugControl.DEBUG_STATUS_STEP_OVER);
+		if (debug)
+			debugDumpStack(frames, level);
+		hr = control.setExecutionStatus(IDebugControl.DEBUG_STATUS_STEP_OVER);
 		if (HRESULT.FAILED(hr))
 			return hr;
 		while (framesFilled.getInt() >= level) {
-			hr = debugControl.waitForEvent(0, IDebugControl.INFINITE);
+			hr = control.waitForEvent(0, IDebugControl.INFINITE);
 			if (HRESULT.FAILED(hr))
 				return hr;
-			hr = debugControl.getStrackTrace(0, 0, 0, frames, framesFilled);
-			if (HRESULT.FAILED(hr))
+			if (HRESULT.FAILED(hr = control.getStrackTrace(0, 0, 0, frames, framesFilled)))
 				return hr;
 		}
-		debugControl.setExecutionStatus(targetStatus);
 		return hr;
 	}
+
+	public int stepInto() {
+		return step(IDebugControl.DEBUG_STATUS_STEP_INTO);
+	}
 	
+	public int stepOver() {
+		return step(IDebugControl.DEBUG_STATUS_STEP_OVER);
+	}
+
+	private int step(int executionStatus) {
+		while (true) {
+			int hr;
+			if (HRESULT.FAILED(hr = control.setExecutionStatus(executionStatus)))
+				return hr;
+		
+			if (HRESULT.FAILED(hr = control.waitForEvent(0, IDebugControl.INFINITE)))
+				return hr;
+
+			DebugLong _offset = new DebugLong();
+			if (HRESULT.FAILED(hr = registers.getInstructionOffset(_offset)))
+				return hr;
+
+			DebugString _file = new DebugString();
+			DebugInt _line = new DebugInt();
+			if (!HRESULT.FAILED(hr = symbols.getLineByOffset(_offset.getLong(),
+					_line, _file, null)))
+				// continue loop until we get a source line we know
+				return hr;
+		}
+	}
+
 }

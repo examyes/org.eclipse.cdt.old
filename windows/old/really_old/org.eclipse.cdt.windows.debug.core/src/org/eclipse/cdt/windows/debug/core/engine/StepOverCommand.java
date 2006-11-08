@@ -11,13 +11,12 @@
 
 package org.eclipse.cdt.windows.debug.core.engine;
 
-import org.eclipse.cdt.windows.debug.core.IDebugControl;
 
 /**
  * @author Doug Schaefer
  *
  */
-public class StepOverCommand extends StepCommand {
+public class StepOverCommand extends DebugCommand {
 
 	@Override
 	protected String getName() {
@@ -25,8 +24,8 @@ public class StepOverCommand extends StepCommand {
 	}
 	
 	@Override
-	protected int getExecutionStatus() {
-		return IDebugControl.DEBUG_STATUS_STEP_OVER;
+	public int run(DebugEngine engine) {
+		return engine.stepOver();
 	}
 	
 }

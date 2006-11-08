@@ -131,7 +131,19 @@ JNISTDMETHOD(setExecutionStatus, jint status)
 JNISTDEND
 
 //    public native int getCodeLevel(DebugInt level);
+JNISTDMETHOD(getCodeLevel, jobject level)
+	ULONG _level;
+	HRESULT hr = control->GetCodeLevel(&_level);
+	if (FAILED(hr))
+		return hr;
+	setObject(env, level, (jint)_level);
+JNISTDEND
+
 //    public native int setCodeLevel(int level);
+JNISTDMETHOD(setCodeLevel, jint level)
+	return control->SetCodeLevel(level);
+JNISTDEND
+
 //    public native int getEngineOptions(DebugInt options);
 //    public native int addEngineOptions(int options);
 //    public native int removeEngineOptions(int options);

@@ -11,8 +11,6 @@
 
 package org.eclipse.cdt.windows.debug.core.engine;
 
-import org.eclipse.cdt.windows.debug.core.HRESULT;
-import org.eclipse.cdt.windows.debug.core.IDebugControl;
 
 /**
  * @author Doug Schaefer
@@ -27,11 +25,7 @@ public class ResumeCommand extends DebugCommand {
 	
 	@Override
 	public int run(DebugEngine engine) {
-		IDebugControl control = engine.getDebugControl();
-		int hr = control.setExecutionStatus(IDebugControl.DEBUG_STATUS_GO);
-		if (HRESULT.FAILED(hr))
-			return hr;
-		return control.waitForEvent(0, IDebugControl.INFINITE);
+		return engine.resume();
 	}
 
 }

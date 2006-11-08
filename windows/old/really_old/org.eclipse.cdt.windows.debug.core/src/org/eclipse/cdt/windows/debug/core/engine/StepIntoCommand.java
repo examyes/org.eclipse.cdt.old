@@ -11,22 +11,21 @@
 
 package org.eclipse.cdt.windows.debug.core.engine;
 
-import org.eclipse.cdt.windows.debug.core.IDebugControl;
 
 /**
  * @author Doug Schaefer
  *
  */
-public class StepIntoCommand extends StepCommand {
+public class StepIntoCommand extends DebugCommand {
 
 	@Override
 	protected String getName() {
 		return "StepInto";
 	}
-	
-	@Override
-	protected int getExecutionStatus() {
-		return IDebugControl.DEBUG_STATUS_STEP_INTO;
-	}
 
+	@Override
+	public int run(DebugEngine engine) {
+		return engine.stepInto();
+	}
+	
 }

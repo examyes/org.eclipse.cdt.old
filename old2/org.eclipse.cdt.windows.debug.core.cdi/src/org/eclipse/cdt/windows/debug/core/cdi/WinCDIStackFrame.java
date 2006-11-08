@@ -55,12 +55,17 @@ public class WinCDIStackFrame implements ICDIStackFrame {
 		else {
 			locator.setFunction(HRESULT.getMessage(hr));
 		}
-		DebugInt line = new DebugInt();
-		DebugString file = new DebugString();
-		hr = symbols.getLineByOffset(offset, line, file, null);
+		if (frame.getFrameNumber() > 0)
+			// Entries higher up in the stack show the next instruction
+			// to be executed, not the call instruction.
+			offset -= 4;
+		DebugInt _line = new DebugInt();
+		DebugString _file = new DebugString();
+		hr = symbols.getLineByOffset(offset, _line, _file, null);
 		if (!HRESULT.FAILED(hr)) {
-			locator.setFile(file.getString());
-			locator.setLineNumber(line.getInt());
+			locator.setFile(_file.getString());
+			int line = _line.getInt();
+			locator.setLineNumber(line);
 			locator.setAddress(new BigInteger(String.valueOf(offset)));
 		} else {
 			locator.setFile("<unknown>");

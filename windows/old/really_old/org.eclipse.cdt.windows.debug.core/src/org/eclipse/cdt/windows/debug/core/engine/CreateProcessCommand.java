@@ -13,10 +13,6 @@ package org.eclipse.cdt.windows.debug.core.engine;
 
 import java.util.Map;
 
-import org.eclipse.cdt.windows.debug.core.DebugCreateProcessOptions;
-import org.eclipse.cdt.windows.debug.core.HRESULT;
-import org.eclipse.cdt.windows.debug.core.IDebugClient;
-import org.eclipse.cdt.windows.debug.core.IDebugControl;
 import org.eclipse.core.runtime.CoreException;
 
 /**
@@ -42,26 +38,10 @@ public class CreateProcessCommand extends DebugCommand {
 		return "CreateProcess";
 	}
 	
-	private String getEnvironmentString() {
-		// TODO - walk the map and create the string
-		return null;
-	};
-	
 	@Override
 	public int run(DebugEngine engine) {
-		IDebugClient client = engine.getDebugClient();
-		
-		// Create the process
-		DebugCreateProcessOptions options = new DebugCreateProcessOptions();
-		options.setCreateFlags(DebugCreateProcessOptions.DEBUG_ONLY_THIS_PROCESS);
-		int hr = client.createProcess2(
-				0L, commandLine, options,
-				initialDirectory, getEnvironmentString());
-		if (HRESULT.FAILED(hr) | engine.isProcessRunning())
-			return hr;
-		
-		// Run to create the process
-		return engine.getDebugControl().waitForEvent(0, IDebugControl.INFINITE);
+		// TODO create the environment string
+		return engine.createProcess(commandLine, initialDirectory, null);
 	}
 
 }
