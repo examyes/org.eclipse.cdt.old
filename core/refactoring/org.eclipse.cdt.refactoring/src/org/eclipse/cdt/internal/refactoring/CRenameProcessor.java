@@ -102,7 +102,7 @@ public class CRenameProcessor extends RenameProcessor {
         
         fDelegate= createDelegate();
         if (fDelegate == null) {
-            status.addFatalError(Messages.getString("CRenameTopProcessor.error.invalidTextSelection")); //$NON-NLS-1$
+            status.addFatalError(Messages.getString("CRenameTopProcessor.error.invalidName")); //$NON-NLS-1$
             return status;
         }            
         RefactoringStatus s1= fDelegate.checkInitialConditions(new NullProgressMonitor());
