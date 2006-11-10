@@ -11,19 +11,49 @@
 
 package org.eclipse.cdt.internal.refactoring;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.cdt.core.model.*;
-import org.eclipse.cdt.internal.refactoring.scanner.Scanner;
-import org.eclipse.cdt.internal.refactoring.scanner.Token;
-import org.eclipse.cdt.refactoring.*;
-import org.eclipse.core.resources.*;
-import org.eclipse.core.runtime.*;
-import org.eclipse.search.core.text.*;
-import org.eclipse.ui.*;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceProxy;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.search.core.text.TextSearchEngine;
+import org.eclipse.search.core.text.TextSearchMatchAccess;
+import org.eclipse.search.core.text.TextSearchRequestor;
+import org.eclipse.search.core.text.TextSearchScope;
+import org.eclipse.ui.IWorkingSet;
+import org.eclipse.ui.IWorkingSetManager;
+import org.eclipse.ui.PlatformUI;
+
+import org.eclipse.cdt.core.model.CoreModel;
+import org.eclipse.cdt.core.model.ICElement;
+import org.eclipse.cdt.core.model.ITranslationUnit;
+import org.eclipse.cdt.refactoring.CRefactoringMatch;
+import org.eclipse.cdt.refactoring.CRefactory;
+import org.eclipse.cdt.refactoring.ICRefactoringSearch;
+
+import org.eclipse.cdt.internal.formatter.scanner.Scanner;
+import org.eclipse.cdt.internal.formatter.scanner.SimpleScanner;
+import org.eclipse.cdt.internal.formatter.scanner.Token;
 
 /**
  * Wraps the platform text search and uses a scanner to categorize the text-matches
@@ -276,7 +306,7 @@ public class TextSearchWrapper implements ICRefactoringSearch {
 
     private void computeLocations(IFile file, ArrayList locations) {
         Reader reader;
-        Scanner scanner= new Scanner();
+        SimpleScanner scanner= new SimpleScanner();
         try {
             reader = new BufferedReader(
                     new InputStreamReader(file.getContents(), file.getCharset()));
