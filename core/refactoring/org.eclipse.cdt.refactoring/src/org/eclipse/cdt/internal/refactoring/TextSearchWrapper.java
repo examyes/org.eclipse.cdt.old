@@ -51,7 +51,6 @@ import org.eclipse.cdt.refactoring.CRefactoringMatch;
 import org.eclipse.cdt.refactoring.CRefactory;
 import org.eclipse.cdt.refactoring.ICRefactoringSearch;
 
-import org.eclipse.cdt.internal.formatter.scanner.Scanner;
 import org.eclipse.cdt.internal.formatter.scanner.SimpleScanner;
 import org.eclipse.cdt.internal.formatter.scanner.Token;
 
