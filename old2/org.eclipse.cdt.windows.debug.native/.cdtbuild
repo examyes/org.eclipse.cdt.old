@@ -9,8 +9,8 @@
 <tool id="org.eclipse.cdt.windows.dll.debug.compiler.1871258226" name="CL Compiler" superClass="org.eclipse.cdt.windows.dll.debug.compiler">
 <option id="org.eclipse.cdt.windows.cl.option.includes.567513790" superClass="org.eclipse.cdt.windows.cl.option.includes" valueType="includePath">
 <listOptionValue builtIn="false" value="&quot;C:\Program Files\Debugging Tools for Windows\sdk\inc&quot;"/>
-<listOptionValue builtIn="false" value="&quot;C:\Program Files\Java\jdk1.5.0_08\include&quot;"/>
-<listOptionValue builtIn="false" value="&quot;C:\Program Files\Java\jdk1.5.0_08\include\win32&quot;"/>
+<listOptionValue builtIn="false" value="&quot;C:\Program Files\Java\jdk1.5.0_09\include&quot;"/>
+<listOptionValue builtIn="false" value="&quot;C:\Program Files\Java\jdk1.5.0_09\include\win32&quot;"/>
 </option>
 <option id="org.eclipse.cdt.windows.cl.debug.option.runtime.1824786" superClass="org.eclipse.cdt.windows.cl.debug.option.runtime" value="org.eclipse.cdt.windows.cl.option.runtime.mtd" valueType="enumerated"/>
 <option id="org.eclipse.cdt.windows.cl.option.macros.982994079" superClass="org.eclipse.cdt.windows.cl.option.macros" valueType="definedSymbols">
