@@ -6,7 +6,6 @@
       <managedBuildRevision fileVersion="1.0"/>
       <tool
             command="cl /c"
-            dependencyCalculator="org.eclipse.cdt.windows.build.DependencyGenerator"
             headerExtensions="h,hpp"
             id="org.eclipse.cdt.windows.cl"
             isAbstract="false"
