@@ -29,15 +29,6 @@ import org.eclipse.cdt.internal.refactoring.UndoCTextFileChange;
 
 /**
  * A TextFileChange that uses a working copy in order to generate CModel events.
- * At this point the class does cannot fully respect the API contract of 
- * TextFileChange. This will change in the final version of the API,
- * so use with care! 
- * <p>
- * <strong>EXPERIMENTAL</strong>. This class or interface has been added as
- * part of a work in progress. There is no guarantee that this API will
- * work or that it will remain the same. Please do not use this API without
- * consulting with the CDT team.
- * </p>
  */
 public class CTextFileChange extends TextFileChange {
     private ITranslationUnit fTranslationUnit = null;
@@ -69,18 +60,13 @@ public class CTextFileChange extends TextFileChange {
         return doc;
     }
        
-    /**
-     * Warning: The method does not respect the api-contract of 
-     * {@link TextFileChange#commit(IDocument, IProgressMonitor)}, as it does not
-     * check <code>super.needsSaving()</code>. This will change in a future version.
-     */
     protected void commit(final IDocument document, final IProgressMonitor pm) throws CoreException {
         if (fWorkingCopy == null) {
         	super.commit(document, pm);
-        	return;
         }
-        
-        fWorkingCopy.commit(false, pm);
+        else if (needsSaving()) {
+        	fWorkingCopy.commit(false, pm);
+        }
     }
     
     /*
