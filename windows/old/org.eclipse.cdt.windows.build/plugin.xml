@@ -224,6 +224,46 @@
                superClass="org.eclipse.cdt.windows.cl.option.runtime"/>
       </tool>
       <tool
+            command="rc"
+            id="org.eclipse.cdt.windows.rc"
+            isAbstract="false"
+            name="Resource Compiler"
+            natureFilter="both"
+            outputFlag="/Fo"
+            outputs="res"
+            sources="rc">
+         <optionCategory
+               id="org.eclipse.cdt.windows.rc.optionCategory.preprocessor"
+               name="Preprocessor"/>
+         <option
+               browseType="directory"
+               category="org.eclipse.cdt.windows.rc.optionCategory.preprocessor"
+               command="/I"
+               id="org.eclipse.cdt.windows.rc.option.includes"
+               isAbstract="false"
+               name="Include Path (/I)"
+               resourceFilter="all"
+               valueType="includePath"/>
+         <option
+               category="org.eclipse.cdt.windows.rc.optionCategory.preprocessor"
+               command="/D"
+               id="org.eclipse.cdt.windows.rc.option.defines"
+               isAbstract="false"
+               name="Defines (/D)"
+               resourceFilter="all"
+               valueType="definedSymbols"/>
+         <optionCategory
+               id="org.eclipse.cdt.windows.rc.optionCategory.misc"
+               name="Miscellaneous"/>
+         <option
+               category="org.eclipse.cdt.windows.rc.optionCategory.misc"
+               id="org.eclipse.cdt.windows.rc.option.others"
+               isAbstract="false"
+               name="Other Options"
+               resourceFilter="all"
+               valueType="stringList"/>
+      </tool>
+      <tool
             command="link"
             id="org.eclipse.cdt.windows.link"
             isAbstract="false"
@@ -231,7 +271,7 @@
             natureFilter="both"
             outputFlag="/OUT:"
             sibling_order="org.eclipse.pde.internal.core.text.plugin.PluginElementNode@1016505"
-            sources="obj">
+            sources="obj,res">
          <envVarBuildPath
                pathType="buildpathLibrary"
                variableList="LIBS"/>
@@ -322,7 +362,7 @@
             natureFilter="both"
             outputFlag="/OUT:"
             outputs="lib"
-            sources="obj">
+            sources="obj,res">
          <optionCategory
                id="org.eclipse.cdt.windows.lib.optionCategory.general"
                name="General"/>
@@ -336,14 +376,6 @@
                resourceFilter="all"
                valueType="boolean"/>
       </tool>
-      <builder
-            arguments="/nologo /k"
-            buildfileGenerator="org.eclipse.cdt.windows.build.NMakefileGenerator"
-            command="nmake"
-            id="org.eclipse.cdt.windows.nmake"
-            isAbstract="false"
-            isVariableCaseSensitive="false"
-            name="NMAKE"/>
       <projectType
             id="org.eclipse.cdt.windows.projectType.exe"
             isAbstract="false"
@@ -367,6 +399,10 @@
                      isAbstract="false"
                      superClass="org.eclipse.cdt.windows.cl.debug"/>
                <tool
+                     id="org.eclipse.cdt.windows.exe.debug.rc"
+                     isAbstract="false"
+                     superClass="org.eclipse.cdt.windows.rc"/>
+               <tool
                      id="org.eclipse.cdt.windows.exe.debug.linker"
                      isAbstract="false"
                      superClass="org.eclipse.cdt.windows.link.exe">
@@ -376,13 +412,6 @@
                         isAbstract="false"
                         superClass="org.eclipse.cdt.windows.link.option.debug"/>
                </tool>
-               <builder
-                     command="nmake"
-                     id="org.eclipse.cdt.windows.exe.debug.nmake"
-                     buildfileGenerator="org.eclipse.cdt.windows.build.NMakefileGenerator"
-                     isAbstract="false"
-                     isVariableCaseSensitive="false"
-                     superClass="org.eclipse.cdt.windows.nmake"/>
             </toolChain>
          </configuration>
          <configuration
@@ -403,15 +432,13 @@
                      isAbstract="false"
                      superClass="org.eclipse.cdt.windows.cl"/>
                <tool
+                     id="org.eclipse.cdt.windows.exe.release.rc"
+                     isAbstract="false"
+                     superClass="org.eclipse.cdt.windows.rc"/>
+               <tool
                      id="org.eclipse.cdt.windows.exe.release.linker"
                      isAbstract="false"
                      superClass="org.eclipse.cdt.windows.link.exe"/>
-               <builder
-                     id="org.eclipse.cdt.windows.exe.release.nmake"
-                     buildfileGenerator="org.eclipse.cdt.windows.build.NMakefileGenerator"
-                     isAbstract="false"
-                     isVariableCaseSensitive="false"
-                     superClass="org.eclipse.cdt.windows.nmake"/>
             </toolChain>
          </configuration>
       </projectType>
@@ -438,6 +465,10 @@
                      isAbstract="false"
                      superClass="org.eclipse.cdt.windows.cl.debug"/>
                <tool
+                     id="org.eclipse.cdt.windows.dll.debug.rc"
+                     isAbstract="false"
+                     superClass="org.eclipse.cdt.windows.rc"/>
+               <tool
                      id="org.eclipse.cdt.windows.dll.debug.linker"
                      isAbstract="false"
                      superClass="org.eclipse.cdt.windows.link.dll">
@@ -447,12 +478,6 @@
                         isAbstract="false"
                         superClass="org.eclipse.cdt.windows.link.option.debug"/>
                </tool>
-               <builder
-                     id="org.eclipse.cdt.windows.dll.debug.nmake"
-                     buildfileGenerator="org.eclipse.cdt.windows.build.NMakefileGenerator"
-                     isAbstract="false"
-                     isVariableCaseSensitive="false"
-                     superClass="org.eclipse.cdt.windows.nmake"/>
             </toolChain>
          </configuration>
          <configuration
@@ -473,15 +498,13 @@
                      isAbstract="false"
                      superClass="org.eclipse.cdt.windows.cl"/>
                <tool
+                     id="org.eclipse.cdt.windows.dll.release.rc"
+                     isAbstract="false"
+                     superClass="org.eclipse.cdt.windows.rc"/>
+               <tool
                      id="org.eclipse.cdt.windows.dll.release.linker"
                      isAbstract="false"
                      superClass="org.eclipse.cdt.windows.link.dll"/>
-               <builder
-                     id="org.eclipse.cdt.windows.dll.release.nmake"
-                     buildfileGenerator="org.eclipse.cdt.windows.build.NMakefileGenerator"
-                     isAbstract="false"
-                     isVariableCaseSensitive="false"
-                     superClass="org.eclipse.cdt.windows.nmake"/>
             </toolChain>
          </configuration>
       </projectType>
@@ -508,15 +531,13 @@
                      isAbstract="false"
                      superClass="org.eclipse.cdt.windows.cl.debug"/>
                <tool
+                     id="org.eclipse.cdt.windows.lib.debug.rc"
+                     isAbstract="false"
+                     superClass="org.eclipse.cdt.windows.rc"/>
+               <tool
                      id="org.eclipse.cdt.windows.lib.debug.lib"
                      isAbstract="false"
                      superClass="org.eclipse.cdt.windows.lib"/>
-               <builder
-                     id="org.eclipse.cdt.windows.lib.debug.nmake"
-                     buildfileGenerator="org.eclipse.cdt.windows.build.NMakefileGenerator"
-                     isAbstract="false"
-                     isVariableCaseSensitive="false"
-                     superClass="org.eclipse.cdt.windows.nmake"/>
             </toolChain>
          </configuration>
          <configuration
@@ -537,15 +558,13 @@
                      isAbstract="false"
                      superClass="org.eclipse.cdt.windows.cl"/>
                <tool
+                     id="org.eclipse.cdt.windows.lib.release.rc"
+                     isAbstract="false"
+                     superClass="org.eclipse.cdt.windows.rc"/>
+               <tool
                      id="org.eclipse.cdt.windows.lib.release.lib"
                      isAbstract="false"
                      superClass="org.eclipse.cdt.windows.lib"/>
-               <builder
-                     id="org.eclipse.cdt.windows.lib.release.nmake"
-                     buildfileGenerator="org.eclipse.cdt.windows.build.NMakefileGenerator"
-                     isAbstract="false"
-                     isVariableCaseSensitive="false"
-                     superClass="org.eclipse.cdt.windows.nmake"/>
             </toolChain>
          </configuration>
       </projectType>
