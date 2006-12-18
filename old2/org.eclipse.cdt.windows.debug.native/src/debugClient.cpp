@@ -197,9 +197,9 @@ JNISTDEND
 JNISTDMETHOD(getProcessOptions, jobject options)
 	ULONG _options;
 	HRESULT hr = client->GetProcessOptions(&_options);
-	if (FAILED(hr))
-		return hr;
-	setObject(env, options, (jint)_options);
+	if (!FAILED(hr))
+		setObject(env, options, (jint)_options);
+	return hr;
 JNISTDEND
 
 //	public native int addProcessOptions(int options);

@@ -2,25 +2,24 @@
 <?fileVersion 3.1.0?>
 
 <ManagedProjectBuildInfo>
-<project id="org.eclipse.cdt.windows.debug.test.app.org.eclipse.cdt.windows.projectType.exe.520007507" name="Windows Executable (EXE)" projectType="org.eclipse.cdt.windows.projectType.exe">
-<configuration artifactExtension="exe" artifactName="testApp" description="" id="org.eclipse.cdt.windows.exe.debug.968942562" name="Debug" parent="org.eclipse.cdt.windows.exe.debug">
-<toolChain id="org.eclipse.cdt.windows.exe.debug.toolChain.1094494227" superClass="org.eclipse.cdt.windows.exe.debug.toolChain">
-<builder arguments="" command="nmake /nologo /k" id="org.eclipse.cdt.windows.exe.debug.nmake.922169133" name="NMAKE.Debug" superClass="org.eclipse.cdt.windows.exe.debug.nmake"/>
-<tool id="org.eclipse.cdt.windows.exe.debug.compiler.582668458" name="CL Compiler" superClass="org.eclipse.cdt.windows.exe.debug.compiler">
-<option id="org.eclipse.cdt.windows.cl.debug.option.runtime.294145161" superClass="org.eclipse.cdt.windows.cl.debug.option.runtime" value="org.eclipse.cdt.windows.cl.option.runtime.mtd" valueType="enumerated"/>
-</tool>
-<tool id="org.eclipse.cdt.windows.exe.debug.linker.1049049295" name="LINK Executable Linker" superClass="org.eclipse.cdt.windows.exe.debug.linker">
-<option id="org.eclipse.cdt.windows.link.option.libraries.859066696" superClass="org.eclipse.cdt.windows.link.option.libraries" valueType="stringList">
+<project id="org.eclipse.cdt.windows.debug.tests.app.org.eclipse.cdt.windows.projectType.exe.1166107065" name="Windows Executable (EXE)" projectType="org.eclipse.cdt.windows.projectType.exe">
+<configuration artifactExtension="exe" artifactName="org.eclipse.cdt.windows.debug.tests.app" description="" id="org.eclipse.cdt.windows.exe.debug.858196959" name="Debug" parent="org.eclipse.cdt.windows.exe.debug">
+<toolChain id="org.eclipse.cdt.windows.exe.debug.toolChain.1832405844" superClass="org.eclipse.cdt.windows.exe.debug.toolChain">
+<tool id="org.eclipse.cdt.windows.exe.debug.compiler.1887393981" name="CL Compiler" superClass="org.eclipse.cdt.windows.exe.debug.compiler"/>
+<tool id="org.eclipse.cdt.windows.exe.debug.rc.558487013" name="Resource Compiler" superClass="org.eclipse.cdt.windows.exe.debug.rc"/>
+<tool id="org.eclipse.cdt.windows.exe.debug.linker.1264596617" name="LINK Executable Linker" superClass="org.eclipse.cdt.windows.exe.debug.linker">
+<option id="org.eclipse.cdt.windows.link.option.libraries.1087662851" superClass="org.eclipse.cdt.windows.link.option.libraries" valueType="stringList">
 <listOptionValue builtIn="false" value="user32.lib"/>
 </option>
 </tool>
 <macros expandEnvironmentMacros="true"/>
 </toolChain>
 </configuration>
-<configuration artifactExtension="exe" artifactName="org.eclipse.cdt.windows.debug.test.app" description="" id="org.eclipse.cdt.windows.exe.release.1652349658" name="Release" parent="org.eclipse.cdt.windows.exe.release">
-<toolChain id="org.eclipse.cdt.windows.exe.release.toolChain.962582309" superClass="org.eclipse.cdt.windows.exe.release.toolChain">
-<tool id="org.eclipse.cdt.windows.exe.release.compiler.22427311" name="CL Compiler" superClass="org.eclipse.cdt.windows.exe.release.compiler"/>
-<tool id="org.eclipse.cdt.windows.exe.release.linker.695840531" name="LINK Executable Linker" superClass="org.eclipse.cdt.windows.exe.release.linker"/>
+<configuration artifactExtension="exe" artifactName="org.eclipse.cdt.windows.debug.tests.app" description="" id="org.eclipse.cdt.windows.exe.release.1213658489" name="Release" parent="org.eclipse.cdt.windows.exe.release">
+<toolChain id="org.eclipse.cdt.windows.exe.release.toolChain.1561894084" superClass="org.eclipse.cdt.windows.exe.release.toolChain">
+<tool id="org.eclipse.cdt.windows.exe.release.compiler.1452960852" name="CL Compiler" superClass="org.eclipse.cdt.windows.exe.release.compiler"/>
+<tool id="org.eclipse.cdt.windows.exe.release.rc.1285829413" name="Resource Compiler" superClass="org.eclipse.cdt.windows.exe.release.rc"/>
+<tool id="org.eclipse.cdt.windows.exe.release.linker.1294951837" name="LINK Executable Linker" superClass="org.eclipse.cdt.windows.exe.release.linker"/>
 </toolChain>
 </configuration>
 </project>

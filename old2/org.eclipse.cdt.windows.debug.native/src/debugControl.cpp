@@ -134,9 +134,9 @@ JNISTDEND
 JNISTDMETHOD(getCodeLevel, jobject level)
 	ULONG _level;
 	HRESULT hr = control->GetCodeLevel(&_level);
-	if (FAILED(hr))
-		return hr;
-	setObject(env, level, (jint)_level);
+	if (!FAILED(hr))
+		setObject(env, level, (jint)_level);
+	return hr;
 JNISTDEND
 
 //    public native int setCodeLevel(int level);

@@ -2,36 +2,38 @@
 <?fileVersion 3.1.0?>
 
 <ManagedProjectBuildInfo>
-<project id="org.eclipse.cdt.windows.debug.native.org.eclipse.cdt.windows.projectType.dll.395496396" name="Windows Shared Library (DLL)" projectType="org.eclipse.cdt.windows.projectType.dll">
-<configuration artifactExtension="dll" artifactName="cdtwindbg" description="" errorParsers="org.eclipse.cdt.core.VCErrorParser;org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GLDErrorParser" id="org.eclipse.cdt.windows.dll.debug.1552793551" name="Debug" parent="org.eclipse.cdt.windows.dll.debug">
-<toolChain id="org.eclipse.cdt.windows.dll.debug.toolChain.149358986" superClass="org.eclipse.cdt.windows.dll.debug.toolChain">
-<builder arguments="" command="nmake /nologo /k" id="org.eclipse.cdt.windows.dll.debug.nmake.1771938657" name="NMAKE.Debug" superClass="org.eclipse.cdt.windows.dll.debug.nmake"/>
-<tool id="org.eclipse.cdt.windows.dll.debug.compiler.1871258226" name="CL Compiler" superClass="org.eclipse.cdt.windows.dll.debug.compiler">
-<option id="org.eclipse.cdt.windows.cl.option.includes.567513790" superClass="org.eclipse.cdt.windows.cl.option.includes" valueType="includePath">
-<listOptionValue builtIn="false" value="&quot;C:\Program Files\Debugging Tools for Windows\sdk\inc&quot;"/>
-<listOptionValue builtIn="false" value="&quot;C:\Program Files\Java\jdk1.5.0_09\include&quot;"/>
-<listOptionValue builtIn="false" value="&quot;C:\Program Files\Java\jdk1.5.0_09\include\win32&quot;"/>
-</option>
-<option id="org.eclipse.cdt.windows.cl.debug.option.runtime.1824786" superClass="org.eclipse.cdt.windows.cl.debug.option.runtime" value="org.eclipse.cdt.windows.cl.option.runtime.mtd" valueType="enumerated"/>
-<option id="org.eclipse.cdt.windows.cl.option.macros.982994079" superClass="org.eclipse.cdt.windows.cl.option.macros" valueType="definedSymbols">
-<listOptionValue builtIn="false" value="_UNICODE"/>
+<project id="org.eclipse.cdt.windows.debug.native.org.eclipse.cdt.windows.projectType.dll.596397547" name="Windows Shared Library (DLL)" projectType="org.eclipse.cdt.windows.projectType.dll">
+<configuration artifactExtension="dll" artifactName="cdtwindbg" description="" errorParsers="org.eclipse.cdt.core.VCErrorParser" id="org.eclipse.cdt.windows.dll.debug.1305033823" name="Debug" parent="org.eclipse.cdt.windows.dll.debug">
+<toolChain id="org.eclipse.cdt.windows.dll.debug.toolChain.474265998" superClass="org.eclipse.cdt.windows.dll.debug.toolChain">
+<tool id="org.eclipse.cdt.windows.dll.debug.compiler.537671700" name="CL Compiler" superClass="org.eclipse.cdt.windows.dll.debug.compiler">
+<option id="org.eclipse.cdt.windows.cl.option.macros.717375664" superClass="org.eclipse.cdt.windows.cl.option.macros" valueType="definedSymbols">
 <listOptionValue builtIn="false" value="UNICODE"/>
 </option>
+<option id="org.eclipse.cdt.windows.cl.option.includes.1324479123" superClass="org.eclipse.cdt.windows.cl.option.includes" valueType="includePath">
+<listOptionValue builtIn="false" value="&quot;C:\Program Files\Java\jdk1.5.0_09\include&quot;"/>
+<listOptionValue builtIn="false" value="&quot;C:\Program Files\Java\jdk1.5.0_09\include\win32&quot;"/>
+<listOptionValue builtIn="false" value="&quot;C:\Program Files\Debugging Tools for Windows\sdk\inc&quot;"/>
+</option>
 </tool>
-<tool id="org.eclipse.cdt.windows.dll.debug.linker.728808516" name="LINK DLL Linker" superClass="org.eclipse.cdt.windows.dll.debug.linker">
-<option id="org.eclipse.cdt.windows.link.option.libraries.1808354509" superClass="org.eclipse.cdt.windows.link.option.libraries" valueType="stringList">
-<listOptionValue builtIn="false" value="&quot;C:\Program Files\Debugging Tools for Windows\sdk\lib\i386\dbgeng.lib&quot;"/>
+<tool id="org.eclipse.cdt.windows.dll.debug.rc.949240027" name="Resource Compiler" superClass="org.eclipse.cdt.windows.dll.debug.rc"/>
+<tool id="org.eclipse.cdt.windows.dll.debug.linker.1726895393" name="LINK DLL Linker" superClass="org.eclipse.cdt.windows.dll.debug.linker">
+<option id="org.eclipse.cdt.windows.link.option.libpath.2005492840" superClass="org.eclipse.cdt.windows.link.option.libpath" valueType="stringList">
+<listOptionValue builtIn="false" value="&quot;C:\Program Files\Debugging Tools for Windows\sdk\lib\i386&quot;"/>
+</option>
+<option id="org.eclipse.cdt.windows.link.option.libraries.1030084148" superClass="org.eclipse.cdt.windows.link.option.libraries" valueType="stringList">
+<listOptionValue builtIn="false" value="dbgeng.lib"/>
 </option>
 </tool>
 <macros expandEnvironmentMacros="true"/>
 </toolChain>
 </configuration>
-<configuration artifactExtension="dll" artifactName="org.eclipse.cdt.windows.debug.native" description="" id="org.eclipse.cdt.windows.dll.release.2050125539" name="Release" parent="org.eclipse.cdt.windows.dll.release">
-<toolChain id="org.eclipse.cdt.windows.dll.release.toolChain.978030134" superClass="org.eclipse.cdt.windows.dll.release.toolChain">
-<tool id="org.eclipse.cdt.windows.dll.release.compiler.1543697730" name="CL Compiler" superClass="org.eclipse.cdt.windows.dll.release.compiler"/>
-<tool id="org.eclipse.cdt.windows.dll.release.linker.1372265821" name="LINK DLL Linker" superClass="org.eclipse.cdt.windows.dll.release.linker"/>
+<configuration artifactExtension="dll" artifactName="cdtwindbg" description="" id="org.eclipse.cdt.windows.dll.release.1750893438" name="Release" parent="org.eclipse.cdt.windows.dll.release">
+<toolChain id="org.eclipse.cdt.windows.dll.release.toolChain.790362328" superClass="org.eclipse.cdt.windows.dll.release.toolChain">
+<tool id="org.eclipse.cdt.windows.dll.release.compiler.612342102" name="CL Compiler" superClass="org.eclipse.cdt.windows.dll.release.compiler"/>
+<tool id="org.eclipse.cdt.windows.dll.release.rc.1342296361" name="Resource Compiler" superClass="org.eclipse.cdt.windows.dll.release.rc"/>
+<tool id="org.eclipse.cdt.windows.dll.release.linker.2098872473" name="LINK DLL Linker" superClass="org.eclipse.cdt.windows.dll.release.linker"/>
+<macros expandEnvironmentMacros="true"/>
 </toolChain>
 </configuration>
-<macros/>
 </project>
 </ManagedProjectBuildInfo>
