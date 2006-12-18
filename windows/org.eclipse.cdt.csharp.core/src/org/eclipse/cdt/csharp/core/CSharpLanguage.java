@@ -11,7 +11,6 @@ import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.model.AbstractLanguage;
 import org.eclipse.cdt.core.model.IContributedModelBuilder;
 import org.eclipse.cdt.core.model.ITranslationUnit;
-import org.eclipse.cdt.core.model.IWorkingCopy;
 import org.eclipse.cdt.core.parser.CodeReader;
 import org.eclipse.cdt.core.parser.IParserLogService;
 import org.eclipse.cdt.core.parser.IScannerInfo;
@@ -30,8 +29,7 @@ public class CSharpLanguage extends AbstractLanguage {
 		return null;
 	}
 
-	public ASTCompletionNode getCompletionNode(IWorkingCopy workingCopy,
-			int offset) throws CoreException {
+	public ASTCompletionNode getCompletionNode(CodeReader reader, IScannerInfo scanInfo, ICodeReaderFactory fileCreator, IIndex index, IParserLogService log, int offset) throws CoreException {
 		// TODO Auto-generated method stub
 		return null;
 	}
