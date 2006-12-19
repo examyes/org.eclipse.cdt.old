@@ -145,9 +145,11 @@ public class CRefactoringActionGroup extends ActionGroup implements IPositionCon
      */
     public void fillActionBars(IActionBars actionBars) {
         super.fillActionBars(actionBars);
-        actionBars.setGlobalActionHandler("org.eclipse.cdt.ui.actions.Rename", fRenameAction); //$NON-NLS-1$
-        actionBars.setGlobalActionHandler(ActionFactory.RENAME.getId(), fRenameAction);
-        actionBars.updateActionBars();
+        if (fRenameAction.isEnabled()) {
+	        actionBars.setGlobalActionHandler("org.eclipse.cdt.ui.actions.Rename", fRenameAction); //$NON-NLS-1$
+	        actionBars.setGlobalActionHandler(ActionFactory.RENAME.getId(), fRenameAction);
+	        actionBars.updateActionBars();
+        }
     }
 
     /* (non-Javadoc)
