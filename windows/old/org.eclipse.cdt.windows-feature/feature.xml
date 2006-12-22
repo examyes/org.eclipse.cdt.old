@@ -5,8 +5,8 @@
       version="1.0.0.qualifier"
       provider-name="eclipse.org">
 
-   <description url="http://www.example.com/description">
-      [Enter Feature Description here.]
+   <description url="http://www.microsoft.com/downloads/details.aspx?familyid=7614FE22-8A64-4DFB-AA0C-DB53035F40A0&amp;displaylang=en">
+      Allows the use of the Windows SDK tools for building and debugging CDT Projects. Currently only build is available.
    </description>
 
    <copyright url="http://www.example.com/copyright">
