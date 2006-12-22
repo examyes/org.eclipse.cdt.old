@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.eclipse.cdt.windows"
-      label="CDT for Windows Feature"
+      label="Eclipse CDT Windows SDK Integration"
       version="1.0.0.qualifier"
       provider-name="eclipse.org">
 
@@ -19,9 +19,10 @@
 
    <requires>
       <import plugin="org.eclipse.core.runtime"/>
-      <import plugin="org.eclipse.cdt.managedbuilder.core" version="4.0.0" match="compatible"/>
       <import plugin="org.eclipse.core.resources"/>
-      <import plugin="org.eclipse.cdt.core" version="4.0.0" match="compatible"/>
+      <import feature="org.eclipse.cdt" version="4.0.0.qualifier" match="compatible"/>
+      <import plugin="org.eclipse.cdt.managedbuilder.core"/>
+      <import plugin="org.eclipse.cdt.core"/>
    </requires>
 
    <plugin
