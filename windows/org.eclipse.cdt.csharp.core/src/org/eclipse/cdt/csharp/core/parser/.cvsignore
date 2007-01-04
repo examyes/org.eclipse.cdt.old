@@ -1,6 +1,3 @@
-CSharpLexer.java
-CSharp.java
-CSharpLexer.tokens
-CSharp.tokens
-CSharp.lexer.g
-*.dot
+CSharpKWLexer.l
+CSharpParser.l
+CSharpLexer.l
