@@ -10,8 +10,8 @@
 <listOptionValue builtIn="false" value="UNICODE"/>
 </option>
 <option id="org.eclipse.cdt.windows.cl.option.includes.1324479123" superClass="org.eclipse.cdt.windows.cl.option.includes" valueType="includePath">
-<listOptionValue builtIn="false" value="&quot;C:\Program Files\Java\jdk1.5.0_09\include&quot;"/>
-<listOptionValue builtIn="false" value="&quot;C:\Program Files\Java\jdk1.5.0_09\include\win32&quot;"/>
+<listOptionValue builtIn="false" value="&quot;C:\Program Files\Java\jdk1.5.0_10\include&quot;"/>
+<listOptionValue builtIn="false" value="&quot;C:\Program Files\Java\jdk1.5.0_10\include\win32&quot;"/>
 <listOptionValue builtIn="false" value="&quot;C:\Program Files\Debugging Tools for Windows\sdk\inc&quot;"/>
 </option>
 </tool>
