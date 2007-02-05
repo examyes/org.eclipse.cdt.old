@@ -17,9 +17,10 @@
             projectEnvironmentSupplier="org.eclipse.cdt.mingw.build.MingwProjectEnvironmentVariableSupplier"
             id="cdt.managedbuild.target.mingw.exe">
          <configuration
-               name="%ConfigName.Dbg"
+               artifactExtension="exe"
+               errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser"
                id="cdt.managedbuild.config.mingw.exe.debug"
-               errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser">
+               name="%ConfigName.Dbg">
                <toolChain
                      archList="all"
                      osList="win32"
@@ -65,10 +66,20 @@
                   <tool
                       id="cdt.managedbuild.tool.mingw.c.linker.exe.debug"
                       superClass="cdt.managedbuild.tool.gnu.c.linker">
+                     <outputType
+                           id="cdt.managedbuild.tool.mingw.c.linker.exe.debug.output"
+                           outputs="exe"
+                           superClass="cdt.managedbuild.tool.gnu.c.linker.output">
+                     </outputType>
                   </tool> 
                   <tool
                       id="cdt.managedbuild.tool.mingw.cpp.linker.exe.debug"
                       superClass="cdt.managedbuild.tool.gnu.cpp.linker">
+                      <outputType
+                           id="cdt.managedbuild.tool.mingw.cpp.linker.exe.debug.output"
+                           outputs="exe"
+                           superClass="cdt.managedbuild.tool.gnu.cpp.linker.output">
+                      </outputType>
                   </tool> 
 				  <tool
 					  id="cdt.managedbuild.tool.mingw.assembler.exe.debug"
@@ -77,9 +88,10 @@
 			  </toolChain>
          </configuration>
          <configuration
-               name="%ConfigName.Rel"
+               artifactExtension="exe"
+               errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser"
                id="cdt.managedbuild.config.mingw.exe.release"
-               errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser">               
+               name="%ConfigName.Rel">               
                <toolChain
                      archList="all"
                      osList="win32"
@@ -125,10 +137,20 @@
                   <tool
                       id="cdt.managedbuild.tool.mingw.c.linker.exe.release"
                       superClass="cdt.managedbuild.tool.gnu.c.linker">
+                      <outputType
+                          id="cdt.managedbuild.tool.mingw.c.linker.exe.release.output"
+                          outputs="exe"
+                          superClass="cdt.managedbuild.tool.gnu.c.linker.output">
+                      </outputType>
                   </tool> 
                   <tool
                       id="cdt.managedbuild.tool.mingw.cpp.linker.exe.release"
                       superClass="cdt.managedbuild.tool.gnu.cpp.linker">
+                      <outputType
+                          id="cdt.managedbuild.tool.mingw.cpp.linker.exe.release.output"
+                          outputs="exe"
+                          superClass="cdt.managedbuild.tool.gnu.cpp.linker.output">
+                      </outputType>
                   </tool>  
 				  <tool
 					  id="cdt.managedbuild.tool.mingw.assembler.exe.release"
