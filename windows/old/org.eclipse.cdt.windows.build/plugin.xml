@@ -330,7 +330,7 @@
                isAbstract="false"
                name="Libraries"
                resourceFilter="all"
-               valueType="stringList"/>
+               valueType="libs"/>
       </tool>
       <tool
             id="org.eclipse.cdt.windows.link.exe"
