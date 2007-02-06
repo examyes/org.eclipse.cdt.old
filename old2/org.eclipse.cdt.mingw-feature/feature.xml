@@ -16,6 +16,13 @@
       [Enter License Description here.]
    </license>
 
+   <requires>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.cdt.managedbuilder.gnu.ui"/>
+      <import plugin="org.eclipse.cdt.managedbuilder.core"/>
+      <import plugin="org.eclipse.ui"/>
+   </requires>
+
    <plugin
          id="org.eclipse.cdt.mingw"
          download-size="0"
