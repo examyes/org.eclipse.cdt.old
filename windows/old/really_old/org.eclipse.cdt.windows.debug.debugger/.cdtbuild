@@ -17,7 +17,7 @@
 <option id="org.eclipse.cdt.windows.link.option.libpath.363676179" superClass="org.eclipse.cdt.windows.link.option.libpath" valueType="stringList">
 <listOptionValue builtIn="false" value="&quot;C:\Program Files\Debugging Tools for Windows\sdk\lib\i386&quot;"/>
 </option>
-<option id="org.eclipse.cdt.windows.link.option.libraries.427883239" superClass="org.eclipse.cdt.windows.link.option.libraries" valueType="stringList">
+<option id="org.eclipse.cdt.windows.link.option.libraries.427883239" superClass="org.eclipse.cdt.windows.link.option.libraries" valueType="libs">
 <listOptionValue builtIn="false" value="dbgeng.lib"/>
 </option>
 </tool>
