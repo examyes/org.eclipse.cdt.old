@@ -24,6 +24,10 @@ public class CSharpLanguage extends AbstractLanguage {
 
 	private static final String ID = Activator.PLUGIN_ID + ".cSharp";
 	
+	public String getName() {
+		return "C#";
+	}
+	
 	public IContributedModelBuilder createModelBuilder(ITranslationUnit tu) {
 		// TODO Auto-generated method stub
 		return null;
