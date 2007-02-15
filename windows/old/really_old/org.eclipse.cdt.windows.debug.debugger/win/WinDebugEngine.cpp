@@ -54,14 +54,29 @@ void WinDebugEngine::mainLoop() {
 			return;
 		}
 		
-		while (!currentRunCommand) {
+		while (true) {
+			// Wait for commands
 			WaitForSingleObject(commandReadyEvent, INFINITE);
+			// Grab the mutex for the queue
 			WaitForSingleObject(commandMutex, INFINITE);
+			
+			if (commandQueue.empty()) {
+				// No commands
+				ResetEvent(commandReadyEvent);
+				ReleaseMutex(commandMutex);
+				if (currentRunCommand)
+					// Ready to run
+					break;
+				else
+					// Wait for more commands
+					continue;
+			}
+
+			// Pop the next command and run it
 			WinDebugCommand * cmd = commandQueue.front();
 			commandQueue.pop_front();
-			if (commandQueue.empty())
-				ResetEvent(commandReadyEvent);
 			ReleaseMutex(commandMutex);
+			
 			cmd->execute(*this);
 		}
 	}
