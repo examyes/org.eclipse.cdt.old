@@ -21,11 +21,10 @@ STDMETHODIMP WinDebugEventCallbacks::CreateProcess(
     __in ULONG64 ThreadDataOffset,
     __in ULONG64 StartOffset)
 {
-	cerr << "Process created\n";
+	// Break immediately after creating the process
 	return DEBUG_STATUS_BREAK;
 }
 
 STDMETHODIMP WinDebugEventCallbacks::Breakpoint(PDEBUG_BREAKPOINT Bp) {
-	cerr << "Breakpoint hit\n";
 	return DEBUG_STATUS_BREAK;
 }

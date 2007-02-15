@@ -8,15 +8,14 @@ using namespace std;
 class MICommand;
 class MIExecAbort;
 
-class MIHandler
+class MIEngine
 {
 private:
 	istream & in;
 	ostream & out;
 	
 public:
-	MIHandler()	: in(cin), out(cout) {
-	}
+	MIEngine() : in(cin), out(cout) { }
 	
 	// Calls the sendResult on the command when the output stream is ready
 	void enqueueResult(MICommand * command);
@@ -25,17 +24,14 @@ public:
 
 protected:
 	// Override to add extended commands
-	virtual MICommand * createCommand(string & operation);
+	virtual MICommand * createMICommand(string & token, string & operation);
+	virtual MICommand * createCLICommand(string & token, string & operation); 
 
-	// The standard commands
-	virtual MIExecAbort * createExecAbort() = 0;
-	
 private:
-	bool parseCommand();
+	MICommand * parseCommand();
+	void parseToken(string & token);
+	void parseParameter(string & parameter);
 	void skipLine();
-	int parseToken();
-	bool parseOperation(string & operation);
-	void reportUnsupportedCommand();
 };
 
 #endif /*MIHANDLER_H_*/

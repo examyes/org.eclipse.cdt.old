@@ -1,22 +1,27 @@
 #ifndef MICOMMAND_H_
 #define MICOMMAND_H_
 
-#include <iostream>
+#include <string>
+#include <ostream>
 using namespace std;
 
-class MIHandler;
+class MIEngine;
 
 class MICommand
 {
 public:
-	void setToken(int _token) { tokenSet = true; token = _token; }
-	
-	// Send the result to the MI output stream
-	virtual void sendResult(ostream & out);
+	MICommand(MIEngine & _engine, string & _token)
+		: engine(_engine), token(_token) { }
 
-private:
-	bool tokenSet;
-	int token;
+	virtual void addParameter(string & parameter);
+	
+	virtual void runCommand() = 0;
+
+	virtual void sendResult(ostream & out) = 0;
+
+protected:
+	string token;
+	MIEngine & engine;
 };
 
 #endif /*MICOMMAND_H_*/

@@ -1,11 +1,25 @@
 #include "WinDebugEngine.h"
 #include "WinDebugEventCallbacks.h"
+#include "WinDebugCommand.h"
 
 #include <iostream>
 using namespace std;
 
+WinDebugEngine::WinDebugEngine(char * _command)
+: command(_command), currentRunCommand(NULL) {
+	commandMutex = CreateMutex(NULL, FALSE, NULL);
+	commandReadyEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+}
+
 void WinDebugEngine::enqueueCommand(WinDebugCommand * command) {
-	
+	WaitForSingleObject(commandMutex, INFINITE);
+	commandQueue.push_back(command);
+	SetEvent(commandReadyEvent);
+	ReleaseMutex(commandMutex);
+}
+
+void WinDebugEngine::run(WinDebugRunCommand * runCommand) {
+	currentRunCommand = runCommand;
 }
 
 void WinDebugEngine::mainLoop() {
@@ -27,27 +41,28 @@ void WinDebugEngine::mainLoop() {
 	}
 	
 	// Create the process
-	cerr << "Creating: " << command << endl;
 	if (FAILED(debugClient->CreateProcess(0, command, DEBUG_PROCESS | CREATE_NO_WINDOW))) {
 		cerr << "Failed to create process for: " << command << endl;
 		return;
 	}
 	
 	while (true) {
-		cerr << "Waiting\n";
 		debugControl->SetExecutionStatus(DEBUG_STATUS_GO);
 		HRESULT hr = debugControl->WaitForEvent(0, INFINITE);
-		cerr << "Done\n";
 		
-		if (hr == E_PENDING) {
-			cerr << "E_PENDING\n";
+		if (hr != S_OK) {
 			return;
-		} else if (hr == E_UNEXPECTED) {
-			cerr << "E_UNEXPECTED\n";
-			return;
-		} else if (hr != S_OK) {
-			cerr << "Not S_OK\n";
-			return;
+		}
+		
+		while (!currentRunCommand) {
+			WaitForSingleObject(commandReadyEvent, INFINITE);
+			WaitForSingleObject(commandMutex, INFINITE);
+			WinDebugCommand * cmd = commandQueue.front();
+			commandQueue.pop_front();
+			if (commandQueue.empty())
+				ResetEvent(commandReadyEvent);
+			ReleaseMutex(commandMutex);
+			cmd->execute(*this);
 		}
 	}
 }
