@@ -9,6 +9,7 @@
 <option id="org.eclipse.cdt.windows.cl.option.includes.612736003" superClass="org.eclipse.cdt.windows.cl.option.includes" valueType="includePath">
 <listOptionValue builtIn="false" value="&quot;C:\Program Files\Debugging Tools for Windows\sdk\inc&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/org.eclipse.cdt.windows.debug.debugger/mi}&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/org.eclipse.cdt.windows.debug.debugger/win}&quot;"/>
 </option>
 <option id="org.eclipse.cdt.windows.cl.option.macros.861805066" superClass="org.eclipse.cdt.windows.cl.option.macros"/>
 </tool>
@@ -18,7 +19,6 @@
 <listOptionValue builtIn="false" value="&quot;C:\Program Files\Debugging Tools for Windows\sdk\lib\i386&quot;"/>
 </option>
 <option id="org.eclipse.cdt.windows.link.option.libraries.427883239" superClass="org.eclipse.cdt.windows.link.option.libraries" valueType="libs">
-<listOptionValue builtIn="false" value="dbgeng.lib"/>
 <listOptionValue builtIn="false" value="user32.lib"/>
 </option>
 </tool>

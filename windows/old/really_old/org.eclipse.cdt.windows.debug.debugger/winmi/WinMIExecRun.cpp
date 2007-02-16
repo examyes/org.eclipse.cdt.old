@@ -8,7 +8,7 @@ void WinMIExecRun::execute(WinDebugEngine & debugEngine) {
 	engine.enqueueResult(this);
 }
 
-void WinMIExecRun::stopped() {
+void WinMIExecRun::stopped(WinDebugEngine & debugEngine) {
 	status = _stopped;
 	engine.enqueueResult(this);
 }
@@ -25,8 +25,11 @@ void WinMIExecRun::sendResult(ostream & out) {
 	case _stopped:
 		out << "*stopped";
 		break;
+	case _error:
+		out << "^error,msg=\"" << msg << '"';
+		break;
 	default:
-		out << "^error";
+		out << "^error,msg=\"Bad run state\"";
 	}
 	out << endl;
 }

@@ -1,6 +1,7 @@
 #include "WinDebugEngine.h"
 #include "WinDebugEventCallbacks.h"
 #include "WinDebugCommand.h"
+#include "WinDebugRunCommand.h"
 
 #include <iostream>
 using namespace std;
@@ -22,9 +23,20 @@ void WinDebugEngine::run(WinDebugRunCommand * runCommand) {
 	currentRunCommand = runCommand;
 }
 
+typedef HANDLE (*DebugCreateProc)(__in REFIID InterfaceId, __out PVOID* Interface);
+
 void WinDebugEngine::mainLoop() {
+	// Load in the DLL - Need to find a way to not hard code the location
+	LoadLibrary("C:\\Program Files\\Debugging Tools for Windows\\dbghelp.dll");
+	HMODULE module = LoadLibrary("C:\\Program Files\\Debugging Tools for Windows\\dbgeng.dll");
+	DebugCreateProc debugCreate = (DebugCreateProc)GetProcAddress(module, "DebugCreate");
+	if (!debugCreate) {
+		cerr << "Failed to find DebugCreate proc\n";
+		return;
+	}
+	
 	// Get the objects
-	if (FAILED(DebugCreate(__uuidof(IDebugClient), (void **)&debugClient))) {
+	if (FAILED(debugCreate(__uuidof(IDebugClient), (void **)&debugClient))) {
 		cerr << "Failed to create IDebugClient\n";
 		return;
 	}
@@ -34,14 +46,18 @@ void WinDebugEngine::mainLoop() {
 		return;
 	}
 	
+	if (FAILED(debugClient->QueryInterface(__uuidof(IDebugSymbols), ((void **)&debugSymbols)))) {
+		cerr << "Failed to create IDebugSymbols" << endl;
+		return;
+	}
 	WinDebugEventCallbacks eventCallbacks;
 	if (FAILED(debugClient->SetEventCallbacks(&eventCallbacks))) {
-		cerr << "Failed to set callbacks\n";
+		cerr << "Failed to set callbacks" << endl;
 		return;
 	}
 	
 	// Create the process
-	if (FAILED(debugClient->CreateProcess(0, command, DEBUG_PROCESS | CREATE_NO_WINDOW))) {
+	if (FAILED(debugClient->CreateProcess(0, command, DEBUG_ONLY_THIS_PROCESS | CREATE_NO_WINDOW))) {
 		cerr << "Failed to create process for: " << command << endl;
 		return;
 	}
@@ -54,6 +70,11 @@ void WinDebugEngine::mainLoop() {
 			return;
 		}
 		
+		if (currentRunCommand) {
+			currentRunCommand->stopped(*this);
+			currentRunCommand = NULL;
+		}
+
 		while (true) {
 			// Wait for commands
 			WaitForSingleObject(commandReadyEvent, INFINITE);

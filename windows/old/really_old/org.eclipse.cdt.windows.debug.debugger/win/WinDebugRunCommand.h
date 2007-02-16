@@ -5,7 +5,7 @@
 
 class WinDebugRunCommand : public WinDebugCommand {
 public:
-	virtual void stopped() = 0;
+	virtual void stopped(WinDebugEngine & debugEngine) = 0;
 };
 
 #endif /*WINDEBUGRUNCOMMAND_H_*/

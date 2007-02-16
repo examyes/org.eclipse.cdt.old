@@ -3,6 +3,12 @@
 
 #include <MICommand.h>
 #include "../win/WinDebugRunCommand.h"
+#include <windows.h>
+
+#include <list>
+using namespace std;
+
+// Also used for exec-continue
 
 class WinMIExecRun : public MICommand, public WinDebugRunCommand
 {
@@ -17,10 +23,11 @@ public:
 	
 	// WinDebugCommand
 	virtual void execute(WinDebugEngine & debugEngine);
-	virtual void stopped();
+	virtual void stopped(WinDebugEngine & debugEngine);
 	
 private:
-	enum { _none, _running, _stopped } status;
+	enum { _none, _running, _stopped, _error } status;
+	string msg;
 };
 
 #endif /*WINMIEXECRUN_H_*/

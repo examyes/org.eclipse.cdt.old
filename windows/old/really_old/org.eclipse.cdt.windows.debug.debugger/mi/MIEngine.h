@@ -1,6 +1,8 @@
 #ifndef MIHANDLER_H_
 #define MIHANDLER_H_
 
+#include <windows.h>
+
 #include <iostream>
 #include <string>
 using namespace std;
@@ -15,7 +17,7 @@ private:
 	ostream & out;
 	
 public:
-	MIEngine() : in(cin), out(cout) { }
+	MIEngine();
 	
 	// Calls the sendResult on the command when the output stream is ready
 	void enqueueResult(MICommand * command);
@@ -28,6 +30,8 @@ protected:
 	virtual MICommand * createCLICommand(string & token, string & operation); 
 
 private:
+	HANDLE outputMutex;
+	
 	MICommand * parseCommand();
 	void parseToken(string & token);
 	void parseParameter(string & parameter);

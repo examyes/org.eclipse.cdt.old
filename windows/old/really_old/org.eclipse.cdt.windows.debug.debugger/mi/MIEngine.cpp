@@ -8,14 +8,22 @@
 using namespace std;
 
 #include <string.h>
-#include <windows.h>
 
 class EndOfFile { };
 
+MIEngine::MIEngine()
+: in(cin), out(cout) {
+	outputMutex = CreateMutex(NULL, FALSE, NULL);
+}
+
 void MIEngine::inputLoop() {
+	// CDT needs this to start
+	WaitForSingleObject(outputMutex, INFINITE);
+	out << "(gdb) " << endl;
+	ReleaseMutex(outputMutex);
+	
 	try {
 		while (true) {
-			out << "(gdb) " << endl;
 			MICommand * cmd = parseCommand();
 			if (cmd)
 				cmd->runCommand();
@@ -129,6 +137,7 @@ MICommand * MIEngine::createCLICommand(string & token, string & operation) {
 }
 
 void MIEngine::enqueueResult(MICommand * command) {
-	// Todo wrap this with a mutex
+	WaitForSingleObject(outputMutex, INFINITE);
 	command->sendResult(out);
+	ReleaseMutex(outputMutex);
 }

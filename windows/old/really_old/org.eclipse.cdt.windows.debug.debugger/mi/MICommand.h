@@ -14,9 +14,7 @@ public:
 		: engine(_engine), token(_token) { }
 
 	virtual void addParameter(string & parameter);
-	
 	virtual void runCommand() = 0;
-
 	virtual void sendResult(ostream & out) = 0;
 
 protected:

@@ -20,11 +20,16 @@ public:
 
 	void run(WinDebugRunCommand * runCommand);
 	
+	IDebugClient * getDebugClient() { return debugClient; }
+	IDebugControl * getDebugControl() { return debugControl; }
+	IDebugSymbols * getDebugSymbols() { return debugSymbols; }
+	
 private:
 	char * command;
 	
 	IDebugClient * debugClient;
 	IDebugControl * debugControl;
+	IDebugSymbols * debugSymbols;
 	
 	list<WinDebugCommand *> commandQueue;
 	HANDLE commandMutex;
