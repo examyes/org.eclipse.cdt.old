@@ -10,14 +10,15 @@
       <managedBuildRevision
             fileVersion="1.0">
       </managedBuildRevision>
-           <projectType      
-            isAbstract="false"     
-            isTest="false"
-            name="%TargetName.mingw.exe"
-            projectEnvironmentSupplier="org.eclipse.cdt.mingw.build.MingwProjectEnvironmentVariableSupplier"
-            id="cdt.managedbuild.target.mingw.exe">
+           <projectType
+                 buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe"
+                 id="cdt.managedbuild.target.mingw.exe"
+                 isAbstract="false"
+                 isTest="false"
+                 projectEnvironmentSupplier="org.eclipse.cdt.mingw.build.MingwProjectEnvironmentVariableSupplier">
          <configuration
                artifactExtension="exe"
+               buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug"
                errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser"
                id="cdt.managedbuild.config.mingw.exe.debug"
                name="%ConfigName.Dbg">
@@ -89,6 +90,7 @@
          </configuration>
          <configuration
                artifactExtension="exe"
+               buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release"
                errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser"
                id="cdt.managedbuild.config.mingw.exe.release"
                name="%ConfigName.Rel">               
@@ -161,16 +163,17 @@
       </projectType>     
       
       <projectType
+            buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.sharedLib"
             id="cdt.managedbuild.target.mingw.dll"
             isAbstract="false"
             isTest="false"
-            name="%TargetName.mingw.dll"
             projectEnvironmentSupplier="org.eclipse.cdt.mingw.build.MingwProjectEnvironmentVariableSupplier">
          <configuration
-               name="%ConfigName.Dbg"
-               artifactExtension="dll"               
-               errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser"                          
-               id="cdt.managedbuild.config.mingw.dll.debug">
+               artifactExtension="dll"
+               buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug"
+               errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser"
+               id="cdt.managedbuild.config.mingw.dll.debug"
+               name="%ConfigName.Dbg">
                <toolChain
                      archList="all"
                      osList="win32"
@@ -250,10 +253,11 @@
 			   </toolChain>
          </configuration>
          <configuration
-               name="%ConfigName.Rel"
                artifactExtension="dll"
+               buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release"
                errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser"
-               id="cdt.managedbuild.config.mingw.dll.release">
+               id="cdt.managedbuild.config.mingw.dll.release"
+               name="%ConfigName.Rel">
                <toolChain
                      archList="all"
                      osList="win32"
@@ -335,16 +339,17 @@
       </projectType>
           
       <projectType
+            buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.staticLib"
             id="cdt.managedbuild.target.mingw.lib"
             isAbstract="false"
             isTest="false"
-            name="%TargetName.mingw.lib"
             projectEnvironmentSupplier="org.eclipse.cdt.mingw.build.MingwProjectEnvironmentVariableSupplier">                        
          <configuration
-			   name="%ConfigName.Dbg"
-			   artifactExtension="a"
-			   errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser"
-			   id="cdt.managedbuild.config.mingw.lib.debug">
+               artifactExtension="a"
+               buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug"
+               errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser"
+               id="cdt.managedbuild.config.mingw.lib.debug"
+               name="%ConfigName.Dbg">
                <toolChain
                      archList="all"
                      osList="win32"
@@ -398,16 +403,18 @@
                </toolChain>                 
          </configuration>
          <configuration
-               name="%ConfigName.Rel"
                artifactExtension="a"
+               buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release"
                errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser"
-               id="cdt.managedbuild.config.mingw.lib.release">
+               id="cdt.managedbuild.config.mingw.lib.release"
+               name="%ConfigName.Rel">
                <toolChain
-                     osList="win32"
+                     archList="all"
+                     id="cdt.managedbuild.toolchain.mingw.lib.release"
                      name="%ToolChainName.Rel"
-                     targetTool="cdt.managedbuild.tool.gnu.archiver.lib.release"
+                     osList="win32"
                      scannerConfigDiscoveryProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfile"
-                     id="cdt.managedbuild.toolchain.mingw.lib.release">
+                     targetTool="cdt.managedbuild.tool.mingw.archiver.lib.release">
 		          <targetPlatform
 		              id="cdt.managedbuild.target.mingw.platform.lib.release"
 		              name="%PlatformName.Rel"

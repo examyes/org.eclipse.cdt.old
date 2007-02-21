@@ -377,17 +377,20 @@
                valueType="boolean"/>
       </tool>
       <projectType
+            buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe"
             id="org.eclipse.cdt.windows.projectType.exe"
             isAbstract="false"
-            name="Windows Executable (EXE)"
             projectEnvironmentSupplier="org.eclipse.cdt.windows.build.WindowsProjectEnvironmentVariableSupplier">
          <configuration
                artifactExtension="exe"
                id="org.eclipse.cdt.windows.exe.debug"
                name="Debug">
             <toolChain
+                  archList="all"
                   id="org.eclipse.cdt.windows.exe.debug.toolChain"
-                  isAbstract="false">
+                  isAbstract="false"
+                  name="%toolchain.name"
+                  osList="win32">
                <targetPlatform
                      archList="all"
                      binaryParser="org.eclipse.cdt.core.PE"
@@ -419,8 +422,11 @@
                id="org.eclipse.cdt.windows.exe.release"
                name="Release">
             <toolChain
+                  archList="all"
                   id="org.eclipse.cdt.windows.exe.release.toolChain"
-                  isAbstract="false">
+                  isAbstract="false"
+                  name="%toolchain.name"
+                  osList="win32">
                <targetPlatform
                      archList="all"
                      binaryParser="org.eclipse.cdt.core.PE"
@@ -443,17 +449,20 @@
          </configuration>
       </projectType>
       <projectType
+            buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.sharedLib"
             id="org.eclipse.cdt.windows.projectType.dll"
             isAbstract="false"
-            name="Windows Shared Library (DLL)"
             projectEnvironmentSupplier="org.eclipse.cdt.windows.build.WindowsProjectEnvironmentVariableSupplier">
          <configuration
                artifactExtension="dll"
                id="org.eclipse.cdt.windows.dll.debug"
                name="Debug">
             <toolChain
+                  archList="all"
                   id="org.eclipse.cdt.windows.dll.debug.toolChain"
-                  isAbstract="false">
+                  isAbstract="false"
+                  name="%toolchain.name"
+                  osList="win32">
                <targetPlatform
                      archList="all"
                      binaryParser="org.eclipse.cdt.core.PE"
@@ -485,8 +494,11 @@
                id="org.eclipse.cdt.windows.dll.release"
                name="Release">
             <toolChain
+                  archList="all"
                   id="org.eclipse.cdt.windows.dll.release.toolChain"
-                  isAbstract="false">
+                  isAbstract="false"
+                  name="%toolchain.name"
+                  osList="win32">
                <targetPlatform
                      archList="all"
                      binaryParser="org.eclipse.cdt.core.PE"
@@ -509,17 +521,20 @@
          </configuration>
       </projectType>
       <projectType
+            buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.staticLib"
             id="org.eclipse.cdt.windows.projectType.lib"
             isAbstract="false"
-            name="Windows Static Library (LIB)"
             projectEnvironmentSupplier="org.eclipse.cdt.windows.build.WindowsProjectEnvironmentVariableSupplier">
          <configuration
                artifactExtension="lib"
                id="org.eclipse.cdt.windows.lib.debug"
                name="Debug">
             <toolChain
+                  archList="all"
                   id="org.eclipse.cdt.windows.lib.debug.toolChain"
-                  isAbstract="false">
+                  isAbstract="false"
+                  name="%toolchain.name"
+                  osList="win32">
                <targetPlatform
                      archList="all"
                      binaryParser="org.eclipse.cdt.core.PE"
@@ -545,8 +560,11 @@
                id="org.eclipse.cdt.windows.lib.release"
                name="Release">
             <toolChain
+                  archList="all"
                   id="org.eclipse.cdt.windows.lib.release.toolChain"
-                  isAbstract="false">
+                  isAbstract="false"
+                  name="%toolchain.name"
+                  osList="win32">
                <targetPlatform
                      archList="all"
                      binaryParser="org.eclipse.cdt.core.PE"
