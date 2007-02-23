@@ -3,17 +3,43 @@
 <plugin>
    <extension
          point="org.eclipse.cdt.managedbuilder.core.buildDefinitions">
-      <managedBuildRevision fileVersion="1.0"/>
+      <managedBuildRevision fileVersion="4.0.0"/>
+      <toolChain
+            archList="all"
+            configurationEnvironmentSupplier="org.eclipse.cdt.windows.build.WindowsEnvironmentVariableSupplier"
+            id="org.eclipse.cdt.windows.toolchain.base"
+            name="%toolchain.name"
+            osList="win32"
+            targetTool="org.eclipse.cdt.windows.link;org.eclipse.cdt.windows.lib">
+         <targetPlatform
+               archList="all"
+               binaryParser="org.eclipse.cdt.core.PE"
+               id="org.eclipse.cdt.windows.targetPlatform"
+               osList="win32">
+         </targetPlatform>
+         <builder
+               id="org.eclipse.cdt.windows.builder"
+               isVariableCaseSensitive="false"
+               superClass="org.eclipse.cdt.build.core.internal.builder">
+         </builder>
       <tool
             command="cl /c"
-            headerExtensions="h,hpp"
+            errorParsers="org.eclipse.cdt.core.VCErrorParser"
             id="org.eclipse.cdt.windows.cl"
-            isAbstract="false"
-            name="CL Compiler"
+            name="%compiler.name"
             natureFilter="both"
-            outputFlag="/Fo"
-            outputs="obj"
-            sources="c,cpp">
+            outputFlag="/Fo">
+         <supportedProperties>
+            <property
+                  id="org.eclipse.cdt.build.core.buildType">
+               <value
+                     id="org.eclipse.cdt.build.core.buildType.debug">
+               </value>
+               <value
+                     id="org.eclipse.cdt.build.core.buildType.release">
+               </value>
+            </property>
+         </supportedProperties>
          <envVarBuildPath
                pathDelimiter=";"
                pathType="buildpathInclude"
@@ -24,7 +50,6 @@
          <option
                category="org.eclipse.cdt.windows.cl.optionCategory.optimization"
                id="org.eclipse.cdt.windows.cl.option.optimization"
-               isAbstract="false"
                name="Optimization"
                resourceFilter="all"
                valueType="enumerated">
@@ -42,6 +67,26 @@
                   id="org.eclipse.cdt.windows.cl.option.optimization.2"
                   isDefault="true"
                   name="Maximize Speed (/O2)"/>
+            <enablement
+                  attribute="value"
+                  extensionAdjustment="false"
+                  type="CONTAINER_ATTRIBUTE"
+                  value="org.eclipse.cdt.windows.cl.option.optimization.2">
+               <checkBuildProperty
+                     property="org.eclipse.cdt.build.core.buildType"
+                     value="org.eclipse.cdt.build.core.buildType.release">
+               </checkBuildProperty>
+            </enablement>
+            <enablement
+                  attribute="value"
+                  extensionAdjustment="false"
+                  type="CONTAINER_ATTRIBUTE"
+                  value="org.eclipse.cdt.windows.cl.option.optimization.default">
+               <checkBuildProperty
+                     property="org.eclipse.cdt.build.core.buildType"
+                     value="org.eclipse.cdt.build.core.buildType.debug">
+               </checkBuildProperty>
+            </enablement>
          </option>
          <optionCategory
                id="org.eclipse.cdt.windows.cl.optionCategory.codegen"
@@ -49,7 +94,6 @@
          <option
                category="org.eclipse.cdt.windows.cl.optionCategory.codegen"
                id="org.eclipse.cdt.windows.cl.option.arch"
-               isAbstract="false"
                name="Minimum CPU Architecture"
                resourceFilter="all"
                valueType="enumerated">
@@ -72,7 +116,6 @@
                command="/clr"
                defaultValue="false"
                id="org.eclipse.cdt.windows.cl.option.clr"
-               isAbstract="false"
                name="Common Language Runtime (/clr)"
                resourceFilter="all"
                valueType="boolean"/>
@@ -81,7 +124,6 @@
                command="/EHs"
                defaultValue="true"
                id="org.eclipse.cdt.windows.cl.option.exceptions"
-               isAbstract="false"
                name="Enable C++ Exception Handling (/EHs)"
                resourceFilter="all"
                valueType="boolean"/>
@@ -90,14 +132,12 @@
                commandFalse="/GR-"
                defaultValue="true"
                id="org.eclipse.cdt.windows.cl.option.rtti"
-               isAbstract="false"
                name="Enable Run-Time Type Information (/GR)"
                resourceFilter="all"
                valueType="boolean"/>
          <option
                category="org.eclipse.cdt.windows.cl.optionCategory.codegen"
                id="org.eclipse.cdt.windows.cl.option.runtime"
-               isAbstract="false"
                name="Run-Time Library"
                resourceFilter="all"
                valueType="enumerated">
@@ -128,7 +168,6 @@
          <option
                category="org.eclipse.cdt.windows.cl.optionCategory.debug"
                id="org.eclipse.cdt.windows.cl.option.debugFormat"
-               isAbstract="false"
                name="Debug Information Format"
                resourceFilter="all"
                valueType="enumerated">
@@ -146,6 +185,26 @@
                   id="org.eclipse.cdt.windows.cl.option.debugFormat.complete"
                   isDefault="false"
                   name="Complete (/Zi)"/>
+            <enablement
+                  attribute="value"
+                  extensionAdjustment="false"
+                  type="CONTAINER_ATTRIBUTE"
+                  value="org.eclipse.cdt.windows.cl.option.debugFormat.none">
+               <checkBuildProperty
+                     property="org.eclipse.cdt.build.core.buildType"
+                     value="org.eclipse.cdt.build.core.buildType.release">
+               </checkBuildProperty>
+            </enablement>
+            <enablement
+                  attribute="value"
+                  extensionAdjustment="false"
+                  type="CONTAINER_ATTRIBUTE"
+                  value="org.eclipse.cdt.windows.cl.option.debugFormat.complete">
+               <checkBuildProperty
+                     property="org.eclipse.cdt.build.core.buildType"
+                     value="org.eclipse.cdt.build.core.buildType.debug">
+               </checkBuildProperty>
+            </enablement>
          </option>
          <optionCategory
                id="org.eclipse.cdt.windows.cl.optionCategory.preprocessor"
@@ -154,7 +213,6 @@
                category="org.eclipse.cdt.windows.cl.optionCategory.preprocessor"
                command="/D"
                id="org.eclipse.cdt.windows.cl.option.macros"
-               isAbstract="false"
                name="Defines (/D)"
                resourceFilter="all"
                valueType="definedSymbols"/>
@@ -163,7 +221,6 @@
                category="org.eclipse.cdt.windows.cl.optionCategory.preprocessor"
                command="/I"
                id="org.eclipse.cdt.windows.cl.option.includes"
-               isAbstract="false"
                name="Include Path (/I)"
                resourceFilter="all"
                valueType="includePath"/>
@@ -175,7 +232,6 @@
                command="/openmp"
                defaultValue="false"
                id="org.eclipse.cdt.windows.cl.option.openmp"
-               isAbstract="false"
                name="Enable OpenMP (/openmp)"
                resourceFilter="all"
                valueType="boolean"/>
@@ -184,7 +240,6 @@
                commandFalse="/Za"
                defaultValue="true"
                id="org.eclipse.cdt.windows.cl.option.langExtensions"
-               isAbstract="false"
                name="Enable Language Extensions (/Ze,/Za)"
                resourceFilter="all"
                valueType="boolean"/>
@@ -196,42 +251,33 @@
                command="/nologo"
                defaultValue="true"
                id="org.eclipse.cdt.windows.cl.option.nologo"
-               isAbstract="false"
                name="Suppress Banner (/nologo)"
                resourceFilter="all"
                valueType="boolean"/>
          <option
                category="org.eclipse.cdt.windows.cl.optionCategory.miscellaneous"
                id="org.eclipse.cdt.windows.cl.option.others"
-               isAbstract="false"
                name="Other Options"
                resourceFilter="all"
                valueType="stringList"/>
-      </tool>
-      <tool
-            id="org.eclipse.cdt.windows.cl.debug"
-            isAbstract="false"
-            superClass="org.eclipse.cdt.windows.cl">
-         <option
-               defaultValue="org.eclipse.cdt.windows.cl.option.debugFormat.complete"
-               id="org.eclipse.cdt.windows.cl.debug.option.debugFormat"
-               isAbstract="false"
-               superClass="org.eclipse.cdt.windows.cl.option.debugFormat"/>
-         <option
-               defaultValue="org.eclipse.cdt.windows.cl.option.runtime.mdd"
-               id="org.eclipse.cdt.windows.cl.debug.option.runtime"
-               isAbstract="false"
-               superClass="org.eclipse.cdt.windows.cl.option.runtime"/>
+         <inputType
+               dependencyContentType="org.eclipse.cdt.core.cxxHeader"
+               id="org.eclipse.cdt.windows.cl.inputType"
+               sourceContentType="org.eclipse.cdt.core.cxxSource">
+         </inputType>
+         <outputType
+               id="org.eclipse.cdt.windows.cl.outputType"
+               outputs="obj">
+         </outputType>
       </tool>
       <tool
             command="rc"
+            errorParsers="org.eclipse.cdt.core.VCErrorParser"
             id="org.eclipse.cdt.windows.rc"
-            isAbstract="false"
-            name="Resource Compiler"
+            name="%rc.name"
             natureFilter="both"
             outputFlag="/Fo"
-            outputs="res"
-            sources="rc">
+            >
          <optionCategory
                id="org.eclipse.cdt.windows.rc.optionCategory.preprocessor"
                name="Preprocessor"/>
@@ -240,7 +286,6 @@
                category="org.eclipse.cdt.windows.rc.optionCategory.preprocessor"
                command="/I"
                id="org.eclipse.cdt.windows.rc.option.includes"
-               isAbstract="false"
                name="Include Path (/I)"
                resourceFilter="all"
                valueType="includePath"/>
@@ -248,7 +293,6 @@
                category="org.eclipse.cdt.windows.rc.optionCategory.preprocessor"
                command="/D"
                id="org.eclipse.cdt.windows.rc.option.defines"
-               isAbstract="false"
                name="Defines (/D)"
                resourceFilter="all"
                valueType="definedSymbols"/>
@@ -258,20 +302,36 @@
          <option
                category="org.eclipse.cdt.windows.rc.optionCategory.misc"
                id="org.eclipse.cdt.windows.rc.option.others"
-               isAbstract="false"
                name="Other Options"
                resourceFilter="all"
                valueType="stringList"/>
+         <inputType
+               id="org.eclipse.cdt.windows.rc.inputType"
+               sources="rc">
+         </inputType>
+         <outputType
+               id="org.eclipse.cdt.windows.rc.outputType"
+               outputs="res">
+         </outputType>
       </tool>
       <tool
             command="link"
+            errorParsers="org.eclipse.cdt.core.VCErrorParser"
             id="org.eclipse.cdt.windows.link"
-            isAbstract="false"
-            name="LINK Linker"
+            name="%linker.name"
             natureFilter="both"
             outputFlag="/OUT:"
-            sibling_order="org.eclipse.pde.internal.core.text.plugin.PluginElementNode@1016505"
-            sources="obj,res">
+            >
+         <supportedProperties>
+            <property
+                  id="org.eclipse.cdt.build.core.buildArtefactType">
+               <value
+                     id="org.eclipse.cdt.build.core.buildArtefactType.exe"></value>
+               <value
+                     id="org.eclipse.cdt.build.core.buildArtefactType.sharedLib">
+               </value>
+            </property>
+         </supportedProperties>
          <envVarBuildPath
                pathType="buildpathLibrary"
                variableList="LIBS"/>
@@ -279,10 +339,20 @@
                command="/DLL"
                defaultValue="false"
                id="org.eclipse.cdt.windows.link.option.dll"
-               isAbstract="false"
                name="Build a DLL"
                resourceFilter="all"
-               valueType="boolean"/>
+               valueType="boolean">
+            <enablement
+                  attribute="defaultValue"
+                  extensionAdjustment="false"
+                  type="CONTAINER_ATTRIBUTE"
+                  value="true">
+               <checkBuildProperty
+                     property="org.eclipse.cdt.build.core.buildArtefactType"
+                     value="org.eclipse.cdt.build.core.buildArtefactType.sharedLib">
+               </checkBuildProperty>
+            </enablement>
+         </option>
          <optionCategory
                id="org.eclipse.cdt.windows.link.optionCategory.general"
                name="General"/>
@@ -291,7 +361,6 @@
                command="/debug"
                defaultValue="false"
                id="org.eclipse.cdt.windows.link.option.debug"
-               isAbstract="false"
                name="Generate Debug Info (/debug)"
                resourceFilter="all"
                valueType="boolean"/>
@@ -300,14 +369,12 @@
                command="/nologo"
                defaultValue="true"
                id="org.eclipse.cdt.windows.link.option.nologo"
-               isAbstract="false"
                name="Suppress Banner (/nologo)"
                resourceFilter="all"
                valueType="boolean"/>
          <option
                category="org.eclipse.cdt.windows.link.optionCategory.general"
                id="org.eclipse.cdt.windows.link.option.others"
-               isAbstract="false"
                name="Other Options"
                resourceFilter="all"
                valueType="stringList"/>
@@ -319,7 +386,6 @@
                category="org.eclipse.cdt.windows.link.optionCategory.libraries"
                command="/libpath:"
                id="org.eclipse.cdt.windows.link.option.libpath"
-               isAbstract="false"
                name="Additional Libpath (/libpath)"
                resourceFilter="all"
                valueType="stringList"/>
@@ -327,42 +393,37 @@
                browseType="file"
                category="org.eclipse.cdt.windows.link.optionCategory.libraries"
                id="org.eclipse.cdt.windows.link.option.libraries"
-               isAbstract="false"
                name="Libraries"
                resourceFilter="all"
                valueType="libs"/>
-      </tool>
-      <tool
-            id="org.eclipse.cdt.windows.link.exe"
-            isAbstract="false"
-            name="LINK Executable Linker"
-            natureFilter="both"
-            outputs="exe"
-            superClass="org.eclipse.cdt.windows.link">
-      </tool>
-      <tool
-            id="org.eclipse.cdt.windows.link.dll"
-            isAbstract="false"
-            name="LINK DLL Linker"
-            natureFilter="both"
-            outputs="dll"
-            superClass="org.eclipse.cdt.windows.link">
-         <option
-               defaultValue="true"
-               id="org.eclipse.cdt.windows.link.dll.option.dll"
-               isAbstract="false"
-               resourceFilter="all"
-               superClass="org.eclipse.cdt.windows.link.option.dll"/>
+         <inputType
+               id="org.eclipse.cdt.windows.link.inputType"
+               sources="res,obj">
+         </inputType>
+         <outputType
+               id="org.eclipse.cdt.windows.link.outputType"
+               outputs="exe">
+         </outputType>
+         <outputType
+               id="org.eclipse.cdt.windows.link.outputType.dll"
+               outputs="dll">
+         </outputType>
       </tool>
       <tool
             command="lib"
             id="org.eclipse.cdt.windows.lib"
-            isAbstract="false"
-            name="LIB Library Manager"
+            name="%lib.name"
             natureFilter="both"
             outputFlag="/OUT:"
-            outputs="lib"
-            sources="obj,res">
+            >
+         <supportedProperties>
+            <property
+                  id="org.eclipse.cdt.build.core.buildArtefactType">
+               <value
+                     id="org.eclipse.cdt.build.core.buildArtefactType.staticLib">
+               </value>
+            </property>
+         </supportedProperties>
          <optionCategory
                id="org.eclipse.cdt.windows.lib.optionCategory.general"
                name="General"/>
@@ -371,218 +432,209 @@
                command="/nologo"
                defaultValue="true"
                id="org.eclipse.cdt.windows.lib.option.nologo"
-               isAbstract="false"
                name="Suppress Banner (/nologo)"
                resourceFilter="all"
                valueType="boolean"/>
+         <inputType
+               id="org.eclipse.cdt.windows.lib.inputType"
+               sources="obj,res">
+         </inputType>
+         <outputType
+               id="org.eclipse.cdt.windows.lib.outputType"
+               outputs="lib">
+         </outputType>
       </tool>
+      </toolChain>
+      <configuration
+            artifactExtension="exe"
+            id="org.eclipse.cdt.windows.configuration">
+         <enablement
+               attribute="artifactExtension"
+               extensionAdjustment="false"
+               type="CONTAINER_ATTRIBUTE"
+               value="dll">
+            <checkBuildProperty
+                  property="org.eclipse.cdt.build.core.buildArtefactType"
+                  value="org.eclipse.cdt.build.core.buildArtefactType.sharedLib"></checkBuildProperty>
+         </enablement>
+         <enablement
+               attribute="artifactExtension"
+               extensionAdjustment="false"
+               type="CONTAINER_ATTRIBUTE"
+               value="lib">
+            <checkBuildProperty
+                  property="org.eclipse.cdt.build.core.buildArtefactType"
+                  value="org.eclipse.cdt.build.core.buildArtefactType.staticLib"></checkBuildProperty>
+         </enablement>
+      </configuration>
       <projectType
             buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe"
             id="org.eclipse.cdt.windows.projectType.exe"
-            isAbstract="false"
-            projectEnvironmentSupplier="org.eclipse.cdt.windows.build.WindowsProjectEnvironmentVariableSupplier">
+            >
          <configuration
-               artifactExtension="exe"
+               buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug"
                id="org.eclipse.cdt.windows.exe.debug"
-               name="Debug">
+               name="%config.debug"
+               parent="org.eclipse.cdt.windows.configuration">
             <toolChain
-                  archList="all"
-                  id="org.eclipse.cdt.windows.exe.debug.toolChain"
-                  isAbstract="false"
-                  name="%toolchain.name"
-                  osList="win32">
+                  id="org.eclipse.cdt.windows.toolchain.exe.debug"
+                  superClass="org.eclipse.cdt.windows.toolchain.base">
                <targetPlatform
-                     archList="all"
-                     binaryParser="org.eclipse.cdt.core.PE"
-                     id="org.eclipse.cdt.windows.exe.debug.targetPlatform"
-                     isAbstract="false"
-                     osList="win32"/>
+                     id="org.eclipse.cdt.windows.targetPlatform.exe.debug"
+                     superClass="org.eclipse.cdt.windows.targetPlatform">
+               </targetPlatform>
                <tool
-                     id="org.eclipse.cdt.windows.exe.debug.compiler"
-                     isAbstract="false"
-                     superClass="org.eclipse.cdt.windows.cl.debug"/>
+                     id="org.eclipse.cdt.windows.cl.exe.debug"
+                     superClass="org.eclipse.cdt.windows.cl">
+               </tool>
                <tool
-                     id="org.eclipse.cdt.windows.exe.debug.rc"
-                     isAbstract="false"
-                     superClass="org.eclipse.cdt.windows.rc"/>
+                     id="org.eclipse.cdt.windows.rc.exe.debug"
+                     superClass="org.eclipse.cdt.windows.rc">
+               </tool>
                <tool
-                     id="org.eclipse.cdt.windows.exe.debug.linker"
-                     isAbstract="false"
-                     superClass="org.eclipse.cdt.windows.link.exe">
-                  <option
-                        defaultValue="true"
-                        id="org.eclipse.cdt.windows.exe.debug.linker.option.debug"
-                        isAbstract="false"
-                        superClass="org.eclipse.cdt.windows.link.option.debug"/>
+                     id="org.eclipse.cdt.windows.link.exe.debug"
+                     superClass="org.eclipse.cdt.windows.link">
                </tool>
             </toolChain>
          </configuration>
          <configuration
-               artifactExtension="exe"
+               buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release"
                id="org.eclipse.cdt.windows.exe.release"
-               name="Release">
+               name="%config.release"
+               parent="org.eclipse.cdt.windows.configuration">
             <toolChain
-                  archList="all"
-                  id="org.eclipse.cdt.windows.exe.release.toolChain"
-                  isAbstract="false"
-                  name="%toolchain.name"
-                  osList="win32">
+                  id="org.eclipse.cdt.windows.toolchain.exe.release"
+                  superClass="org.eclipse.cdt.windows.toolchain.base">
                <targetPlatform
-                     archList="all"
-                     binaryParser="org.eclipse.cdt.core.PE"
-                     id="org.eclipse.cdt.windows.exe.release.targetPlatform"
-                     isAbstract="false"
-                     osList="win32"/>
+                     id="org.eclipse.cdt.windows.targetPlatform.exe.release"
+                     superClass="org.eclipse.cdt.windows.targetPlatform">
+               </targetPlatform>
                <tool
-                     id="org.eclipse.cdt.windows.exe.release.compiler"
-                     isAbstract="false"
-                     superClass="org.eclipse.cdt.windows.cl"/>
+                     id="org.eclipse.cdt.windows.cl.exe.release"
+                     superClass="org.eclipse.cdt.windows.cl">
+               </tool>
                <tool
-                     id="org.eclipse.cdt.windows.exe.release.rc"
-                     isAbstract="false"
-                     superClass="org.eclipse.cdt.windows.rc"/>
+                     id="org.eclipse.cdt.windows.rc.exe.release"
+                     superClass="org.eclipse.cdt.windows.rc">
+               </tool>
                <tool
-                     id="org.eclipse.cdt.windows.exe.release.linker"
-                     isAbstract="false"
-                     superClass="org.eclipse.cdt.windows.link.exe"/>
+                     id="org.eclipse.cdt.windows.link.exe.release"
+                     superClass="org.eclipse.cdt.windows.link">
+               </tool>
             </toolChain>
          </configuration>
       </projectType>
       <projectType
             buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.sharedLib"
             id="org.eclipse.cdt.windows.projectType.dll"
-            isAbstract="false"
-            projectEnvironmentSupplier="org.eclipse.cdt.windows.build.WindowsProjectEnvironmentVariableSupplier">
+            >
          <configuration
-               artifactExtension="dll"
+               buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug"
                id="org.eclipse.cdt.windows.dll.debug"
-               name="Debug">
+               name="%config.debug"
+               parent="org.eclipse.cdt.windows.configuration">
             <toolChain
-                  archList="all"
-                  id="org.eclipse.cdt.windows.dll.debug.toolChain"
-                  isAbstract="false"
-                  name="%toolchain.name"
-                  osList="win32">
+                  id="org.eclipse.cdt.windows.toolchain.dll.debug"
+                  superClass="org.eclipse.cdt.windows.toolchain.base">
                <targetPlatform
-                     archList="all"
-                     binaryParser="org.eclipse.cdt.core.PE"
-                     id="org.eclipse.cdt.windows.dll.debug.targetPlatform"
-                     isAbstract="false"
-                     osList="win32"/>
+                     id="org.eclipse.cdt.windows.targetPlatform.dll.debug"
+                     superClass="org.eclipse.cdt.windows.targetPlatform">
+               </targetPlatform>
                <tool
-                     id="org.eclipse.cdt.windows.dll.debug.compiler"
-                     isAbstract="false"
-                     superClass="org.eclipse.cdt.windows.cl.debug"/>
+                     id="org.eclipse.cdt.windows.cl.dll.debug"
+                     superClass="org.eclipse.cdt.windows.cl">
+               </tool>
                <tool
-                     id="org.eclipse.cdt.windows.dll.debug.rc"
-                     isAbstract="false"
-                     superClass="org.eclipse.cdt.windows.rc"/>
+                     id="org.eclipse.cdt.windows.rc.dll.debug"
+                     superClass="org.eclipse.cdt.windows.rc">
+               </tool>
                <tool
-                     id="org.eclipse.cdt.windows.dll.debug.linker"
-                     isAbstract="false"
-                     superClass="org.eclipse.cdt.windows.link.dll">
-                  <option
-                        defaultValue="true"
-                        id="org.eclipse.cdt.windows.dll.debug.linker.option.debug"
-                        isAbstract="false"
-                        superClass="org.eclipse.cdt.windows.link.option.debug"/>
+                     id="org.eclipse.cdt.windows.link.dll.debug"
+                     superClass="org.eclipse.cdt.windows.link">
                </tool>
             </toolChain>
          </configuration>
          <configuration
-               artifactExtension="dll"
+               buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release"
                id="org.eclipse.cdt.windows.dll.release"
-               name="Release">
+               name="%config.release"
+               parent="org.eclipse.cdt.windows.configuration">
             <toolChain
-                  archList="all"
-                  id="org.eclipse.cdt.windows.dll.release.toolChain"
-                  isAbstract="false"
-                  name="%toolchain.name"
-                  osList="win32">
+                  id="org.eclipse.cdt.windows.toolchain.dll.release"
+                  superClass="org.eclipse.cdt.windows.toolchain.base">
                <targetPlatform
-                     archList="all"
-                     binaryParser="org.eclipse.cdt.core.PE"
-                     id="org.eclipse.cdt.windows.dll.release.targetPlatform"
-                     isAbstract="false"
-                     osList="win32"/>
+                     id="org.eclipse.cdt.windows.targetPlatform.dll.release"
+                     superClass="org.eclipse.cdt.windows.targetPlatform">
+               </targetPlatform>
                <tool
-                     id="org.eclipse.cdt.windows.dll.release.compiler"
-                     isAbstract="false"
-                     superClass="org.eclipse.cdt.windows.cl"/>
+                     id="org.eclipse.cdt.windows.cl.dll.release"
+                     superClass="org.eclipse.cdt.windows.cl">
+               </tool>
                <tool
-                     id="org.eclipse.cdt.windows.dll.release.rc"
-                     isAbstract="false"
-                     superClass="org.eclipse.cdt.windows.rc"/>
+                     id="org.eclipse.cdt.windows.rc.dll.release"
+                     superClass="org.eclipse.cdt.windows.rc">
+               </tool>
                <tool
-                     id="org.eclipse.cdt.windows.dll.release.linker"
-                     isAbstract="false"
-                     superClass="org.eclipse.cdt.windows.link.dll"/>
+                     id="org.eclipse.cdt.windows.link.dll.release"
+                     superClass="org.eclipse.cdt.windows.link">
+               </tool>
             </toolChain>
          </configuration>
       </projectType>
       <projectType
             buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.staticLib"
             id="org.eclipse.cdt.windows.projectType.lib"
-            isAbstract="false"
-            projectEnvironmentSupplier="org.eclipse.cdt.windows.build.WindowsProjectEnvironmentVariableSupplier">
+            >
          <configuration
-               artifactExtension="lib"
+               buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug"
                id="org.eclipse.cdt.windows.lib.debug"
-               name="Debug">
+               name="%config.debug"
+               parent="org.eclipse.cdt.windows.configuration">
             <toolChain
-                  archList="all"
-                  id="org.eclipse.cdt.windows.lib.debug.toolChain"
-                  isAbstract="false"
-                  name="%toolchain.name"
-                  osList="win32">
+                  id="org.eclipse.cdt.windows.toolchain.lib.debug"
+                  superClass="org.eclipse.cdt.windows.toolchain.base">
                <targetPlatform
-                     archList="all"
-                     binaryParser="org.eclipse.cdt.core.PE"
-                     id="org.eclipse.cdt.windows.lib.debug.targetPlatform"
-                     isAbstract="false"
-                     osList="win32"/>
+                     id="org.eclipse.cdt.windows.targetPlatform.lib.debug"
+                     superClass="org.eclipse.cdt.windows.targetPlatform">
+               </targetPlatform>
                <tool
-                     id="org.eclipse.cdt.windows.lib.debug.compiler"
-                     isAbstract="false"
-                     superClass="org.eclipse.cdt.windows.cl.debug"/>
+                     id="org.eclipse.cdt.windows.cl.lib.debug"
+                     superClass="org.eclipse.cdt.windows.cl">
+               </tool>
                <tool
-                     id="org.eclipse.cdt.windows.lib.debug.rc"
-                     isAbstract="false"
-                     superClass="org.eclipse.cdt.windows.rc"/>
+                     id="org.eclipse.cdt.windows.rc.lib.debug"
+                     superClass="org.eclipse.cdt.windows.rc">
+               </tool>
                <tool
-                     id="org.eclipse.cdt.windows.lib.debug.lib"
-                     isAbstract="false"
-                     superClass="org.eclipse.cdt.windows.lib"/>
+                     id="org.eclipse.cdt.windows.lib.lib.debug"
+                     superClass="org.eclipse.cdt.windows.lib">
+               </tool>
             </toolChain>
          </configuration>
          <configuration
-               artifactExtension="lib"
+               buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release"
                id="org.eclipse.cdt.windows.lib.release"
-               name="Release">
+               name="%config.release"
+               parent="org.eclipse.cdt.windows.configuration">
             <toolChain
-                  archList="all"
-                  id="org.eclipse.cdt.windows.lib.release.toolChain"
-                  isAbstract="false"
-                  name="%toolchain.name"
-                  osList="win32">
+                  id="org.eclipse.cdt.windows.toolchain.lib.release"
+                  superClass="org.eclipse.cdt.windows.toolchain.base">
                <targetPlatform
-                     archList="all"
-                     binaryParser="org.eclipse.cdt.core.PE"
-                     id="org.eclipse.cdt.windows.lib.release.targetPlatform"
-                     isAbstract="false"
-                     osList="win32"/>
+                     id="org.eclipse.cdt.windows.targetPlatform.lib.release"
+                     superClass="org.eclipse.cdt.windows.targetPlatform">
+               </targetPlatform>
                <tool
-                     id="org.eclipse.cdt.windows.lib.release.compiler"
-                     isAbstract="false"
-                     superClass="org.eclipse.cdt.windows.cl"/>
+                     id="org.eclipse.cdt.windows.cl.lib.release"
+                     superClass="org.eclipse.cdt.windows.cl">
+               </tool>
                <tool
-                     id="org.eclipse.cdt.windows.lib.release.rc"
-                     isAbstract="false"
-                     superClass="org.eclipse.cdt.windows.rc"/>
+                     id="org.eclipse.cdt.windows.rc.lib.release"
+                     superClass="org.eclipse.cdt.windows.rc">
+               </tool>
                <tool
-                     id="org.eclipse.cdt.windows.lib.release.lib"
-                     isAbstract="false"
-                     superClass="org.eclipse.cdt.windows.lib"/>
+                     id="org.eclipse.cdt.windows.lib.lib.release"
+                     superClass="org.eclipse.cdt.windows.lib">
+               </tool>
             </toolChain>
          </configuration>
       </projectType>
