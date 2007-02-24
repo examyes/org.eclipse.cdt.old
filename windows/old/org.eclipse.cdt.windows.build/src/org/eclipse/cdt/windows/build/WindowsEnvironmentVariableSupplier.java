@@ -84,10 +84,6 @@ public class WindowsEnvironmentVariableSupplier	implements IConfigurationEnviron
 		// The SDK Location
 		String sdkDir = reg.getLocalMachineValue("SOFTWARE\\Microsoft\\Microsoft SDKs\\Windows\\v6.0", "InstallationFolder");
 		
-		// The .Net Framework Location
-		String netRoot = reg.getLocalMachineValue("SOFTWARE\\Microsoft\\.NETFramework", "InstallRoot");
-		String netVer = reg.getLocalMachineValueName("SOFTWARE\\Microsoft\\.NETFramework\\policy\\v2.0", 0);
-		
 		// INCLUDE
 		buff = new StringBuffer();
 		buff.append(sdkDir).append("VC\\Include;");
@@ -106,7 +102,6 @@ public class WindowsEnvironmentVariableSupplier	implements IConfigurationEnviron
 		buff = new StringBuffer();
 		buff.append(sdkDir).append("VC\\Bin;");
 		buff.append(sdkDir).append("Bin;");
-		buff.append(netRoot).append("v2.0.").append(netVer).append(';');
 		addvar(new WindowsBuildEnvironmentVariable("PATH", buff.toString(), IBuildEnvironmentVariable.ENVVAR_PREPEND));
 	}
 
