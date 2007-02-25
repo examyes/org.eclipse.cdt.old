@@ -2,27 +2,27 @@
 #include "../win/WinDebugEngine.h"
 
 #include "WinMIExecRun.h"
+#include "WinMIExecNext.h"
+#include "WinMIExecStep.h"
 #include "WinMIBreakInsert.h"
 #include "WinMIStackInfoDepth.h"
 #include "WinMIStackListFrames.h"
 
+#define COMMAND(X) X * cmd = new X(*this, token); debugEngine.enqueueCommand(cmd); return cmd
+
 MICommand * WinMIEngine::createMICommand(string & token, string & operation) {
 	if (operation == "exec-run" || operation == "exec-continue") {
-		WinMIExecRun * cmd = new WinMIExecRun(*this, token);
-		debugEngine.enqueueCommand(cmd);
-		return cmd;
+		COMMAND(WinMIExecRun);
+	} else if (operation == "exec-next") {
+		COMMAND(WinMIExecNext);
+	} else if (operation == "exec-step") {
+		COMMAND(WinMIExecStep);
 	} else if (operation == "break-insert") {
-		WinMIBreakInsert * cmd = new WinMIBreakInsert(*this, token);
-		debugEngine.enqueueCommand(cmd);
-		return cmd;
+		COMMAND(WinMIBreakInsert);
 	} else if (operation == "stack-info-depth") {
-		WinMIStackInfoDepth * cmd = new WinMIStackInfoDepth(*this, token);
-		debugEngine.enqueueCommand(cmd);
-		return cmd;
+		COMMAND(WinMIStackInfoDepth);
 	} else if (operation == "stack-list-frames") {
-		WinMIStackListFrames * cmd = new WinMIStackListFrames(*this, token);
-		debugEngine.enqueueCommand(cmd);
-		return cmd;
+		COMMAND(WinMIStackListFrames);
 	} else
 		return MIEngine::createMICommand(token, operation);
 }

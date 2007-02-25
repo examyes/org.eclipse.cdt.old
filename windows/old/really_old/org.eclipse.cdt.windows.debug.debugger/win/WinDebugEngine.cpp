@@ -61,7 +61,7 @@ void WinDebugEngine::mainLoop() {
 		cerr << "Failed to create process for: " << command << endl;
 		return;
 	}
-	
+
 	while (true) {
 		debugControl->SetExecutionStatus(DEBUG_STATUS_GO);
 		HRESULT hr = debugControl->WaitForEvent(0, INFINITE);

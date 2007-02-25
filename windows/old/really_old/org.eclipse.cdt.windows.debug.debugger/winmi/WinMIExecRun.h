@@ -2,11 +2,8 @@
 #define WINMIEXECRUN_H_
 
 #include <MICommand.h>
-#include "../win/WinDebugRunCommand.h"
+#include <WinDebugRunCommand.h>
 #include <windows.h>
-
-#include <list>
-using namespace std;
 
 // Also used for exec-continue
 
@@ -24,8 +21,10 @@ public:
 	// WinDebugCommand
 	virtual void execute(WinDebugEngine & debugEngine);
 	virtual void stopped(WinDebugEngine & debugEngine);
-	
-private:
+
+protected:
+	virtual ULONG getExecutionStatus();
+		
 	enum { _none, _running, _stopped, _error } status;
 	string msg;
 };
