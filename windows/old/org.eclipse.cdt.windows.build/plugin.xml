@@ -470,7 +470,7 @@
       <projectType
             buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe"
             id="org.eclipse.cdt.windows.projectType.exe"
-            >
+            projectEnvironmentSupplier="org.eclipse.cdt.windows.build.WindowsEnvironmentVariableSupplier">
          <configuration
                buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug"
                id="org.eclipse.cdt.windows.exe.debug"
@@ -527,7 +527,7 @@
       <projectType
             buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.sharedLib"
             id="org.eclipse.cdt.windows.projectType.dll"
-            >
+            projectEnvironmentSupplier="org.eclipse.cdt.windows.build.WindowsEnvironmentVariableSupplier">
          <configuration
                buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug"
                id="org.eclipse.cdt.windows.dll.debug"
@@ -584,7 +584,7 @@
       <projectType
             buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.staticLib"
             id="org.eclipse.cdt.windows.projectType.lib"
-            >
+            projectEnvironmentSupplier="org.eclipse.cdt.windows.build.WindowsEnvironmentVariableSupplier">
          <configuration
                buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug"
                id="org.eclipse.cdt.windows.lib.debug"

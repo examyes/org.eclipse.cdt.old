@@ -14,16 +14,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.cdt.managedbuilder.core.IConfiguration;
+import org.eclipse.cdt.managedbuilder.core.IManagedProject;
 import org.eclipse.cdt.managedbuilder.envvar.IBuildEnvironmentVariable;
 import org.eclipse.cdt.managedbuilder.envvar.IConfigurationEnvironmentVariableSupplier;
 import org.eclipse.cdt.managedbuilder.envvar.IEnvironmentVariableProvider;
+import org.eclipse.cdt.managedbuilder.envvar.IProjectEnvironmentVariableSupplier;
 import org.eclipse.cdt.utils.WindowsRegistry;
 
 /**
  * @author DSchaefer
  *
  */
-public class WindowsEnvironmentVariableSupplier	implements IConfigurationEnvironmentVariableSupplier {
+public class WindowsEnvironmentVariableSupplier
+	implements IConfigurationEnvironmentVariableSupplier, IProjectEnvironmentVariableSupplier {
 	
 	private Map<String, IBuildEnvironmentVariable> envvars;
 	
@@ -58,10 +61,24 @@ public class WindowsEnvironmentVariableSupplier	implements IConfigurationEnviron
 	}
 
 	public IBuildEnvironmentVariable getVariable(String variableName,
+			IManagedProject project, IEnvironmentVariableProvider provider) {
+		if (envvars == null)
+			initvars();
+		return envvars.get(variableName);
+	}
+	
+	public IBuildEnvironmentVariable getVariable(String variableName,
 			IConfiguration configuration, IEnvironmentVariableProvider provider) {
 		if (envvars == null)
 			initvars();
 		return envvars.get(variableName);
+	}
+
+	public IBuildEnvironmentVariable[] getVariables(IManagedProject project,
+			IEnvironmentVariableProvider provider) {
+		if (envvars == null)
+			initvars();
+		return envvars.values().toArray(new IBuildEnvironmentVariable[envvars.size()]);
 	}
 	
 	public IBuildEnvironmentVariable[] getVariables(
