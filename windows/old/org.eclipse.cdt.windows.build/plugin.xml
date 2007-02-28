@@ -398,6 +398,7 @@
                valueType="libs"/>
          <inputType
                id="org.eclipse.cdt.windows.link.inputType"
+               multipleOfType="true"
                sources="res,obj">
          </inputType>
          <outputType
