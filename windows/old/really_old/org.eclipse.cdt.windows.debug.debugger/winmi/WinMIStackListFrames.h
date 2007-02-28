@@ -5,6 +5,8 @@
 #include <WinDebugCommand.h>
 #include <dbgeng.h>
 
+struct WinDebugFrame;
+
 class WinMIStackListFrames : public MICommand, public WinDebugCommand
 {
 public:
@@ -22,13 +24,7 @@ public:
 private:
 	enum { param0, param1, param2 } paramState;
 	ULONG depth;
-	
-	struct Frame {
-		ULONG64 addr;
-		string func;
-		string file;
-		ULONG line;
-	} * frames;
+	WinDebugFrame * frames;
 	
 	bool error;
 	string msg;

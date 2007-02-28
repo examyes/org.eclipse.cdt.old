@@ -14,9 +14,10 @@ void WinMIExecRun::execute(WinDebugEngine & debugEngine) {
 		return;
 	}
 
-	debugEngine.run(this);
 	status = _running;
 	engine.enqueueResult(this);
+
+	debugEngine.run(this);
 }
 
 void WinMIExecRun::stopped(WinDebugEngine & debugEngine) {

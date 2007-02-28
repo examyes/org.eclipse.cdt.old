@@ -1,7 +1,6 @@
 #include "WinDebugEventCallbacks.h"
 
-#include <iostream>
-using namespace std;
+#include "WinDebugEngine.h"
 
 STDMETHODIMP WinDebugEventCallbacks::GetInterestMask(PULONG mask) {
 	*mask = DEBUG_EVENT_CREATE_PROCESS | DEBUG_EVENT_BREAKPOINT;
@@ -21,6 +20,9 @@ STDMETHODIMP WinDebugEventCallbacks::CreateProcess(
     __in ULONG64 ThreadDataOffset,
     __in ULONG64 StartOffset)
 {
+	// Tell the engine the handle
+	engine.processCreated((HANDLE)Handle);
+	
 	// Break immediately after creating the process
 	return DEBUG_STATUS_BREAK;
 }

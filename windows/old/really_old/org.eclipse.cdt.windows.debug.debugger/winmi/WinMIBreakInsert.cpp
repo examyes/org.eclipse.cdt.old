@@ -2,6 +2,7 @@
 #include <MIEngine.h>
 #include <WinDebugEngine.h>
 #include <dbgeng.h>
+#include <dbghelp.h>
 
 WinMIBreakInsert::WinMIBreakInsert(MIEngine & miEngine, string & token)
 : MICommand(miEngine, token)
@@ -79,13 +80,15 @@ void WinMIBreakInsert::execute(WinDebugEngine & debugEngine) {
 		return;
 	}
 
-	char buff[MAX_PATH];
-	if (FAILED(debugEngine.getDebugSymbols()
-			->GetLineByOffset(offset, &line, buff, MAX_PATH, NULL, NULL))) {
-		recordError("Failed to get breakpoint file/line");
+	DWORD disp;
+	IMAGEHLP_LINE64 lineInfo;
+	if (!SymGetLineFromAddr64(debugEngine.getProcess(),
+			offset, &disp, &lineInfo)) {
+		recordError("Failed to get breakpoint line info");
 		return;
 	}
-	file = buff;
+	file = lineInfo.FileName;
+	line = lineInfo.LineNumber;
 
 	engine.enqueueResult(this);
 }

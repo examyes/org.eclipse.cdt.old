@@ -2,12 +2,15 @@
 #include "WinDebugEventCallbacks.h"
 #include "WinDebugCommand.h"
 #include "WinDebugRunCommand.h"
+#include "WinDebugFrame.h"
 
 #include <iostream>
 using namespace std;
 
+#include <dbghelp.h>
+
 WinDebugEngine::WinDebugEngine(char * _command)
-: command(_command), currentRunCommand(NULL) {
+: command(_command), currentRunCommand(NULL), frames(NULL) {
 	commandMutex = CreateMutex(NULL, FALSE, NULL);
 	commandReadyEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 }
@@ -26,17 +29,8 @@ void WinDebugEngine::run(WinDebugRunCommand * runCommand) {
 typedef HANDLE (*DebugCreateProc)(__in REFIID InterfaceId, __out PVOID* Interface);
 
 void WinDebugEngine::mainLoop() {
-	// Load in the DLL - Need to find a way to not hard code the location
-	LoadLibrary("C:\\Program Files\\Debugging Tools for Windows\\dbghelp.dll");
-	HMODULE module = LoadLibrary("C:\\Program Files\\Debugging Tools for Windows\\dbgeng.dll");
-	DebugCreateProc debugCreate = (DebugCreateProc)GetProcAddress(module, "DebugCreate");
-	if (!debugCreate) {
-		cerr << "Failed to find DebugCreate proc\n";
-		return;
-	}
-	
 	// Get the objects
-	if (FAILED(debugCreate(__uuidof(IDebugClient), (void **)&debugClient))) {
+	if (FAILED(DebugCreate(__uuidof(IDebugClient), (void **)&debugClient))) {
 		cerr << "Failed to create IDebugClient\n";
 		return;
 	}
@@ -46,11 +40,7 @@ void WinDebugEngine::mainLoop() {
 		return;
 	}
 	
-	if (FAILED(debugClient->QueryInterface(__uuidof(IDebugSymbols), ((void **)&debugSymbols)))) {
-		cerr << "Failed to create IDebugSymbols" << endl;
-		return;
-	}
-	WinDebugEventCallbacks eventCallbacks;
+	WinDebugEventCallbacks eventCallbacks(*this);
 	if (FAILED(debugClient->SetEventCallbacks(&eventCallbacks))) {
 		cerr << "Failed to set callbacks" << endl;
 		return;
@@ -63,14 +53,18 @@ void WinDebugEngine::mainLoop() {
 	}
 
 	while (true) {
-		debugControl->SetExecutionStatus(DEBUG_STATUS_GO);
 		HRESULT hr = debugControl->WaitForEvent(0, INFINITE);
-		
 		if (hr != S_OK) {
 			return;
 		}
 		
 		if (currentRunCommand) {
+			if (!populateFrames()) {
+				// This is not a valid frame, keep going
+				debugControl->SetExecutionStatus(DEBUG_STATUS_STEP_OVER);
+				continue;
+			}			
+			
 			currentRunCommand->stopped(*this);
 			currentRunCommand = NULL;
 		}
@@ -101,4 +95,81 @@ void WinDebugEngine::mainLoop() {
 			cmd->execute(*this);
 		}
 	}
+}
+
+void WinDebugEngine::processCreated(HANDLE _process) {
+	// Stow away the process handle 
+	process = _process;
+	
+	// Set up dbghelp
+	SymSetOptions(SYMOPT_LOAD_LINES | SYMOPT_UNDNAME | SYMOPT_DEFERRED_LOADS);
+	
+	if (!SymInitialize(process, NULL, TRUE)) {
+		cerr << "Failed to init symbol handler" << endl;
+		return;
+	}
+
+}
+
+bool WinDebugEngine::populateFrames() {
+	// The first stack frame must be valid
+	bool isValid = false;
+	
+	DEBUG_STACK_FRAME stack[50];
+	if (FAILED(debugControl->GetStackTrace(0, 0, 0, stack, 50, &numFrames))) {
+		MessageBox(NULL, "GetStackTrace failed", "WinDebug", MB_OK);
+		return false;
+	}
+
+	// Take the top three off since they are in the runtime
+	// TODO - usually that is. we should be smarter about this.
+	numFrames -= 3;
+	
+	if (numFrames < 1) {
+		return false;
+	}
+	
+	if (frames)
+		delete[] frames;
+	frames = new WinDebugFrame[numFrames];
+		
+	int fi = 0;
+	for (int i = 0; i < numFrames; ++fi, ++i) {
+		frames[fi].addr = stack[i].InstructionOffset;
+			
+		// Get the name
+		char buffer[sizeof(SYMBOL_INFO) + MAX_SYM_NAME];
+		SYMBOL_INFO * symbol = (SYMBOL_INFO *)buffer;
+			
+		symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
+		symbol->MaxNameLen = MAX_SYM_NAME;
+
+		DWORD64 disp64;
+		if (!SymFromAddr(process, frames[fi].addr, &disp64, symbol)) {
+			MessageBox(NULL, "SymFromAddr failed", "WinDebug", MB_OK);
+			if (!isValid) return false;
+			--fi; --numFrames; continue;
+		}
+			
+		if (symbol->Flags & SYMFLAG_EXPORT) {
+			if (!isValid) return false;
+			--fi; --numFrames; continue;
+		}
+
+		frames[fi].func = symbol->Name;
+			
+		// Get the file/line
+		DWORD disp;
+		IMAGEHLP_LINE64 lineInfo;
+		if (!SymGetLineFromAddr64(process, frames[fi].addr, &disp, &lineInfo)) {
+			if (!isValid) return false;
+			--fi; --numFrames; continue;
+		}
+			
+		frames[fi].file = lineInfo.FileName;
+		frames[fi].line = lineInfo.LineNumber;
+		isValid = true;
+	}
+	
+	return isValid;
 }

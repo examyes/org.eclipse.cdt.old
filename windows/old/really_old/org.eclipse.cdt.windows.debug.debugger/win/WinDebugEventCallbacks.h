@@ -3,10 +3,13 @@
 
 #include <dbgeng.h>
 
+class WinDebugEngine;
+
 class WinDebugEventCallbacks : public DebugBaseEventCallbacks
 {
 public:
-	WinDebugEventCallbacks() { }
+	WinDebugEventCallbacks(WinDebugEngine & _engine)
+		: engine(_engine) { }
 	virtual ~WinDebugEventCallbacks() { }
 	
     STDMETHOD_(ULONG, AddRef)() { return 0; }
@@ -28,6 +31,9 @@ public:
             );
 
     STDMETHOD(Breakpoint)(PDEBUG_BREAKPOINT Bp);
+    
+private:
+	WinDebugEngine & engine;
 };
 
 #endif /*WINDEBUGEVENTCALLBACKS_H_*/

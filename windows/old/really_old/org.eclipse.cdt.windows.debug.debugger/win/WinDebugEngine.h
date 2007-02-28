@@ -8,6 +8,7 @@ using namespace std;
 
 class WinDebugCommand;
 class WinDebugRunCommand;
+struct WinDebugFrame;
 
 class WinDebugEngine
 {
@@ -22,14 +23,26 @@ public:
 	
 	IDebugClient * getDebugClient() { return debugClient; }
 	IDebugControl * getDebugControl() { return debugControl; }
-	IDebugSymbols * getDebugSymbols() { return debugSymbols; }
+	
+	HANDLE getProcess() { return process; }
+	
+	void processCreated(HANDLE process);
+	
+	ULONG getNumFrames() { return numFrames; }
+	WinDebugFrame * getFrames() { return frames; }
 	
 private:
 	char * command;
 	
 	IDebugClient * debugClient;
 	IDebugControl * debugControl;
-	IDebugSymbols * debugSymbols;
+	
+	HANDLE process;
+	
+	ULONG numFrames;
+	WinDebugFrame * frames;
+	
+	bool populateFrames();
 	
 	list<WinDebugCommand *> commandQueue;
 	HANDLE commandMutex;

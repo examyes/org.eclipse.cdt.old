@@ -1,7 +1,7 @@
 #include <windows.h>
 
 void foo() {
-	MessageBox(NULL, "Hello World", "Debug Test", MB_OK);
+	MessageBox(NULL, "Hi there", "Test", MB_OK);
 }
 
 int main(int argc, char **argv) {

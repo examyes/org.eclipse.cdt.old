@@ -5,7 +5,9 @@
 <project id="org.eclipse.cdt.windows.debug.tests.app.org.eclipse.cdt.windows.projectType.exe.1166107065" name="Windows Executable (EXE)" projectType="org.eclipse.cdt.windows.projectType.exe">
 <configuration artifactExtension="exe" artifactName="testApp" description="" id="org.eclipse.cdt.windows.exe.debug.858196959" name="Debug" parent="org.eclipse.cdt.windows.exe.debug">
 <toolChain id="org.eclipse.cdt.windows.exe.debug.toolChain.1832405844" superClass="org.eclipse.cdt.windows.exe.debug.toolChain">
-<tool id="org.eclipse.cdt.windows.exe.debug.compiler.1887393981" name="CL Compiler" superClass="org.eclipse.cdt.windows.exe.debug.compiler"/>
+<tool id="org.eclipse.cdt.windows.exe.debug.compiler.1887393981" name="CL Compiler" superClass="org.eclipse.cdt.windows.exe.debug.compiler">
+<option id="org.eclipse.cdt.windows.cl.option.optimization.2138051060" superClass="org.eclipse.cdt.windows.cl.option.optimization" value="org.eclipse.cdt.windows.cl.option.optimization.default" valueType="enumerated"/>
+</tool>
 <tool id="org.eclipse.cdt.windows.exe.debug.rc.558487013" name="Resource Compiler" superClass="org.eclipse.cdt.windows.exe.debug.rc"/>
 <tool id="org.eclipse.cdt.windows.exe.debug.linker.1264596617" name="LINK Executable Linker" superClass="org.eclipse.cdt.windows.exe.debug.linker">
 <option id="org.eclipse.cdt.windows.link.option.libraries.1087662851" superClass="org.eclipse.cdt.windows.link.option.libraries" valueType="stringList">
