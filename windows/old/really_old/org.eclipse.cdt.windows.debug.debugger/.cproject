@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?fileVersion 4.0.0?>
+
+<cproject>
+<storageModule moduleId="org.eclipse.cdt.core.settings">
+<cconfiguration id="org.eclipse.cdt.windows.exe.debug.1791357520">
+<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="org.eclipse.cdt.windows.exe.debug.1791357520" moduleId="org.eclipse.cdt.core.settings" name="Debug">
+
+
+
+
+
+
+
+
+<externalSettings/>
+<extensions>
+<extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
+<extension id="org.eclipse.cdt.core.VCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+</extensions>
+</storageModule>
+<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+
+
+
+
+<configuration artifactExtension="exe" artifactName="cdtwindbg" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug" description="" id="org.eclipse.cdt.windows.exe.debug.1791357520" name="Debug" parent="org.eclipse.cdt.windows.exe.debug">
+<folderInfo id="org.eclipse.cdt.windows.exe.debug.1791357520./" name="/" resourcePath="/">
+<toolChain id="org.eclipse.cdt.windows.toolchain.exe.debug.538958210" name="Microsoft Visual C++" superClass="org.eclipse.cdt.windows.toolchain.exe.debug">
+<targetPlatform id="org.eclipse.cdt.windows.targetPlatform.exe.debug.262798511" superClass="org.eclipse.cdt.windows.targetPlatform.exe.debug"/>
+<builder buildPath="${workspace_loc:/org.eclipse.cdt.windows.debug.debugger/Debug}" id="org.eclipse.cdt.windows.builder.303751507" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="org.eclipse.cdt.windows.builder"/>
+<tool id="org.eclipse.cdt.windows.cl.exe.debug.2037005342" name="C/C++ Compiler (cl)" superClass="org.eclipse.cdt.windows.cl.exe.debug">
+<option id="org.eclipse.cdt.windows.cl.option.optimization.1876212808" name="Optimization" superClass="org.eclipse.cdt.windows.cl.option.optimization" value="org.eclipse.cdt.windows.cl.option.optimization.default" valueType="enumerated"/>
+<option id="org.eclipse.cdt.windows.cl.option.debugFormat.1600708862" name="Debug Information Format" superClass="org.eclipse.cdt.windows.cl.option.debugFormat" value="org.eclipse.cdt.windows.cl.option.debugFormat.complete" valueType="enumerated"/>
+<option id="org.eclipse.cdt.windows.cl.option.includes.923214400" name="Include Path (/I)" superClass="org.eclipse.cdt.windows.cl.option.includes" valueType="includePath">
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/org.eclipse.cdt.windows.debug.debugger/mi}&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/org.eclipse.cdt.windows.debug.debugger/win}&quot;"/>
+</option>
+</tool>
+<tool id="org.eclipse.cdt.windows.rc.exe.debug.1639083430" name="Resource Compiler (rc)" superClass="org.eclipse.cdt.windows.rc.exe.debug"/>
+<tool id="org.eclipse.cdt.windows.link.exe.debug.1406439718" name="Linker (link)" superClass="org.eclipse.cdt.windows.link.exe.debug">
+<option id="org.eclipse.cdt.windows.link.option.libraries.1021880313" name="Libraries" superClass="org.eclipse.cdt.windows.link.option.libraries" valueType="libs">
+<listOptionValue builtIn="false" value="user32.lib"/>
+</option>
+</tool>
+<tool id="org.eclipse.cdt.windows.lib.1524394670" name="Library Manager (lib)" superClass="org.eclipse.cdt.windows.lib"/>
+</toolChain>
+</folderInfo>
+</configuration>
+</storageModule>
+</cconfiguration>
+<cconfiguration id="org.eclipse.cdt.windows.exe.release.1777240014">
+<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="org.eclipse.cdt.windows.exe.release.1777240014" moduleId="org.eclipse.cdt.core.settings" name="Release">
+
+
+
+
+
+
+
+
+<externalSettings/>
+<extensions>
+<extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
+<extension id="org.eclipse.cdt.core.VCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+</extensions>
+</storageModule>
+<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+
+
+
+
+<configuration artifactExtension="exe" artifactName="cdtwindbg" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release" description="" id="org.eclipse.cdt.windows.exe.release.1777240014" name="Release" parent="org.eclipse.cdt.windows.exe.release">
+<folderInfo id="org.eclipse.cdt.windows.exe.release.1777240014./" name="/" resourcePath="/">
+<toolChain id="org.eclipse.cdt.windows.toolchain.exe.release.626261989" name="Microsoft Visual C++" superClass="org.eclipse.cdt.windows.toolchain.exe.release">
+<targetPlatform id="org.eclipse.cdt.windows.targetPlatform.exe.release.1710996820" superClass="org.eclipse.cdt.windows.targetPlatform.exe.release"/>
+<builder buildPath="${workspace_loc:/org.eclipse.cdt.windows.debug.debugger/Release}" id="org.eclipse.cdt.windows.builder.638647922" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="org.eclipse.cdt.windows.builder"/>
+<tool id="org.eclipse.cdt.windows.cl.exe.release.1428728440" name="C/C++ Compiler (cl)" superClass="org.eclipse.cdt.windows.cl.exe.release">
+<option id="org.eclipse.cdt.windows.cl.option.optimization.1934391982" name="Optimization" superClass="org.eclipse.cdt.windows.cl.option.optimization"/>
+<option id="org.eclipse.cdt.windows.cl.option.debugFormat.394894369" name="Debug Information Format" superClass="org.eclipse.cdt.windows.cl.option.debugFormat"/>
+<option id="org.eclipse.cdt.windows.cl.option.includes.953942551" name="Include Path (/I)" superClass="org.eclipse.cdt.windows.cl.option.includes" valueType="includePath">
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/org.eclipse.cdt.windows.debug.debugger/mi}&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/org.eclipse.cdt.windows.debug.debugger/win}&quot;"/>
+</option>
+</tool>
+<tool id="org.eclipse.cdt.windows.rc.exe.release.1326534479" name="Resource Compiler (rc)" superClass="org.eclipse.cdt.windows.rc.exe.release"/>
+<tool id="org.eclipse.cdt.windows.link.exe.release.417268557" name="Linker (link)" superClass="org.eclipse.cdt.windows.link.exe.release">
+<option id="org.eclipse.cdt.windows.link.option.libraries.1239321292" name="Libraries" superClass="org.eclipse.cdt.windows.link.option.libraries" valueType="libs">
+<listOptionValue builtIn="false" value="user32.lib"/>
+</option>
+</tool>
+<tool id="org.eclipse.cdt.windows.lib.688681351" name="Library Manager (lib)" superClass="org.eclipse.cdt.windows.lib"/>
+</toolChain>
+</folderInfo>
+</configuration>
+</storageModule>
+</cconfiguration>
+</storageModule>
+<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+
+
+
+
+<project id="org.eclipse.cdt.windows.debug.debugger.org.eclipse.cdt.windows.projectType.exe.1855374930" name="Executable" projectType="org.eclipse.cdt.windows.projectType.exe"/>
+</storageModule>
+</cproject>

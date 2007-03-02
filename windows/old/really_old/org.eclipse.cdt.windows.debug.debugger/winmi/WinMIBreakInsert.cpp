@@ -1,8 +1,6 @@
 #include "WinMIBreakInsert.h"
 #include <MIEngine.h>
 #include <WinDebugEngine.h>
-#include <dbgeng.h>
-#include <dbghelp.h>
 
 WinMIBreakInsert::WinMIBreakInsert(MIEngine & miEngine, string & token)
 : MICommand(miEngine, token)
@@ -70,6 +68,11 @@ void WinMIBreakInsert::execute(WinDebugEngine & debugEngine) {
 		return;
 	}
 	
+	if (flags & DEBUG_BREAKPOINT_DEFERRED) {
+		recordError("Breakpoint deferred");
+		return;
+	}
+	
 	if (FAILED(breakpoint->GetId(&id))) {
 		recordError("Failed to get breakpoint id");
 		return;
@@ -82,13 +85,14 @@ void WinMIBreakInsert::execute(WinDebugEngine & debugEngine) {
 
 	DWORD disp;
 	IMAGEHLP_LINE64 lineInfo;
-	if (!SymGetLineFromAddr64(debugEngine.getProcess(),
+	if (!debugEngine.symGetLineFromAddr64(debugEngine.getProcess(),
 			offset, &disp, &lineInfo)) {
 		recordError("Failed to get breakpoint line info");
 		return;
 	}
 	file = lineInfo.FileName;
 	line = lineInfo.LineNumber;
+	WinDebugEngine::message("leave getline");
 
 	engine.enqueueResult(this);
 }

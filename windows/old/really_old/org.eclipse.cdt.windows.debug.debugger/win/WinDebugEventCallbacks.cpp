@@ -1,5 +1,4 @@
 #include "WinDebugEventCallbacks.h"
-
 #include "WinDebugEngine.h"
 
 STDMETHODIMP WinDebugEventCallbacks::GetInterestMask(PULONG mask) {

@@ -1,8 +1,9 @@
 #ifndef WINDEBUGENGINE_H_
 #define WINDEBUGENGINE_H_
 
-#include <windows.h>
 #include <dbgeng.h>
+#include <dbghelp.h>
+
 #include <list>
 using namespace std;
 
@@ -31,9 +32,28 @@ public:
 	ULONG getNumFrames() { return numFrames; }
 	WinDebugFrame * getFrames() { return frames; }
 	
+	// Calls into dbghelp to facilitate dynamic loading of dll
+	typedef DWORD (__stdcall * SymSetOptionsProc)(DWORD SymOptions);
+	SymSetOptionsProc symSetOptions;
+
+	typedef BOOL (__stdcall * SymInitializeProc)(HANDLE hProcess,
+	    PCSTR UserSearchPath, BOOL fInvadeProcess);
+	SymInitializeProc symInitialize;
+	
+	typedef BOOL (__stdcall * SymFromAddrProc)(HANDLE hProcess,
+	    DWORD64 Address, PDWORD64 Displacement, PSYMBOL_INFO Symbol);
+	SymFromAddrProc symFromAddr;
+	
+	typedef BOOL (__stdcall * SymGetLineFromAddr64Proc)(HANDLE hProcess,
+	    DWORD64 qwAddr, PDWORD pdwDisplacement, PIMAGEHLP_LINE64 Line64);
+	SymGetLineFromAddr64Proc symGetLineFromAddr64;
+
+	// Debug message box out put
+	static void message(const char * msg);
+	
 private:
 	char * command;
-	
+
 	IDebugClient * debugClient;
 	IDebugControl * debugControl;
 	
@@ -49,6 +69,7 @@ private:
 	HANDLE commandReadyEvent;
 	
 	WinDebugRunCommand * currentRunCommand;
+	
 };
 
 #endif /*WINDEBUGENGINE_H_*/

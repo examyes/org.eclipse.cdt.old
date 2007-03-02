@@ -7,12 +7,47 @@
 #include <iostream>
 using namespace std;
 
-#include <dbghelp.h>
+void WinDebugEngine::message(const char * msg) {
+	MessageBox(NULL, msg, "WinDebug", MB_OK);
+}
 
 WinDebugEngine::WinDebugEngine(char * _command)
-: command(_command), currentRunCommand(NULL), frames(NULL) {
+: command(_command), currentRunCommand(NULL), frames(NULL), process(NULL) {
 	commandMutex = CreateMutex(NULL, FALSE, NULL);
 	commandReadyEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+	
+	// Init the dbgeng/dbghelp
+	
+	// Load in the DLL
+	// TODO Need to find a way to not hard code the location
+	HMODULE dbghelp = LoadLibrary("C:\\Program Files\\Debugging Tools for Windows\\dbghelp.dll");
+	HMODULE dbgeng = LoadLibrary("C:\\Program Files\\Debugging Tools for Windows\\dbgeng.dll");
+	
+	typedef HANDLE (__stdcall * DebugCreateProc)(__in REFIID InterfaceId, __out PVOID* Interface);
+	DebugCreateProc debugCreate = (DebugCreateProc)GetProcAddress(dbgeng, "DebugCreate");
+	
+	if (FAILED(debugCreate(__uuidof(IDebugClient), (void **)&debugClient))) {
+		cerr << "Failed to create IDebugClient\n";
+		return;
+	}
+
+	if (FAILED(debugClient->QueryInterface(__uuidof(IDebugControl), ((void **)&debugControl)))) {
+		cerr << "Failed to create IDebugControl\n";
+		return;
+	}
+	
+	symSetOptions = (SymSetOptionsProc)GetProcAddress(dbghelp, "SymSetOptions");
+	symInitialize = (SymInitializeProc)GetProcAddress(dbghelp, "SymInitialize");
+	symFromAddr = (SymFromAddrProc)GetProcAddress(dbghelp, "SymFromAddr");
+	symGetLineFromAddr64 = (SymGetLineFromAddr64Proc)GetProcAddress(dbghelp, "SymGetLineFromAddr64");
+	
+	typedef LPAPI_VERSION (__stdcall * ImagehlpApiVersionProc)();
+	ImagehlpApiVersionProc getVersion = (ImagehlpApiVersionProc)GetProcAddress(dbghelp, "ImagehlpApiVersion");
+	
+	API_VERSION * version = getVersion();
+	char buff[1024];
+	sprintf_s(buff, "Version %d.%d.%d", version->MajorVersion, version->MinorVersion, version->Revision);
+	message(buff);
 }
 
 void WinDebugEngine::enqueueCommand(WinDebugCommand * command) {
@@ -26,20 +61,7 @@ void WinDebugEngine::run(WinDebugRunCommand * runCommand) {
 	currentRunCommand = runCommand;
 }
 
-typedef HANDLE (*DebugCreateProc)(__in REFIID InterfaceId, __out PVOID* Interface);
-
 void WinDebugEngine::mainLoop() {
-	// Get the objects
-	if (FAILED(DebugCreate(__uuidof(IDebugClient), (void **)&debugClient))) {
-		cerr << "Failed to create IDebugClient\n";
-		return;
-	}
-
-	if (FAILED(debugClient->QueryInterface(__uuidof(IDebugControl), ((void **)&debugControl)))) {
-		cerr << "Failed to create IDebugControl\n";
-		return;
-	}
-	
 	WinDebugEventCallbacks eventCallbacks(*this);
 	if (FAILED(debugClient->SetEventCallbacks(&eventCallbacks))) {
 		cerr << "Failed to set callbacks" << endl;
@@ -100,15 +122,6 @@ void WinDebugEngine::mainLoop() {
 void WinDebugEngine::processCreated(HANDLE _process) {
 	// Stow away the process handle 
 	process = _process;
-	
-	// Set up dbghelp
-	SymSetOptions(SYMOPT_LOAD_LINES | SYMOPT_UNDNAME | SYMOPT_DEFERRED_LOADS);
-	
-	if (!SymInitialize(process, NULL, TRUE)) {
-		cerr << "Failed to init symbol handler" << endl;
-		return;
-	}
-
 }
 
 bool WinDebugEngine::populateFrames() {
@@ -145,7 +158,7 @@ bool WinDebugEngine::populateFrames() {
 		symbol->MaxNameLen = MAX_SYM_NAME;
 
 		DWORD64 disp64;
-		if (!SymFromAddr(process, frames[fi].addr, &disp64, symbol)) {
+		if (!symFromAddr(process, frames[fi].addr, &disp64, symbol)) {
 			MessageBox(NULL, "SymFromAddr failed", "WinDebug", MB_OK);
 			if (!isValid) return false;
 			--fi; --numFrames; continue;
@@ -161,7 +174,7 @@ bool WinDebugEngine::populateFrames() {
 		// Get the file/line
 		DWORD disp;
 		IMAGEHLP_LINE64 lineInfo;
-		if (!SymGetLineFromAddr64(process, frames[fi].addr, &disp, &lineInfo)) {
+		if (!symGetLineFromAddr64(process, frames[fi].addr, &disp, &lineInfo)) {
 			if (!isValid) return false;
 			--fi; --numFrames; continue;
 		}
