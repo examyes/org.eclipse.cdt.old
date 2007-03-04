@@ -9,6 +9,10 @@
 
 
 
+
+
+
+
 <externalSettings/>
 <extensions>
 <extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
@@ -18,7 +22,9 @@
 <storageModule moduleId="cdtBuildSystem" version="4.0.0">
 
 
-<configuration artifactExtension="exe" artifactName="test" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" description="" id="org.eclipse.cdt.windows.exe.debug.1158980765" name="Debug" parent="org.eclipse.cdt.windows.exe.debug">
+
+
+<configuration artifactExtension="exe" artifactName="test" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug" description="" id="org.eclipse.cdt.windows.exe.debug.1158980765" name="Debug" parent="org.eclipse.cdt.windows.exe.debug">
 <folderInfo id="org.eclipse.cdt.windows.exe.debug.1158980765./" name="/" resourcePath="/">
 <toolChain id="org.eclipse.cdt.windows.toolchain.exe.debug.1941969352" name="Microsoft Visual C++" superClass="org.eclipse.cdt.windows.toolchain.exe.debug">
 <targetPlatform id="org.eclipse.cdt.windows.targetPlatform.exe.debug.1719740827" superClass="org.eclipse.cdt.windows.targetPlatform.exe.debug"/>
@@ -32,6 +38,7 @@
 <option id="org.eclipse.cdt.windows.link.option.libraries.205772788" name="Libraries" superClass="org.eclipse.cdt.windows.link.option.libraries" valueType="libs">
 <listOptionValue builtIn="false" value="user32.lib"/>
 </option>
+<option id="org.eclipse.cdt.windows.link.option.debug.1764581383" superClass="org.eclipse.cdt.windows.link.option.debug" value="true" valueType="boolean"/>
 </tool>
 <tool id="org.eclipse.cdt.windows.lib.487838467" name="Library Manager (lib)" superClass="org.eclipse.cdt.windows.lib"/>
 </toolChain>
@@ -45,6 +52,10 @@
 
 
 
+
+
+
+
 <externalSettings/>
 <extensions>
 <extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
@@ -52,6 +63,8 @@
 </extensions>
 </storageModule>
 <storageModule moduleId="cdtBuildSystem" version="4.0.0">
+
+
 
 
 <configuration artifactName="org.eclipse.cdt.windows.debug.tests.app" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" description="" id="org.eclipse.cdt.windows.exe.release.1486128275" name="Release" parent="org.eclipse.cdt.windows.exe.release">
@@ -73,6 +86,8 @@
 </cconfiguration>
 </storageModule>
 <storageModule moduleId="cdtBuildSystem" version="4.0.0">
+
+
 
 
 <project id="org.eclipse.cdt.windows.debug.tests.app.org.eclipse.cdt.windows.projectType.exe.350537883" name="Executable" projectType="org.eclipse.cdt.windows.projectType.exe"/>
