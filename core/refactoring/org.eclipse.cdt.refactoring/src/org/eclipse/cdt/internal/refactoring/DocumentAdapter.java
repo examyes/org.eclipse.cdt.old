@@ -21,6 +21,7 @@ import java.util.Set;
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.filebuffers.ITextFileBuffer;
 import org.eclipse.core.filebuffers.ITextFileBufferManager;
+import org.eclipse.core.filebuffers.LocationKind;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourceAttributes;
@@ -172,12 +173,12 @@ public class DocumentAdapter implements IBuffer, IAdaptable, IDocumentListener {
 		ITextFileBufferManager manager= FileBuffers.getTextFileBufferManager();
 		IPath location= fFile.getFullPath();
 		try {
-			manager.connect(location, new NullProgressMonitor());
-			fTextFileBuffer= manager.getTextFileBuffer(location);
+			manager.connect(location, LocationKind.IFILE, new NullProgressMonitor());
+			fTextFileBuffer= manager.getTextFileBuffer(location, LocationKind.IFILE);
 			fDocument= fTextFileBuffer.getDocument();
 		} catch (CoreException x) {
 			fStatus= x.getStatus();
-			fDocument= manager.createEmptyDocument(location);
+			fDocument= manager.createEmptyDocument(location, LocationKind.IFILE);
 		}
 		fDocument.addPrenotifiedDocumentListener(this);
 	}
@@ -253,7 +254,7 @@ public class DocumentAdapter implements IBuffer, IAdaptable, IDocumentListener {
 		if (fTextFileBuffer != null) {
 			ITextFileBufferManager manager= FileBuffers.getTextFileBufferManager();
 			try {
-				manager.disconnect(fTextFileBuffer.getLocation(), new NullProgressMonitor());
+				manager.disconnect(fTextFileBuffer.getLocation(), LocationKind.IFILE, new NullProgressMonitor());
 			} catch (CoreException x) {
 				// ignore
 			}
