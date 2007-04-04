@@ -1462,7 +1462,7 @@ public class ASTManager {
     						new Object[]{conflict.getName()});
                 	String message3 = MessageFormat.format(Messages.getString("CRenameLocalProcessor.error.message3"), //$NON-NLS-1$
     						new Object[]{what});
-                	String space = "  \n"; //$NON-NLS-1$
+                	String space = "\n"; //$NON-NLS-1$
                 	String formatted = message + space + message1 + space +  message2 + space +  message3;
                     RefactoringStatusEntry[] entries= status.getEntries();
                     for (int j = 0; (conflict.getName() != null || msg != null || what != null) 

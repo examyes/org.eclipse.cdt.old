@@ -359,7 +359,10 @@ public class RenameRegressionTests extends RenameTests {
         assertTotalChanges( 1, changes );
         assertChange( changes, file, contents.indexOf("moon/*vp1*/"), 4, "foo" );  //$NON-NLS-1$//$NON-NLS-2$
         RefactoringStatus status= checkConditions(file, offset, "foo"); //$NON-NLS-1$
-        assertRefactoringWarning(status, "'foo' will overload a method."); //$NON-NLS-1$
+        assertRefactoringWarning(status, "A conflict was encountered during refactoring.\n" +
+        		"Type of problem: Overloading\n" +
+        		"New element: foo\n" + 
+        		"Conflicting element type: Method"); //$NON-NLS-1$
    }
     
     public void testMethod_33_72605() throws Exception {
@@ -1227,7 +1230,10 @@ public class RenameRegressionTests extends RenameTests {
         
         String[] messages = getRefactorMessages( file, offset, "A" ); //$NON-NLS-1$
         assertEquals(1, messages.length);
-        assertEquals("'A' will redeclare a type.", messages[0]);   //$NON-NLS-1$
+        assertEquals("A conflict was encountered during refactoring.\n" +
+        		"Type of problem: Redeclaration\n" +
+        		"New element: A\n" +
+        		"Conflicting element type: Type", messages[0]);   //$NON-NLS-1$
         // assert that you cannot refactor because severity is FATAL (4)
         int s = getRefactorSeverity(file, offset, "A"); //$NON-NLS-1$
         assertEquals(RefactoringStatus.ERROR,s);
