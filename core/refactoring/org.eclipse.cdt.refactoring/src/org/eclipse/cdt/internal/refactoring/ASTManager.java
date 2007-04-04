@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2005, 2006 Wind River Systems, Inc.
+ * Copyright (c) 2005, 2007 Wind River Systems, Inc.
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
  * which accompanies this distribution, and is available at 
@@ -7,6 +7,7 @@
  * 
  * Contributors: 
  * Markus Schorn - initial API and implementation 
+ * IBM Corporation
  ******************************************************************************/ 
 package org.eclipse.cdt.internal.refactoring;
 
@@ -1454,11 +1455,18 @@ public class ASTManager {
                     }
                 }
                 if (what != null) {
-                    String formatted= MessageFormat.format(
-                            Messages.getString("CRenameLocalProcessor.error.nameErrorWhat"), //$NON-NLS-1$
-                            new Object[]{conflict.getName(), msg, what});
+                	String message = MessageFormat.format(Messages.getString("CRenameLocalProcessor.error.message"), null); //$NON-NLS-1$
+                	String message1 = MessageFormat.format(Messages.getString("CRenameLocalProcessor.error.message1"), //$NON-NLS-1$
+                						new Object[]{msg});
+                	String message2 = MessageFormat.format(Messages.getString("CRenameLocalProcessor.error.message2"), //$NON-NLS-1$
+    						new Object[]{conflict.getName()});
+                	String message3 = MessageFormat.format(Messages.getString("CRenameLocalProcessor.error.message3"), //$NON-NLS-1$
+    						new Object[]{what});
+                	String space = "  \n"; //$NON-NLS-1$
+                	String formatted = message + space + message1 + space +  message2 + space +  message3;
                     RefactoringStatusEntry[] entries= status.getEntries();
-                    for (int j = 0; formatted != null && j<entries.length; j++) {
+                    for (int j = 0; (conflict.getName() != null || msg != null || what != null) 
+                    	&& j<entries.length; j++) {
                         RefactoringStatusEntry entry = entries[j];
                         if (formatted.equals(entry.getMessage())) {
                             formatted= null;
