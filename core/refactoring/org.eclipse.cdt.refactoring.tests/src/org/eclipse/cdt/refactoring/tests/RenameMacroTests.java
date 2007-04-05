@@ -127,31 +127,31 @@ public class RenameMacroTests extends RenameTests {
         
         // conflicting renamings
         RefactoringStatus status= checkConditions(cpp, offset1, "w1");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Name conflict\n" +
-        		"New element: w1\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Name conflict  \n" +
+        		"New element: w1  \n" +
         		"Conflicting element type: Local variable"); //$NON-NLS-1$
         status= checkConditions(cpp, contents.indexOf("par1"), "MACRO");  //$NON-NLS-1$ //$NON-NLS-2$
         assertRefactoringError(status, "'MACRO' conflicts with the name of an existing macro!"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "par1");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Name conflict\n" +
-        		"New element: par1\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Name conflict  \n" +
+        		"New element: par1  \n" +
         		"Conflicting element type: Parameter"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "extern_var");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Name conflict\n" +
-        		"New element: extern_var\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Name conflict  \n" +
+        		"New element: extern_var  \n" +
         		"Conflicting element type: Global variable"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "var_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Name conflict\n" +
-        		"New element: var_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Name conflict  \n" +
+        		"New element: var_def  \n" +
         		"Conflicting element type: Global variable"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "enum_item");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Name conflict\n" +
-        		"New element: enum_item\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Name conflict  \n" +
+        		"New element: enum_item  \n" +
         		"Conflicting element type: Enumerator"); //$NON-NLS-1$
    }
 

@@ -86,9 +86,9 @@ public class RenameTypeTests extends RenameTests {
         RefactoringStatus status= checkConditions(cpp, offset1, "w1");  //$NON-NLS-1$
         assertRefactoringOk(status);
         status= checkConditions(cpp, contents.indexOf("par1"), "v1");  //$NON-NLS-1$ //$NON-NLS-2$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: v1\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: v1  \n" +
         		"Conflicting element type: Constructor"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "par1");  //$NON-NLS-1$
         assertRefactoringOk(status);
@@ -182,49 +182,49 @@ public class RenameTypeTests extends RenameTests {
         // renamings colliding with types.
      // renamings colliding with types.
         status= checkConditions(cpp, offset1, "class_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "struct_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "union_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "class_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "struct_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "union_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "enum_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "typedef_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: typedef_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: typedef_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "namespace_def");  //$NON-NLS-1$
-        assertRefactoringWarning(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: namespace_def\n" +
+        assertRefactoringWarning(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: namespace_def  \n" +
         		"Conflicting element type: Namespace"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "st_member");  //$NON-NLS-1$
         assertRefactoringOk(status);
@@ -232,49 +232,49 @@ public class RenameTypeTests extends RenameTests {
         assertRefactoringOk(status);
 
         status= checkConditions(cpp, offset2, "class_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "struct_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "union_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "class_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "struct_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "union_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "enum_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "typedef_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: typedef_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: typedef_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "namespace_def");  //$NON-NLS-1$
-        assertRefactoringWarning(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: namespace_def\n" +
+        assertRefactoringWarning(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: namespace_def  \n" +
         		"Conflicting element type: Namespace"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "st_member");  //$NON-NLS-1$
         assertRefactoringOk(status);
@@ -282,49 +282,49 @@ public class RenameTypeTests extends RenameTests {
         assertRefactoringOk(status);
         
         status= checkConditions(cpp, offset3, "class_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "struct_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "union_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "class_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "struct_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "union_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "enum_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "typedef_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: typedef_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: typedef_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "namespace_def");  //$NON-NLS-1$
-        assertRefactoringWarning(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: namespace_def\n" +
+        assertRefactoringWarning(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: namespace_def  \n" +
         		"Conflicting element type: Namespace"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "st_member");  //$NON-NLS-1$
         assertRefactoringOk(status);
@@ -332,49 +332,49 @@ public class RenameTypeTests extends RenameTests {
         assertRefactoringOk(status);
 
         status= checkConditions(cpp, offset4, "class_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "struct_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "union_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "class_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "struct_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "union_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "enum_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "typedef_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: typedef_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: typedef_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "namespace_def");  //$NON-NLS-1$
-        assertRefactoringWarning(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: namespace_def\n" +
+        assertRefactoringWarning(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: namespace_def  \n" +
         		"Conflicting element type: Namespace"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "st_member");  //$NON-NLS-1$
         assertRefactoringOk(status);
@@ -520,49 +520,49 @@ public class RenameTypeTests extends RenameTests {
 
         // renamings colliding with types.
         status= checkConditions(cpp, offset1, "class_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "struct_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "union_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "class_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "struct_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "union_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "enum_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "typedef_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: typedef_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: typedef_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "namespace_def");  //$NON-NLS-1$
-        assertRefactoringWarning(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: namespace_def\n" +
+        assertRefactoringWarning(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: namespace_def  \n" +
         		"Conflicting element type: Namespace"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "st_member");  //$NON-NLS-1$
         assertRefactoringOk(status);
@@ -570,49 +570,49 @@ public class RenameTypeTests extends RenameTests {
         assertRefactoringOk(status);
 
         status= checkConditions(cpp, offset2, "class_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "struct_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "union_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "class_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "struct_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "union_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "enum_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "typedef_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: typedef_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: typedef_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "namespace_def");  //$NON-NLS-1$
-        assertRefactoringWarning(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: namespace_def\n" +
+        assertRefactoringWarning(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: namespace_def  \n" +
         		"Conflicting element type: Namespace"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "st_member");  //$NON-NLS-1$
         assertRefactoringOk(status);
@@ -620,49 +620,49 @@ public class RenameTypeTests extends RenameTests {
         assertRefactoringOk(status);
         
         status= checkConditions(cpp, offset3, "class_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "struct_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "union_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "class_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "struct_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "union_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "enum_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "typedef_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: typedef_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: typedef_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "namespace_def");  //$NON-NLS-1$
-        assertRefactoringWarning(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: namespace_def\n" +
+        assertRefactoringWarning(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: namespace_def  \n" +
         		"Conflicting element type: Namespace"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "st_member");  //$NON-NLS-1$
         assertRefactoringOk(status);
@@ -670,49 +670,49 @@ public class RenameTypeTests extends RenameTests {
         assertRefactoringOk(status);
 
         status= checkConditions(cpp, offset4, "class_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "struct_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "union_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "class_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "struct_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "union_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "enum_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "typedef_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: typedef_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: typedef_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "namespace_def");  //$NON-NLS-1$
-        assertRefactoringWarning(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: namespace_def\n" +
+        assertRefactoringWarning(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: namespace_def  \n" +
         		"Conflicting element type: Namespace"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "st_member");  //$NON-NLS-1$
         assertRefactoringOk(status);
@@ -858,49 +858,49 @@ public class RenameTypeTests extends RenameTests {
 
         // renamings colliding with types.
         status= checkConditions(cpp, offset1, "class_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "struct_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "union_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "class_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "struct_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "union_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "enum_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "typedef_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: typedef_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: typedef_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "namespace_def");  //$NON-NLS-1$
-        assertRefactoringWarning(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: namespace_def\n" +
+        assertRefactoringWarning(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: namespace_def  \n" +
         		"Conflicting element type: Namespace"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "st_member");  //$NON-NLS-1$
         assertRefactoringOk(status);
@@ -908,49 +908,49 @@ public class RenameTypeTests extends RenameTests {
         assertRefactoringOk(status);
 
         status= checkConditions(cpp, offset2, "class_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "struct_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "union_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "class_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "struct_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "union_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "enum_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "typedef_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: typedef_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: typedef_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "namespace_def");  //$NON-NLS-1$
-        assertRefactoringWarning(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: namespace_def\n" +
+        assertRefactoringWarning(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: namespace_def  \n" +
         		"Conflicting element type: Namespace"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "st_member");  //$NON-NLS-1$
         assertRefactoringOk(status);
@@ -958,49 +958,49 @@ public class RenameTypeTests extends RenameTests {
         assertRefactoringOk(status);
         
         status= checkConditions(cpp, offset3, "class_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "struct_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "union_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "class_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "struct_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "union_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "enum_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "typedef_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: typedef_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: typedef_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "namespace_def");  //$NON-NLS-1$
-        assertRefactoringWarning(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: namespace_def\n" +
+        assertRefactoringWarning(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: namespace_def  \n" +
         		"Conflicting element type: Namespace"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "st_member");  //$NON-NLS-1$
         assertRefactoringOk(status);
@@ -1008,49 +1008,49 @@ public class RenameTypeTests extends RenameTests {
         assertRefactoringOk(status);
 
         status= checkConditions(cpp, offset4, "class_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "struct_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "union_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "class_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "struct_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "union_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "enum_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "typedef_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: typedef_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: typedef_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "namespace_def");  //$NON-NLS-1$
-        assertRefactoringWarning(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: namespace_def\n" +
+        assertRefactoringWarning(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: namespace_def  \n" +
         		"Conflicting element type: Namespace"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "st_member");  //$NON-NLS-1$
         assertRefactoringOk(status);
@@ -1105,34 +1105,34 @@ public class RenameTypeTests extends RenameTests {
 
         // renamings colliding with types.
         status= checkConditions(cpp, offset1, "struct_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "union_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "struct_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "union_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "enum_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "typedef_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: typedef_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: typedef_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "st_member");  //$NON-NLS-1$
         assertRefactoringOk(status);
@@ -1279,49 +1279,49 @@ public class RenameTypeTests extends RenameTests {
 
         // renamings colliding with types.
         status= checkConditions(cpp, offset1, "class_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "struct_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "union_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "class_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "struct_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "union_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "enum_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "typedef_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: typedef_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: typedef_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "namespace_def");  //$NON-NLS-1$
-        assertRefactoringWarning(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: namespace_def\n" +
+        assertRefactoringWarning(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: namespace_def  \n" +
         		"Conflicting element type: Namespace"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "st_member");  //$NON-NLS-1$
         assertRefactoringOk(status);
@@ -1329,49 +1329,49 @@ public class RenameTypeTests extends RenameTests {
         assertRefactoringOk(status);
 
         status= checkConditions(cpp, offset2, "class_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "struct_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "union_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "class_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "struct_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "union_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "enum_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "typedef_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: typedef_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: typedef_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "namespace_def");  //$NON-NLS-1$
-        assertRefactoringWarning(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: namespace_def\n" +
+        assertRefactoringWarning(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: namespace_def  \n" +
         		"Conflicting element type: Namespace"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "st_member");  //$NON-NLS-1$
         assertRefactoringOk(status);
@@ -1379,49 +1379,49 @@ public class RenameTypeTests extends RenameTests {
         assertRefactoringOk(status);
         
         status= checkConditions(cpp, offset3, "class_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "struct_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "union_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "class_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "struct_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "union_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "enum_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "typedef_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: typedef_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: typedef_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "namespace_def");  //$NON-NLS-1$
-        assertRefactoringWarning(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: namespace_def\n" +
+        assertRefactoringWarning(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: namespace_def  \n" +
         		"Conflicting element type: Namespace"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "st_member");  //$NON-NLS-1$
         assertRefactoringOk(status);
@@ -1429,49 +1429,49 @@ public class RenameTypeTests extends RenameTests {
         assertRefactoringOk(status);
 
         status= checkConditions(cpp, offset4, "class_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "struct_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "union_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "class_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "struct_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "union_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "enum_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "typedef_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: typedef_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: typedef_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "namespace_def");  //$NON-NLS-1$
-        assertRefactoringWarning(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: namespace_def\n" +
+        assertRefactoringWarning(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: namespace_def  \n" +
         		"Conflicting element type: Namespace"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "st_member");  //$NON-NLS-1$
         assertRefactoringOk(status);
@@ -1518,34 +1518,34 @@ public class RenameTypeTests extends RenameTests {
 
         // renamings colliding with types.
         status= checkConditions(cpp, offset1, "struct_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "union_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "struct_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "union_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "enum_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "typedef_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: typedef_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: typedef_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "st_member");  //$NON-NLS-1$
         assertRefactoringOk(status);
@@ -1667,49 +1667,49 @@ public class RenameTypeTests extends RenameTests {
 
         // renamings colliding with types.
         status= checkConditions(cpp, offset1, "class_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "struct_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "union_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "class_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "struct_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "union_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "enum_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "typedef_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: typedef_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: typedef_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "namespace_def");  //$NON-NLS-1$
-        assertRefactoringWarning(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: namespace_def\n" +
+        assertRefactoringWarning(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: namespace_def  \n" +
         		"Conflicting element type: Namespace"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "st_member");  //$NON-NLS-1$
         assertRefactoringOk(status);
@@ -1717,49 +1717,49 @@ public class RenameTypeTests extends RenameTests {
         assertRefactoringOk(status);
 
         status= checkConditions(cpp, offset2, "class_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "struct_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "union_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "class_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "struct_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "union_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "enum_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "typedef_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: typedef_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: typedef_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "namespace_def");  //$NON-NLS-1$
-        assertRefactoringWarning(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: namespace_def\n" +
+        assertRefactoringWarning(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: namespace_def  \n" +
         		"Conflicting element type: Namespace"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "st_member");  //$NON-NLS-1$
         assertRefactoringOk(status);
@@ -1767,49 +1767,49 @@ public class RenameTypeTests extends RenameTests {
         assertRefactoringOk(status);
         
         status= checkConditions(cpp, offset3, "class_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "struct_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "union_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "class_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "struct_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "union_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "enum_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "typedef_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: typedef_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: typedef_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "namespace_def");  //$NON-NLS-1$
-        assertRefactoringWarning(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: namespace_def\n" +
+        assertRefactoringWarning(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: namespace_def  \n" +
         		"Conflicting element type: Namespace"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "st_member");  //$NON-NLS-1$
         assertRefactoringOk(status);
@@ -1866,34 +1866,34 @@ public class RenameTypeTests extends RenameTests {
 
         // renamings colliding with types.
         status= checkConditions(cpp, offset1, "struct_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "union_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "struct_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "union_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "enum_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "typedef_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: typedef_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: typedef_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "st_member");  //$NON-NLS-1$
         assertRefactoringOk(status);
@@ -2027,49 +2027,49 @@ public class RenameTypeTests extends RenameTests {
 
         // renamings colliding with types.
         status= checkConditions(cpp, offset1, "class_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "struct_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "union_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "class_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "struct_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "union_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "enum_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "typedef_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: typedef_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: typedef_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "namespace_def");  //$NON-NLS-1$
-        assertRefactoringWarning(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: namespace_def\n" +
+        assertRefactoringWarning(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: namespace_def  \n" +
         		"Conflicting element type: Namespace"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "st_member");  //$NON-NLS-1$
         assertRefactoringOk(status);
@@ -2077,49 +2077,49 @@ public class RenameTypeTests extends RenameTests {
         assertRefactoringOk(status);
 
         status= checkConditions(cpp, offset2, "class_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "struct_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "union_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "class_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "struct_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "union_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "enum_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "typedef_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: typedef_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: typedef_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "namespace_def");  //$NON-NLS-1$
-        assertRefactoringWarning(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: namespace_def\n" +
+        assertRefactoringWarning(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: namespace_def  \n" +
         		"Conflicting element type: Namespace"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "st_member");  //$NON-NLS-1$
         assertRefactoringOk(status);
@@ -2127,49 +2127,49 @@ public class RenameTypeTests extends RenameTests {
         assertRefactoringOk(status);
         
         status= checkConditions(cpp, offset3, "class_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "struct_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "union_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "class_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "struct_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "union_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "enum_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "typedef_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: typedef_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: typedef_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "namespace_def");  //$NON-NLS-1$
-        assertRefactoringWarning(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: namespace_def\n" +
+        assertRefactoringWarning(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: namespace_def  \n" +
         		"Conflicting element type: Namespace"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "st_member");  //$NON-NLS-1$
         assertRefactoringOk(status);
@@ -2177,49 +2177,49 @@ public class RenameTypeTests extends RenameTests {
         assertRefactoringOk(status);
 
         status= checkConditions(cpp, offset4, "class_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "struct_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "union_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "class_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: class_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: class_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "struct_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "union_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "enum_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "typedef_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: typedef_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: typedef_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "namespace_def");  //$NON-NLS-1$
-        assertRefactoringWarning(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: namespace_def\n" +
+        assertRefactoringWarning(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: namespace_def  \n" +
         		"Conflicting element type: Namespace"); //$NON-NLS-1$
         status= checkConditions(cpp, offset4, "st_member");  //$NON-NLS-1$
         assertRefactoringOk(status);
@@ -2278,34 +2278,34 @@ public class RenameTypeTests extends RenameTests {
 
         // renamings colliding with types.
         status= checkConditions(cpp, offset1, "struct_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "union_fwd");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_fwd\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_fwd  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "struct_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: struct_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: struct_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "union_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: union_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: union_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "enum_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "typedef_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: typedef_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: typedef_def  \n" +
         		"Conflicting element type: Type"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "st_member");  //$NON-NLS-1$
         assertRefactoringOk(status);

@@ -78,86 +78,86 @@ public class RenameFunctionTests extends RenameTests {
         
         // conflicting renamings
         RefactoringStatus status= checkConditions(cpp, offset1, "w1");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: w1\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: w1  \n" +
         		"Conflicting element type: Local variable"); //$NON-NLS-1$
         status= checkConditions(cpp, contents.indexOf("par1"), "v1");  //$NON-NLS-1$ //$NON-NLS-2$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: v1\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: v1  \n" +
         		"Conflicting element type: Global function"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "par1");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: par1\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: par1  \n" +
         		"Conflicting element type: Parameter"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "extern_var");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: extern_var\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: extern_var  \n" +
         		"Conflicting element type: Global variable"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "var_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: var_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: var_def  \n" +
         		"Conflicting element type: Global variable"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "enum_item");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_item\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_item  \n" +
         		"Conflicting element type: Enumerator"); //$NON-NLS-1$
 
         status= checkConditions(cpp, offset2, "w2");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: w2\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: w2  \n" +
         		"Conflicting element type: Local variable"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "par2");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: par2\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: par2  \n" +
         		"Conflicting element type: Parameter"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "extern_var");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: extern_var\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: extern_var  \n" +
         		"Conflicting element type: Global variable"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "var_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: var_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: var_def  \n" +
         		"Conflicting element type: Global variable"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "enum_item");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_item\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_item  \n" +
         		"Conflicting element type: Enumerator"); //$NON-NLS-1$
 
         status= checkConditions(cpp, offset3, "w3");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: w3\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: w3  \n" +
         		"Conflicting element type: Local variable"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "par3");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: par3\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: par3  \n" +
         		"Conflicting element type: Parameter"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "extern_var");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: extern_var\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: extern_var  \n" +
         		"Conflicting element type: Global variable"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "var_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: var_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: var_def  \n" +
         		"Conflicting element type: Global variable"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "enum_item");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_item\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_item  \n" +
         		"Conflicting element type: Enumerator"); //$NON-NLS-1$
 
         // renamings depending on scope
@@ -170,24 +170,24 @@ public class RenameFunctionTests extends RenameTests {
         status= checkConditions(cpp, offset1, "static_method");  //$NON-NLS-1$
         assertRefactoringOk(status);
         status= checkConditions(cpp, offset2, "member");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: member\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: member  \n" +
         		"Conflicting element type: Field"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "method");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: method\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: method  \n" +
         		"Conflicting element type: Method"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "static_member");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: static_member\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: static_member  \n" +
         		"Conflicting element type: Field"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "static_method");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: static_method\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: static_method  \n" +
         		"Conflicting element type: Method"); //$NON-NLS-1$
 //        lookup inside a static method also returns non-static members
 //        we may want to have a check whether a binding is accessible or not.
@@ -197,78 +197,78 @@ public class RenameFunctionTests extends RenameTests {
 //        status= checkConditions(cpp, offset3, "method");  //$NON-NLS-1$
 //        assertRefactoringOk(status);
         status= checkConditions(cpp, offset3, "static_member");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: static_member\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: static_member  \n" +
         		"Conflicting element type: Field"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "static_method");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: static_method\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: static_method  \n" +
         		"Conflicting element type: Method"); //$NON-NLS-1$
 
         // renamings conflicting with global stuff.
         status= checkConditions(cpp, offset1, "func_proto");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: func_proto\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: func_proto  \n" +
         		"Conflicting element type: Global function"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "func_proto_ov");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: func_proto_ov\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: func_proto_ov  \n" +
         		"Conflicting element type: Global function"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "func_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: func_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: func_def  \n" +
         		"Conflicting element type: Global function"); //$NON-NLS-1$
         // would be good to see an error here
         status= checkConditions(cpp, offset1, "func_def_ov");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: func_def_ov\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: func_def_ov  \n" +
         		"Conflicting element type: Global function"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "func_proto");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: func_proto\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: func_proto  \n" +
         		"Conflicting element type: Global function"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "func_proto_ov");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: func_proto_ov\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: func_proto_ov  \n" +
         		"Conflicting element type: Global function"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "func_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: func_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: func_def  \n" +
         		"Conflicting element type: Global function"); //$NON-NLS-1$
         // would be good to see an error here
         status= checkConditions(cpp, offset2, "func_def_ov");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: func_def_ov\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: func_def_ov  \n" +
         		"Conflicting element type: Global function"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "func_proto");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: func_proto\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: func_proto  \n" +
         		"Conflicting element type: Global function"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "func_proto_ov");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: func_proto_ov\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: func_proto_ov  \n" +
         		"Conflicting element type: Global function"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "func_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: func_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: func_def  \n" +
         		"Conflicting element type: Global function"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "func_def_ov");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: func_def_ov\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: func_def_ov  \n" +
         		"Conflicting element type: Global function"); //$NON-NLS-1$
 
         // renamings that are ok.
@@ -279,9 +279,9 @@ public class RenameFunctionTests extends RenameTests {
         status= checkConditions(cpp, offset1, "union_fwd");  //$NON-NLS-1$
         assertRefactoringOk(status);
         status= checkConditions(cpp, offset1, "class_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: class_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: class_def  \n" +
         		"Conflicting element type: Constructor"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "struct_def");  //$NON-NLS-1$
         assertRefactoringOk(status);
@@ -305,9 +305,9 @@ public class RenameFunctionTests extends RenameTests {
         status= checkConditions(cpp, offset2, "union_fwd");  //$NON-NLS-1$
         assertRefactoringOk(status);
         status= checkConditions(cpp, offset2, "class_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: class_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: class_def  \n" +
         		"Conflicting element type: Constructor"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "struct_def");  //$NON-NLS-1$
         assertRefactoringOk(status);
@@ -331,9 +331,9 @@ public class RenameFunctionTests extends RenameTests {
         status= checkConditions(cpp, offset3, "union_fwd");  //$NON-NLS-1$
         assertRefactoringOk(status);
         status= checkConditions(cpp, offset3, "class_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: class_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: class_def  \n" +
         		"Conflicting element type: Constructor"); //$NON-NLS-1$
         status= checkConditions(cpp, offset3, "struct_def");  //$NON-NLS-1$
         assertRefactoringOk(status);
@@ -352,9 +352,9 @@ public class RenameFunctionTests extends RenameTests {
         
         // file static stuff
         status= checkConditions(cpp, contents.indexOf("s1"), "s2"); //$NON-NLS-1$ //$NON-NLS-2$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: s2\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: s2  \n" +
         		"Conflicting element type: File static function"); //$NON-NLS-1$
 
         status= checkConditions(cpp, contents.indexOf("s1"), "static_other_file"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -410,46 +410,46 @@ public class RenameFunctionTests extends RenameTests {
         
         // conflicting renamings
         RefactoringStatus status= checkConditions(cpp, offset1, "w1");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: w1\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: w1  \n" +
         		"Conflicting element type: Local variable"); //$NON-NLS-1$
         status= checkConditions(cpp, contents.indexOf("par1"), "v1");  //$NON-NLS-1$ //$NON-NLS-2$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: v1\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: v1  \n" +
         		"Conflicting element type: Global function"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "par1");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: par1\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: par1  \n" +
         		"Conflicting element type: Parameter"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "extern_var");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: extern_var\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: extern_var  \n" +
         		"Conflicting element type: Global variable"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "var_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: var_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: var_def  \n" +
         		"Conflicting element type: Global variable"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "enum_item");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: enum_item\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: enum_item  \n" +
         		"Conflicting element type: Enumerator"); //$NON-NLS-1$
 
         // renamings conflicting with global stuff.
         status= checkConditions(cpp, offset1, "func_proto");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: func_proto\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: func_proto  \n" +
         		"Conflicting element type: Global function"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "func_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: func_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: func_def  \n" +
         		"Conflicting element type: Global function"); //$NON-NLS-1$
 
         // renamings that are ok.
@@ -472,9 +472,9 @@ public class RenameFunctionTests extends RenameTests {
         
         // file static stuff
         status= checkConditions(cpp, contents.indexOf("s1"), "s2"); //$NON-NLS-1$ //$NON-NLS-2$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: s2\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: s2  \n" +
         		"Conflicting element type: File static function"); //$NON-NLS-1$
 
         status= checkConditions(cpp, contents.indexOf("s1"), "static_other_file"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -513,92 +513,92 @@ public class RenameFunctionTests extends RenameTests {
 
         // conflicting renamings
         RefactoringStatus status= checkConditions(cpp, offset1, "w1");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: w1\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: w1  \n" +
         		"Conflicting element type: Local variable"); //$NON-NLS-1$
         status= checkConditions(cpp, contents.indexOf("w1"), "v1");  //$NON-NLS-1$ //$NON-NLS-2$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: v1\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: v1  \n" +
         		"Conflicting element type: Method"); //$NON-NLS-1$
         status= checkConditions(cpp, contents.indexOf("par1"), "v1");  //$NON-NLS-1$ //$NON-NLS-2$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: v1\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: v1  \n" +
         		"Conflicting element type: Method"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "par1");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: par1\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: par1  \n" +
         		"Conflicting element type: Parameter"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "extern_var");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: extern_var\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: extern_var  \n" +
         		"Conflicting element type: Global variable"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "var_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: var_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: var_def  \n" +
         		"Conflicting element type: Global variable"); //$NON-NLS-1$
         status= checkConditions(cpp, offset1, "enum_item");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: enum_item\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: enum_item  \n" +
         		"Conflicting element type: Enumerator"); //$NON-NLS-1$
 
         status= checkConditions(cpp, offset2, "w2");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: w2\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: w2  \n" +
         		"Conflicting element type: Local variable"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "par2");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: par2\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: par2  \n" +
         		"Conflicting element type: Parameter"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "extern_var");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: extern_var\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: extern_var  \n" +
         		"Conflicting element type: Global variable"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "var_def");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: var_def\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: var_def  \n" +
         		"Conflicting element type: Global variable"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "enum_item");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Shadowing\n" +
-        		"New element: enum_item\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Shadowing  \n" +
+        		"New element: enum_item  \n" +
         		"Conflicting element type: Enumerator"); //$NON-NLS-1$
 
 
         status= checkConditions(cpp, offset2, "member");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: member\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: member  \n" +
         		"Conflicting element type: Field"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "method");  //$NON-NLS-1$
-        assertRefactoringWarning(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Overloading\n" +
-        		"New element: method\n" +
+        assertRefactoringWarning(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Overloading  \n" +
+        		"New element: method  \n" +
         		"Conflicting element type: Method"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "method_samesig");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: method_samesig\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: method_samesig  \n" +
         		"Conflicting element type: Method"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "static_member");  //$NON-NLS-1$
-        assertRefactoringError(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Redeclaration\n" +
-        		"New element: static_member\n" +
+        assertRefactoringError(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Redeclaration  \n" +
+        		"New element: static_member  \n" +
         		"Conflicting element type: Field"); //$NON-NLS-1$
         status= checkConditions(cpp, offset2, "static_method");  //$NON-NLS-1$
-        assertRefactoringWarning(status, "A conflict was encountered during refactoring.\n" +
-        		"Type of problem: Overloading\n" +
-        		"New element: static_method\n" +
+        assertRefactoringWarning(status, "A conflict was encountered during refactoring.  \n" +
+        		"Type of problem: Overloading  \n" +
+        		"New element: static_method  \n" +
         		"Conflicting element type: Method"); //$NON-NLS-1$
     }
 
