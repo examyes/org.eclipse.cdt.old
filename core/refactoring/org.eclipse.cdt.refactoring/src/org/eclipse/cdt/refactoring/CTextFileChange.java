@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2006 Wind River Systems and others.
+ * Copyright (c) 2006, 2007 Wind River Systems and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,6 +7,7 @@
  *
  * Contributors:
  * Markus Schorn (Wind River Systems) - Initial API and implementation
+ * Anton Leherbauer (Wind River Systems)
  *******************************************************************************/
 package org.eclipse.cdt.refactoring;
 
@@ -40,7 +41,10 @@ public class CTextFileChange extends TextFileChange {
         ICElement element = CoreModel.getDefault().create(file);
         if(element instanceof ITranslationUnit) {
             fTranslationUnit = (ITranslationUnit)element;
-        } 
+            // "c2" is the extension which the CContentViewerCreator is registered
+            // with the extension point "org.eclipse.compare.contentMergeViewers"
+            setTextType("c2"); //$NON-NLS-1$
+        }
     }
     
     /*
