@@ -429,7 +429,7 @@ public class CRenameRefactoringInputPage extends UserInputWizardPage {
 			}
 		}
 	    
-		fWorkingSetSpec.setText(ws.getName());
+		fWorkingSetSpec.setText(wsName);
 	    processor.setWorkingSet(wsName);
 	    updateEnablement();
     }
