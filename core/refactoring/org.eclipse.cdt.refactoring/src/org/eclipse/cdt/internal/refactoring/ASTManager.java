@@ -1455,7 +1455,7 @@ public class ASTManager {
                     }
                 }
                 if (what != null) {
-                	String message = MessageFormat.format(Messages.getString("CRenameLocalProcessor.error.message"), null); //$NON-NLS-1$
+                	String message = Messages.getString("CRenameLocalProcessor.error.message"); //$NON-NLS-1$
                 	String message1 = MessageFormat.format(Messages.getString("CRenameLocalProcessor.error.message1"), //$NON-NLS-1$
                 						new Object[]{msg});
                 	String message2 = MessageFormat.format(Messages.getString("CRenameLocalProcessor.error.message2"), //$NON-NLS-1$
