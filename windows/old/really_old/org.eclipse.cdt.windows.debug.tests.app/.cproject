@@ -1,18 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?fileVersion 4.0.0?>
 
 <cproject>
 <storageModule moduleId="org.eclipse.cdt.core.settings">
 <cconfiguration id="org.eclipse.cdt.windows.exe.debug.1158980765">
 <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="org.eclipse.cdt.windows.exe.debug.1158980765" moduleId="org.eclipse.cdt.core.settings" name="Debug">
-
-
-
-
-
-
-
-
 <externalSettings/>
 <extensions>
 <extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
@@ -20,20 +12,19 @@
 </extensions>
 </storageModule>
 <storageModule moduleId="cdtBuildSystem" version="4.0.0">
-
-
-
-
-<configuration artifactExtension="exe" artifactName="test" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug" description="" id="org.eclipse.cdt.windows.exe.debug.1158980765" name="Debug" parent="org.eclipse.cdt.windows.exe.debug">
-<folderInfo id="org.eclipse.cdt.windows.exe.debug.1158980765./" name="/" resourcePath="/">
+<configuration artifactExtension="exe" artifactName="test" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" description="" id="org.eclipse.cdt.windows.exe.debug.1158980765" name="Debug" parent="org.eclipse.cdt.windows.exe.debug">
+<folderInfo id="org.eclipse.cdt.windows.exe.debug.1158980765./" name="/" resourcePath="">
 <toolChain id="org.eclipse.cdt.windows.toolchain.exe.debug.1941969352" name="Microsoft Visual C++" superClass="org.eclipse.cdt.windows.toolchain.exe.debug">
 <targetPlatform id="org.eclipse.cdt.windows.targetPlatform.exe.debug.1719740827" superClass="org.eclipse.cdt.windows.targetPlatform.exe.debug"/>
 <builder buildPath="${workspace_loc:/org.eclipse.cdt.windows.debug.tests.app/Debug}" id="org.eclipse.cdt.windows.builder.1061754485" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="org.eclipse.cdt.windows.builder"/>
 <tool id="org.eclipse.cdt.windows.cl.exe.debug.2126347765" name="C/C++ Compiler (cl)" superClass="org.eclipse.cdt.windows.cl.exe.debug">
 <option id="org.eclipse.cdt.windows.cl.option.optimization.243763001" name="Optimization" superClass="org.eclipse.cdt.windows.cl.option.optimization" value="org.eclipse.cdt.windows.cl.option.optimization.default" valueType="enumerated"/>
 <option id="org.eclipse.cdt.windows.cl.option.debugFormat.850902436" name="Debug Information Format" superClass="org.eclipse.cdt.windows.cl.option.debugFormat" value="org.eclipse.cdt.windows.cl.option.debugFormat.complete" valueType="enumerated"/>
+<inputType id="org.eclipse.cdt.windows.cl.inputType.454081128" superClass="org.eclipse.cdt.windows.cl.inputType"/>
 </tool>
-<tool id="org.eclipse.cdt.windows.rc.exe.debug.183339774" name="Resource Compiler (rc)" superClass="org.eclipse.cdt.windows.rc.exe.debug"/>
+<tool id="org.eclipse.cdt.windows.rc.exe.debug.183339774" name="Resource Compiler (rc)" superClass="org.eclipse.cdt.windows.rc.exe.debug">
+<inputType id="org.eclipse.cdt.windows.rc.inputType.1314924100" superClass="org.eclipse.cdt.windows.rc.inputType"/>
+</tool>
 <tool id="org.eclipse.cdt.windows.link.exe.debug.159503779" name="Linker (link)" superClass="org.eclipse.cdt.windows.link.exe.debug">
 <option id="org.eclipse.cdt.windows.link.option.libraries.205772788" name="Libraries" superClass="org.eclipse.cdt.windows.link.option.libraries" valueType="libs">
 <listOptionValue builtIn="false" value="user32.lib"/>
@@ -45,17 +36,12 @@
 </folderInfo>
 </configuration>
 </storageModule>
+<storageModule moduleId="scannerConfiguration"/>
+<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
+<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
 </cconfiguration>
 <cconfiguration id="org.eclipse.cdt.windows.exe.release.1486128275">
 <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="org.eclipse.cdt.windows.exe.release.1486128275" moduleId="org.eclipse.cdt.core.settings" name="Release">
-
-
-
-
-
-
-
-
 <externalSettings/>
 <extensions>
 <extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
@@ -63,33 +49,31 @@
 </extensions>
 </storageModule>
 <storageModule moduleId="cdtBuildSystem" version="4.0.0">
-
-
-
-
-<configuration artifactName="org.eclipse.cdt.windows.debug.tests.app" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" description="" id="org.eclipse.cdt.windows.exe.release.1486128275" name="Release" parent="org.eclipse.cdt.windows.exe.release">
-<folderInfo id="org.eclipse.cdt.windows.exe.release.1486128275./" name="/" resourcePath="/">
+<configuration artifactName="org.eclipse.cdt.windows.debug.tests.app" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" description="" id="org.eclipse.cdt.windows.exe.release.1486128275" name="Release" parent="org.eclipse.cdt.windows.exe.release">
+<folderInfo id="org.eclipse.cdt.windows.exe.release.1486128275./" name="/" resourcePath="">
 <toolChain id="org.eclipse.cdt.windows.toolchain.exe.release.2050522252" name="Microsoft Visual C++" superClass="org.eclipse.cdt.windows.toolchain.exe.release">
 <targetPlatform id="org.eclipse.cdt.windows.targetPlatform.exe.release.1157993600" superClass="org.eclipse.cdt.windows.targetPlatform.exe.release"/>
 <builder buildPath="${workspace_loc:/org.eclipse.cdt.windows.debug.tests.app/Release}" id="org.eclipse.cdt.windows.builder.1203313464" managedBuildOn="true" name="CDT Internal Builder.Release" superClass="org.eclipse.cdt.windows.builder"/>
 <tool id="org.eclipse.cdt.windows.cl.exe.release.707328213" name="C/C++ Compiler (cl)" superClass="org.eclipse.cdt.windows.cl.exe.release">
 <option id="org.eclipse.cdt.windows.cl.option.optimization.1644092295" superClass="org.eclipse.cdt.windows.cl.option.optimization"/>
 <option id="org.eclipse.cdt.windows.cl.option.debugFormat.811779745" superClass="org.eclipse.cdt.windows.cl.option.debugFormat"/>
+<inputType id="org.eclipse.cdt.windows.cl.inputType.1076128427" superClass="org.eclipse.cdt.windows.cl.inputType"/>
 </tool>
-<tool id="org.eclipse.cdt.windows.rc.exe.release.603017742" name="Resource Compiler (rc)" superClass="org.eclipse.cdt.windows.rc.exe.release"/>
+<tool id="org.eclipse.cdt.windows.rc.exe.release.603017742" name="Resource Compiler (rc)" superClass="org.eclipse.cdt.windows.rc.exe.release">
+<inputType id="org.eclipse.cdt.windows.rc.inputType.2082805699" superClass="org.eclipse.cdt.windows.rc.inputType"/>
+</tool>
 <tool id="org.eclipse.cdt.windows.link.exe.release.1306371021" name="Linker (link)" superClass="org.eclipse.cdt.windows.link.exe.release"/>
 <tool id="org.eclipse.cdt.windows.lib.970811675" name="Library Manager (lib)" superClass="org.eclipse.cdt.windows.lib"/>
 </toolChain>
 </folderInfo>
 </configuration>
 </storageModule>
+<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
+<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+<storageModule moduleId="scannerConfiguration"/>
 </cconfiguration>
 </storageModule>
 <storageModule moduleId="cdtBuildSystem" version="4.0.0">
-
-
-
-
 <project id="org.eclipse.cdt.windows.debug.tests.app.org.eclipse.cdt.windows.projectType.exe.350537883" name="Executable" projectType="org.eclipse.cdt.windows.projectType.exe"/>
 </storageModule>
 </cproject>

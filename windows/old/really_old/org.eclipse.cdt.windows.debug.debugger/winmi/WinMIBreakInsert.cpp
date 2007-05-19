@@ -33,7 +33,7 @@ void WinMIBreakInsert::sendResult(ostream & out) {
 			<< ",type=\"breakpoint\""
 			<< ",func=\"" << target << '"'
 			<< ",disp=\"" << (isTemporary ? "del" : "keep") << '"'
-			<< ",enabled=\"" << (flags & DEBUG_BREAKPOINT_ENABLED ? "y" : "n") << '"'
+//			<< ",enabled=\"" << (flags & DEBUG_BREAKPOINT_ENABLED ? "y" : "n") << '"'
 			<< ",addr=\"" << offset << '"'
 			<< ",file=\"" << file << '"'
 			<< ",line=\"" << line << '"'
@@ -43,57 +43,35 @@ void WinMIBreakInsert::sendResult(ostream & out) {
 }
 
 void WinMIBreakInsert::execute(WinDebugEngine & debugEngine) {
-	IDebugBreakpoint * breakpoint;
-	if (FAILED(debugEngine.getDebugControl()
-			->AddBreakpoint(DEBUG_BREAKPOINT_CODE, DEBUG_ANY_ID, &breakpoint))) {
-		recordError("Failed to add breakpoint");
-		return;
-	}
 	
-	if (FAILED(breakpoint->SetOffsetExpression(target.c_str()))) {
-		recordError("Failed to set breakpoint expression");
-		return;
-	}
-	
-	flags = DEBUG_BREAKPOINT_ENABLED;
-	if (isTemporary)
-		flags |= DEBUG_BREAKPOINT_ONE_SHOT;
-	if (FAILED(breakpoint->AddFlags(flags))) {
-		recordError("Failed to set breakpoint flags");
-		return;
-	}
-	
-	if (FAILED(breakpoint->GetFlags(&flags))) {
-		recordError("Failed to get breakpoint flags");
-		return;
-	}
-	
-	if (flags & DEBUG_BREAKPOINT_DEFERRED) {
-		recordError("Breakpoint deferred");
-		return;
-	}
-	
-	if (FAILED(breakpoint->GetId(&id))) {
-		recordError("Failed to get breakpoint id");
-		return;
-	}
-	
-	if (FAILED(breakpoint->GetOffset(&offset))) {
-		recordError("Failed to get breakpoint offset");
-		return;
-	}
+	char buffer[sizeof(SYMBOL_INFO) + MAX_SYM_NAME];
+	SYMBOL_INFO * symbol = (SYMBOL_INFO *)buffer;
 
-	DWORD disp;
-	IMAGEHLP_LINE64 lineInfo;
-	if (!debugEngine.symGetLineFromAddr64(debugEngine.getProcess(),
-			offset, &disp, &lineInfo)) {
-		recordError("Failed to get breakpoint line info");
+	symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
+	symbol->MaxNameLen = MAX_SYM_NAME;
+
+	if (!SymFromName(debugEngine.getProcess(), target.c_str(), symbol)) {
+		char buff[256];
+		sprintf_s(buff, "Failed to get symbol info: %d", GetLastError());
+		recordError(buff);
 		return;
 	}
+	
+	offset = symbol->Address;
+	
+	IMAGEHLP_LINE64 lineInfo;
+	lineInfo.SizeOfStruct = sizeof(lineInfo);
+	DWORD disp;
+	if (!SymGetLineFromAddr64(debugEngine.getProcess(), offset, &disp, &lineInfo)) {
+		char buff[256];
+		sprintf_s(buff, "Failed to get line info: %d", GetLastError());
+		recordError(buff);
+		return;
+	}
+	
 	file = lineInfo.FileName;
 	line = lineInfo.LineNumber;
-	WinDebugEngine::message("leave getline");
-
+	
 	engine.enqueueResult(this);
 }
 

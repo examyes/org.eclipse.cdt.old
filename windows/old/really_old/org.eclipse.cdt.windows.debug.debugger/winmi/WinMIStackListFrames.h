@@ -1,9 +1,9 @@
 #ifndef WINMISTACKLISTFRAMES_H_
 #define WINMISTACKLISTFRAMES_H_
 
+#include <windows.h>
 #include <MICommand.h>
 #include <WinDebugCommand.h>
-#include <dbgeng.h>
 
 struct WinDebugFrame;
 

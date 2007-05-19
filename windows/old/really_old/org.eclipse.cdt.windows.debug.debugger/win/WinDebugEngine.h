@@ -1,14 +1,17 @@
 #ifndef WINDEBUGENGINE_H_
 #define WINDEBUGENGINE_H_
 
-#include <dbgeng.h>
+#include <windows.h>
 #include <dbghelp.h>
 
 #include <list>
+#include <vector>
+#include <map>
 using namespace std;
 
 class WinDebugCommand;
 class WinDebugRunCommand;
+class WinDebugBreakpoint;
 struct WinDebugFrame;
 
 class WinDebugEngine
@@ -22,41 +25,19 @@ public:
 
 	void run(WinDebugRunCommand * runCommand);
 	
-	IDebugClient * getDebugClient() { return debugClient; }
-	IDebugControl * getDebugControl() { return debugControl; }
-	
 	HANDLE getProcess() { return process; }
-	
-	void processCreated(HANDLE process);
 	
 	ULONG getNumFrames() { return numFrames; }
 	WinDebugFrame * getFrames() { return frames; }
 	
-	// Calls into dbghelp to facilitate dynamic loading of dll
-	typedef DWORD (__stdcall * SymSetOptionsProc)(DWORD SymOptions);
-	SymSetOptionsProc symSetOptions;
-
-	typedef BOOL (__stdcall * SymInitializeProc)(HANDLE hProcess,
-	    PCSTR UserSearchPath, BOOL fInvadeProcess);
-	SymInitializeProc symInitialize;
+	void addBreakpoint(WinDebugBreakpoint * bp);
 	
-	typedef BOOL (__stdcall * SymFromAddrProc)(HANDLE hProcess,
-	    DWORD64 Address, PDWORD64 Displacement, PSYMBOL_INFO Symbol);
-	SymFromAddrProc symFromAddr;
-	
-	typedef BOOL (__stdcall * SymGetLineFromAddr64Proc)(HANDLE hProcess,
-	    DWORD64 qwAddr, PDWORD pdwDisplacement, PIMAGEHLP_LINE64 Line64);
-	SymGetLineFromAddr64Proc symGetLineFromAddr64;
-
 	// Debug message box out put
 	static void message(const char * msg);
 	
 private:
 	char * command;
 
-	IDebugClient * debugClient;
-	IDebugControl * debugControl;
-	
 	HANDLE process;
 	
 	ULONG numFrames;
@@ -64,12 +45,16 @@ private:
 	
 	bool populateFrames();
 	
+	vector<WinDebugBreakpoint *> breakpoints;
+	map<DWORD64, WinDebugBreakpoint *> breakpointMap;
+	
 	list<WinDebugCommand *> commandQueue;
 	HANDLE commandMutex;
 	HANDLE commandReadyEvent;
 	
 	WinDebugRunCommand * currentRunCommand;
 	
+	DWORD handleEvent(DEBUG_EVENT & event);
 };
 
 #endif /*WINDEBUGENGINE_H_*/

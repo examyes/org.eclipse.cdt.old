@@ -1,19 +1,12 @@
 #include "WinMIExecRun.h"
 #include <MIEngine.h>
 #include <WinDebugEngine.h>
-#include <dbgeng.h>
 
 ULONG WinMIExecRun::getExecutionStatus() {
-	return DEBUG_STATUS_GO;
+	return 0; //DEBUG_STATUS_GO;
 }
 
 void WinMIExecRun::execute(WinDebugEngine & debugEngine) {
-	if (FAILED(debugEngine.getDebugControl()->SetExecutionStatus(getExecutionStatus()))) {
-		status = _error;
-		msg = "Failed to set execution status";
-		return;
-	}
-
 	status = _running;
 	engine.enqueueResult(this);
 
