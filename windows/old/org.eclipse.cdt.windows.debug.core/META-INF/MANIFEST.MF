@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Core Plug-in
+Bundle-SymbolicName: org.eclipse.cdt.windows.debug.core
+Bundle-Version: 1.0.0
+Bundle-Activator: org.eclipse.cdt.windows.debug.core.Activator
+Require-Bundle: org.eclipse.core.runtime
+Eclipse-LazyStart: true
