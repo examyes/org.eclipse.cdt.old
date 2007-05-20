@@ -335,6 +335,7 @@
 <listOptionValue builtIn="false" value="&quot;C:\Program Files\Java\jdk1.6.0_01\include&quot;"/>
 <listOptionValue builtIn="false" value="&quot;C:\Program Files\Java\jdk1.6.0_01\include\win32&quot;"/>
 </option>
+<option id="org.eclipse.cdt.windows.cl.option.runtime.135200233" superClass="org.eclipse.cdt.windows.cl.option.runtime" value="org.eclipse.cdt.windows.cl.option.runtime.mt" valueType="enumerated"/>
 <inputType id="org.eclipse.cdt.windows.cl.inputType.193488577" superClass="org.eclipse.cdt.windows.cl.inputType"/>
 </tool>
 <tool id="org.eclipse.cdt.windows.rc.dll.release.1273492713" name="Resource Compiler (rc)" superClass="org.eclipse.cdt.windows.rc.dll.release">
