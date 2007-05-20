@@ -40,10 +40,6 @@
                </value>
             </property>
          </supportedProperties>
-         <envVarBuildPath
-               pathDelimiter=";"
-               pathType="buildpathInclude"
-               variableList="INCLUDE"/>
          <optionCategory
                id="org.eclipse.cdt.windows.cl.optionCategory.optimization"
                name="Optimization"/>
@@ -263,6 +259,7 @@
          <inputType
                dependencyContentType="org.eclipse.cdt.core.cxxHeader"
                id="org.eclipse.cdt.windows.cl.inputType"
+               scannerConfigDiscoveryProfileId="org.eclipse.cdt.windows.build.clScannerInfo"
                sourceContentType="org.eclipse.cdt.core.cxxSource">
          </inputType>
          <outputType
@@ -332,9 +329,6 @@
                </value>
             </property>
          </supportedProperties>
-         <envVarBuildPath
-               pathType="buildpathLibrary"
-               variableList="LIBS"/>
          <option
                command="/DLL"
                defaultValue="false"
@@ -639,6 +633,15 @@
             </toolChain>
          </configuration>
       </projectType>
+   </extension>
+   <extension
+         id="clScannerInfo"
+         name="Windows SDK Scanner Info Provider"
+         point="org.eclipse.cdt.make.core.ScannerConfigurationDiscoveryProfile">
+      <scannerInfoCollector
+            class="org.eclipse.cdt.windows.build.WindowsScannerInfoCollector"
+            scope="project">
+      </scannerInfoCollector>
    </extension>
 
 </plugin>
