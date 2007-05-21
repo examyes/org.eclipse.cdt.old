@@ -31,7 +31,7 @@ JNIEXPORT jboolean JNICALL Java_org_eclipse_cdt_windows_debug_core_sdk_Win32Debu
 	jbyte * bytes = env->GetByteArrayElements(buffer, NULL);
 	jsize size = env->GetArrayLength(buffer);
 	
-	DWORD numRead;
+	SIZE_T numRead;
 	jboolean rc = ReadProcessMemory((HANDLE)processHandle, (void *)baseAddress, bytes, size, &numRead)
 		? JNI_TRUE : JNI_FALSE;
 
@@ -60,7 +60,7 @@ JNIEXPORT jboolean JNICALL Java_org_eclipse_cdt_windows_debug_core_sdk_Win32Debu
 	jbyte * bytes = env->GetByteArrayElements(buffer, NULL);
 	jsize size = env->GetArrayLength(buffer);
 	
-	DWORD numWritten;
+	SIZE_T numWritten;
 	jboolean rc = WriteProcessMemory((HANDLE)processHandle, (void *)baseAddress, bytes, size, &numWritten)
 		? JNI_TRUE : JNI_FALSE;
 	
