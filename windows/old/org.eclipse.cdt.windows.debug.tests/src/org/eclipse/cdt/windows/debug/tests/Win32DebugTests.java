@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 public class Win32DebugTests extends TestCase {
 
 	public void test1() {
-		assertTrue(Win32Debug.WriteProcessMemory(0, 0, null, null));
+		assertTrue(Win32Debug.test());
 	}
 	
 }
