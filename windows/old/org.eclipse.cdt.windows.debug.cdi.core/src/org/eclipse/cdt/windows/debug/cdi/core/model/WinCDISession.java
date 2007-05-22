@@ -11,6 +11,9 @@
 
 package org.eclipse.cdt.windows.debug.cdi.core.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.cdt.debug.core.cdi.CDIException;
 import org.eclipse.cdt.debug.core.cdi.ICDIEventManager;
 import org.eclipse.cdt.debug.core.cdi.ICDISession;
@@ -23,37 +26,47 @@ import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
  */
 public class WinCDISession implements ICDISession {
 
+	private WinCDITarget[] targets;
+	private final WinCDISessionConfiguration configuration;
+	private final Map<String, String> attributes = new HashMap<String, String>();
+	final WinCDIEventManager eventManager;
+	
+	public WinCDISession() {
+		targets = new WinCDITarget[] {
+			new WinCDITarget(this)
+		};
+		
+		configuration = new WinCDISessionConfiguration(this);
+		eventManager = new WinCDIEventManager(this);
+	}
+	
 	public String getAttribute(String key) {
-		// TODO Auto-generated method stub
-		return null;
+		return attributes.get(key);
 	}
 
 	public ICDISessionConfiguration getConfiguration() {
-		// TODO Auto-generated method stub
-		return null;
+		return configuration;
 	}
 
 	public ICDIEventManager getEventManager() {
-		// TODO Auto-generated method stub
-		return null;
+		return eventManager;
 	}
 
 	public Process getSessionProcess() throws CDIException {
-		// TODO Auto-generated method stub
+		// Our debugger isn't running in a process
 		return null;
 	}
 
 	public ICDITarget[] getTargets() {
-		// TODO Auto-generated method stub
-		return new ICDITarget[0];
+		return targets;
 	}
 
 	public void setAttribute(String key, String value) {
-		// TODO Auto-generated method stub
+		attributes.put(key, value);
 	}
 
 	public void terminate() throws CDIException {
-		// TODO Auto-generated method stub
+		targets[0].terminate();
 	}
 
 }
