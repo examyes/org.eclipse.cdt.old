@@ -12,7 +12,6 @@
 package org.eclipse.cdt.windows.debug.cdi.core.model;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.cdt.debug.core.cdi.ICDIEventManager;

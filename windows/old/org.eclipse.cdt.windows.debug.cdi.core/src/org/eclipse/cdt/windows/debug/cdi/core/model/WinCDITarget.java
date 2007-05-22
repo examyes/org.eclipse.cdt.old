@@ -44,7 +44,6 @@ import org.eclipse.cdt.debug.core.cdi.model.ICDITargetConfiguration;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIThread;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIWatchpoint;
 import org.eclipse.cdt.windows.debug.cdi.core.events.WinCDIDestroyedEvent;
-import org.eclipse.osgi.framework.eventmgr.EventManager;
 
 /**
  * @author Doug Schaefer
