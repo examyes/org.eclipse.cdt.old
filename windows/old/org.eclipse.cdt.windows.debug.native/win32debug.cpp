@@ -1,10 +1,6 @@
 #include <windows.h>
 #include <jni.h>
 
-// MSVC doesn't need this, and our parser doesn't support __stdcall yet
-#undef JNICALL
-#define JNICALL
-
 extern "C"
 JNIEXPORT jboolean JNICALL Java_org_eclipse_cdt_windows_debug_core_sdk_Win32Debug_test(
 		JNIEnv * env, jclass cls) {

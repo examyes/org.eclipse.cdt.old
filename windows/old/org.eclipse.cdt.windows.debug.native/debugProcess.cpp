@@ -1,9 +1,6 @@
 #include <windows.h>
 #include <jni.h>
 
-#undef JNICALL
-#define JNICALL
-
 // create
 
 extern "C"
