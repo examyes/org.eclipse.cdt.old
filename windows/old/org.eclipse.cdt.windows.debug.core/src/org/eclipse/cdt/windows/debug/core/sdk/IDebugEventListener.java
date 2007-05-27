@@ -17,6 +17,6 @@ package org.eclipse.cdt.windows.debug.core.sdk;
  */
 public interface IDebugEventListener {
 
-	void handleEvent(DebugEvent debugEvent);
+	boolean handleEvent(DebugEvent debugEvent);
 	
 }

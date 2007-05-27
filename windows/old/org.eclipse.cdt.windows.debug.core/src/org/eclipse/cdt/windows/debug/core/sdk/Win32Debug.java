@@ -59,4 +59,44 @@ public class Win32Debug {
 			byte[] buffer,
 			long[] numberOfBytesWritten);
 
+	// CreateProcess
+	
+	public static native boolean CreateProcess(String cmdline, String envp, String dir, long[] handles);
+
+	// GetExitCodeProcess
+	
+	public static native boolean GetExitCodeProcess(long processHandle, int[] exitCode);
+	
+	// WaitForSingleObject
+	
+	public static final int WAIT_ABANDONED = 0x80;
+	public static final int WAIT_OBJECT_0 = 0;
+	public static final int WAIT_TIMEOUT = 0x102;
+	
+	public static native int WaitForSingleObject(long handle, int milliseconds);
+	
+	// TerminateProcess
+	
+	public static native boolean TerminateProcess(long processHandle, int exitCode);
+	
+	// GenerateConsoleCtrlEvent
+	
+	public static final int CTRL_C_EVENT = 0;
+	public static final int CTRL_BREAK_EVENT = 1;
+	
+	public static native boolean GenerateConsoleCtrlEvent(int ctrlEvent, int processGroupId);
+	
+	// GetProcessId
+	
+	public static native int GetProcessId(long processHandle);
+	
+	// ReadFile
+	
+	public static native boolean ReadFile(long handle, byte[] buffer, int[] numberOfBytesRead);
+
+	// WriteFile
+	
+	public static native boolean WriteFile(long handle, byte[] buffer, int numberOfBytesToWrite,
+			int[] numberOfBytesWritten);
+
 }

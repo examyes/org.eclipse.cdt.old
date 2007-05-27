@@ -91,7 +91,18 @@ public class WinCDITarget implements ICDITarget2, IDebugEventListener {
 		}
 	}
 	
-	public void handleEvent(DebugEvent debugEvent) {
+	public boolean handleEvent(DebugEvent debugEvent) {
+		System.out.println("DebugEvent: " + debugEvent.getDebugEventCode());
+		System.out.flush();
+		
+		switch (debugEvent.getDebugEventCode()) {
+		case DebugEvent.EXIT_PROCESS_DEBUG_EVENT:
+			// Send destroyed event with no source
+			session.eventManager.dispatchEvent(new WinCDIDestroyedEvent());
+			break;
+		}
+		
+		return true;
 	}
 	
 	public ICDIGlobalVariableDescriptor[] getGlobalVariables() {
@@ -232,11 +243,9 @@ public class WinCDITarget implements ICDITarget2, IDebugEventListener {
 	}
 
 	public void terminate() throws CDIException {
-		// TODO Auto-generated method stub
 		isTerminated = true;
 		
-		// Send destroyed event with no source
-		session.eventManager.dispatchEvent(new WinCDIDestroyedEvent());
+		process.destroy();
 	}
 
 	public ICDIThread getCurrentThread() throws CDIException {

@@ -24,21 +24,20 @@ import java.util.Properties;
  */
 public class DebugProcess extends Process {
 
-	private final boolean created;
-	
 	private final long processHandle;
 	private final OutputStream childStdin;
 	private final InputStream childStdout;
 	private final InputStream childStderr;
 	
 	private final Thread createrThread;
+	private boolean created = false;
+	private int exitCode = STILL_ACTIVE;
 	
 	private final List<IDebugEventListener> listeners = new LinkedList<IDebugEventListener>();
 	
 	public DebugProcess(String app, String[] args, String dir, Properties env) {
 		long[] handles = new long[4];
-//		created = create(app, "", "", handles);
-		created = true;
+		created = Win32Debug.CreateProcess(app, null, null, handles);
 		processHandle = handles[0];
 		childStdin = new DebugOutputStream(handles[1]);
 		childStdout = new DebugInputStream(handles[2]);
@@ -46,30 +45,22 @@ public class DebugProcess extends Process {
 		createrThread = Thread.currentThread();
 	}
 
-	public static native boolean create(String cmdline, String envp, String dir, long[] handles);
-	
 	public void destroy() {
-		// TODO Auto-generated method stub
+		Win32Debug.TerminateProcess(processHandle, 0);
 	}
 
 	private static final int STILL_ACTIVE = 259;
 	
 	public int exitValue() {
 		if (!created)
-			return -1;
+			return exitCode;
 
-		int[] exitCode = new int[1];
-		if (!GetExitCodeProcess(processHandle, exitCode))
-			return -1;
-		
-		if (exitCode[0] == STILL_ACTIVE)
+		if (exitCode == STILL_ACTIVE)
 			throw new IllegalThreadStateException();
 		
-		return exitCode[0];
+		return exitCode;
 	}
 
-	private static native boolean GetExitCodeProcess(long processHandle, int[] exitCode);
-	
 	public InputStream getErrorStream() {
 		return childStderr;
 	}
@@ -84,9 +75,14 @@ public class DebugProcess extends Process {
 
 	public int waitFor() throws InterruptedException {
 		if (!created)
+			return 0;
+		
+		if (Win32Debug.WaitForSingleObject(processHandle, Win32Debug.INFINITE) != Win32Debug.WAIT_OBJECT_0)
 			return -1;
-		// TODO Auto-generated method stub
-		return 0;
+		
+		created = false;
+		
+		return exitValue();
 	}
 
 	public void addListener(IDebugEventListener listener) {
@@ -103,16 +99,29 @@ public class DebugProcess extends Process {
 		
 		DebugEvent debugEvent = new DebugEvent();
 		
-//		while (Win32Debug.WaitForDebugEvent(debugEvent, Win32Debug.INFINITE)) {
-		while (true) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-			}
+		while (Win32Debug.WaitForDebugEvent(debugEvent, Win32Debug.INFINITE)) {
+			boolean handled = false;
 			Iterator<IDebugEventListener> i = listeners.iterator();
 			while (i.hasNext()) {
-				i.next().handleEvent(debugEvent);
+				if (i.next().handleEvent(debugEvent))
+					handled = true;
 			}
+			
+			// My own handling
+			int continueStatus = Win32Debug.DBG_CONTINUE;
+			
+			switch (debugEvent.getDebugEventCode()) {
+			case DebugEvent.EXIT_PROCESS_DEBUG_EVENT:
+				exitCode = debugEvent.getExitProcessDebugInfo().getExitCode();
+				return;
+			case DebugEvent.EXCEPTION_DEBUG_EVENT:
+				if (!handled)
+					continueStatus = Win32Debug.DBG_EXCEPTION_NOT_HANDLED;
+				break;
+			}
+			
+			// TODO - If thread suspended, don't call this
+			Win32Debug.ContinueDebugEvent(debugEvent.getProcessId(), debugEvent.getThreadId(), continueStatus);
 		}
 	}
 }

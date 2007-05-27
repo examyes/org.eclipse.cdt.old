@@ -32,7 +32,7 @@ public class DebugInputStream extends InputStream {
 	public int read() throws IOException {
 		if (pos > len) {
 			int[] numRead = new int[1];
-			boolean rc = ReadFile(handle, buffer, numRead);
+			boolean rc = Win32Debug.ReadFile(handle, buffer, numRead);
 			if (!rc)
 				throw new IOException("Railed to read");
 			
@@ -46,7 +46,5 @@ public class DebugInputStream extends InputStream {
 		
 		return buffer[pos++];
 	}
-
-	private static native boolean ReadFile(long handle, byte[] buffer, int[] numberOfBytesRead);
 
 }

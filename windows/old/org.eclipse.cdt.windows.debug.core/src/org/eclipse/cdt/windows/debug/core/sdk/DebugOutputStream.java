@@ -40,7 +40,7 @@ public class DebugOutputStream extends OutputStream {
 
 	public void flush() throws IOException {
 		int[] numWritten = new int[1];
-		boolean rc = WriteFile(handle, buffer, pos, numWritten);
+		boolean rc = Win32Debug.WriteFile(handle, buffer, pos, numWritten);
 		if (!rc)
 			throw new IOException("Failed to write");
 		
@@ -50,7 +50,4 @@ public class DebugOutputStream extends OutputStream {
 		pos -= len;
 	}
 	
-	private static native boolean WriteFile(long handle, byte[] buffer, int numberOfBytesToWrite,
-			int[] numberOfBytesWritten);
-
 }
