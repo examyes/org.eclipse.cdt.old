@@ -17,10 +17,6 @@ package org.eclipse.cdt.windows.debug.core.sdk;
  */
 public class Win32Debug {
 
-	static {
-		System.loadLibrary("cdtwindbg"); //$NON-NLS-1$
-	}
-	
 	public static native boolean test();
 	
 	// ContinueDebugEvent

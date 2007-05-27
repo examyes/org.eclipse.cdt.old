@@ -6,4 +6,5 @@ Bundle-Version: 1.0.0
 Bundle-Activator: org.eclipse.cdt.windows.debug.core.Activator
 Require-Bundle: org.eclipse.core.runtime
 Eclipse-LazyStart: true
-Export-Package: org.eclipse.cdt.windows.debug.core.sdk;x-friends:="org.eclipse.cdt.windows.debug.tests"
+Export-Package: org.eclipse.cdt.windows.debug.core.sdk
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

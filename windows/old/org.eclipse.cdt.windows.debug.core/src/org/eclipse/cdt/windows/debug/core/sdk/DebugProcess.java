@@ -13,6 +13,9 @@ package org.eclipse.cdt.windows.debug.core.sdk;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -28,13 +31,19 @@ public class DebugProcess extends Process {
 	private final InputStream childStdout;
 	private final InputStream childStderr;
 	
+	private final Thread createrThread;
+	
+	private final List<IDebugEventListener> listeners = new LinkedList<IDebugEventListener>();
+	
 	public DebugProcess(String app, String[] args, String dir, Properties env) {
 		long[] handles = new long[4];
-		created = create(app, "", "", handles);
+//		created = create(app, "", "", handles);
+		created = true;
 		processHandle = handles[0];
 		childStdin = new DebugOutputStream(handles[1]);
 		childStdout = new DebugInputStream(handles[2]);
 		childStderr = new DebugInputStream(handles[3]);
+		createrThread = Thread.currentThread();
 	}
 
 	public static native boolean create(String cmdline, String envp, String dir, long[] handles);
@@ -80,4 +89,30 @@ public class DebugProcess extends Process {
 		return 0;
 	}
 
+	public void addListener(IDebugEventListener listener) {
+		listeners.add(listener);
+	}
+	
+	public void removeListener(IDebugEventListener listener) {
+		listeners.remove(listener);
+	}
+	
+	public void eventLoop() {
+		if (createrThread != Thread.currentThread())
+			throw new IllegalArgumentException();
+		
+		DebugEvent debugEvent = new DebugEvent();
+		
+//		while (Win32Debug.WaitForDebugEvent(debugEvent, Win32Debug.INFINITE)) {
+		while (true) {
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+			}
+			Iterator<IDebugEventListener> i = listeners.iterator();
+			while (i.hasNext()) {
+				i.next().handleEvent(debugEvent);
+			}
+		}
+	}
 }

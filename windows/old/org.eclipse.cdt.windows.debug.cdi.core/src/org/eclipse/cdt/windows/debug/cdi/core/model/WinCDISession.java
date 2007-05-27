@@ -19,6 +19,7 @@ import org.eclipse.cdt.debug.core.cdi.ICDIEventManager;
 import org.eclipse.cdt.debug.core.cdi.ICDISession;
 import org.eclipse.cdt.debug.core.cdi.ICDISessionConfiguration;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
+import org.eclipse.core.runtime.IPath;
 
 /**
  * @author Doug Schaefer
@@ -31,9 +32,9 @@ public class WinCDISession implements ICDISession {
 	private final Map<String, String> attributes = new HashMap<String, String>();
 	final WinCDIEventManager eventManager;
 	
-	public WinCDISession() {
+	public WinCDISession(IPath executable) {
 		targets = new WinCDITarget[] {
-			new WinCDITarget(this)
+			new WinCDITarget(this, executable)
 		};
 		
 		configuration = new WinCDISessionConfiguration(this);

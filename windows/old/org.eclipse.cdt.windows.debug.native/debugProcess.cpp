@@ -73,6 +73,13 @@ JNIEXPORT jboolean JNICALL Java_org_eclipse_cdt_windows_debug_core_sdk_DebugProc
 	return rc;
 }
 
+extern "C"
+JNIEXPORT jboolean JNICALL Java_org_eclipse_cdt_windows_debug_core_sdk_DebugProcess_GetExitCodeProcess(
+		JNIEnv * env, jclass cls,
+		jlong processHandle, jintArray exitCode) {
+	return JNI_TRUE;
+}
+
 // DebugInputStream.ReadFile
 
 extern "C"

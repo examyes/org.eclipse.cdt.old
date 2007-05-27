@@ -12,13 +12,16 @@
 package org.eclipse.cdt.windows.debug.cdi.core;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.eclipse.cdt.core.IBinaryParser.IBinaryObject;
 import org.eclipse.cdt.debug.core.ICDIDebugger2;
 import org.eclipse.cdt.debug.core.cdi.ICDISession;
 import org.eclipse.cdt.windows.debug.cdi.core.model.WinCDISession;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunch;
 
 /**
@@ -29,7 +32,14 @@ public class WinCDIDebugger implements ICDIDebugger2 {
 
 	public ICDISession createSession(ILaunch launch, File executable,
 			IProgressMonitor monitor) throws CoreException {
-		return new WinCDISession();
+		IPath exepath;
+		try {
+			exepath = new Path(executable.getCanonicalPath());
+		} catch (IOException e) {
+			exepath = new Path(executable.getAbsolutePath());
+		}
+
+		return new WinCDISession(exepath);
 	}
 
 	// Depreciated version not really used

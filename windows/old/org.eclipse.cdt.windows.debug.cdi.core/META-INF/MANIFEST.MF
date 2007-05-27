@@ -7,5 +7,7 @@ Bundle-Activator: org.eclipse.cdt.windows.debug.cdi.core.Activator
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.cdt.debug.core,
  org.eclipse.debug.core,
- org.eclipse.cdt.core
+ org.eclipse.cdt.core,
+ org.eclipse.cdt.windows.debug.core
 Eclipse-LazyStart: true
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

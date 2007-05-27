@@ -44,24 +44,54 @@ import org.eclipse.cdt.debug.core.cdi.model.ICDITargetConfiguration;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIThread;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIWatchpoint;
 import org.eclipse.cdt.windows.debug.cdi.core.events.WinCDIDestroyedEvent;
+import org.eclipse.cdt.windows.debug.core.sdk.DebugEvent;
+import org.eclipse.cdt.windows.debug.core.sdk.DebugProcess;
+import org.eclipse.cdt.windows.debug.core.sdk.IDebugEventListener;
+import org.eclipse.core.runtime.IPath;
 
 /**
  * @author Doug Schaefer
  *
  */
-public class WinCDITarget implements ICDITarget2 {
+public class WinCDITarget implements ICDITarget2, IDebugEventListener {
 
 	private final WinCDISession session;
 	private final WinCDIRuntimeOptions runtimeOptions;
 	private final WinCDITargetConfiguration configuration;
 	
+	private DebugProcess process;
+	
 	// Temporary for testing
 	boolean isTerminated = false;
 	
-	public WinCDITarget(WinCDISession session) {
+	public WinCDITarget(WinCDISession session, final IPath executable) {
 		this.session = session;
 		this.runtimeOptions = new WinCDIRuntimeOptions(this);
 		this.configuration = new WinCDITargetConfiguration(this);
+		
+		// DebugProcess thread
+		final Object mutex = new Object();
+		new Thread() {
+			@Override
+			public void run() {
+				synchronized (mutex) {
+					process = new DebugProcess(executable.toOSString(), null, null, null);
+					mutex.notifyAll();
+				}
+				process.addListener(WinCDITarget.this);
+				process.eventLoop();
+			}
+		}.start();
+		try {
+			synchronized (mutex) {
+				if (process == null)
+					mutex.wait();
+			}
+		} catch (InterruptedException e) {
+		}
+	}
+	
+	public void handleEvent(DebugEvent debugEvent) {
 	}
 	
 	public ICDIGlobalVariableDescriptor[] getGlobalVariables() {
@@ -130,8 +160,7 @@ public class WinCDITarget implements ICDITarget2 {
 	}
 
 	public Process getProcess() {
-		// TODO Auto-generated method stub
-		return null;
+		return process;
 	}
 
 	public ICDIRegisterGroup[] getRegisterGroups() throws CDIException {
