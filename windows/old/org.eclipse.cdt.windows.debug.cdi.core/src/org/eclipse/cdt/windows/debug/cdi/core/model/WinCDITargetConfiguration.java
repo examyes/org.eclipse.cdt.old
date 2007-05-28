@@ -58,8 +58,7 @@ public class WinCDITargetConfiguration implements ICDITargetConfiguration3 {
 	}
 
 	public boolean supportsBreakpoints() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	public boolean supportsDisconnect() {

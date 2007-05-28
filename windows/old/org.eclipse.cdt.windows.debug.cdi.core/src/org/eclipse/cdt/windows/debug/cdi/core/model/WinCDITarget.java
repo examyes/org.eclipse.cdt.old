@@ -44,6 +44,8 @@ import org.eclipse.cdt.debug.core.cdi.model.ICDITargetConfiguration;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIThread;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIWatchpoint;
 import org.eclipse.cdt.windows.debug.cdi.core.events.WinCDIDestroyedEvent;
+import org.eclipse.cdt.windows.debug.cdi.core.model.WinCDILocation.LocationNotFound;
+import org.eclipse.cdt.windows.debug.core.sdk.Breakpoint;
 import org.eclipse.cdt.windows.debug.core.sdk.DebugEvent;
 import org.eclipse.cdt.windows.debug.core.sdk.DebugProcess;
 import org.eclipse.cdt.windows.debug.core.sdk.IDebugEventListener;
@@ -128,8 +130,7 @@ public class WinCDITarget implements ICDITarget2, IDebugEventListener {
 
 	public ICDIFunctionLocation createFunctionLocation(String file,
 			String function) {
-		// TODO Auto-generated method stub
-		return null;
+		return new WinCDIFunctionLocation(file, function);
 	}
 
 	public ICDIGlobalVariable createGlobalVariable(
@@ -290,8 +291,17 @@ public class WinCDITarget implements ICDITarget2, IDebugEventListener {
 	public ICDIFunctionBreakpoint setFunctionBreakpoint(int type,
 			ICDIFunctionLocation location, ICDICondition condition,
 			boolean deferred) throws CDIException {
-		// TODO Auto-generated method stub
-		return null;
+		if (!(location instanceof WinCDIFunctionLocation))
+			return null;
+		
+		try {
+			WinCDIFunctionLocation functionLocation = (WinCDIFunctionLocation)location;
+			Breakpoint breakpoint = new Breakpoint(functionLocation.getAddress());
+			return new WinCDIFunctionBreakpoint(this, breakpoint, functionLocation);
+		} catch (LocationNotFound e) {
+			// TODO this won't work. Need to support setting breakpoints before symbols loaded
+			return null;
+		}
 	}
 
 	public ICDILineBreakpoint setLineBreakpoint(int type,
