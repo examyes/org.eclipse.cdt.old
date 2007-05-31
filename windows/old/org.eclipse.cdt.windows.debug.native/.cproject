@@ -336,7 +336,7 @@
 <listOptionValue builtIn="false" value="&quot;C:\Program Files\Java\jdk1.6.0_01\include\win32&quot;"/>
 </option>
 <option id="org.eclipse.cdt.windows.cl.option.runtime.135200233" name="Run-Time Library" superClass="org.eclipse.cdt.windows.cl.option.runtime" value="org.eclipse.cdt.windows.cl.option.runtime.mt" valueType="enumerated"/>
-<option id="org.eclipse.cdt.windows.cl.option.macros.1556731315" superClass="org.eclipse.cdt.windows.cl.option.macros" valueType="definedSymbols">
+<option id="org.eclipse.cdt.windows.cl.option.macros.1556731315" name="Defines (/D)" superClass="org.eclipse.cdt.windows.cl.option.macros" valueType="definedSymbols">
 <listOptionValue builtIn="false" value="UNICODE"/>
 </option>
 <inputType id="org.eclipse.cdt.windows.cl.inputType.193488577" superClass="org.eclipse.cdt.windows.cl.inputType"/>
