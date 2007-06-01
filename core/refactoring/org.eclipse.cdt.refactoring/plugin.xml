@@ -59,6 +59,12 @@
             contextId="org.eclipse.cdt.ui.cEditorScope"
             commandId="org.eclipse.cdt.ui.edit.text.c.rename.element"
       />
+   	  <key
+            sequence="Alt+Shift+R"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            contextId="org.eclipse.cdt.ui.cViewScope"
+            commandId="org.eclipse.cdt.ui.edit.text.c.rename.element"
+      />
    </extension>
 
    <!-- Action set associations -->
