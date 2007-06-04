@@ -53,14 +53,16 @@
    </extension>    
    <extension
          point="org.eclipse.ui.bindings">
+      <!--  win32:  M1=CTRL,    M2=SHIFT, M3=ALT, M4=-
+            carbon: M1=COMMAND, M2=SHIFT, M3=ALT, M4=CTRL -->
    	  <key
-            sequence="Alt+Shift+R"
+            sequence="M2+M3+R"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             contextId="org.eclipse.cdt.ui.cEditorScope"
             commandId="org.eclipse.cdt.ui.edit.text.c.rename.element"
       />
    	  <key
-            sequence="Alt+Shift+R"
+            sequence="M2+M3+R"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             contextId="org.eclipse.cdt.ui.cViewScope"
             commandId="org.eclipse.cdt.ui.edit.text.c.rename.element"
