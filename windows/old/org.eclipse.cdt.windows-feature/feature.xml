@@ -26,7 +26,8 @@
       <import plugin="org.eclipse.core.runtime"/>
       <import plugin="org.eclipse.cdt.managedbuilder.core"/>
       <import plugin="org.eclipse.cdt.core"/>
-      <import feature="org.eclipse.cdt"/>
+      <import plugin="org.eclipse.cdt.make.core"/>
+      <import plugin="org.eclipse.core.resources"/>
    </requires>
 
    <plugin
