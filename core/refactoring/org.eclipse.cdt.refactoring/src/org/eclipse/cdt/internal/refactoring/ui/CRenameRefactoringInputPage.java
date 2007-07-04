@@ -11,19 +11,35 @@
 
 package org.eclipse.cdt.internal.refactoring.ui;
 
-import org.eclipse.cdt.internal.refactoring.*;
-import org.eclipse.cdt.refactoring.*;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.window.Window;
 import org.eclipse.ltk.ui.refactoring.UserInputWizardPage;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.*;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.*;
-import org.eclipse.ui.*;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IWorkingSet;
+import org.eclipse.ui.IWorkingSetManager;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.IWorkingSetSelectionDialog;
+
+import org.eclipse.cdt.refactoring.CRefactoringPlugin;
+import org.eclipse.cdt.refactoring.CRefactory;
+import org.eclipse.cdt.refactoring.ICRefactoringSearch;
+
+import org.eclipse.cdt.internal.refactoring.CRenameProcessor;
+import org.eclipse.cdt.internal.refactoring.CRenameRefactoring;
+import org.eclipse.cdt.internal.refactoring.Messages;
 
 /**
  * Input page added to the standard refactoring wizard.
@@ -436,10 +452,79 @@ public class CRenameRefactoringInputPage extends UserInputWizardPage {
 
     protected void updatePageComplete() {
         String txt= fNewName.getText();
-        setPageComplete(txt.length() > 0 && !txt.equals(fSearchString));
+        if (txt.length() == 0 || txt.equals(fSearchString)) {
+        	setErrorMessage(null);
+        	setPageComplete(false);
+        }
+        else if (!isValidIdentifier(txt)) {
+        	setErrorMessage(NLS.bind(Messages.getString("CRenameRefactoringInputPage.errorInvalidIdentifier"), txt)); //$NON-NLS-1$
+        	setPageComplete(false);
+        }
+        else {
+        	setErrorMessage(null);
+        	setPageComplete(true);
+        }
     }
 
-    protected void updateEnablement() {
+    private boolean isValidIdentifier(String txt) {
+    	if (txt.length() < 1) {
+    		return false;
+    	}
+    	char[] chars= txt.toCharArray();
+    	for (int i = 0; i < chars.length; i++) {
+			final char c = chars[i];
+			switch(c) {
+			case '\\': 
+				// check for universal character name
+				if (++i >= chars.length) {
+					return false;
+				}
+				int hexdigits= 0;
+				switch(chars[i]) {
+				case 'u':
+					hexdigits= 4;
+					break;
+				case 'U':
+					hexdigits= 8;
+					break;
+				default:
+					return false;
+				}
+				while (hexdigits > 0) {
+					if (++i >= chars.length) {
+						return false;
+					}
+					if (!isHexDigit(chars[i])) {
+						return false;
+					}
+					hexdigits--;
+				}
+				break;
+			case '_':
+				break;
+			default: 
+				if (i==0) {
+					if (!Character.isLetter(c)) {
+						return false;
+					}
+				}
+				else {
+					if (!Character.isLetterOrDigit(c)) {
+						return false;
+					}
+				}
+			}
+		}
+    	return true;
+    }
+    
+	private boolean isHexDigit(char c) {
+		return ( c >= '0' && c <= '9' )
+			|| ( c >= 'A' && c <= 'F' )
+			|| ( c >= 'a' && c <= 'f' );
+	}
+
+	protected void updateEnablement() {
         boolean enable= fEnableScopeOptions==-1 ||
         	(computeSelectedOptions() & fEnableScopeOptions) != 0;
         
