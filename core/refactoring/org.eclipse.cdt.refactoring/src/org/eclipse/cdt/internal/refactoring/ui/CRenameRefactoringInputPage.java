@@ -474,6 +474,18 @@ public class CRenameRefactoringInputPage extends UserInputWizardPage {
     	for (int i = 0; i < chars.length; i++) {
 			final char c = chars[i];
 			switch(c) {
+			case '?':
+				// check for trigraph for backslash
+				if (i+2 >= chars.length) {
+					return false;
+				}
+				if (chars[++i] != '?') {
+					return false;
+				}
+				if (chars[++i] != '/') {
+					return false;
+				}
+				// no break, continue with check for universal character name
 			case '\\': 
 				// check for universal character name
 				if (++i >= chars.length) {
