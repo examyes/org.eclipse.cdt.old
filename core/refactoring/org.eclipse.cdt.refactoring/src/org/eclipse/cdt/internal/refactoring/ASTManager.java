@@ -21,8 +21,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
@@ -41,7 +39,6 @@ import org.eclipse.cdt.core.dom.ast.IASTDeclarator;
 import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionStyleMacroParameter;
-import org.eclipse.cdt.core.dom.ast.IASTMacroExpansion;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
@@ -654,52 +651,6 @@ public class ASTManager {
         return TRUE;
     }
 
-    public static int backrelateNameToMacroCallArgument(IASTName name, IASTMacroExpansion me) {
-        int expansionCount= 0;
-        IASTMacroExpansion mloc= me;
-        IASTNodeLocation[] locs= null;
-        boolean done=false;
-        while (!done) {
-            IASTPreprocessorMacroDefinition mdef= mloc.getMacroDefinition();
-            if (!(mdef instanceof IASTPreprocessorFunctionStyleMacroDefinition)) {
-                return -1;
-            }
-            expansionCount++;
-            
-            locs= mloc.getExpansionLocations();
-            if (locs==null || locs.length != 1) {
-                return -1;
-            }
-            IASTNodeLocation aloc= locs[0];
-            if (aloc instanceof IASTFileLocation) {
-                done= true;
-            }
-            else if (aloc instanceof IASTMacroExpansion) {
-                mloc= (IASTMacroExpansion) aloc;
-            }
-        }
-        IASTMacroExpansion[] macroExpansions= 
-            new IASTMacroExpansion[expansionCount];
-        macroExpansions[expansionCount-1]= me;
-        for (int i= expansionCount-2; i>=0; i--) {
-            macroExpansions[i]= (IASTMacroExpansion) macroExpansions[i+1].getExpansionLocations()[0];
-        }
-        
-        // because of bug#90956 we need to use a heuristics.
-        String orig= name.getTranslationUnit().getUnpreprocessedSignature(locs);
-        Pattern p= Pattern.compile("\\b" +name.toString()+"\\b");  //$NON-NLS-1$//$NON-NLS-2$
-        Matcher m= p.matcher(orig);
-        if (!m.find()) {
-            return -1;
-        }
-        int start= m.start();
-        
-        if (m.find(m.end())) {
-            return -1;
-        }
-        return locs[0].getNodeOffset()+start;
-    }
-
     private static IScope getContainingScope(IASTName name) {
         IASTTranslationUnit tu= name.getTranslationUnit();
         if (tu == null) {
@@ -1164,27 +1115,31 @@ public class ASTManager {
         IPath path= null;
         CRefactoringMatch match= null;
         
-        IASTNodeLocation[] locations= name.getNodeLocations();
-        if (locations != null && locations.length==1) {
-            IASTNodeLocation loc= locations[0];
-            IASTFileLocation floc= loc.asFileLocation();
-            if (floc != null) {
-                path= new Path(floc.getFileName());
-                if (loc instanceof IASTMacroExpansion) {
-                    IASTMacroExpansion me= (IASTMacroExpansion) loc;
-                    int offset= backrelateNameToMacroCallArgument(name, me);
-                    match= store.findMatch(path, offset + (isDestructor ? 1 : 0));
-                }
-                else {
-                    match= store.findMatch(path, floc.getNodeOffset() + (isDestructor ? 1 : 0));
-                }
-            }
-        }
-        if (match != null) {
-            analyzeAstTextMatchPair(match, name, status);
+        IASTFileLocation loc = getImageFileLocation(name);
+        if (loc != null) {
+        	path= new Path(loc.getFileName());
+        	match= store.findMatch(path, loc.getNodeOffset() + (isDestructor ? 1 : 0));
+        	if (match != null) {
+        		analyzeAstTextMatchPair(match, name, status);
+        	}
         }
         return path;
     }
+
+	static IASTFileLocation getImageFileLocation(IASTName name) {
+		IASTFileLocation loc= name.getImageLocation();
+        if (loc == null) {
+        	// mstodo- support for old location resolver
+        	IASTNodeLocation[] locations= name.getNodeLocations();
+        	if (locations != null && locations.length==1) {
+        		IASTNodeLocation nloc= locations[0];
+        		if (nloc instanceof IASTFileLocation) {
+        			loc= (IASTFileLocation) nloc;
+        		}
+        	}
+        }
+		return loc;
+	}
 
     private void analyzeAstTextMatchPair(CRefactoringMatch match, IASTName name, 
             RefactoringStatus status) {

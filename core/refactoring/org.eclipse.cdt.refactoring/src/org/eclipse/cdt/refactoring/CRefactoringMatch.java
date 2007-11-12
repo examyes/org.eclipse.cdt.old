@@ -1,18 +1,19 @@
 /*******************************************************************************
- * Copyright (c) 2004-2005 Wind River Systems, Inc.
+ * Copyright (c) 2004, 2007 Wind River Systems, Inc.
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
  * which accompanies this distribution, and is available at 
  * http://www.eclipse.org/legal/epl-v10.html  
  * 
  * Contributors: 
- * Markus Schorn - initial API and implementation 
+ *    Markus Schorn - initial API and implementation 
  ******************************************************************************/ 
 
 package org.eclipse.cdt.refactoring;
 
-import org.eclipse.cdt.internal.refactoring.Messages;
 import org.eclipse.core.resources.IFile;
+
+import org.eclipse.cdt.internal.refactoring.Messages;
 
 /**
  * A refactoring match initially is a plain text match. In the course of refactoring
@@ -20,15 +21,19 @@ import org.eclipse.core.resources.IFile;
  * whether it has been verified via AST or not.
  */
 public class CRefactoringMatch {
-    public  static final int POTENTIAL= 0;
-    public  static final int AST_REFERENCE= 1;
-    public  static final int IN_COMMENT = 2;
-    public  static final int AST_REFERENCE_OTHER= 3;
+    public static final int POTENTIAL= 0;
+    public static final int AST_REFERENCE= 1;
+    public static final int AST_REFERENCE_OTHER= 2;
+    public static final int AST_REFEREENCE_CONFLICTING= 3;
+    public static final int IN_COMMENT = 4;
     
     private static String[] LABELS= {
         Messages.getString("CRefactoringMatch.label.potentialOccurrence"),  //$NON-NLS-1$
         Messages.getString("CRefactoringMatch.label.occurrence"), //$NON-NLS-1$
+        "", //$NON-NLS-1$
+        Messages.getString("CRefactoringMatch.label.potentialOccurrence"),  //$NON-NLS-1$
         Messages.getString("CRefactoringMatch.label.comment")}; //$NON-NLS-1$
+    
     private IFile fFile;
     private int fOffset;
     private int fLength;
@@ -61,7 +66,18 @@ public class CRefactoringMatch {
         return fFile;
     }
     public void setASTInformation(int val) {
-        fAstInformation= val;
+    	switch(fAstInformation) {
+    	case AST_REFERENCE:
+    	case AST_REFERENCE_OTHER:
+    	case AST_REFEREENCE_CONFLICTING:
+    		if (val != fAstInformation) {
+    			fAstInformation= AST_REFEREENCE_CONFLICTING;
+    		}
+    		break;
+    	default:
+            fAstInformation= val;
+    		break;
+    	}
     }
     public String getLabel() {
         if (fAstInformation == AST_REFERENCE) {

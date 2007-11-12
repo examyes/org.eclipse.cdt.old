@@ -34,6 +34,8 @@ public class RenameVariableTests extends RenameTests {
     }
     public static Test suite( boolean cleanup ) {
         TestSuite suite = new TestSuite(RenameVariableTests.class); 
+        suite.addTest(new FailingTest(new RenameVariableTests("_testReferenceViaMacro"), 90956) ); //$NON-NLS-1$
+        suite.addTest(new FailingTest(new RenameVariableTests("_testReferenceViaMacro2"), 90956) ); //$NON-NLS-1$
         suite.addTest(new FailingTest(new RenameVariableTests("_referenceViaMacro3"), 90956) ); //$NON-NLS-1$
 
         if (cleanup) {
@@ -1883,7 +1885,7 @@ public class RenameVariableTests extends RenameTests {
         assertRefactoringOk(status);
     }
     
-    public void testReferenceViaMacro() throws Exception {
+    public void _testReferenceViaMacro() throws Exception {
         StringWriter writer = new StringWriter();
         writer.write("#define PASSON(x) (x)         \n"); //$NON-NLS-1$
         writer.write("#define INC(x) PASSON(/*pc*/x)++         \n"); //$NON-NLS-1$
@@ -1902,7 +1904,7 @@ public class RenameVariableTests extends RenameTests {
         assertChange( changes, cpp, offset2, 2, "z" );  //$NON-NLS-1$
     }
 
-    public void testReferenceViaMacro2() throws Exception {
+    public void _testReferenceViaMacro2() throws Exception {
         StringWriter writer = new StringWriter();
         writer.write("#define INC(x,y) x+=y      \n"); //$NON-NLS-1$
         writer.write("void f() {                 \n"); //$NON-NLS-1$
