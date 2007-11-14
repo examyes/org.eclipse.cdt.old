@@ -16,7 +16,6 @@ import java.io.StringWriter;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.eclipse.cdt.core.tests.FailingTest;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
@@ -34,7 +33,6 @@ public class RenameMacroTests extends RenameTests {
     }
     public static Test suite( boolean cleanup ) {
         TestSuite suite = new TestSuite(RenameMacroTests.class); 
-        suite.addTest(new FailingTest(new RenameMacroTests("_renameMacroAsMacroArgument"), 94673)); //$NON-NLS-1$
         if (cleanup) {
             suite.addTest( new RefactoringTests("cleanupProject") );    //$NON-NLS-1$
         }
@@ -209,7 +207,7 @@ public class RenameMacroTests extends RenameTests {
         assertTotalChanges(1, 1, 0, ch);
     }
 
-    public void _renameMacroAsMacroArgument() throws Exception {
+    public void testRenameMacroAsMacroArgument() throws Exception {
         StringWriter writer = new StringWriter();
         writer.write("#define M1(var) var       \n"); //$NON-NLS-1$
         writer.write("#define M2 1              \n"); //$NON-NLS-1$
