@@ -1127,18 +1127,7 @@ public class ASTManager {
     }
 
 	static IASTFileLocation getImageFileLocation(IASTName name) {
-		IASTFileLocation loc= name.getImageLocation();
-        if (loc == null) {
-        	// mstodo- support for old location resolver
-        	IASTNodeLocation[] locations= name.getNodeLocations();
-        	if (locations != null && locations.length==1) {
-        		IASTNodeLocation nloc= locations[0];
-        		if (nloc instanceof IASTFileLocation) {
-        			loc= (IASTFileLocation) nloc;
-        		}
-        	}
-        }
-		return loc;
+		return name.getImageLocation();
 	}
 
     private void analyzeAstTextMatchPair(CRefactoringMatch match, IASTName name, 
