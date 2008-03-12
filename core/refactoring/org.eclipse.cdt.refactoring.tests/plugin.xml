@@ -1,22 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.0"?>
 <plugin>
-
-     <extension point="org.eclipse.ltk.core.refactoring.renameParticipants">
-      <renameParticipant
-            class="org.eclipse.cdt.refactoring.tests.TestRenameParticipant"
-            name="TestRenameParticipant"
-            id="org.eclipse.cdt.refactoring.tests.TestRenameParticipant"> 
-         <enablement>
-           <with variable="affectedNatures">
-             <iterate operator="or">
-               <equals value="org.eclipse.cdt.core.cnature"/>
-             </iterate>
-           </with>
-           <with variable="element">
-   	         <instanceof value="org.eclipse.cdt.core.dom.ast.IBinding"/>
-           </with>
-         </enablement>
-      </renameParticipant>
-   </extension>
 </plugin>
