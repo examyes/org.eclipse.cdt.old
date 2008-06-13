@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Tests Plug-in
+Bundle-SymbolicName: org.eclipse.cdt.msw.debug.core.tests
+Bundle-Version: 1.0.0
+Bundle-Activator: org.eclipse.cdt.msw.debug.core.tests.Activator
+Require-Bundle: org.eclipse.core.runtime,
+ org.junit4,
+ org.eclipse.cdt.msw.debug.core;bundle-version="1.0.0"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
