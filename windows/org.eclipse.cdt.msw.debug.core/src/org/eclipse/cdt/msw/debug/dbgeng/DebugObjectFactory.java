@@ -3,6 +3,8 @@ package org.eclipse.cdt.msw.debug.dbgeng;
 
 public class DebugObjectFactory {
 
+	public static final int S_OK = 0;
+	
 	public static IDebugClient createClient() throws HRESULTException {
 		return new IDebugClient(nativeCreateClient());
 	}

@@ -13,6 +13,14 @@ NATIVE(void, nativeCreateProcess)(JNIEnv * env, jclass cls, jlong p, jlong serve
 	HRESULT hr = client->CreateProcessWide(server, commandLineStr, createFlags);
 	free(commandLineStr);
 	env->ReleaseStringChars(commandLine, commandLineJchar);
-	if (hr != S_OK)
+	if (FAILED(hr))
+		throwHRESULT(env, hr);
+}
+
+NATIVE(void, nativeSetEventCallbacks)(JNIEnv * env, jclass cls, jlong p, jlong callbacksp) {
+	IDebugClient5 * client = (IDebugClient5 *)p;
+	IDebugEventCallbacksWide * callbacks = (IDebugEventCallbacksWide *)callbacksp;
+	HRESULT hr = client->SetEventCallbacksWide(callbacks);
+	if (FAILED(hr))
 		throwHRESULT(env, hr);
 }

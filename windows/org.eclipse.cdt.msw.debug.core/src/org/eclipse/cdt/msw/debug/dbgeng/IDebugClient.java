@@ -6,7 +6,7 @@ public class IDebugClient extends DebugObject {
 		super(p);
 	}
 
-	public void CreateProcess(long server, String commandLine, int createFlags)
+	public void createProcess(long server, String commandLine, int createFlags)
 			throws HRESULTException {
 		nativeCreateProcess(p, server, commandLine, createFlags);
 	}
@@ -14,4 +14,9 @@ public class IDebugClient extends DebugObject {
 	private static native void nativeCreateProcess(long p, long server, String commandLine,
 			int createFlags) throws HRESULTException;
 
+	public void setEventCallbacks(IDebugEventCallbacks callbacks) {
+		nativeSetEventCallbacks(p, callbacks.p);
+	}
+	
+	private static native void nativeSetEventCallbacks(long p, long callbacks);
 }
