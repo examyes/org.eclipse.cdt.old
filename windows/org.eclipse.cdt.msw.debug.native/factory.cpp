@@ -7,9 +7,19 @@
 NATIVE(jlong, nativeCreateClient)(JNIEnv * env, jclass cls) {
 	void * client;
 	HRESULT hr = DebugCreate(__uuidof(IDebugClient5), &client);
-	if (hr != S_OK) {
+	if (FAILED(hr)) {
 		throwHRESULT(env, hr);
 		return NULL;
 	}
 	return (jlong)client;
+}
+
+NATIVE(jlong, nativeCreateControl)(JNIEnv * env, jclass cls) {
+	void * control;
+	HRESULT hr = DebugCreate(__uuidof(IDebugControl4), &control);
+	if (FAILED(hr)) {
+		throwHRESULT(env, hr);
+		return NULL;
+	}
+	return (jlong)control;
 }

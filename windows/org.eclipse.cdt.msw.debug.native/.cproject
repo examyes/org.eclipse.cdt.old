@@ -306,6 +306,8 @@
 </profile>
 </scannerConfigBuildInfo>
 </storageModule>
+<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
+<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 </cconfiguration>
 <cconfiguration id="org.eclipse.cdt.msvc.dll.release.280589311">
 <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="org.eclipse.cdt.msvc.dll.release.280589311" moduleId="org.eclipse.cdt.core.settings" name="Release">
@@ -332,8 +334,9 @@
 <option id="org.eclipse.cdt.msvc.cl.option.includes.116820672" name="Include Path (/I)" superClass="org.eclipse.cdt.msvc.cl.option.includes" valueType="includePath">
 <listOptionValue builtIn="false" value="&quot;C:\Program Files\Java\jdk1.6.0_06\include&quot;"/>
 <listOptionValue builtIn="false" value="&quot;C:\Program Files\Java\jdk1.6.0_06\include\win32&quot;"/>
+<listOptionValue builtIn="false" value="&quot;C:\Program Files\Debugging Tools for Windows (x86)\sdk\inc&quot;"/>
 </option>
-<option id="org.eclipse.cdt.msvc.cl.option.runtime.1570821434" superClass="org.eclipse.cdt.msvc.cl.option.runtime" value="org.eclipse.cdt.msvc.cl.option.runtime.mt" valueType="enumerated"/>
+<option id="org.eclipse.cdt.msvc.cl.option.runtime.1570821434" name="Run-Time Library" superClass="org.eclipse.cdt.msvc.cl.option.runtime" value="org.eclipse.cdt.msvc.cl.option.runtime.mt" valueType="enumerated"/>
 <inputType id="org.eclipse.cdt.msvc.cl.inputType.164697995" superClass="org.eclipse.cdt.msvc.cl.inputType"/>
 </tool>
 <tool id="org.eclipse.cdt.msvc.rc.dll.release.323253830" name="Resource Compiler (rc)" superClass="org.eclipse.cdt.msvc.rc.dll.release">
@@ -621,6 +624,8 @@
 </profile>
 </scannerConfigBuildInfo>
 </storageModule>
+<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
+<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 </cconfiguration>
 </storageModule>
 <storageModule moduleId="cdtBuildSystem" version="4.0.0">

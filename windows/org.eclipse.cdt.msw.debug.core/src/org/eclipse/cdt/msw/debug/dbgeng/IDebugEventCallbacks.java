@@ -77,15 +77,15 @@ public class IDebugEventCallbacks {
     }
 
     protected int changeDebuggeeState(int flags, long argument) {
-		return DebugObjectFactory.S_OK;
+		return HRESULTException.S_OK;
 	}
 	
     protected int changeEngineState(int flags, long argument) {
-		return DebugObjectFactory.S_OK;
+		return HRESULTException.S_OK;
 	}
 
     protected int changeSymbolState(int flags, long argument) {
-		return DebugObjectFactory.S_OK;
+		return HRESULTException.S_OK;
 	}
 
 }

@@ -3,13 +3,17 @@ package org.eclipse.cdt.msw.debug.dbgeng;
 
 public class DebugObjectFactory {
 
-	public static final int S_OK = 0;
-	
 	public static IDebugClient createClient() throws HRESULTException {
 		return new IDebugClient(nativeCreateClient());
 	}
 
 	private native static long nativeCreateClient() throws HRESULTException;
+	
+	public static IDebugControl createControl() throws HRESULTException {
+		return new IDebugControl(nativeCreateControl());
+	}
+	
+	private native static long nativeCreateControl() throws HRESULTException;
 	
 	static {
 		// Make sure we load in the latest dbgeng and dbghelp from Debugging Tools for Windows
