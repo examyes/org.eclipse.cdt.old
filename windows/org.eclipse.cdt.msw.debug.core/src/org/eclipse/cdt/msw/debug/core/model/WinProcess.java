@@ -98,4 +98,8 @@ public class WinProcess implements IProcess {
 		terminated = true;
 	}
 
+	void terminated() {
+		terminated = true;
+	}
+	
 }
