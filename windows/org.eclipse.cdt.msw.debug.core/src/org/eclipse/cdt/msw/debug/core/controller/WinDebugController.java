@@ -106,10 +106,11 @@ public class WinDebugController extends Thread {
 					debugControl.waitForEvent(0, IDebugControl.INFINITE);
 				} catch (HRESULTException e) {
 					if (e.getHRESULT() == HRESULTException.E_UNEXPECTED) {
+						// No more targets
 						fireEvent(WinDebugEventType.TERMINATED);
 						go = false;
-					}
-					e.printStackTrace();
+					} else
+						e.printStackTrace();
 				}
 			}
 			
