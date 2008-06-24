@@ -6,7 +6,9 @@ import java.util.Map;
 import org.eclipse.cdt.msw.debug.core.controller.WinDebugController;
 import org.eclipse.cdt.msw.debug.dbgeng.DebugCreateProcessOptions;
 import org.eclipse.cdt.msw.debug.dbgeng.HRESULTException;
+import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
+import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStreamsProxy;
@@ -17,6 +19,7 @@ public class WinProcess implements IProcess {
 	private ILaunch launch;
 	private Map<String, String> attributes = new HashMap<String, String>();
 	private boolean terminated = false;
+	private int exitCode = 99;
 	private WinDebugController controller = WinDebugController.getController();
 	
 	public WinProcess(String command, String[] args, ILaunch launch) {
@@ -52,8 +55,7 @@ public class WinProcess implements IProcess {
 
 	@Override
 	public int getExitValue() throws DebugException {
-		// TODO Auto-generated method stub
-		return 0;
+		return exitCode;
 	}
 
 	@Override
@@ -84,7 +86,7 @@ public class WinProcess implements IProcess {
 
 	@Override
 	public boolean canTerminate() {
-		return true;
+		return !terminated;
 	}
 
 	@Override
@@ -98,8 +100,11 @@ public class WinProcess implements IProcess {
 		terminated = true;
 	}
 
-	void terminated() {
+	void terminated(int exitCode) {
 		terminated = true;
+		this.exitCode = exitCode;
+		DebugEvent event = new DebugEvent(this, DebugEvent.TERMINATE);
+		DebugPlugin.getDefault().fireDebugEventSet(new DebugEvent[] { event });
 	}
 	
 }

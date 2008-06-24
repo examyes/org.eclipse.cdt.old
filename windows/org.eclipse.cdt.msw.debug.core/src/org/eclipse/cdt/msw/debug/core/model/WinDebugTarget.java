@@ -1,9 +1,7 @@
 package org.eclipse.cdt.msw.debug.core.model;
 
 import org.eclipse.cdt.msw.debug.core.Activator;
-import org.eclipse.cdt.msw.debug.core.controller.IWinDebugListener;
 import org.eclipse.cdt.msw.debug.core.controller.WinDebugController;
-import org.eclipse.cdt.msw.debug.core.controller.WinDebugEventType;
 import org.eclipse.core.resources.IMarkerDelta;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.ILaunch;
@@ -14,7 +12,7 @@ import org.eclipse.debug.core.model.IMemoryBlock;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IThread;
 
-public class WinDebugTarget extends DebugElement implements IDebugTarget, IWinDebugListener {
+public class WinDebugTarget extends DebugElement implements IDebugTarget {
 
 	private final String name;
 	private final ILaunch launch;
@@ -28,7 +26,7 @@ public class WinDebugTarget extends DebugElement implements IDebugTarget, IWinDe
 		this.name = name;
 		this.launch = launch;
 		this.process = process;
-		controller.addListener(this);
+		controller.getDebugClient().setEventCallbacks(new WinDebugEventCallbacks(this));
 	}
 
 	@Override
@@ -136,7 +134,7 @@ public class WinDebugTarget extends DebugElement implements IDebugTarget, IWinDe
 
 	@Override
 	public boolean canTerminate() {
-		return true;
+		return !terminated;
 	}
 
 	@Override
@@ -168,15 +166,10 @@ public class WinDebugTarget extends DebugElement implements IDebugTarget, IWinDe
 		return false;
 	}
 
-	@Override
-	public void handleEvent(WinDebugEventType type, WinDebugController controller) {
-		switch (type) {
-		case TERMINATED:
-			terminated = true;
-			process.terminated();
-			fireTerminateEvent();
-			controller.removeListener(this);
-		}
+	public void exitProcess(int exitCode) {
+		terminated = true;
+		process.terminated(exitCode);
+		fireTerminateEvent();
 	}
 	
 }

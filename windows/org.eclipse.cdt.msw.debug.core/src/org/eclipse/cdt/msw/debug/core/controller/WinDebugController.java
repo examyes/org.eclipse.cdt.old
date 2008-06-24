@@ -4,7 +4,6 @@
 package org.eclipse.cdt.msw.debug.core.controller;
 
 import java.util.LinkedList;
-import java.util.List;
 
 import org.eclipse.cdt.msw.debug.dbgeng.DebugObjectFactory;
 import org.eclipse.cdt.msw.debug.dbgeng.HRESULTException;
@@ -20,7 +19,6 @@ public class WinDebugController extends Thread {
 	private static Object mutex = new Object();
 	private static WinDebugController controller;
 	
-	private List<IWinDebugListener> listeners = new LinkedList<IWinDebugListener>();
 	private LinkedList<Runnable> commandQueue = new LinkedList<Runnable>();
 	private boolean go = false;
 	private IDebugClient debugClient;
@@ -31,6 +29,12 @@ public class WinDebugController extends Thread {
 			if (controller == null) {
 				controller = new WinDebugController();
 				controller.start();
+				try {
+					mutex.wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			return controller;
 		}
@@ -58,27 +62,6 @@ public class WinDebugController extends Thread {
 		}
 	}
 	
-	public void addListener(IWinDebugListener listener) {
-		synchronized (listeners) {
-			listeners.add(listener);
-		}
-	}
-
-	public void removeListener(IWinDebugListener listener) {
-		synchronized (listeners) {
-			listeners.remove(listener);
-		}
-	}
-	
-	private void fireEvent(WinDebugEventType type) {
-		List<IWinDebugListener> l = new LinkedList<IWinDebugListener>();
-		synchronized (listeners) {
-			l.addAll(listeners);
-		}
-		for (IWinDebugListener listener : l)
-			listener.handleEvent(type, this);
-	}
-	
 	public IDebugClient getDebugClient() {
 		return debugClient;
 	}
@@ -97,7 +80,12 @@ public class WinDebugController extends Thread {
 			debugClient = DebugObjectFactory.createClient();
 			debugControl = DebugObjectFactory.createControl();
 		} catch (HRESULTException e) {
-			
+			// TODO uh, oh
+		}
+		
+		// let the starter go
+		synchronized (mutex) {
+			mutex.notify();
 		}
 		
 		while (true) {
@@ -106,8 +94,7 @@ public class WinDebugController extends Thread {
 					debugControl.waitForEvent(0, IDebugControl.INFINITE);
 				} catch (HRESULTException e) {
 					if (e.getHRESULT() == HRESULTException.E_UNEXPECTED) {
-						// No more targets
-						fireEvent(WinDebugEventType.TERMINATED);
+						// No more targets, set go to false to make sure or we'll be looping for a while
 						go = false;
 					} else
 						e.printStackTrace();
