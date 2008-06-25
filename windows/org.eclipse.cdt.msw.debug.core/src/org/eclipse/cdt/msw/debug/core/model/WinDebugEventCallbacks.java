@@ -3,18 +3,21 @@ package org.eclipse.cdt.msw.debug.core.model;
 import org.eclipse.cdt.msw.debug.dbgeng.DebugEvent;
 import org.eclipse.cdt.msw.debug.dbgeng.DebugStatus;
 import org.eclipse.cdt.msw.debug.dbgeng.IDebugEventCallbacks;
+import org.eclipse.debug.core.ILaunch;
 
 public class WinDebugEventCallbacks extends IDebugEventCallbacks {
 
-	private final WinDebugTarget target;
+	private final ILaunch launch;
+	private WinDebugTarget target;
 	
-	public WinDebugEventCallbacks(WinDebugTarget target) {
-		this.target = target;
+	public WinDebugEventCallbacks(ILaunch launch) {
+		this.launch = launch;
 	}
 
 	@Override
 	protected int getInterestMask() {
-		return DebugEvent.EXIT_PROCESS;
+		return DebugEvent.CREATE_PROCESS
+			 | DebugEvent.EXIT_PROCESS;
 	}
 	
 	@Override
@@ -22,6 +25,11 @@ public class WinDebugEventCallbacks extends IDebugEventCallbacks {
 			long baseOffset, int moduleSize, String moduleName,
 			String imageName, int checkSum, int timeDateStamp,
 			long initialThreadHandle, long threadDataOffset, long startOffset) {
+		WinProcess process = new WinProcess(imageName, launch);
+		launch.addProcess(process);
+		
+		target = new WinDebugTarget("Windows Debugger", launch, process);
+		launch.addDebugTarget(target);
 		return DebugStatus.NO_CHANGE;
 	}
 	

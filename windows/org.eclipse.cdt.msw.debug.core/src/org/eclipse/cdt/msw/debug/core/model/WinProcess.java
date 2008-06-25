@@ -3,9 +3,6 @@ package org.eclipse.cdt.msw.debug.core.model;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.cdt.msw.debug.core.controller.WinDebugController;
-import org.eclipse.cdt.msw.debug.dbgeng.DebugCreateProcessOptions;
-import org.eclipse.cdt.msw.debug.dbgeng.HRESULTException;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
@@ -20,32 +17,11 @@ public class WinProcess implements IProcess {
 	private Map<String, String> attributes = new HashMap<String, String>();
 	private boolean terminated = false;
 	private int exitCode = 99;
-	private WinDebugController controller = WinDebugController.getController();
 	
-	public WinProcess(String command, String[] args, ILaunch launch) {
+	public WinProcess(String command, ILaunch launch) {
 		label = command;
 		this.launch = launch;
-		
-		StringBuffer cmdLineBuff = new StringBuffer(command);
-		if (args != null)
-			for (String arg : args) {
-				cmdLineBuff.append(' ');
-				cmdLineBuff.append(arg);
-			}
-		
-		final String cmdLine = cmdLineBuff.toString(); 
-		controller.enqueueCommand(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					controller.getDebugClient().createProcess(0, cmdLine,
-							DebugCreateProcessOptions.DEBUG_PROCESS);
-					controller.go();
-				} catch (HRESULTException e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		created();
 	}
 	
 	@Override
@@ -100,6 +76,11 @@ public class WinProcess implements IProcess {
 		terminated = true;
 	}
 
+	void created() {
+		DebugEvent event = new DebugEvent(this, DebugEvent.CREATE);
+		DebugPlugin.getDefault().fireDebugEventSet(new DebugEvent[] { event });
+	}
+	
 	void terminated(int exitCode) {
 		terminated = true;
 		this.exitCode = exitCode;

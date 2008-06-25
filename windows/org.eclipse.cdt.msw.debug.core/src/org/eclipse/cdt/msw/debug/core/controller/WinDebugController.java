@@ -5,6 +5,7 @@ package org.eclipse.cdt.msw.debug.core.controller;
 
 import java.util.LinkedList;
 
+import org.eclipse.cdt.msw.debug.dbgeng.DebugInterrupt;
 import org.eclipse.cdt.msw.debug.dbgeng.DebugObjectFactory;
 import org.eclipse.cdt.msw.debug.dbgeng.HRESULTException;
 import org.eclipse.cdt.msw.debug.dbgeng.IDebugClient;
@@ -23,7 +24,7 @@ public class WinDebugController extends Thread {
 	private boolean go = false;
 	private IDebugClient debugClient;
 	private IDebugControl debugControl;
-	
+
 	public static WinDebugController getController() {
 		synchronized (mutex) {
 			if (controller == null) {
@@ -40,10 +41,21 @@ public class WinDebugController extends Thread {
 		}
 	}
 	
+	public WinDebugController() {
+		super("Windows Debugger");
+	}
+	
 	public void enqueueCommand(Runnable command) {
 		synchronized (commandQueue) {
 			commandQueue.add(command);
 			commandQueue.notify();
+			try {
+				controller.getDebugControl().setInterrupt(DebugInterrupt.PASSIVE);
+			} catch (HRESULTException e) {
+				if (e.getHRESULT() != HRESULTException.E_UNEXPECTED)
+					// We'll get unexpected if the target is isn't ready which is OK.
+					e.printStackTrace();
+			}
 		}
 	}
 	
@@ -92,16 +104,20 @@ public class WinDebugController extends Thread {
 			if (go) {
 				try {
 					debugControl.waitForEvent(0, IDebugControl.INFINITE);
+					
+					// clear the interrupt
+					debugControl.getInterrupt();
 				} catch (HRESULTException e) {
 					if (e.getHRESULT() == HRESULTException.E_UNEXPECTED) {
 						// No more targets, set go to false to make sure or we'll be looping for a while
 						go = false;
+					} else if (e.getHRESULT() == HRESULTException.E_PENDING) {
+						// No worries, this usually only happens when we interrupt the wait to run a command
+						// Do nothing
 					} else
 						e.printStackTrace();
 				}
 			}
-			
-			// TODO Send out notifications of why we stopped??
 			
 			Runnable command = dequeueCommand(!go);
 			while (command != null) {

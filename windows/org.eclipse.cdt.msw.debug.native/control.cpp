@@ -18,3 +18,18 @@ NATIVE(void, nativeSetExecutionStatus)(JNIEnv * env, jclass cls, jlong object, j
 	if (FAILED(hr))
 		throwHRESULT(env, hr);
 }
+
+NATIVE(void, nativeSetInterrupt)(JNIEnv * env, jclass cls, jlong object, jint flags) {
+	IDebugControl4 * control = (IDebugControl4 *)object;
+	HRESULT hr = control->SetInterrupt(flags);
+	if (FAILED(hr))
+		throwHRESULT(env, hr);
+}
+
+NATIVE(jint, nativeGetInterrupt)(JNIEnv * env, jclass cls, jobject object) {
+	IDebugControl4 * control = (IDebugControl4 *)object;
+	HRESULT hr = control->GetInterrupt();
+	if (FAILED(hr))
+		throwHRESULT(env, hr);
+	return hr;
+}

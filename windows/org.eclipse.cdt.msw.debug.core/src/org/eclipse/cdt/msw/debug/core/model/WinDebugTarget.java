@@ -1,7 +1,6 @@
 package org.eclipse.cdt.msw.debug.core.model;
 
 import org.eclipse.cdt.msw.debug.core.Activator;
-import org.eclipse.cdt.msw.debug.core.controller.WinDebugController;
 import org.eclipse.core.resources.IMarkerDelta;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.ILaunch;
@@ -17,7 +16,6 @@ public class WinDebugTarget extends DebugElement implements IDebugTarget {
 	private final String name;
 	private final ILaunch launch;
 	private final WinProcess process;
-	private final WinDebugController controller = WinDebugController.getController();
 	
 	private boolean terminated = false;
 	
@@ -26,7 +24,6 @@ public class WinDebugTarget extends DebugElement implements IDebugTarget {
 		this.name = name;
 		this.launch = launch;
 		this.process = process;
-		controller.getDebugClient().setEventCallbacks(new WinDebugEventCallbacks(this));
 	}
 
 	@Override

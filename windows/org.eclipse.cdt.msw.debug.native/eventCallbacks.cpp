@@ -3,7 +3,7 @@
 
 class CDTDebugEventCallbacks : public DebugBaseEventCallbacksWide {
 private:
-	JNIEnv * env;
+	JavaVM * vm;
 	jobject object;
 	jmethodID getInterestMaskID;
 	jmethodID breakpointID;
@@ -21,8 +21,8 @@ private:
 	jmethodID changeSymbolStateID;
 
 public:
-	CDTDebugEventCallbacks(JNIEnv * _env, jobject _object) {
-		env = _env;
+	CDTDebugEventCallbacks(JNIEnv * env, jobject _object) {
+		env->GetJavaVM(&vm);
 		object = env->NewGlobalRef(_object);
 
 		jclass cls = env->GetObjectClass(object);
@@ -45,7 +45,13 @@ public:
 	}
 
 	~CDTDebugEventCallbacks() {
-		env->DeleteGlobalRef(object);
+		getEnv()->DeleteGlobalRef(object);
+	}
+
+	JNIEnv * getEnv() {
+		JNIEnv * env;
+		vm->AttachCurrentThread((void **)&env, NULL);
+		return env;
 	}
 
 	// We don't need to reference count since we keep a handle on this object in Java land
@@ -59,29 +65,30 @@ public:
     }
 
     STDMETHOD(GetInterestMask)(PULONG mask) {
-    	*mask = env->CallIntMethod(object, getInterestMaskID);
+    	*mask = getEnv()->CallIntMethod(object, getInterestMaskID);
     	return S_OK;
     }
 
     STDMETHOD(Breakpoint)(PDEBUG_BREAKPOINT2 bp) {
-    	return env->CallIntMethod(object, breakpointID, (jlong)bp);
+    	return getEnv()->CallIntMethod(object, breakpointID, (jlong)bp);
     }
 
     STDMETHOD(Exception)(PEXCEPTION_RECORD64 exception, ULONG firstChance) {
-    	return env->CallIntMethod(object, exceptionID, (jlong)exception, firstChance);
+    	return getEnv()->CallIntMethod(object, exceptionID, (jlong)exception, firstChance);
     }
 
     STDMETHOD(CreateThread)(ULONG64 handle, ULONG64 dataOffset, ULONG64 startOffset) {
-    	return env->CallIntMethod(object, createThreadID, (jlong)handle, (jlong)dataOffset, (jlong)startOffset);
+    	return getEnv()->CallIntMethod(object, createThreadID, (jlong)handle, (jlong)dataOffset, (jlong)startOffset);
     }
 
     STDMETHOD(ExitThread)(ULONG exitCode) {
-    	return env->CallIntMethod(object, exitThreadID, exitCode);
+    	return getEnv()->CallIntMethod(object, exitThreadID, exitCode);
     }
 
     STDMETHOD(CreateProcess)(ULONG64 imageFileHandle, ULONG64 handle, ULONG64 baseOffset,
     		ULONG moduleSize, PCWSTR moduleName, PCWSTR imageName, ULONG checkSum, ULONG timeDateStamp,
     		ULONG64 initialThreadHandle, ULONG64 threadDataOffset, ULONG64 startOffset) {
+    	JNIEnv * env = getEnv();
     	jstring moduleNameStr = env->NewString((const jchar *)moduleName, wcslen(moduleName));
     	jstring imageNameStr = env->NewString((const jchar *)imageName, wcslen(imageName));
     	return env->CallIntMethod(object, createProcessID, (jlong)imageFileHandle, (jlong)handle,
@@ -90,11 +97,12 @@ public:
     }
 
     STDMETHOD(ExitProcess)(ULONG exitCode) {
-    	return env->CallIntMethod(object, exitProcessID, exitCode);
+    	return getEnv()->CallIntMethod(object, exitProcessID, exitCode);
     }
 
     STDMETHOD(LoadModule)(ULONG64 imageFileHandle, ULONG64 baseOffset, ULONG moduleSize,
     		PCWSTR moduleName, PCWSTR imageName, ULONG checkSum, ULONG timeDateStamp) {
+    	JNIEnv * env = getEnv();
     	jstring moduleNameStr = env->NewString((const jchar *)moduleName, wcslen(moduleName));
     	jstring imageNameStr = env->NewString((const jchar *)imageName, wcslen(imageName));
     	return env->CallIntMethod(object, loadModuleID, (jlong)imageFileHandle, (jlong)baseOffset,
@@ -102,28 +110,29 @@ public:
     }
 
     STDMETHOD(UnloadModule)(PCWSTR imageBaseName, ULONG64 baseOffset) {
+    	JNIEnv * env = getEnv();
     	jstring imageBaseNameStr = env->NewString((const jchar *)imageBaseName, wcslen(imageBaseName));
     	return env->CallIntMethod(object, unloadModuleID, imageBaseNameStr, (jlong)baseOffset);
     }
 
     STDMETHOD(SystemError)(ULONG error, ULONG level) {
-    	return env->CallIntMethod(object, systemErrorID, error, level);
+    	return getEnv()->CallIntMethod(object, systemErrorID, error, level);
     }
 
     STDMETHOD(SessionStatus)(ULONG status) {
-    	return env->CallIntMethod(object, sessionStatusID, status);
+    	return getEnv()->CallIntMethod(object, sessionStatusID, status);
     }
 
     STDMETHOD(ChangeDebuggeeState)(ULONG flags, ULONG64 argument) {
-    	return env->CallIntMethod(object, changeDebuggeeStateID, flags, (jlong)argument);
+    	return getEnv()->CallIntMethod(object, changeDebuggeeStateID, flags, (jlong)argument);
     }
 
     STDMETHOD(ChangeEngineState)(ULONG flags, ULONG64 argument) {
-    	return env->CallIntMethod(object, changeEngineStateID, flags, argument);
+    	return getEnv()->CallIntMethod(object, changeEngineStateID, flags, argument);
     }
 
     STDMETHOD(ChangeSymbolState)(ULONG flags, ULONG64 argument) {
-    	return env->CallIntMethod(object, changeSymbolStateID, flags, argument);
+    	return getEnv()->CallIntMethod(object, changeSymbolStateID, flags, argument);
     }
 
 };

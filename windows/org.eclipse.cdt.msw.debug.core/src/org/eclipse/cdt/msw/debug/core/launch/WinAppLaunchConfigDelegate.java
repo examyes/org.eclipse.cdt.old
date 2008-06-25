@@ -1,7 +1,9 @@
 package org.eclipse.cdt.msw.debug.core.launch;
 
-import org.eclipse.cdt.msw.debug.core.model.WinDebugTarget;
-import org.eclipse.cdt.msw.debug.core.model.WinProcess;
+import org.eclipse.cdt.msw.debug.core.controller.WinDebugController;
+import org.eclipse.cdt.msw.debug.core.model.WinDebugEventCallbacks;
+import org.eclipse.cdt.msw.debug.dbgeng.DebugCreateProcessOptions;
+import org.eclipse.cdt.msw.debug.dbgeng.HRESULTException;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.DebugPlugin;
@@ -42,11 +44,29 @@ public class WinAppLaunchConfigDelegate implements ILaunchConfigurationDelegate 
 	}
 	
 	private void debugLaunch(ILaunchConfiguration configuration, ILaunch launch, IProgressMonitor monitor) {
-		WinProcess process = new WinProcess(getCommand(configuration), getArguments(configuration), launch);
-		launch.addProcess(process);
+		StringBuffer cmdLineBuff = new StringBuffer(getCommand(configuration));
+		String[] args = getArguments(configuration);
+		if (args != null)
+			for (String arg : args) {
+				cmdLineBuff.append(' ');
+				cmdLineBuff.append(arg);
+			}
 		
-		WinDebugTarget target = new WinDebugTarget("Windows Debugger", launch, process);
-		launch.addDebugTarget(target);
+		final String cmdLine = cmdLineBuff.toString();
+		final WinDebugController controller = WinDebugController.getController();
+		controller.getDebugClient().setEventCallbacks(new WinDebugEventCallbacks(launch));
+		controller.enqueueCommand(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					controller.getDebugClient().createProcess(0, cmdLine,
+							DebugCreateProcessOptions.DEBUG_PROCESS);
+					controller.go();
+				} catch (HRESULTException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 	
 	
