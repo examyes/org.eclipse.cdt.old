@@ -66,7 +66,7 @@ public class WinAppLaunchConfigDelegate implements ILaunchConfigurationDelegate 
 				try {
 					controller.getDebugClient().createProcess(0, cmdLine,
 							DebugCreateProcessOptions.DEBUG_PROCESS);
-					controller.go();
+					controller.go(true);
 				} catch (HRESULTException e) {
 					e.printStackTrace();
 				}

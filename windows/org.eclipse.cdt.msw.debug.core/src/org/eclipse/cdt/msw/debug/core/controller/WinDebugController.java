@@ -4,7 +4,9 @@
 package org.eclipse.cdt.msw.debug.core.controller;
 
 import java.util.LinkedList;
+import java.util.List;
 
+import org.eclipse.cdt.msw.debug.core.model.WinDebugTarget;
 import org.eclipse.cdt.msw.debug.dbgeng.DebugInterrupt;
 import org.eclipse.cdt.msw.debug.dbgeng.DebugObjectFactory;
 import org.eclipse.cdt.msw.debug.dbgeng.HRESULTException;
@@ -26,6 +28,8 @@ public class WinDebugController extends Thread {
 	private IDebugClient debugClient;
 	private IDebugControl debugControl;
 	private IDebugSystemObjects debugSystemObjects;
+	
+	private List<WinDebugTarget> targets = new LinkedList<WinDebugTarget>();
 
 	public static WinDebugController getController() {
 		synchronized (mutex) {
@@ -45,6 +49,24 @@ public class WinDebugController extends Thread {
 	
 	public WinDebugController() {
 		super("Windows Debugger");
+	}
+	
+	public void addTarget(WinDebugTarget target) {
+		synchronized (targets) {
+			targets.add(target);
+		}
+	}
+	
+	public void removeTarget(WinDebugTarget target) {
+		synchronized (targets) {
+			targets.remove(target);
+		}
+	}
+	
+	public WinDebugTarget[] getTargets() {
+		synchronized (targets) {
+			return targets.toArray(new WinDebugTarget[targets.size()]);
+		}
 	}
 	
 	public void enqueueCommand(Runnable command) {
@@ -88,8 +110,8 @@ public class WinDebugController extends Thread {
 		return debugSystemObjects;
 	}
 	
-	public void go() {
-		go = true;
+	public void go(boolean go) {
+		this.go = go;
 	}
 	
 	@Override
