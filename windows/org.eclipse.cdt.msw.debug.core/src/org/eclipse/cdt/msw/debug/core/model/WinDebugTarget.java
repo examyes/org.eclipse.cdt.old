@@ -141,8 +141,7 @@ public class WinDebugTarget extends DebugElement implements IDebugTarget {
 
 	@Override
 	public void terminate() throws DebugException {
-		// TODO Auto-generated method stub
-		
+		process.terminate();
 	}
 
 	@Override

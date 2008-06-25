@@ -2,9 +2,20 @@ package org.eclipse.cdt.msw.debug.dbgeng;
 
 public class IDebugSystemObjects extends DebugObject {
 
-	public IDebugSystemObjects(long p) {
+	IDebugSystemObjects(long p) {
 		super(p);
-		// TODO Auto-generated constructor stub
 	}
 
+	public int getProcessIdByHandle(long handle) throws HRESULTException {
+		return nativeGetProcessIdByHandle(p, handle);
+	}
+	
+	private static native int nativeGetProcessIdByHandle(long p, long handle) throws HRESULTException;
+	
+	public void setCurrentProcessId(int id) throws HRESULTException  {
+		nativeSetCurrentProcessId(p, id);
+	}
+	
+	private static native void nativeSetCurrentProcessId(long p, int id) throws HRESULTException;
+	
 }

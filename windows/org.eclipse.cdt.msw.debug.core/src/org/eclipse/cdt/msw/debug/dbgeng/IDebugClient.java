@@ -14,9 +14,15 @@ public class IDebugClient extends DebugObject {
 	private static native void nativeCreateProcess(long p, long server, String commandLine,
 			int createFlags) throws HRESULTException;
 
-	public void setEventCallbacks(IDebugEventCallbacks callbacks) {
+	public void setEventCallbacks(IDebugEventCallbacks callbacks) throws HRESULTException {
 		nativeSetEventCallbacks(p, callbacks.p);
 	}
 	
-	private static native void nativeSetEventCallbacks(long p, long callbacks);
+	private static native void nativeSetEventCallbacks(long p, long callbacks) throws HRESULTException;
+	
+	public void terminateCurrentProcess() throws HRESULTException {
+		nativeTerminateCurrentProcess(p);
+	}
+	
+	private static native void nativeTerminateCurrentProcess(long p) throws HRESULTException;
 }

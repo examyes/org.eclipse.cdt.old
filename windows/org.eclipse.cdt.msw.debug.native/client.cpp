@@ -24,3 +24,10 @@ NATIVE(void, nativeSetEventCallbacks)(JNIEnv * env, jclass cls, jlong p, jlong c
 	if (FAILED(hr))
 		throwHRESULT(env, hr);
 }
+
+NATIVE(void, nativeTerminateCurrentProcess)(JNIEnv * env, jclass cls, jlong p) {
+	IDebugClient5 * client = (IDebugClient5 *)p;
+	HRESULT hr = client->TerminateCurrentProcess();
+	if (FAILED(hr))
+		throwHRESULT(env, hr);
+}

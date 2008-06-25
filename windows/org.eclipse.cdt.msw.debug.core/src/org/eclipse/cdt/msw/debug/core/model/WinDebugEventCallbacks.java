@@ -25,7 +25,7 @@ public class WinDebugEventCallbacks extends IDebugEventCallbacks {
 			long baseOffset, int moduleSize, String moduleName,
 			String imageName, int checkSum, int timeDateStamp,
 			long initialThreadHandle, long threadDataOffset, long startOffset) {
-		WinProcess process = new WinProcess(imageName, launch);
+		WinProcess process = new WinProcess(imageName, launch, handle);
 		launch.addProcess(process);
 		
 		target = new WinDebugTarget("Windows Debugger", launch, process);

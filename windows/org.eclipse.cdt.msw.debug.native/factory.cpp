@@ -23,3 +23,13 @@ NATIVE(jlong, nativeCreateControl)(JNIEnv * env, jclass cls) {
 	}
 	return (jlong)control;
 }
+
+NATIVE(jlong, nativeCreateSystemObjects)(JNIEnv * env, jclass cls) {
+	void * systemObjects;
+	HRESULT hr = DebugCreate(__uuidof(IDebugSystemObjects4), &systemObjects);
+	if (FAILED(hr)) {
+		throwHRESULT(env, hr);
+		return NULL;
+	}
+	return (jlong)systemObjects;
+}

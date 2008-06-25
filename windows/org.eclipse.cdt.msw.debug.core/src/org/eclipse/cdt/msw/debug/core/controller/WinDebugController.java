@@ -10,6 +10,7 @@ import org.eclipse.cdt.msw.debug.dbgeng.DebugObjectFactory;
 import org.eclipse.cdt.msw.debug.dbgeng.HRESULTException;
 import org.eclipse.cdt.msw.debug.dbgeng.IDebugClient;
 import org.eclipse.cdt.msw.debug.dbgeng.IDebugControl;
+import org.eclipse.cdt.msw.debug.dbgeng.IDebugSystemObjects;
 
 /**
  * @author DSchaefe
@@ -24,6 +25,7 @@ public class WinDebugController extends Thread {
 	private boolean go = false;
 	private IDebugClient debugClient;
 	private IDebugControl debugControl;
+	private IDebugSystemObjects debugSystemObjects;
 
 	public static WinDebugController getController() {
 		synchronized (mutex) {
@@ -50,7 +52,7 @@ public class WinDebugController extends Thread {
 			commandQueue.add(command);
 			commandQueue.notify();
 			try {
-				controller.getDebugControl().setInterrupt(DebugInterrupt.PASSIVE);
+				controller.getDebugControl().setInterrupt(DebugInterrupt.ACTIVE);
 			} catch (HRESULTException e) {
 				if (e.getHRESULT() != HRESULTException.E_UNEXPECTED)
 					// We'll get unexpected if the target is isn't ready which is OK.
@@ -82,6 +84,10 @@ public class WinDebugController extends Thread {
 		return debugControl;
 	}
 	
+	public IDebugSystemObjects getDebugSystemObjects() {
+		return debugSystemObjects;
+	}
+	
 	public void go() {
 		go = true;
 	}
@@ -91,6 +97,7 @@ public class WinDebugController extends Thread {
 		try {
 			debugClient = DebugObjectFactory.createClient();
 			debugControl = DebugObjectFactory.createControl();
+			debugSystemObjects = DebugObjectFactory.createSystemObjects();
 		} catch (HRESULTException e) {
 			// TODO uh, oh
 		}

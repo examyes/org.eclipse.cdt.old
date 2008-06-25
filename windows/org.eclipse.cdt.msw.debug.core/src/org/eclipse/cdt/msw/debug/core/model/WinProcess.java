@@ -3,6 +3,10 @@ package org.eclipse.cdt.msw.debug.core.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.cdt.msw.debug.core.controller.WinDebugController;
+import org.eclipse.cdt.msw.debug.dbgeng.HRESULTException;
+import org.eclipse.cdt.msw.debug.dbgeng.IDebugClient;
+import org.eclipse.cdt.msw.debug.dbgeng.IDebugSystemObjects;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
@@ -14,13 +18,16 @@ public class WinProcess implements IProcess {
 
 	private String label;
 	private ILaunch launch;
+	private long handle;
 	private Map<String, String> attributes = new HashMap<String, String>();
+	private boolean canTerminate = true;
 	private boolean terminated = false;
 	private int exitCode = 99;
 	
-	public WinProcess(String command, ILaunch launch) {
+	public WinProcess(String command, ILaunch launch, long handle) {
 		label = command;
 		this.launch = launch;
+		this.handle = handle;
 		created();
 	}
 	
@@ -62,7 +69,7 @@ public class WinProcess implements IProcess {
 
 	@Override
 	public boolean canTerminate() {
-		return !terminated;
+		return canTerminate;
 	}
 
 	@Override
@@ -72,8 +79,23 @@ public class WinProcess implements IProcess {
 
 	@Override
 	public void terminate() throws DebugException {
-		// TODO 
-		terminated = true;
+		canTerminate = false;
+		final WinDebugController controller = WinDebugController.getController();
+		controller.enqueueCommand(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					IDebugSystemObjects systemObjects = controller.getDebugSystemObjects();
+					int pid = systemObjects.getProcessIdByHandle(handle);
+					systemObjects.setCurrentProcessId(pid);
+					
+					IDebugClient client = controller.getDebugClient();
+					client.terminateCurrentProcess();
+				} catch (HRESULTException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
 	void created() {
@@ -83,6 +105,7 @@ public class WinProcess implements IProcess {
 	
 	void terminated(int exitCode) {
 		terminated = true;
+		canTerminate = false;
 		this.exitCode = exitCode;
 		DebugEvent event = new DebugEvent(this, DebugEvent.TERMINATE);
 		DebugPlugin.getDefault().fireDebugEventSet(new DebugEvent[] { event });

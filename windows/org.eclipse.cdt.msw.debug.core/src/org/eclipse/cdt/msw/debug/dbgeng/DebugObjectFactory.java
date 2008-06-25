@@ -7,13 +7,19 @@ public class DebugObjectFactory {
 		return new IDebugClient(nativeCreateClient());
 	}
 
-	private native static long nativeCreateClient() throws HRESULTException;
+	private static native long nativeCreateClient() throws HRESULTException;
 	
 	public static IDebugControl createControl() throws HRESULTException {
 		return new IDebugControl(nativeCreateControl());
 	}
 	
-	private native static long nativeCreateControl() throws HRESULTException;
+	private static native long nativeCreateControl() throws HRESULTException;
+	
+	public static IDebugSystemObjects createSystemObjects() throws HRESULTException {
+		return new IDebugSystemObjects(nativeCreateSystemObjects());
+	}
+	
+	private static native long nativeCreateSystemObjects() throws HRESULTException;
 	
 	static {
 		// Make sure we load in the latest dbgeng and dbghelp from Debugging Tools for Windows

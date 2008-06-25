@@ -26,7 +26,7 @@ NATIVE(void, nativeSetInterrupt)(JNIEnv * env, jclass cls, jlong object, jint fl
 		throwHRESULT(env, hr);
 }
 
-NATIVE(jint, nativeGetInterrupt)(JNIEnv * env, jclass cls, jobject object) {
+NATIVE(jint, nativeGetInterrupt)(JNIEnv * env, jclass cls, jlong object) {
 	IDebugControl4 * control = (IDebugControl4 *)object;
 	HRESULT hr = control->GetInterrupt();
 	if (FAILED(hr))
