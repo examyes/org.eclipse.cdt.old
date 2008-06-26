@@ -17,5 +17,10 @@ public class IDebugSystemObjects extends DebugObject {
 	}
 	
 	private static native void nativeSetCurrentProcessId(long p, int id) throws HRESULTException;
+
+	public long getCurrentProcessHandle() throws HRESULTException {
+		return nativeGetCurrentProcessHandle(p);
+	}
 	
+	private static native long nativeGetCurrentProcessHandle(long p) throws HRESULTException;
 }

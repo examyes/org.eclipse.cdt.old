@@ -1,17 +1,18 @@
 package org.eclipse.cdt.msw.debug.core.model;
 
+import org.eclipse.cdt.msw.debug.core.controller.WinDebugController;
 import org.eclipse.cdt.msw.debug.dbgeng.DebugEvent;
 import org.eclipse.cdt.msw.debug.dbgeng.DebugStatus;
+import org.eclipse.cdt.msw.debug.dbgeng.HRESULTException;
 import org.eclipse.cdt.msw.debug.dbgeng.IDebugEventCallbacks;
 import org.eclipse.debug.core.ILaunch;
+import org.eclipse.debug.core.model.IDebugTarget;
 
 public class WinDebugEventCallbacks extends IDebugEventCallbacks {
 
-	private final ILaunch launch;
-	private WinDebugTarget target;
+	private ILaunch currentLaunch;
 	
-	public WinDebugEventCallbacks(ILaunch launch) {
-		this.launch = launch;
+	public WinDebugEventCallbacks() {
 	}
 
 	@Override
@@ -20,22 +21,35 @@ public class WinDebugEventCallbacks extends IDebugEventCallbacks {
 			 | DebugEvent.EXIT_PROCESS;
 	}
 	
+	public void setCurrentLaunch(ILaunch launch) {
+		currentLaunch = launch;
+	}
+	
 	@Override
 	protected int createProcess(long imageFileHandle, long handle,
 			long baseOffset, int moduleSize, String moduleName,
 			String imageName, int checkSum, int timeDateStamp,
 			long initialThreadHandle, long threadDataOffset, long startOffset) {
-		WinProcess process = new WinProcess(imageName, launch, handle);
-		launch.addProcess(process);
+		WinProcess process = new WinProcess(imageName, currentLaunch, handle);
+		currentLaunch.addProcess(process);
 		
-		target = new WinDebugTarget("Windows Debugger", launch, process);
-		launch.addDebugTarget(target);
+		IDebugTarget target = new WinDebugTarget("Windows Debugger", currentLaunch, process);
+		currentLaunch.addDebugTarget(target);
 		return DebugStatus.NO_CHANGE;
 	}
 	
 	@Override
 	protected int exitProcess(int exitCode) {
-		target.exitProcess(exitCode);
+		WinDebugController controller = WinDebugController.getController(); 
+		long currProcess;
+		try {
+			currProcess = controller.getDebugSystemObjects().getCurrentProcessHandle();
+			for (WinDebugTarget target : controller.getTargets())
+				if (target.getProcessHandle() == currProcess)
+					target.exitProcess(exitCode);
+		} catch (HRESULTException e) {
+			e.printStackTrace();
+		}
 		return DebugStatus.NO_CHANGE;
 	}
 	

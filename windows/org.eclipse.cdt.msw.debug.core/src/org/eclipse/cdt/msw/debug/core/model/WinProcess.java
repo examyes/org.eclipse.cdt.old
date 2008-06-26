@@ -31,6 +31,10 @@ public class WinProcess implements IProcess {
 		created();
 	}
 	
+	public long getHandle() {
+		return handle;
+	}
+	
 	@Override
 	public String getAttribute(String key) {
 		return attributes.get(key);

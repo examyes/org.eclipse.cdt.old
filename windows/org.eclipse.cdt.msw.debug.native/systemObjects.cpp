@@ -19,3 +19,12 @@ NATIVE(void, nativeSetCurrentProcessId)(JNIEnv * env, jclass cls, jlong object, 
 	if (FAILED(hr))
 		throwHRESULT(env, hr);
 }
+
+NATIVE(jlong, nativeGetCurrentProcessHandle)(JNIEnv * env, jclass cls, jlong object) {
+	IDebugSystemObjects4 * systemObjects = (IDebugSystemObjects4 *)object;
+	ULONG64 handle;
+	HRESULT hr = systemObjects->GetCurrentProcessHandle(&handle);
+	if (FAILED(hr))
+		throwHRESULT(env, hr);
+	return handle;
+}

@@ -54,12 +54,7 @@ public class WinAppLaunchConfigDelegate implements ILaunchConfigurationDelegate 
 		
 		final String cmdLine = cmdLineBuff.toString();
 		final WinDebugController controller = WinDebugController.getController();
-		try {
-			controller.getDebugClient().setEventCallbacks(new WinDebugEventCallbacks(launch));
-		} catch (HRESULTException e1) {
-			e1.printStackTrace();
-		}
-		
+		controller.getDebugEventCallbacks().setCurrentLaunch(launch);
 		controller.enqueueCommand(new Runnable() {
 			@Override
 			public void run() {

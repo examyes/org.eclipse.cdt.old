@@ -31,6 +31,10 @@ public class WinDebugTarget extends DebugElement implements IDebugTarget {
 		WinDebugController.getController().addTarget(this);
 	}
 
+	public long getProcessHandle() {
+		return process.getHandle();
+	}
+	
 	@Override
 	public IDebugTarget getDebugTarget() {
 		return this;

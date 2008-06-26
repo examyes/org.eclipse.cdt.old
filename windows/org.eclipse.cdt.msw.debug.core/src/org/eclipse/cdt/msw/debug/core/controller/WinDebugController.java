@@ -6,6 +6,7 @@ package org.eclipse.cdt.msw.debug.core.controller;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.cdt.msw.debug.core.model.WinDebugEventCallbacks;
 import org.eclipse.cdt.msw.debug.core.model.WinDebugTarget;
 import org.eclipse.cdt.msw.debug.dbgeng.DebugInterrupt;
 import org.eclipse.cdt.msw.debug.dbgeng.DebugObjectFactory;
@@ -28,6 +29,7 @@ public class WinDebugController extends Thread {
 	private IDebugClient debugClient;
 	private IDebugControl debugControl;
 	private IDebugSystemObjects debugSystemObjects;
+	private WinDebugEventCallbacks debugEventCallbacks;
 	
 	private List<WinDebugTarget> targets = new LinkedList<WinDebugTarget>();
 
@@ -110,6 +112,10 @@ public class WinDebugController extends Thread {
 		return debugSystemObjects;
 	}
 	
+	public WinDebugEventCallbacks getDebugEventCallbacks() {
+		return debugEventCallbacks;
+	}
+	
 	public void go(boolean go) {
 		this.go = go;
 	}
@@ -120,6 +126,8 @@ public class WinDebugController extends Thread {
 			debugClient = DebugObjectFactory.createClient();
 			debugControl = DebugObjectFactory.createControl();
 			debugSystemObjects = DebugObjectFactory.createSystemObjects();
+			debugEventCallbacks = new WinDebugEventCallbacks();
+			debugClient.setEventCallbacks(debugEventCallbacks);
 		} catch (HRESULTException e) {
 			// TODO uh, oh
 		}
