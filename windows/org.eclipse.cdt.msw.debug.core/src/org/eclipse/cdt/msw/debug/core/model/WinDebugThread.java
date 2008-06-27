@@ -1,5 +1,6 @@
 package org.eclipse.cdt.msw.debug.core.model;
 
+import org.eclipse.cdt.msw.debug.core.Activator;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.DebugElement;
 import org.eclipse.debug.core.model.IBreakpoint;
@@ -64,38 +65,32 @@ public class WinDebugThread extends DebugElement implements IThread {
 
 	@Override
 	public String getModelIdentifier() {
-		// TODO Auto-generated method stub
-		return null;
+		return Activator.PLUGIN_ID;
 	}
 
 	@Override
 	public boolean canResume() {
-		// TODO Auto-generated method stub
-		return false;
+		return target.canResume();
 	}
 
 	@Override
 	public boolean canSuspend() {
-		// TODO Auto-generated method stub
-		return false;
+		return target.canSuspend();
 	}
 
 	@Override
 	public boolean isSuspended() {
-		// TODO Auto-generated method stub
-		return false;
+		return target.isSuspended();
 	}
 
 	@Override
 	public void resume() throws DebugException {
-		// TODO Auto-generated method stub
-
+		target.resume();
 	}
 
 	@Override
 	public void suspend() throws DebugException {
-		// TODO Auto-generated method stub
-
+		target.suspend();
 	}
 
 	@Override
