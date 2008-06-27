@@ -28,3 +28,21 @@ NATIVE(jlong, nativeGetCurrentProcessHandle)(JNIEnv * env, jclass cls, jlong obj
 		throwHRESULT(env, hr);
 	return handle;
 }
+
+NATIVE(jint, nativeGetThreadIdByHandle)(JNIEnv * env, jclass cls, jlong object, jlong handle) {
+	IDebugSystemObjects4 * systemObjects = (IDebugSystemObjects4 *)object;
+	ULONG id;
+	HRESULT hr = systemObjects->GetThreadIdByHandle(handle, &id);
+	if (FAILED(hr))
+		throwHRESULT(env, hr);
+	return id;
+}
+
+NATIVE(jlong, nativeGetCurrentThreadHandle)(JNIEnv * env, jclass cls, jlong object) {
+	IDebugSystemObjects4 * systemObjects = (IDebugSystemObjects4 *)object;
+	ULONG64 handle;
+	HRESULT hr = systemObjects->GetCurrentThreadHandle(&handle);
+	if (FAILED(hr))
+		throwHRESULT(env, hr);
+	return handle;
+}

@@ -6,7 +6,6 @@ import org.eclipse.cdt.msw.debug.dbgeng.DebugStatus;
 import org.eclipse.cdt.msw.debug.dbgeng.HRESULTException;
 import org.eclipse.cdt.msw.debug.dbgeng.IDebugEventCallbacks;
 import org.eclipse.debug.core.ILaunch;
-import org.eclipse.debug.core.model.IDebugTarget;
 
 public class WinDebugEventCallbacks extends IDebugEventCallbacks {
 
@@ -18,11 +17,22 @@ public class WinDebugEventCallbacks extends IDebugEventCallbacks {
 	@Override
 	protected int getInterestMask() {
 		return DebugEvent.CREATE_PROCESS
-			 | DebugEvent.EXIT_PROCESS;
+			 | DebugEvent.EXIT_PROCESS
+			 | DebugEvent.CREATE_THREAD
+			 | DebugEvent.EXIT_THREAD;
 	}
 	
 	public void setCurrentLaunch(ILaunch launch) {
 		currentLaunch = launch;
+	}
+	
+	private WinDebugTarget getCurrentTarget() throws HRESULTException {
+		WinDebugController controller = WinDebugController.getController(); 
+		long currProcess = controller.getDebugSystemObjects().getCurrentProcessHandle();
+		for (WinDebugTarget target : controller.getTargets())
+			if (target.getProcessHandle() == currProcess)
+				return target;
+		return null;
 	}
 	
 	@Override
@@ -33,20 +43,51 @@ public class WinDebugEventCallbacks extends IDebugEventCallbacks {
 		WinProcess process = new WinProcess(imageName, currentLaunch, handle);
 		currentLaunch.addProcess(process);
 		
-		IDebugTarget target = new WinDebugTarget("Windows Debugger", currentLaunch, process);
+		WinDebugTarget target = new WinDebugTarget("Windows Debugger", currentLaunch, process);
 		currentLaunch.addDebugTarget(target);
+
+		int initialThreadId = 0;
+		try {
+			initialThreadId = WinDebugController.getController().getDebugSystemObjects().getThreadIdByHandle(initialThreadHandle);
+		} catch (HRESULTException e) {
+			e.printStackTrace();
+		}
+		new WinDebugThread(target, initialThreadHandle, initialThreadId);
+		
 		return DebugStatus.NO_CHANGE;
 	}
 	
 	@Override
 	protected int exitProcess(int exitCode) {
-		WinDebugController controller = WinDebugController.getController(); 
-		long currProcess;
 		try {
-			currProcess = controller.getDebugSystemObjects().getCurrentProcessHandle();
-			for (WinDebugTarget target : controller.getTargets())
-				if (target.getProcessHandle() == currProcess)
-					target.exitProcess(exitCode);
+			WinDebugTarget target = getCurrentTarget();
+			if (target != null)
+				target.exitProcess(exitCode);
+		} catch (HRESULTException e) {
+			e.printStackTrace();
+		}
+		return DebugStatus.NO_CHANGE;
+	}
+	
+	@Override
+	protected int createThread(long handle, long dataOffset, long startOffset) {
+		try {
+			WinDebugTarget target = getCurrentTarget();
+			int id = WinDebugController.getController().getDebugSystemObjects().getThreadIdByHandle(handle);
+			new WinDebugThread(target, handle, id);
+		} catch (HRESULTException e) {
+			e.printStackTrace();
+		}
+		return DebugStatus.NO_CHANGE;
+	}
+
+	@Override
+	protected int exitThread(int exitCode) {
+		try {
+			WinDebugTarget target = getCurrentTarget();
+			long threadHandle = WinDebugController.getController().getDebugSystemObjects().getCurrentThreadHandle();
+			WinDebugThread thread = target.getThread(threadHandle);
+			thread.exitThread(exitCode);
 		} catch (HRESULTException e) {
 			e.printStackTrace();
 		}

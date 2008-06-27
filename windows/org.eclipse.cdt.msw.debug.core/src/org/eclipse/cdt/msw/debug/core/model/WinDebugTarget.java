@@ -1,5 +1,8 @@
 package org.eclipse.cdt.msw.debug.core.model;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.cdt.msw.debug.core.Activator;
 import org.eclipse.cdt.msw.debug.core.controller.WinDebugController;
 import org.eclipse.core.resources.IMarkerDelta;
@@ -18,6 +21,7 @@ public class WinDebugTarget extends DebugElement implements IDebugTarget {
 	private final String name;
 	private final ILaunch launch;
 	private final WinProcess process;
+	private List<WinDebugThread> threads = new LinkedList<WinDebugThread>();
 
 	private boolean suspended = false;
 	private boolean canSuspend = true;
@@ -33,6 +37,22 @@ public class WinDebugTarget extends DebugElement implements IDebugTarget {
 
 	public long getProcessHandle() {
 		return process.getHandle();
+	}
+	
+	public void addThread(WinDebugThread thread) {
+		threads.add(thread);
+	}
+	
+	public void removeThread(WinDebugThread thread) {
+		threads.remove(thread);
+	}
+
+	public WinDebugThread getThread(long handle) {
+		for (WinDebugThread thread : threads) {
+			if (thread.getHandle() == handle)
+				return thread;
+		}
+		return null;
 	}
 	
 	@Override
@@ -57,13 +77,12 @@ public class WinDebugTarget extends DebugElement implements IDebugTarget {
 
 	@Override
 	public IThread[] getThreads() throws DebugException {
-		// TODO Auto-generated method stub
-		return new IThread[0];
+		return threads.toArray(new IThread[threads.size()]);
 	}
 
 	@Override
 	public boolean hasThreads() throws DebugException {
-		return true;
+		return !threads.isEmpty();
 	}
 
 	@Override
@@ -199,6 +218,9 @@ public class WinDebugTarget extends DebugElement implements IDebugTarget {
 	public void exitProcess(int exitCode) {
 		terminated = true;
 		process.terminated(exitCode);
+		WinDebugThread deadThreads[] = threads.toArray(new WinDebugThread[threads.size()]);
+		for (WinDebugThread thread : deadThreads)
+			thread.exitThread(exitCode);
 		WinDebugController.getController().removeTarget(this);
 		fireTerminateEvent();
 	}
