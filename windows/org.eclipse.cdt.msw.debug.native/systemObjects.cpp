@@ -1,6 +1,6 @@
 #include <jni.h>
 #include <dbgeng.h>
-#include "hresult.h"
+#include "native.h"
 
 #define NATIVE(ret, func) extern "C" JNIEXPORT ret JNICALL Java_org_eclipse_cdt_msw_debug_dbgeng_IDebugSystemObjects_##func
 
@@ -45,4 +45,11 @@ NATIVE(jlong, nativeGetCurrentThreadHandle)(JNIEnv * env, jclass cls, jlong obje
 	if (FAILED(hr))
 		throwHRESULT(env, hr);
 	return handle;
+}
+
+NATIVE(void, nativeSetCurrentThreadId)(JNIEnv * env, jclass cls, jlong object, jint id) {
+	IDebugSystemObjects4 * systemObjects = (IDebugSystemObjects4 *)object;
+	HRESULT hr = systemObjects->SetCurrentThreadId(id);
+	if (FAILED(hr))
+		throwHRESULT(env, hr);
 }

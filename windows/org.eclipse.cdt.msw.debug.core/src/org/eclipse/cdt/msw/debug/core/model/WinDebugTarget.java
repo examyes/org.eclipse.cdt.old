@@ -180,6 +180,9 @@ public class WinDebugTarget extends DebugElement implements IDebugTarget {
 			fireSuspendEvent(detail);
 		else
 			fireResumeEvent(detail);
+		
+		for (WinDebugThread thread : threads)
+			thread.suspended(suspended, detail);
 	}
 
 	@Override

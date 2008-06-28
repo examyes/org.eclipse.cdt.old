@@ -36,4 +36,10 @@ public class IDebugSystemObjects extends DebugObject {
 	
 	private static native long nativeGetCurrentThreadHandle(long p) throws HRESULTException;
 	
+	public void setCurrentThreadId(int id) throws HRESULTException {
+		nativeSetCurrentThreadId(p, id);
+	}
+	
+	private static native void nativeSetCurrentThreadId(long p, int id) throws HRESULTException;
+	
 }

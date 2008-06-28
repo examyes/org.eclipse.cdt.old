@@ -32,4 +32,13 @@ public class IDebugControl extends DebugObject {
 	
 	private static native int nativeGetInterrupt(long p) throws HRESULTException;
 	
+	public DebugStackFrame[] getStackTrace(long frameOffset, long stackOffset, long instructionOffset) throws HRESULTException {
+		DebugStackFrame.FrameChunk frames = new DebugStackFrame.FrameChunk();
+		int n = nativeGetStackTrace(p, frameOffset, stackOffset, instructionOffset, frames.p);
+		return frames.getFrames(n);
+	}
+	
+	private static native int nativeGetStackTrace(long p, long frameOffset, long stackOffset,
+			long instructionOffset, long frame) throws HRESULTException;
+	
 }

@@ -1,6 +1,13 @@
 package org.eclipse.cdt.msw.debug.core.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.cdt.msw.debug.core.Activator;
+import org.eclipse.cdt.msw.debug.core.controller.WinDebugController;
+import org.eclipse.cdt.msw.debug.dbgeng.DebugStackFrame;
+import org.eclipse.cdt.msw.debug.dbgeng.HRESULTException;
+import org.eclipse.cdt.msw.debug.dbgeng.IDebugControl;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.DebugElement;
 import org.eclipse.debug.core.model.IBreakpoint;
@@ -14,6 +21,7 @@ public class WinDebugThread extends DebugElement implements IThread {
 	private final int id;
 	
 	private boolean terminated = false;
+	private List<WinDebugStackFrame> stackFrames;
 	
 	public WinDebugThread(WinDebugTarget target, long handle, int id) {
 		super(target);
@@ -47,22 +55,63 @@ public class WinDebugThread extends DebugElement implements IThread {
 
 	@Override
 	public IStackFrame[] getStackFrames() throws DebugException {
-		// TODO Auto-generated method stub
-		return null;
+		if (!target.isSuspended())
+			return new IStackFrame[0];
+		buildStackFrames();
+		return stackFrames.toArray(new IStackFrame[stackFrames.size()]);
 	}
 
 	@Override
 	public IStackFrame getTopStackFrame() throws DebugException {
-		// TODO Auto-generated method stub
-		return null;
+		if (!target.isSuspended())
+			return null;
+		buildStackFrames();
+		return stackFrames.isEmpty() ? null : stackFrames.get(0);
 	}
 
+	private synchronized void buildStackFrames() {
+		if (stackFrames != null)
+			return;
+		stackFrames = new ArrayList<WinDebugStackFrame>();
+		final WinDebugController controller = WinDebugController.getController();
+		synchronized (stackFrames) {
+			controller.enqueueCommand(new Runnable() {
+				@Override
+				public void run() {
+					IDebugControl control = controller.getDebugControl();
+					try {
+						DebugStackFrame[] frames = control.getStackTrace(0, 0, 0);
+						for (DebugStackFrame frame : frames)
+							new WinDebugStackFrame(WinDebugThread.this, frame);
+					} catch (HRESULTException e) {
+						e.printStackTrace();
+					}
+					synchronized (stackFrames) {
+						stackFrames.notify();
+					}					
+				}
+			});
+			try {
+				stackFrames.wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	@Override
 	public boolean hasStackFrames() throws DebugException {
-		// TODO Auto-generated method stub
-		return false;
+		if (!target.isSuspended())
+			// Can't show stack frame unless we're suspended 
+			return false;
+		buildStackFrames();
+		return !stackFrames.isEmpty();
 	}
 
+	void addStackFrame(WinDebugStackFrame stackFrame) {
+		stackFrames.add(stackFrame);
+	}
+	
 	@Override
 	public String getModelIdentifier() {
 		return Activator.PLUGIN_ID;
@@ -151,6 +200,11 @@ public class WinDebugThread extends DebugElement implements IThread {
 		target.terminate();
 	}
 
+	public void suspended(boolean suspended, int detail) {
+		if (!suspended)
+			stackFrames = null;
+	}
+	
 	public void exitThread(int exitCode) {
 		terminated = true;
 		target.removeThread(this);

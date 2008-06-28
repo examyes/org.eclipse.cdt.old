@@ -1,6 +1,6 @@
 #include <jni.h>
 #include <dbgeng.h>
-#include "hresult.h"
+#include "native.h"
 
 #define NATIVE(ret, func) extern "C" JNIEXPORT ret JNICALL Java_org_eclipse_cdt_msw_debug_dbgeng_DebugObjectFactory_##func
 
