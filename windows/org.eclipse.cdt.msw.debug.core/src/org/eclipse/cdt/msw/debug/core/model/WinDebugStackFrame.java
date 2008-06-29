@@ -1,8 +1,6 @@
 package org.eclipse.cdt.msw.debug.core.model;
 
-import org.eclipse.cdt.msw.debug.core.Activator;
 import org.eclipse.cdt.msw.debug.core.controller.WinDebugController;
-import org.eclipse.cdt.msw.debug.dbgeng.DebugModuleAndId;
 import org.eclipse.cdt.msw.debug.dbgeng.DebugStackFrame;
 import org.eclipse.cdt.msw.debug.dbgeng.HRESULTException;
 import org.eclipse.cdt.msw.debug.dbgeng.IDebugSymbols;
@@ -17,6 +15,10 @@ public class WinDebugStackFrame extends DebugElement implements IStackFrame {
 
 	private final WinDebugThread thread;
 	private final DebugStackFrame frame;
+
+	private Object fileMutex;
+	private String fileName;
+	private int lineNumber = -2;
 	
 	public WinDebugStackFrame(WinDebugThread thread, DebugStackFrame frame) {
 		super(thread.getDebugTarget());
@@ -28,20 +30,74 @@ public class WinDebugStackFrame extends DebugElement implements IStackFrame {
 	
 	@Override
 	public int getCharEnd() throws DebugException {
-		// TODO Auto-generated method stub
-		return 0;
+		return -1;
 	}
 
 	@Override
 	public int getCharStart() throws DebugException {
-		// TODO Auto-generated method stub
-		return 0;
+		return -1;
 	}
 
+	public String getFileName() {
+		if (fileName == null && fileMutex == null) {
+			final WinDebugController controller = WinDebugController.getController();
+			fileMutex = new Object();
+			synchronized (fileMutex) {
+				controller.enqueueCommand(new Runnable() {
+					@Override
+					public void run() {
+						IDebugSymbols symbols = controller.getDebugSymbols();
+						try {
+							fileName = symbols.getFileByOffset(frame.getInstructionOffset());
+						} catch (HRESULTException e) {
+							if (e.getHRESULT() != HRESULTException.E_FAIL)
+								// get this when the file name isn't found
+								e.printStackTrace();
+						}
+						synchronized (fileMutex) {
+							fileMutex.notify();
+						}
+					}
+				});
+				try {
+					fileMutex.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return fileName;
+	}
+	
 	@Override
 	public int getLineNumber() throws DebugException {
-		// TODO Auto-generated method stub
-		return 0;
+		if (lineNumber < -1) {
+			final WinDebugController controller = WinDebugController.getController();
+			lineNumber = -1;
+			final Object mutex = new Object();
+			synchronized (mutex) {
+				controller.enqueueCommand(new Runnable() {
+					@Override
+					public void run() {
+						IDebugSymbols symbols = controller.getDebugSymbols();
+						try {
+							lineNumber = symbols.getLineByOffset(frame.getInstructionOffset()) - 1;
+						} catch (HRESULTException e) {
+							e.printStackTrace();
+						}
+						synchronized (mutex) {
+							mutex.notify();
+						}
+					}
+				});
+				try {
+					mutex.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return lineNumber;
 	}
 
 	@Override
@@ -72,9 +128,12 @@ public class WinDebugStackFrame extends DebugElement implements IStackFrame {
 				e.printStackTrace();
 			}
 		}
-		if (name[0] == null)
-			name[0] = "<unknown>";
-		return name[0] + " (0x" + Long.toHexString(frame.getInstructionOffset()) + ")";
+		String n = (name[0] == null) ? "<unknown>" : name[0];
+		n += " (0x" + Long.toHexString(frame.getInstructionOffset()) + ")";
+		String fileName = getFileName();
+		if (fileName != null)
+			n += " " + fileName + ":" + getLineNumber();
+		return n;
 	}
 
 	@Override
@@ -108,7 +167,7 @@ public class WinDebugStackFrame extends DebugElement implements IStackFrame {
 
 	@Override
 	public String getModelIdentifier() {
-		return Activator.PLUGIN_ID;
+		return "org.eclipse.cdt.debug.core"; //Activator.PLUGIN_ID;
 	}
 
 	@Override

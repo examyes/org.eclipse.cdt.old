@@ -48,5 +48,17 @@ public class IDebugSymbols extends DebugObject {
 	}
 	
 	private static native void nativeSetSymbolPath(long p, String path) throws HRESULTException;
+
+	public String getFileByOffset(long offset) throws HRESULTException {
+		return nativeGetFileByOffset(p, offset);
+	}
+	
+	private static native String nativeGetFileByOffset(long p, long offset) throws HRESULTException;
+	
+	public int getLineByOffset(long offset) throws HRESULTException {
+		return nativeGetLineByOffset(p, offset);
+	}
+	
+	private static native int nativeGetLineByOffset(long p, long offset) throws HRESULTException;
 	
 }

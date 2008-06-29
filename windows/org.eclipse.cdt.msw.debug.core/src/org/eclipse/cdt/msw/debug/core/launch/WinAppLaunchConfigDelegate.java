@@ -1,6 +1,7 @@
 package org.eclipse.cdt.msw.debug.core.launch;
 
 import org.eclipse.cdt.msw.debug.core.controller.WinDebugController;
+import org.eclipse.cdt.msw.debug.core.sourcelookup.WinDebugSourceLookupDirector;
 import org.eclipse.cdt.msw.debug.dbgeng.DebugCreateProcessOptions;
 import org.eclipse.cdt.msw.debug.dbgeng.HRESULTException;
 import org.eclipse.core.runtime.CoreException;
@@ -42,7 +43,7 @@ public class WinAppLaunchConfigDelegate implements ILaunchConfigurationDelegate 
 		}
 	}
 	
-	private void debugLaunch(ILaunchConfiguration configuration, ILaunch launch, IProgressMonitor monitor) {
+	private void debugLaunch(ILaunchConfiguration configuration, ILaunch launch, IProgressMonitor monitor) throws CoreException {
 		StringBuffer cmdLineBuff = new StringBuffer(getCommand(configuration));
 		String[] args = getArguments(configuration);
 		if (args != null)
@@ -66,6 +67,15 @@ public class WinAppLaunchConfigDelegate implements ILaunchConfigurationDelegate 
 				}
 			}
 		});
+		
+		WinDebugSourceLookupDirector locator = new WinDebugSourceLookupDirector();
+        String memento = configuration.getAttribute(ILaunchConfiguration.ATTR_SOURCE_LOCATOR_MEMENTO, (String)null);
+        if (memento == null) {
+            locator.initializeDefaults(configuration);
+        } else {
+            locator.initializeFromMemento(memento, configuration);
+        }
+		launch.setSourceLocator(locator);
 	}
 	
 	

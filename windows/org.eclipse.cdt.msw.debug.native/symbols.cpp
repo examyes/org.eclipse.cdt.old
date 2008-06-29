@@ -86,3 +86,24 @@ NATIVE(void, nativeSetSymbolPath)(JNIEnv * env, jclass cls, jlong object, jstrin
 	env->ReleaseStringChars(path, pathstr);
 }
 
+
+NATIVE(jstring, nativeGetFileByOffset)(JNIEnv * env, jclass cls, jlong object, jlong offset) {
+	IDebugSymbols3 * symbols = (IDebugSymbols3 *)object;
+	wchar_t buff[1024];
+	ULONG size;
+	HRESULT hr = symbols->GetLineByOffsetWide(offset, NULL, buff, sizeof(buff)/sizeof(wchar_t), &size, NULL);
+	if (FAILED(hr)) {
+		throwHRESULT(env, hr);
+		return NULL;
+	}
+	return env->NewString((jchar *)buff, size - 1);
+}
+
+NATIVE(jint, nativeGetLineByOffset)(JNIEnv * env, jclass cls, jlong object, jlong offset) {
+	IDebugSymbols3 * symbols = (IDebugSymbols3 *)object;
+	ULONG line;
+	HRESULT hr = symbols->GetLineByOffsetWide(offset, &line, NULL, 0, NULL, NULL);
+	if (FAILED(hr))
+		throwHRESULT(env, hr);
+	return line;
+}
