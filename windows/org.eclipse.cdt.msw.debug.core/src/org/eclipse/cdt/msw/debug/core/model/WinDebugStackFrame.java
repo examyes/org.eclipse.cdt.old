@@ -1,7 +1,11 @@
 package org.eclipse.cdt.msw.debug.core.model;
 
 import org.eclipse.cdt.msw.debug.core.Activator;
+import org.eclipse.cdt.msw.debug.core.controller.WinDebugController;
+import org.eclipse.cdt.msw.debug.dbgeng.DebugModuleAndId;
 import org.eclipse.cdt.msw.debug.dbgeng.DebugStackFrame;
+import org.eclipse.cdt.msw.debug.dbgeng.HRESULTException;
+import org.eclipse.cdt.msw.debug.dbgeng.IDebugSymbols;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.DebugElement;
 import org.eclipse.debug.core.model.IRegisterGroup;
@@ -42,13 +46,41 @@ public class WinDebugStackFrame extends DebugElement implements IStackFrame {
 
 	@Override
 	public String getName() throws DebugException {
-		return "Instruction Offset: 0x" + Long.toHexString(frame.getInstructionOffset());
+		final String[] name = new String[1];
+		final WinDebugController controller = WinDebugController.getController();
+		synchronized (name) {
+			controller.enqueueCommand(new Runnable() {
+				@Override
+				public void run() {
+					IDebugSymbols symbols = controller.getDebugSymbols();
+					try {
+						name[0] = symbols.getNameByOffset(frame.getInstructionOffset());
+//						DebugModuleAndId id = symbols.getSymbolEntryByOffset(frame.getInstructionOffset(), 0);
+//						if (id != null)
+//							name[0] = symbols.getSymbolEntryString(id, 0);
+					} catch (HRESULTException e) {
+						e.printStackTrace();
+					}
+					synchronized (name) {
+						name.notify();
+					}
+				}
+			});
+			try {
+				name.wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		if (name[0] == null)
+			name[0] = "<unknown>";
+		return name[0] + " (0x" + Long.toHexString(frame.getInstructionOffset()) + ")";
 	}
 
 	@Override
 	public IRegisterGroup[] getRegisterGroups() throws DebugException {
 		// TODO Auto-generated method stub
-		return null;
+		return new IRegisterGroup[0];
 	}
 
 	@Override
@@ -59,7 +91,7 @@ public class WinDebugStackFrame extends DebugElement implements IStackFrame {
 	@Override
 	public IVariable[] getVariables() throws DebugException {
 		// TODO Auto-generated method stub
-		return null;
+		return new IVariable[0];
 	}
 
 	@Override

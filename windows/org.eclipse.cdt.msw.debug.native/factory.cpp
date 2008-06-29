@@ -33,3 +33,13 @@ NATIVE(jlong, nativeCreateSystemObjects)(JNIEnv * env, jclass cls) {
 	}
 	return (jlong)systemObjects;
 }
+
+NATIVE(jlong, nativeCreateSymbols)(JNIEnv * env, jclass cls) {
+	void * symbols;
+	HRESULT hr = DebugCreate(__uuidof(IDebugSymbols3), &symbols);
+	if (FAILED(hr)) {
+		throwHRESULT(env, hr);
+		return NULL;
+	}
+	return (jlong)symbols;
+}

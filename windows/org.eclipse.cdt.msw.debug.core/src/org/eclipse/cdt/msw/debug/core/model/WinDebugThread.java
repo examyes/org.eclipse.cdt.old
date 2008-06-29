@@ -8,6 +8,7 @@ import org.eclipse.cdt.msw.debug.core.controller.WinDebugController;
 import org.eclipse.cdt.msw.debug.dbgeng.DebugStackFrame;
 import org.eclipse.cdt.msw.debug.dbgeng.HRESULTException;
 import org.eclipse.cdt.msw.debug.dbgeng.IDebugControl;
+import org.eclipse.cdt.msw.debug.dbgeng.IDebugSystemObjects;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.DebugElement;
 import org.eclipse.debug.core.model.IBreakpoint;
@@ -79,7 +80,9 @@ public class WinDebugThread extends DebugElement implements IThread {
 				@Override
 				public void run() {
 					IDebugControl control = controller.getDebugControl();
+					IDebugSystemObjects systemObjects = controller.getDebugSystemObjects();
 					try {
+						systemObjects.setCurrentThreadId(id);
 						DebugStackFrame[] frames = control.getStackTrace(0, 0, 0);
 						for (DebugStackFrame frame : frames)
 							new WinDebugStackFrame(WinDebugThread.this, frame);

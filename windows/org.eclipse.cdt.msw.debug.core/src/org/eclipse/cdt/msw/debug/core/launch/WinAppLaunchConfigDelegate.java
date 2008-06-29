@@ -1,7 +1,6 @@
 package org.eclipse.cdt.msw.debug.core.launch;
 
 import org.eclipse.cdt.msw.debug.core.controller.WinDebugController;
-import org.eclipse.cdt.msw.debug.core.model.WinDebugEventCallbacks;
 import org.eclipse.cdt.msw.debug.dbgeng.DebugCreateProcessOptions;
 import org.eclipse.cdt.msw.debug.dbgeng.HRESULTException;
 import org.eclipse.core.runtime.CoreException;
@@ -24,7 +23,7 @@ public class WinAppLaunchConfigDelegate implements ILaunchConfigurationDelegate 
 
 	private String getCommand(ILaunchConfiguration configuration) {
 		// TODO
-		return "notepad";
+		return "C:\\Eclipse\\workspaces\\cdt\\.test\\Test\\Debug\\Test.exe";
 	}
 	
 	private String[] getArguments(ILaunchConfiguration configuration) {

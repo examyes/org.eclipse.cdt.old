@@ -21,6 +21,12 @@ public class DebugObjectFactory {
 	
 	private static native long nativeCreateSystemObjects() throws HRESULTException;
 	
+	public static IDebugSymbols createSymbols() throws HRESULTException {
+		return new IDebugSymbols(nativeCreateSymbols());
+	}
+	
+	private static native long nativeCreateSymbols() throws HRESULTException;
+	
 	static {
 		// Make sure we load in the latest dbgeng and dbghelp from Debugging Tools for Windows
 		System.load("C:\\Program Files\\Debugging Tools for Windows (x86)\\dbghelp.dll");

@@ -13,7 +13,9 @@ import org.eclipse.cdt.msw.debug.dbgeng.DebugObjectFactory;
 import org.eclipse.cdt.msw.debug.dbgeng.HRESULTException;
 import org.eclipse.cdt.msw.debug.dbgeng.IDebugClient;
 import org.eclipse.cdt.msw.debug.dbgeng.IDebugControl;
+import org.eclipse.cdt.msw.debug.dbgeng.IDebugSymbols;
 import org.eclipse.cdt.msw.debug.dbgeng.IDebugSystemObjects;
+import org.eclipse.cdt.msw.debug.dbgeng.SymOpt;
 
 /**
  * @author DSchaefe
@@ -26,9 +28,11 @@ public class WinDebugController extends Thread {
 	
 	private LinkedList<Runnable> commandQueue = new LinkedList<Runnable>();
 	private boolean go = false;
+	
 	private IDebugClient debugClient;
 	private IDebugControl debugControl;
 	private IDebugSystemObjects debugSystemObjects;
+	private IDebugSymbols debugSymbols;
 	private WinDebugEventCallbacks debugEventCallbacks;
 	
 	private List<WinDebugTarget> targets = new LinkedList<WinDebugTarget>();
@@ -116,6 +120,10 @@ public class WinDebugController extends Thread {
 		return debugEventCallbacks;
 	}
 	
+	public IDebugSymbols getDebugSymbols() {
+		return debugSymbols;
+	}
+	
 	public void go(boolean go) {
 		this.go = go;
 	}
@@ -123,11 +131,21 @@ public class WinDebugController extends Thread {
 	@Override
 	public void run() {
 		try {
+			// create the debug objects
 			debugClient = DebugObjectFactory.createClient();
 			debugControl = DebugObjectFactory.createControl();
 			debugSystemObjects = DebugObjectFactory.createSystemObjects();
+			debugSymbols = DebugObjectFactory.createSymbols();
+			
+			// register our callbacks
 			debugEventCallbacks = new WinDebugEventCallbacks();
 			debugClient.setEventCallbacks(debugEventCallbacks);
+			
+			// set the symbol options
+			int symbolOptions = debugSymbols.getSymbolOptions();
+			symbolOptions &= ~SymOpt.DEFERRED_LOADS;
+			symbolOptions |= SymOpt.LOAD_LINES;
+			debugSymbols.setSymbolOptions(symbolOptions);
 		} catch (HRESULTException e) {
 			// TODO uh, oh
 		}
@@ -141,8 +159,7 @@ public class WinDebugController extends Thread {
 			if (go) {
 				try {
 					debugControl.waitForEvent(0, IDebugControl.INFINITE);
-					
-					// clear the interrupt
+					// prepare for next go
 					debugControl.getInterrupt();
 				} catch (HRESULTException e) {
 					if (e.getHRESULT() == HRESULTException.E_UNEXPECTED) {
