@@ -37,6 +37,10 @@ public class WinDebugThread extends DebugElement implements IThread {
 		return handle;
 	}
 	
+	public int getId() {
+		return id;
+	}
+	
 	@Override
 	public IBreakpoint[] getBreakpoints() {
 		// TODO Auto-generated method stub

@@ -60,5 +60,22 @@ public class IDebugSymbols extends DebugObject {
 	}
 	
 	private static native int nativeGetLineByOffset(long p, long offset) throws HRESULTException;
+
+	public void setScopeFrameByIndex(int index) throws HRESULTException {
+		nativeSetScopeFrameByIndex(p, index);
+	}
 	
+	private static native void nativeSetScopeFrameByIndex(long p, int index) throws HRESULTException;
+
+	public static final int DEBUG_SCOPE_GROUP_ARGUMENTS = 1;
+	public static final int DEBUG_SCOPE_GROUP_LOCALS = 2;
+	public static final int DEBUG_SCOPE_GROUP_ALL = DEBUG_SCOPE_GROUP_ARGUMENTS | DEBUG_SCOPE_GROUP_LOCALS;
+	
+
+	public IDebugSymbolGroup getScopeSymbolGroup(int flags, IDebugSymbolGroup update) throws HRESULTException {
+		return new IDebugSymbolGroup(nativeGetScopeSymbolGroup(p, flags, update != null ? update.p : 0));
+	}
+	
+	private static native long nativeGetScopeSymbolGroup(long p, int flags, long update) throws HRESULTException;
+
 }

@@ -3,7 +3,9 @@ package org.eclipse.cdt.msw.debug.core.model;
 import org.eclipse.cdt.msw.debug.core.controller.WinDebugController;
 import org.eclipse.cdt.msw.debug.dbgeng.DebugStackFrame;
 import org.eclipse.cdt.msw.debug.dbgeng.HRESULTException;
+import org.eclipse.cdt.msw.debug.dbgeng.IDebugSymbolGroup;
 import org.eclipse.cdt.msw.debug.dbgeng.IDebugSymbols;
+import org.eclipse.cdt.msw.debug.dbgeng.IDebugSystemObjects;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.DebugElement;
 import org.eclipse.debug.core.model.IRegisterGroup;
@@ -15,6 +17,8 @@ public class WinDebugStackFrame extends DebugElement implements IStackFrame {
 
 	private final WinDebugThread thread;
 	private final DebugStackFrame frame;
+	
+	private WinDebugVariable[] variables;
 
 	private Object fileMutex;
 	private String fileName;
@@ -149,8 +153,42 @@ public class WinDebugStackFrame extends DebugElement implements IStackFrame {
 
 	@Override
 	public IVariable[] getVariables() throws DebugException {
-		// TODO Auto-generated method stub
-		return new IVariable[0];
+		if (variables == null) {
+			final WinDebugController controller = WinDebugController.getController();
+			final Object mutex = new Object();
+			synchronized (mutex) {
+				controller.enqueueCommand(new Runnable() {
+					@Override
+					public void run() {
+						IDebugSystemObjects systemObjects = controller.getDebugSystemObjects();
+						IDebugSymbols symbols = controller.getDebugSymbols();
+						int frameNumber = frame.getFrameNumber();
+						try {
+							int pid = systemObjects.getProcessIdByHandle(((WinDebugTarget)getDebugTarget()).getProcessHandle());
+							systemObjects.setCurrentProcessId(pid);
+							systemObjects.setCurrentThreadId(thread.getId());
+							symbols.setScopeFrameByIndex(frameNumber);
+							IDebugSymbolGroup symbolGroup = symbols.getScopeSymbolGroup(IDebugSymbols.DEBUG_SCOPE_GROUP_ALL, null);
+							variables = new WinDebugVariable[symbolGroup.getNumberSymbols()];
+							for (int i = 0; i < variables.length; ++i) {
+								variables[i] = new WinDebugVariable(WinDebugStackFrame.this, symbolGroup, i);
+							}
+						} catch (HRESULTException e) {
+							e.printStackTrace();
+						}
+						synchronized (mutex) {
+							mutex.notify();
+						}
+					}
+				});
+				try {
+					mutex.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return variables;
 	}
 
 	@Override
@@ -161,8 +199,7 @@ public class WinDebugStackFrame extends DebugElement implements IStackFrame {
 
 	@Override
 	public boolean hasVariables() throws DebugException {
-		// TODO Auto-generated method stub
-		return false;
+		return getVariables().length > 0;
 	}
 
 	@Override

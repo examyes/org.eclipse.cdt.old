@@ -107,3 +107,22 @@ NATIVE(jint, nativeGetLineByOffset)(JNIEnv * env, jclass cls, jlong object, jlon
 		throwHRESULT(env, hr);
 	return line;
 }
+
+
+NATIVE(void, nativeSetScopeFrameByIndex)(JNIEnv * env, jclass cls, jlong object, jint index) {
+	IDebugSymbols3 * symbols = (IDebugSymbols3 *)object;
+	HRESULT hr = symbols->SetScopeFrameByIndex(index);
+	if (FAILED(hr))
+		throwHRESULT(env, hr);
+}
+
+NATIVE(jlong, nativeGetScopeSymbolGroup)(JNIEnv * env, jclass cls, jlong object,
+		jint flags, jlong update) {
+	IDebugSymbols3 * symbols = (IDebugSymbols3 *)object;
+	IDebugSymbolGroup2 * updateSymbols = (IDebugSymbolGroup2 *)update;
+	IDebugSymbolGroup2 * returnSymbols;
+	HRESULT hr = symbols->GetScopeSymbolGroup2(flags, updateSymbols, &returnSymbols);
+	if (FAILED(hr))
+		throwHRESULT(env, hr);
+	return (jlong)returnSymbols;
+}
