@@ -45,3 +45,29 @@ NATIVE(jint, nativeGetStackTrace)(JNIEnv * env, jclass cls, jlong object,
 		throwHRESULT(env, hr);
 	return size;
 }
+
+NATIVE(jlong, nativeAddBreakpoint)(JNIEnv * env, jclass cls, jlong object, jint type, jint desiredId) {
+	IDebugControl4 * control = (IDebugControl4 *)object;
+	IDebugBreakpoint2 * bp;
+	HRESULT hr = control->AddBreakpoint2(type, desiredId, &bp);
+	if (FAILED(hr))
+		throwHRESULT(env, hr);
+	return (jlong)bp;
+}
+
+NATIVE(void, nativeRemoveBreakpoint)(JNIEnv * env, jclass cls, jlong object, jlong bp) {
+	IDebugControl4 * control = (IDebugControl4 *)object;
+	IDebugBreakpoint2 * dbp = (IDebugBreakpoint2 *)bp;
+	HRESULT hr = control->RemoveBreakpoint2(dbp);
+	if (FAILED(hr))
+		throwHRESULT(env, hr);
+}
+
+NATIVE(jlong, nativeGetBreakpointById)(JNIEnv * env, jclass cls, jlong object, jint id) {
+	IDebugControl4 * control = (IDebugControl4 *)object;
+	IDebugBreakpoint2 * bp;
+	HRESULT hr = control->GetBreakpointById2(id, &bp);
+	if (FAILED(hr))
+		throwHRESULT(env, hr);
+	return (jlong)bp;
+}

@@ -1,13 +1,24 @@
 package org.eclipse.cdt.msw.debug.core.model;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
+import org.eclipse.cdt.debug.core.model.ICLineBreakpoint;
 import org.eclipse.cdt.msw.debug.core.Activator;
 import org.eclipse.cdt.msw.debug.core.controller.WinDebugController;
+import org.eclipse.cdt.msw.debug.dbgeng.DebugConstants;
+import org.eclipse.cdt.msw.debug.dbgeng.HRESULTException;
+import org.eclipse.cdt.msw.debug.dbgeng.IDebugBreakpoint;
+import org.eclipse.cdt.msw.debug.dbgeng.IDebugControl;
 import org.eclipse.core.resources.IMarkerDelta;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.IBreakpointManager;
+import org.eclipse.debug.core.IBreakpointsListener;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.model.DebugElement;
 import org.eclipse.debug.core.model.IBreakpoint;
@@ -21,11 +32,87 @@ public class WinDebugTarget extends DebugElement implements IDebugTarget {
 	private final String name;
 	private final ILaunch launch;
 	private final WinProcess process;
-	private List<WinDebugThread> threads = new LinkedList<WinDebugThread>();
-
+	private final List<WinDebugThread> threads = new LinkedList<WinDebugThread>();
+	private final Map<String, Integer> bpMap = new HashMap<String, Integer>();
+	
 	private boolean suspended = false;
 	private boolean canSuspend = true;
 	private boolean terminated = false;
+	
+	private final IBreakpointsListener bpListener = new IBreakpointsListener() {
+		@Override
+		public void breakpointsAdded(final IBreakpoint[] breakpoints) {
+			final WinDebugController controller = WinDebugController.getController();
+			controller.enqueueCommand(new Runnable() {
+				@Override
+				public void run() {
+					IDebugControl control = controller.getDebugControl();
+					for (IBreakpoint breakpoint : breakpoints) {
+						if (breakpoint instanceof ICLineBreakpoint) {
+							ICLineBreakpoint bp = (ICLineBreakpoint)breakpoint;
+							try {
+								// TODO should be using URI here, but we're only supporting local debug for now
+								String fileName = bp.getMarker().getResource().getLocation().toOSString();
+								int lineNumber = bp.getLineNumber() + 1;
+								String offsetExpr = '`' + fileName + ':' + lineNumber + '`';
+								
+								if (!bpMap.containsKey(offsetExpr)) {
+									IDebugBreakpoint winbp = control.addBreakpoint(
+											DebugConstants.DEBUG_BREAKPOINT_CODE,
+											DebugConstants.DEBUG_ANY_ID);
+								
+									winbp.setOffsetExpression(offsetExpr);
+									winbp.addFlags(DebugConstants.DEBUG_BREAKPOINT_ENABLED);
+									bpMap.put(offsetExpr, winbp.getId());
+								}
+							} catch (CoreException e) {
+								e.printStackTrace();
+							} catch (HRESULTException e) {
+								e.printStackTrace();
+							}
+						}
+					}
+				}
+			});
+		}
+		
+		@Override
+		public void breakpointsChanged(IBreakpoint[] breakpoints,
+				IMarkerDelta[] deltas) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void breakpointsRemoved(final IBreakpoint[] breakpoints,	IMarkerDelta[] deltas) {
+			final WinDebugController controller = WinDebugController.getController();
+			controller.enqueueCommand(new Runnable() {
+				@Override
+				public void run() {
+					IDebugControl control = controller.getDebugControl();
+					for (IBreakpoint breakpoint : breakpoints) {
+						if (breakpoint instanceof ICLineBreakpoint) {
+							ICLineBreakpoint bp = (ICLineBreakpoint)breakpoint;
+							try {
+								String fileName = bp.getFileName();
+								int lineNumber = bp.getLineNumber();
+								String offsetExpr = '`' + fileName + ':' + lineNumber + '`';
+								Integer id = bpMap.get(offsetExpr);
+								if (id != null) {
+									IDebugBreakpoint dbp = control.getBreakpointById(id);
+									control.removeBreakpoint(dbp);
+								}
+							} catch (CoreException e) {
+								e.printStackTrace();
+							} catch (HRESULTException e) {
+								e.printStackTrace();
+							}
+						}
+					}
+				}
+			});
+		}
+	};
 	
 	public WinDebugTarget(String name, ILaunch launch, WinProcess process) {
 		super(null);
@@ -33,6 +120,9 @@ public class WinDebugTarget extends DebugElement implements IDebugTarget {
 		this.launch = launch;
 		this.process = process;
 		WinDebugController.getController().addTarget(this);
+		IBreakpointManager bpManager = DebugPlugin.getDefault().getBreakpointManager();
+		bpManager.addBreakpointListener(bpListener);
+		bpListener.breakpointsAdded(bpManager.getBreakpoints());
 	}
 
 	public long getProcessHandle() {
@@ -87,7 +177,7 @@ public class WinDebugTarget extends DebugElement implements IDebugTarget {
 
 	@Override
 	public boolean supportsBreakpoint(IBreakpoint breakpoint) {
-		// TODO Auto-generated method stub
+		// TODO - not sure anyone even calls this
 		return false;
 	}
 
@@ -98,20 +188,17 @@ public class WinDebugTarget extends DebugElement implements IDebugTarget {
 
 	@Override
 	public void breakpointAdded(IBreakpoint breakpoint) {
-		// TODO Auto-generated method stub
-		
+		bpListener.breakpointsAdded(new IBreakpoint[] { breakpoint });
 	}
 
 	@Override
 	public void breakpointChanged(IBreakpoint breakpoint, IMarkerDelta delta) {
-		// TODO Auto-generated method stub
-		
+		bpListener.breakpointsChanged(new IBreakpoint[] { breakpoint }, new IMarkerDelta[] { delta });
 	}
 
 	@Override
 	public void breakpointRemoved(IBreakpoint breakpoint, IMarkerDelta delta) {
-		// TODO Auto-generated method stub
-		
+		bpListener.breakpointsRemoved(new IBreakpoint[] { breakpoint }, new IMarkerDelta[] { delta });
 	}
 
 	@Override
@@ -224,6 +311,7 @@ public class WinDebugTarget extends DebugElement implements IDebugTarget {
 		WinDebugThread deadThreads[] = threads.toArray(new WinDebugThread[threads.size()]);
 		for (WinDebugThread thread : deadThreads)
 			thread.exitThread(exitCode);
+		DebugPlugin.getDefault().getBreakpointManager().removeBreakpointListener(bpListener);
 		WinDebugController.getController().removeTarget(this);
 		fireTerminateEvent();
 	}

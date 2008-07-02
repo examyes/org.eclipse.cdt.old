@@ -4,6 +4,7 @@ import org.eclipse.cdt.msw.debug.core.controller.WinDebugController;
 import org.eclipse.cdt.msw.debug.dbgeng.DebugEvent;
 import org.eclipse.cdt.msw.debug.dbgeng.DebugStatus;
 import org.eclipse.cdt.msw.debug.dbgeng.HRESULTException;
+import org.eclipse.cdt.msw.debug.dbgeng.IDebugBreakpoint;
 import org.eclipse.cdt.msw.debug.dbgeng.IDebugEventCallbacks;
 import org.eclipse.debug.core.ILaunch;
 
@@ -19,7 +20,8 @@ public class WinDebugEventCallbacks extends IDebugEventCallbacks {
 		return DebugEvent.CREATE_PROCESS
 			 | DebugEvent.EXIT_PROCESS
 			 | DebugEvent.CREATE_THREAD
-			 | DebugEvent.EXIT_THREAD;
+			 | DebugEvent.EXIT_THREAD
+			 | DebugEvent.BREAKPOINT;
 	}
 	
 	public void setCurrentLaunch(ILaunch launch) {
@@ -54,7 +56,8 @@ public class WinDebugEventCallbacks extends IDebugEventCallbacks {
 		}
 		new WinDebugThread(target, initialThreadHandle, initialThreadId);
 		
-		return DebugStatus.NO_CHANGE;
+		// Break to set breakpoints
+		return DebugStatus.BREAK;
 	}
 	
 	@Override
@@ -92,6 +95,18 @@ public class WinDebugEventCallbacks extends IDebugEventCallbacks {
 			e.printStackTrace();
 		}
 		return DebugStatus.NO_CHANGE;
+	}
+	
+	
+	@Override
+	protected int breakpoint(IDebugBreakpoint breakpoint) {
+		WinDebugController.getController().go(false);
+		try {
+			getCurrentTarget().suspended(true, org.eclipse.debug.core.DebugEvent.BREAKPOINT);
+		} catch (HRESULTException e) {
+			e.printStackTrace();
+		}
+		return DebugStatus.BREAK;
 	}
 	
 }

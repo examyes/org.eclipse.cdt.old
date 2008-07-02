@@ -41,4 +41,22 @@ public class IDebugControl extends DebugObject {
 	private static native int nativeGetStackTrace(long p, long frameOffset, long stackOffset,
 			long instructionOffset, long frame) throws HRESULTException;
 	
+	public IDebugBreakpoint addBreakpoint(int type, int desiredId) throws HRESULTException {
+		return new IDebugBreakpoint(nativeAddBreakpoint(p, type, desiredId));
+	}
+	
+	private static native long nativeAddBreakpoint(long p, int type, int desiredId) throws HRESULTException;
+
+	public void removeBreakpoint(IDebugBreakpoint bp) throws HRESULTException {
+		nativeRemoveBreakpoint(p, bp.p);
+	}
+	
+	private static native void nativeRemoveBreakpoint(long p, long bp) throws HRESULTException;
+	
+	public IDebugBreakpoint getBreakpointById(int id) throws HRESULTException {
+		return new IDebugBreakpoint(nativeGetBreakpointById(p, id));
+	}
+	
+	private static native long nativeGetBreakpointById(long p, int id) throws HRESULTException;
+	
 }
