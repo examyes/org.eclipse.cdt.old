@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Mylyn Plug-in
+Bundle-Name: Mylyn Bridge: C/C++ Development
 Bundle-SymbolicName: org.eclipse.cdt.mylyn
 Bundle-Version: 1.0.100.qualifier
+Bundle-Vendor: Eclipse.org
