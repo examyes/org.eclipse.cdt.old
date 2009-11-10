@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: CDT Build Core
+Bundle-SymbolicName: org.eclipse.cdt.build.core
+Bundle-Version: 7.0.0.qualifier
+Bundle-Activator: org.eclipse.cdt.build.core.Activator
+Bundle-Vendor: Eclipse CDT
+Require-Bundle: org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
