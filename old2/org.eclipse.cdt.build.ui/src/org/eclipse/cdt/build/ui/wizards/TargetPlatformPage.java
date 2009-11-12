@@ -10,24 +10,33 @@
  *******************************************************************************/
 package org.eclipse.cdt.build.ui.wizards;
 
+import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 
-public class NewCDTProjectPage extends WizardNewProjectCreationPage {
+/**
+ * @author Doug Schaefer
+ */
+public class TargetPlatformPage extends WizardPage {
 
-	private final NewCDTProjectWizard wizard;
-	
-	public NewCDTProjectPage(NewCDTProjectWizard wizard) {
-		super("New CDT Project");
-		this.wizard = wizard;
+	public TargetPlatformPage() {
+		super("Target Platform");
 	}
 
 	@Override
 	public void createControl(Composite parent) {
-		super.createControl(parent);
+        Composite composite = new Composite(parent, SWT.NULL);
+        composite.setLayout(new GridLayout());
+        composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+        
+		new TargetPlatformBlock(composite);
 		
-		setTitle("CDT Project");
-		setDescription("Specify name and location for this project.");
+        setControl(composite);
+        
+		setTitle("Select Target Platform");
+		setMessage("Specify the initial target platform for this project.");
 	}
-	
+
 }

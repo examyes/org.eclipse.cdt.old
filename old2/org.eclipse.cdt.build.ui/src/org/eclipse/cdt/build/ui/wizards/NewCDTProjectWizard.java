@@ -31,7 +31,9 @@ public class NewCDTProjectWizard extends Wizard implements INewWizard {
 
 	@Override
 	public void addPages() {
-		addPage(new NewCDTProjectPage("New CDT Project"));
+		addPage(new NewCDTProjectPage(this));
+		addPage(new TargetPlatformPage());
+		addPage(new BuildSystemPage());
 	}
 	
 }
