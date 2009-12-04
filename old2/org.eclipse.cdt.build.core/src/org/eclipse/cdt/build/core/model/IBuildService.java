@@ -10,23 +10,16 @@
  *******************************************************************************/
 package org.eclipse.cdt.build.core.model;
 
-import org.eclipse.cdt.core.parser.IScannerInfo;
-import org.eclipse.core.resources.IResource;
+import org.eclipse.cdt.core.parser.IScannerInfoProvider;
 
 /**
  * The OSGi Service access point into the CDT Build System.
+ * 
+ * This service services as a scanner info provider.
  *  
  * @author Doug Schaefer
  */
-public interface IBuildService {
+public interface IBuildService extends IScannerInfoProvider {
 
-	/**
-	 * Return the scanner info for the given resource based in the current build settings.
-	 * 
-	 * @param resource
-	 * @return
-	 */
-	IScannerInfo getScannerInfo(IResource resource);
-	
 
 }
