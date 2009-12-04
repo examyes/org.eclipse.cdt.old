@@ -10,6 +10,8 @@
  *******************************************************************************/
 package org.eclipse.cdt.build.core.model;
 
+import org.eclipse.cdt.core.IBinaryParser;
+
 /**
  * @author Doug Schaefer
  * 
@@ -21,5 +23,19 @@ package org.eclipse.cdt.build.core.model;
  * platform.
  */
 public interface ITargetPlatform {
+	
+	/**
+	 * Return a list of Builders that can build for this target platform.
+	 * 
+	 * @return list of builders
+	 */
+	IBuilder[] getApplicableBuilders();
+	
+	/**
+	 * Return the binary parser used to parse binaries for this target platform.
+	 * 
+	 * @return binary parser
+	 */
+	IBinaryParser getBinaryParser();
 
 }
