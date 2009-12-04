@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: CDT Build Core
 Bundle-SymbolicName: org.eclipse.cdt.build.core
 Bundle-Version: 7.0.0.qualifier
-Bundle-Activator: org.eclipse.cdt.build.core.Activator
+Bundle-Activator: org.eclipse.cdt.internal.build.core.Activator
 Bundle-Vendor: Eclipse CDT
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.cdt.core;bundle-version="5.2.0",

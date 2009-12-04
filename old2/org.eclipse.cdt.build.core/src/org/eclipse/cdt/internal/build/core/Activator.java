@@ -1,7 +1,10 @@
-package org.eclipse.cdt.build.core;
+package org.eclipse.cdt.internal.build.core;
 
+import org.eclipse.cdt.build.core.model.IBuildService;
+import org.eclipse.cdt.internal.build.core.model.BuildService;
 import org.eclipse.core.runtime.Plugin;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -20,19 +23,12 @@ public class Activator extends Plugin {
 	public Activator() {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.core.runtime.Plugins#start(org.osgi.framework.BundleContext)
-	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		context.registerService(IBuildService.class.getName(), new BuildService(), null);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.core.runtime.Plugin#stop(org.osgi.framework.BundleContext)
-	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
@@ -47,4 +43,18 @@ public class Activator extends Plugin {
 		return plugin;
 	}
 
+	/**
+	 * Quick way to get ahold of a service.
+	 * 
+	 * @param service the desired service class
+	 * @return the service instance
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T getService(Class<T> service) {
+		if (plugin == null)
+			return null;
+		BundleContext context = plugin.getBundle().getBundleContext();
+		ServiceReference ref = context.getServiceReference(service.getName());
+		return ref != null ? (T)context.getService(ref) : null;
+	}
 }
