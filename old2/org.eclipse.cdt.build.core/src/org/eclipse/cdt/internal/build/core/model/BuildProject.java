@@ -8,26 +8,26 @@
  * Contributors:
  * Wind River Systems - Initial API and implementation
  *******************************************************************************/
-package org.eclipse.cdt.build.core.model;
+package org.eclipse.cdt.internal.build.core.model;
 
-import org.eclipse.cdt.core.parser.IScannerInfoProvider;
+import org.eclipse.cdt.build.core.model.IBuildProject;
 import org.eclipse.core.resources.IProject;
 
 /**
- * The OSGi Service access point into the CDT Build System.
- * 
- * This service services as a scanner info provider.
- *  
  * @author Doug Schaefer
+ *
  */
-public interface IBuildService extends IScannerInfoProvider {
+public class BuildProject implements IBuildProject {
 
-	/**
-	 * This is a convenience method for adapting an IProject to a IBuildProject.
-	 * 
-	 * @param project
-	 * @return
-	 */
-	IBuildProject getBuildProject(IProject project);
+	private final IProject project;
 	
+	public BuildProject(IProject project) {
+		this.project = project;
+	}
+	
+	@Override
+	public IProject getProject() {
+		return project;
+	}
+
 }

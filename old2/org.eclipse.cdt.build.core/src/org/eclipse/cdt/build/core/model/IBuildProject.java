@@ -10,24 +10,23 @@
  *******************************************************************************/
 package org.eclipse.cdt.build.core.model;
 
-import org.eclipse.cdt.core.parser.IScannerInfoProvider;
 import org.eclipse.core.resources.IProject;
 
 /**
- * The OSGi Service access point into the CDT Build System.
+ * This is an extension of IProject to add build information.
+ * You can get an the associated instance of this object for a given project by
+ * adapting the project to IBuildProject.
  * 
- * This service services as a scanner info provider.
- *  
  * @author Doug Schaefer
+ *
  */
-public interface IBuildService extends IScannerInfoProvider {
+public interface IBuildProject {
 
 	/**
-	 * This is a convenience method for adapting an IProject to a IBuildProject.
+	 * Return the project this object is associated with.
 	 * 
-	 * @param project
-	 * @return
+	 * @return the project
 	 */
-	IBuildProject getBuildProject(IProject project);
+	IProject getProject();
 	
 }

@@ -15,11 +15,8 @@ import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 
 public class NewCDTProjectPage extends WizardNewProjectCreationPage {
 
-	private final NewCDTProjectWizard wizard;
-	
-	public NewCDTProjectPage(NewCDTProjectWizard wizard) {
+	public NewCDTProjectPage() {
 		super("New CDT Project");
-		this.wizard = wizard;
 	}
 
 	@Override

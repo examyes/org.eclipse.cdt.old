@@ -10,9 +10,11 @@
  *******************************************************************************/
 package org.eclipse.cdt.internal.build.core.model;
 
+import org.eclipse.cdt.build.core.model.IBuildProject;
 import org.eclipse.cdt.build.core.model.IBuildService;
 import org.eclipse.cdt.core.parser.IScannerInfo;
 import org.eclipse.cdt.core.parser.IScannerInfoChangeListener;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 
 /**
@@ -28,17 +30,20 @@ public class BuildService implements IBuildService {
 	}
 
 	@Override
-	public void subscribe(IResource resource,
-			IScannerInfoChangeListener listener) {
+	public void subscribe(IResource resource, IScannerInfoChangeListener listener) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void unsubscribe(IResource resource,
-			IScannerInfoChangeListener listener) {
+	public void unsubscribe(IResource resource,	IScannerInfoChangeListener listener) {
 		// TODO Auto-generated method stub
 
 	}
 
+	@Override
+	public IBuildProject getBuildProject(IProject project) {
+		return (IBuildProject)project.getAdapter(IBuildProject.class);
+	}
+	
 }
