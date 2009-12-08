@@ -23,5 +23,12 @@
          </run>
       </builder>
    </extension>
+   <extension
+         point="org.eclipse.cdt.core.ScannerInfoProvider2">
+      <provider
+            builder="org.eclipse.cdt.build.core.builder"
+            class="org.eclipse.cdt.internal.build.core.model.ScannerInfoProvider">
+      </provider>
+   </extension>
 
 </plugin>
