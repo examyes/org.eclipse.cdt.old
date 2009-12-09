@@ -14,7 +14,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 
 import org.eclipse.cdt.build.core.ProjectBuilder;
+import org.eclipse.cdt.build.core.model.IBuildService;
 import org.eclipse.cdt.core.CProjectNature;
+import org.eclipse.cdt.internal.build.ui.Activator;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
@@ -89,9 +91,7 @@ public class NewCDTProjectWizard extends BasicNewResourceWizard implements INewW
 		natures[0] = CProjectNature.C_NATURE_ID;
 		description.setNatureIds(natures);
 		
-		ICommand[] commands = new ICommand[1];
-		commands[0] = ProjectBuilder.createCommand(description);
-		description.setBuildSpec(commands);
+		Activator.getService(IBuildService.class).initBuildSpec(description);
 	}
 
 	@Override

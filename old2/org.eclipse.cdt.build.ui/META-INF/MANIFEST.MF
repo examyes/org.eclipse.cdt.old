@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: CDT Build UI
 Bundle-SymbolicName: org.eclipse.cdt.build.ui;singleton:=true
 Bundle-Version: 6.0.0.qualifier
-Bundle-Activator: org.eclipse.cdt.build.ui.Activator
+Bundle-Activator: org.eclipse.cdt.internal.build.ui.Activator
 Bundle-Vendor: Eclipse CDT
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources;bundle-version="3.6.0",

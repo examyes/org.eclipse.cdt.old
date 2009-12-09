@@ -12,6 +12,7 @@ package org.eclipse.cdt.build.core.model;
 
 import org.eclipse.cdt.core.parser.IScannerInfoProvider;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
 
 /**
  * The OSGi Service access point into the CDT Build System.
@@ -22,6 +23,12 @@ import org.eclipse.core.resources.IProject;
  */
 public interface IBuildService extends IScannerInfoProvider {
 
+	/**
+	 * Initialize the build spec for the project to invoke our build service
+	 * @param desc
+	 */
+	void initBuildSpec(IProjectDescription desc);
+	
 	/**
 	 * This is a convenience method for adapting an IProject to a IBuildProject.
 	 * 
