@@ -11,9 +11,9 @@
 package org.eclipse.cdt.internal.build.core.model;
 
 import org.eclipse.cdt.build.core.ProjectBuilder;
-import org.eclipse.cdt.build.core.model.IBuildProject;
+import org.eclipse.cdt.build.core.model.BuildProject;
 import org.eclipse.cdt.build.core.model.IBuildService;
-import org.eclipse.cdt.build.core.model.ITargetPlatform;
+import org.eclipse.cdt.build.core.model.TargetPlatform;
 import org.eclipse.cdt.core.parser.IScannerInfo;
 import org.eclipse.cdt.core.parser.IScannerInfoChangeListener;
 import org.eclipse.cdt.internal.build.core.Activator;
@@ -34,24 +34,6 @@ import org.eclipse.core.runtime.Platform;
 public class BuildService implements IBuildService {
 
 	@Override
-	public IScannerInfo getScannerInformation(IResource resource) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void subscribe(IResource resource, IScannerInfoChangeListener listener) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void unsubscribe(IResource resource,	IScannerInfoChangeListener listener) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void initBuildSpec(IProjectDescription desc) {
 		ICommand[] commands = new ICommand[1];
 		commands[0] = ProjectBuilder.createCommand(desc);
@@ -59,12 +41,12 @@ public class BuildService implements IBuildService {
 	}
 	
 	@Override
-	public IBuildProject getBuildProject(IProject project) {
-		return (IBuildProject)project.getAdapter(IBuildProject.class);
+	public BuildProject getBuildProject(IProject project) {
+		return (BuildProject)project.getAdapter(BuildProject.class);
 	}
 
 	@Override
-	public ITargetPlatform[] getTargetPlatforms() {
+	public TargetPlatform[] getTargetPlatforms() {
 		IExtensionRegistry extReg = Platform.getExtensionRegistry();
 		IExtensionPoint extPoint = extReg.getExtensionPoint(Activator.PLUGIN_ID, "buildDefinitions");
 		IExtension[] extensions = extPoint.getExtensions();
@@ -74,7 +56,7 @@ public class BuildService implements IBuildService {
 
 			}
 		}
-		return new ITargetPlatform[0];
+		return new TargetPlatform[0];
 	}
 	
 }

@@ -20,13 +20,42 @@ import org.eclipse.core.resources.IProject;
  * @author Doug Schaefer
  *
  */
-public interface IBuildProject {
+public class BuildProject {
 
 	/**
-	 * Return the project this object is associated with.
-	 * 
-	 * @return the project
+	 * @param project
+	 * @return the build object for the project
 	 */
-	IProject getProject();
+	public static BuildProject getBuildProject(IProject project) {
+		return null;
+	}
+	
+	/**
+	 * @return the project this object is associated with.
+	 */
+	public IProject getProject() {
+		return null;
+	}
+	
+	/**
+	 * @return the configurations for this project.
+	 */
+	public Configuration[] getConfigurations() {
+		return null;
+	}
+
+	/**
+	 * @return the current active configuration for system builds.
+	 */
+	public Configuration getActiveBuildConfiguration() {
+		return null;
+	}
+	
+	/**
+	 * @return the current active configuration for indexing.
+	 */
+	public Configuration getActiveIndexConfiguration() {
+		return null;
+	}
 	
 }

@@ -14,19 +14,38 @@ import org.eclipse.cdt.core.IBinaryParser;
 
 /**
  * @author Doug Schaefer
- *
+ * 
+ * A target platform is the executable environment that the build target will execute on.
+ * Examples include Windows, Linux, Cross-Linux, etc.
+ * 
+ * This is modeled explicitly since different target platforms will have different build targets
+ * and it helps separate out the applicable toolchains which generally support only a single target
+ * platform.
  */
-public class TargetPlatform implements ITargetPlatform {
-
-	@Override
-	public IBuilder[] getApplicableBuilders() {
-		// TODO Auto-generated method stub
+public class TargetPlatform {
+	
+	/**
+	 * Return a list of Builders that can build for this target platform.
+	 * 
+	 * @return list of builders
+	 */
+	public Builder[] getApplicableBuilders() {
+		return null;
+	}
+	
+	/**
+	 * Return the binary parser used to parse binaries for this target platform.
+	 * 
+	 * @return binary parser
+	 */
+	public IBinaryParser getBinaryParser() {
 		return null;
 	}
 
-	@Override
-	public IBinaryParser getBinaryParser() {
-		// TODO Auto-generated method stub
+	/**
+	 * @return the minimum set of tools that are used to build for this target platform.
+	 */
+	public Tool[] getDefaultTools() {
 		return null;
 	}
 

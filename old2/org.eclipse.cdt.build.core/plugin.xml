@@ -3,16 +3,6 @@
 <plugin>
    <extension-point id="buildDefinitions" name="Build Definitions" schema="schema/buildDefinitions.exsd"/>
    <extension
-         point="org.eclipse.core.runtime.adapters">
-      <factory
-            adaptableType="org.eclipse.core.resources.IProject"
-            class="org.eclipse.cdt.internal.build.core.model.BuildAdapterFactory">
-         <adapter
-               type="org.eclipse.cdt.build.core.model.IBuildProject">
-         </adapter>
-      </factory>
-   </extension>
-   <extension
          id="builder"
          point="org.eclipse.core.resources.builders">
       <builder

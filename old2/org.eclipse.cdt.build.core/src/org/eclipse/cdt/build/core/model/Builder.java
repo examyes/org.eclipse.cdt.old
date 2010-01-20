@@ -13,9 +13,11 @@ package org.eclipse.cdt.build.core.model;
 /**
  * @author Doug Schaefer
  * 
- * A build target represents either a IResource that will be produced by a build, or a pseudo target
- * that is passed on to the IBuilder as the target for the build.
+ * A builder is a system that managed the build. Traditionally this has been a program like 'make'.
+ * But there are many such builders, including the CDT internal builder.
+ * 
+ * This is modeled explicitly to allow users to select the builder to use for a given configuration.
  */
-public interface IBuildTarget {
+public abstract class Builder {
 
 }

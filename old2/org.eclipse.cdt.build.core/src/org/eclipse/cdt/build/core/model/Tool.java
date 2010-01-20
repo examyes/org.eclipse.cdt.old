@@ -19,6 +19,10 @@ package org.eclipse.cdt.build.core.model;
  * (TODO could we have internal tools? For the internal builder?)
  * Tools are instantiated at the folder level (e.g. pattern rules) or file level
  */
-public interface ITool {
+public class Tool {
 
+	public String getId() {
+		return null;
+	}
+	
 }

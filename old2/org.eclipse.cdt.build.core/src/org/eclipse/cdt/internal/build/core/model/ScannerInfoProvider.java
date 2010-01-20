@@ -6,36 +6,39 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Wind River Systems - Initial API and implementation
+ * Doug Schaefer (WRS) - Initial API and implementation
  *******************************************************************************/
 package org.eclipse.cdt.internal.build.core.model;
 
-import org.eclipse.cdt.build.core.model.IBuildService;
+import org.eclipse.cdt.build.core.model.BuildProject;
+import org.eclipse.cdt.build.core.model.Configuration;
 import org.eclipse.cdt.core.parser.IScannerInfo;
 import org.eclipse.cdt.core.parser.IScannerInfoChangeListener;
 import org.eclipse.cdt.core.parser.IScannerInfoProvider;
-import org.eclipse.cdt.internal.build.core.Activator;
 import org.eclipse.core.resources.IResource;
 
 /**
- * @author Doug Schaefer
- *
+ * Get the scanner info provider from the active indexer configuration.
  */
 public class ScannerInfoProvider implements IScannerInfoProvider {
 
 	@Override
 	public IScannerInfo getScannerInformation(IResource resource) {
-		return Activator.getService(IBuildService.class).getScannerInformation(resource);
+		BuildProject buildProject = BuildProject.getBuildProject(resource.getProject());
+		Configuration indexConfig = buildProject.getActiveIndexConfiguration();
+		return indexConfig.getScannerInformation(resource);
 	}
 
 	@Override
 	public void subscribe(IResource resource, IScannerInfoChangeListener listener) {
-		Activator.getService(IBuildService.class).subscribe(resource, listener);
+		// TODO where to manage this, build project
+		// The main issue is to send events when active config changes.
+		// BTW, I'm not sure this is even called any more ???
 	}
 
 	@Override
 	public void unsubscribe(IResource resource, IScannerInfoChangeListener listener) {
-		Activator.getService(IBuildService.class).unsubscribe(resource, listener);
+		// TODO see above
 	}
 
 }

@@ -8,8 +8,10 @@
  * Contributors:
  * Wind River Systems - Initial API and implementation
  *******************************************************************************/
-package org.eclipse.cdt.build.core.model;
+package org.eclipse.cdt.build.core;
 
+import org.eclipse.cdt.build.core.model.BuildProject;
+import org.eclipse.cdt.build.core.model.TargetPlatform;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 
