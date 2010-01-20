@@ -10,9 +10,7 @@
  *******************************************************************************/
 package org.eclipse.cdt.build.core;
 
-import org.eclipse.cdt.build.core.model.BuildProject;
 import org.eclipse.cdt.build.core.model.TargetPlatform;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 
 /**
@@ -30,14 +28,6 @@ public interface IBuildService {
 	 */
 	void initBuildSpec(IProjectDescription desc);
 	
-	/**
-	 * This is a convenience method for adapting an IProject to a IBuildProject.
-	 * 
-	 * @param project
-	 * @return
-	 */
-	BuildProject getBuildProject(IProject project);
-
 	/**
 	 * Get all registered target platforms.
 	 * 

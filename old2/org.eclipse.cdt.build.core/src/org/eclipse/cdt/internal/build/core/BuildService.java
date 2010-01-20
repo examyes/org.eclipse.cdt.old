@@ -12,14 +12,9 @@ package org.eclipse.cdt.internal.build.core;
 
 import org.eclipse.cdt.build.core.IBuildService;
 import org.eclipse.cdt.build.core.ProjectBuilder;
-import org.eclipse.cdt.build.core.model.BuildProject;
 import org.eclipse.cdt.build.core.model.TargetPlatform;
-import org.eclipse.cdt.core.parser.IScannerInfo;
-import org.eclipse.cdt.core.parser.IScannerInfoChangeListener;
 import org.eclipse.core.resources.ICommand;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
@@ -39,11 +34,6 @@ public class BuildService implements IBuildService {
 		desc.setBuildSpec(commands);
 	}
 	
-	@Override
-	public BuildProject getBuildProject(IProject project) {
-		return (BuildProject)project.getAdapter(BuildProject.class);
-	}
-
 	@Override
 	public TargetPlatform[] getTargetPlatforms() {
 		IExtensionRegistry extReg = Platform.getExtensionRegistry();
