@@ -23,6 +23,13 @@ import org.eclipse.core.resources.IResource;
 public class Configuration {
 
 	/**
+	 * @return the parent build project for this configuration.
+	 */
+	public BuildProject getBuildProject() {
+		return null;
+	}
+	
+	/**
 	 * @return the builder for this configuration.
 	 */
 	public Builder getBuilder() {

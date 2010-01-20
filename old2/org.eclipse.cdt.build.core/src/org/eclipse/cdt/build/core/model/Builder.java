@@ -6,18 +6,49 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Wind River Systems - Initial API and implementation
+ * Doug Schaefer (WRS) - Initial API and implementation
  *******************************************************************************/
 package org.eclipse.cdt.build.core.model;
 
+import java.util.Map;
+
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+
 /**
- * @author Doug Schaefer
- * 
- * A builder is a system that managed the build. Traditionally this has been a program like 'make'.
- * But there are many such builders, including the CDT internal builder.
- * 
- * This is modeled explicitly to allow users to select the builder to use for a given configuration.
+ * Each configuration has a builder that does the actual build. It implements the technique of the
+ * based on settings in the configuration.
  */
 public abstract class Builder {
+
+	/**
+	 * This will mainly be used internally by this builder to access the tools and options.
+	 * 
+	 * @return the configuration that this builder builds.
+	 */
+	public Configuration getConfiguration() {
+		return null;
+	}
+
+	/**
+	 * The build method implementation for the IncrementalProjectBuilder.
+	 * 
+	 * @param kind
+	 * @param args
+	 * @param monitor
+	 * @return
+	 * @throws CoreException
+	 */
+	public abstract IProject[] build(int kind, Map args, IProgressMonitor monitor) throws CoreException;
+
+	/**
+	 * The clean method implementation for the IncrementalProjectBuilder.
+	 * 
+	 * @param monitor
+	 * @throws CoreException
+	 */
+	public abstract void clean(IProgressMonitor monitor) throws CoreException;
 
 }

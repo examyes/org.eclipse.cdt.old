@@ -12,6 +12,7 @@ package org.eclipse.cdt.build.core;
 
 import java.util.Map;
 
+import org.eclipse.cdt.build.core.model.BuildProject;
 import org.eclipse.cdt.internal.build.core.Activator;
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
@@ -42,15 +43,22 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 		return command;
 	}
 	
+	/**
+	 * Calls the build method on the builder for the active configuration.
+	 */
 	@Override
 	protected IProject[] build(int kind, Map args, IProgressMonitor monitor) throws CoreException {
-		// TODO Auto-generated method stub
-		return null;
+		BuildProject buildProject = BuildProject.getBuildProject(getProject());
+		return buildProject.getActiveBuildConfiguration().getBuilder().build(kind, args, monitor);
 	}
 
+	/**
+	 * Calls the clean method on the builder for the active configuration.
+	 */
 	@Override
 	protected void clean(IProgressMonitor monitor) throws CoreException {
-		// TODO Auto-generated method stub
+		BuildProject buildProject = BuildProject.getBuildProject(getProject());
+		buildProject.getActiveBuildConfiguration().getBuilder().clean(monitor);
 	}
 	
 }
