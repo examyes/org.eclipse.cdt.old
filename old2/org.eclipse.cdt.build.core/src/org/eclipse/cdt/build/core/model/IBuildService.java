@@ -36,5 +36,12 @@ public interface IBuildService extends IScannerInfoProvider {
 	 * @return
 	 */
 	IBuildProject getBuildProject(IProject project);
+
+	/**
+	 * Get all registered target platforms.
+	 * 
+	 * @return target platforms
+	 */
+	ITargetPlatform[] getTargetPlatforms();
 	
 }

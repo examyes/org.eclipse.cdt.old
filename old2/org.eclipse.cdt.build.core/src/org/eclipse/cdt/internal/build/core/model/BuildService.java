@@ -13,12 +13,19 @@ package org.eclipse.cdt.internal.build.core.model;
 import org.eclipse.cdt.build.core.ProjectBuilder;
 import org.eclipse.cdt.build.core.model.IBuildProject;
 import org.eclipse.cdt.build.core.model.IBuildService;
+import org.eclipse.cdt.build.core.model.ITargetPlatform;
 import org.eclipse.cdt.core.parser.IScannerInfo;
 import org.eclipse.cdt.core.parser.IScannerInfoChangeListener;
+import org.eclipse.cdt.internal.build.core.Activator;
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionPoint;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.Platform;
 
 /**
  * @author Doug Schaefer
@@ -54,6 +61,20 @@ public class BuildService implements IBuildService {
 	@Override
 	public IBuildProject getBuildProject(IProject project) {
 		return (IBuildProject)project.getAdapter(IBuildProject.class);
+	}
+
+	@Override
+	public ITargetPlatform[] getTargetPlatforms() {
+		IExtensionRegistry extReg = Platform.getExtensionRegistry();
+		IExtensionPoint extPoint = extReg.getExtensionPoint(Activator.PLUGIN_ID, "buildDefinitions");
+		IExtension[] extensions = extPoint.getExtensions();
+		for (IExtension extension : extensions) {
+			IConfigurationElement[] elems = extension.getConfigurationElements();
+			for (IConfigurationElement elem : elems) {
+
+			}
+		}
+		return new ITargetPlatform[0];
 	}
 	
 }
