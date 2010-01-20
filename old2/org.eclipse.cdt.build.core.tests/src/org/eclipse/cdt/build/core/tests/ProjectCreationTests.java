@@ -10,13 +10,13 @@
  *******************************************************************************/
 package org.eclipse.cdt.build.core.tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
-import org.eclipse.cdt.build.core.model.IBuildService;
+import org.eclipse.cdt.build.core.IBuildService;
 import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.CProjectNature;
 import org.eclipse.cdt.core.parser.IScannerInfoProvider;
-import org.eclipse.cdt.internal.build.core.model.ScannerInfoProvider;
+import org.eclipse.cdt.internal.build.core.ScannerInfoProvider;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IWorkspace;

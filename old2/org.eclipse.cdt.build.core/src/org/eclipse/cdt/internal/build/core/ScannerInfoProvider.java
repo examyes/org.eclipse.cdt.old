@@ -8,7 +8,7 @@
  * Contributors:
  * Doug Schaefer (WRS) - Initial API and implementation
  *******************************************************************************/
-package org.eclipse.cdt.internal.build.core.model;
+package org.eclipse.cdt.internal.build.core;
 
 import org.eclipse.cdt.build.core.model.BuildProject;
 import org.eclipse.cdt.build.core.model.Configuration;

@@ -12,4 +12,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.cdt.build.core,
  org.eclipse.cdt.build.core.model,
- org.eclipse.cdt.internal.build.core.model;x-friends:="org.eclipse.cdt.build.core.tests"
+ org.eclipse.cdt.internal.build.core;x-friends:="org.eclipse.cdt.build.core.tests"

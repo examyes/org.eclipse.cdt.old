@@ -13,8 +13,8 @@ package org.eclipse.cdt.build.ui.wizards;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 
+import org.eclipse.cdt.build.core.IBuildService;
 import org.eclipse.cdt.build.core.ProjectBuilder;
-import org.eclipse.cdt.build.core.model.IBuildService;
 import org.eclipse.cdt.core.CProjectNature;
 import org.eclipse.cdt.internal.build.ui.Activator;
 import org.eclipse.core.commands.ExecutionException;

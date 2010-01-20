@@ -1,7 +1,6 @@
 package org.eclipse.cdt.internal.build.core;
 
-import org.eclipse.cdt.build.core.model.IBuildService;
-import org.eclipse.cdt.internal.build.core.model.BuildService;
+import org.eclipse.cdt.build.core.IBuildService;
 import org.eclipse.core.runtime.Plugin;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
