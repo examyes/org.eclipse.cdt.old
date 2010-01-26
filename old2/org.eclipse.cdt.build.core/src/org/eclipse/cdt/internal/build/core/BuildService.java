@@ -10,11 +10,15 @@
  *******************************************************************************/
 package org.eclipse.cdt.internal.build.core;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.cdt.build.core.IBuildService;
 import org.eclipse.cdt.build.core.ProjectBuilder;
 import org.eclipse.cdt.build.core.model.TargetPlatform;
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
@@ -35,17 +39,21 @@ public class BuildService implements IBuildService {
 	}
 	
 	@Override
-	public TargetPlatform[] getTargetPlatforms() {
+	public TargetPlatform[] getTargetPlatforms() throws CoreException {
+		List<TargetPlatform> targetPlatforms = new ArrayList<TargetPlatform>();
 		IExtensionRegistry extReg = Platform.getExtensionRegistry();
-		IExtensionPoint extPoint = extReg.getExtensionPoint(Activator.PLUGIN_ID, "buildDefinitions");
+		IExtensionPoint extPoint = extReg.getExtensionPoint(Activator.PLUGIN_ID, "targetPlatform"); //$NON-NLS-1$
 		IExtension[] extensions = extPoint.getExtensions();
 		for (IExtension extension : extensions) {
-			IConfigurationElement[] elems = extension.getConfigurationElements();
-			for (IConfigurationElement elem : elems) {
-
-			}
+			IConfigurationElement[] elements = extension.getConfigurationElements();
+			if (elements.length < 1)
+				continue;
+			// There is only one element in this extension point.
+			TargetPlatform targetPlatform = (TargetPlatform)elements[0].createExecutableExtension("class"); //$NON-NLS-1$
+			targetPlatform.load(extension);
+			targetPlatforms.add(targetPlatform);
 		}
-		return new TargetPlatform[0];
+		return targetPlatforms.toArray(new TargetPlatform[targetPlatforms.size()]);
 	}
 	
 }

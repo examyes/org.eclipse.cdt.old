@@ -13,14 +13,12 @@ package org.eclipse.cdt.build.gnu.core;
 import org.eclipse.cdt.build.core.model.TargetPlatform;
 import org.eclipse.core.runtime.Platform;
 
-/**
- * 
- */
-public class LinuxGCCTargetPlatform extends TargetPlatform {
+public class MinGWTargetPlatform extends TargetPlatform {
 
 	@Override
 	public boolean isAvailable() {
-		return Platform.getOS().equals(Platform.OS_LINUX);
+		// TODO It would be awesome if we could detect a cross compiler on Linux!
+		return Platform.getOS().equals(Platform.OS_WIN32);
 	}
 
 }

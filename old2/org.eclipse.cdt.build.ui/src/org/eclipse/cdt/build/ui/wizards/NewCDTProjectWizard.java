@@ -105,6 +105,7 @@ public class NewCDTProjectWizard extends BasicNewResourceWizard implements INewW
 	public void addPages() {
 		mainPage = new NewCDTProjectPage();
 		this.addPage(mainPage);
+		this.addPage(new TargetPlatformPage());
 	}
 	
 }

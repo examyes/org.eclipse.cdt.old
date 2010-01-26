@@ -10,6 +10,9 @@
  *******************************************************************************/
 package org.eclipse.cdt.build.ui.wizards;
 
+import org.eclipse.cdt.internal.build.ui.Activator;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -31,7 +34,11 @@ public class TargetPlatformPage extends WizardPage {
         composite.setLayout(new GridLayout());
         composite.setLayoutData(new GridData(GridData.FILL_BOTH));
         
-		new TargetPlatformBlock(composite);
+		try {
+			new TargetPlatformBlock(composite);
+		} catch (CoreException e) {
+			Activator.getService(ILog.class).log(e.getStatus());
+		}
 		
         setControl(composite);
         

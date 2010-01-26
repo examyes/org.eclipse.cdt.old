@@ -3,7 +3,7 @@
 <schema targetNamespace="org.eclipse.cdt.build.core" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="org.eclipse.cdt.build.core" id="buildDefinitions" name="Build Definitions"/>
+         <meta.schema plugin="org.eclipse.cdt.build.core" id="targetPlatform" name="Target Platform"/>
       </appinfo>
       <documentation>
          [Enter description of this extension point.]
@@ -18,9 +18,7 @@
       </annotation>
       <complexType>
          <sequence>
-            <choice>
-               <element ref="targetPlatform"/>
-            </choice>
+            <element ref="targetPlatform"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -51,21 +49,7 @@
 
    <element name="targetPlatform">
       <complexType>
-         <attribute name="id" type="string">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-            </annotation>
-         </attribute>
-         <attribute name="name" type="string">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-            </annotation>
-         </attribute>
-         <attribute name="class" type="string">
+         <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
                   

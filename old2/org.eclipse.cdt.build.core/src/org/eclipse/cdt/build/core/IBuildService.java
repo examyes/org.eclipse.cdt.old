@@ -12,6 +12,7 @@ package org.eclipse.cdt.build.core;
 
 import org.eclipse.cdt.build.core.model.TargetPlatform;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.runtime.CoreException;
 
 /**
  * The OSGi Service access point into the CDT Build System.
@@ -33,6 +34,6 @@ public interface IBuildService {
 	 * 
 	 * @return target platforms
 	 */
-	TargetPlatform[] getTargetPlatforms();
+	TargetPlatform[] getTargetPlatforms() throws CoreException;
 	
 }

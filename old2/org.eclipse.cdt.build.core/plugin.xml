@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="buildDefinitions" name="Build Definitions" schema="schema/buildDefinitions.exsd"/>
+   <extension-point id="targetPlatform" name="Target Platform" schema="schema/targetPlatform.exsd"/>
    <extension
          id="builder"
          point="org.eclipse.core.resources.builders">

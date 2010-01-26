@@ -11,6 +11,7 @@
 package org.eclipse.cdt.build.core.model;
 
 import org.eclipse.cdt.core.IBinaryParser;
+import org.eclipse.core.runtime.IExtension;
 
 /**
  * @author Doug Schaefer
@@ -22,7 +23,36 @@ import org.eclipse.cdt.core.IBinaryParser;
  * and it helps separate out the applicable toolchains which generally support only a single target
  * platform.
  */
-public class TargetPlatform {
+public abstract class TargetPlatform {
+	
+	private String id;
+	private String name;
+	
+	/**
+	 * Load the target platform from the extension.
+	 *
+	 * @param extension
+	 */
+	public void load(IExtension extension) {
+		id = extension.getUniqueIdentifier();
+		name = extension.getLabel();
+	}
+	
+	/**
+	 * @return the name of this platform.
+	 */
+	public String getName() {
+		return name;
+	}
+	
+	/**
+	 * Give the environment we're running in right now, will this target platform produce
+	 * builds successfully. This let's us hide unavailable builds in the new project wizard
+	 * and give the user warnings when attempting to use configurations for this platform.
+	 * 
+	 * @return is this target platform available for builds
+	 */
+	public abstract boolean isAvailable();
 	
 	/**
 	 * Return a list of Builders that can build for this target platform.

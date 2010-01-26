@@ -2,11 +2,19 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="org.eclipse.cdt.build.core.buildDefinitions">
+         id="linuxGCC"
+         name="Linux GCC"
+         point="org.eclipse.cdt.build.core.targetPlatform">
       <targetPlatform
-            class="org.eclipse.cdt.build.gnu.core.LinuxGCCTargetPlatform"
-            id="linux.gcc"
-            name="Linux GCC">
+            class="org.eclipse.cdt.build.gnu.core.LinuxGCCTargetPlatform">
+      </targetPlatform>
+   </extension>
+   <extension
+         id="mingw"
+         name="MinGW GCC"
+         point="org.eclipse.cdt.build.core.targetPlatform">
+      <targetPlatform
+            class="org.eclipse.cdt.build.gnu.core.MinGWTargetPlatform">
       </targetPlatform>
    </extension>
 
