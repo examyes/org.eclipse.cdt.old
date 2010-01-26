@@ -10,33 +10,32 @@
  *******************************************************************************/
 package org.eclipse.cdt.build.core.model;
 
-import java.util.Map;
-
 /**
- * A tool instance managed a tool's option settings for a given configuration.
+ * 
  */
-public class ToolInstance {
+public abstract class Option {
 
-	// TODO this will likely be replaced by preference store
-	private Map<String, String> optionValues;
-
-	public Configuration getConfiguration() {
+	/**
+	 * @return the id of the Option.
+	 */
+	public String getId() {
 		return null;
 	}
 	
 	/**
-	 * @return the associated tool.
+	 * Serialize the object for storing in the project settings.
+	 * 
+	 * @param value
+	 * @return
 	 */
-	public Tool getTool() {
-		return null;
-	}
-	
-	public Object getOptionValue(Option option) {
-		return option.deserialize(optionValues.get(option.getId()));
-	}
+	public abstract String serialize(Object value);
 
-	public void setOptionValue(Option option, Object value) {
-		optionValues.put(option.getId(), option.serialize(value));
-	}
+	/**
+	 * Recreate the object from the project settings.
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public abstract Object deserialize(String value);
 	
 }
