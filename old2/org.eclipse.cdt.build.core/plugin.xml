@@ -2,6 +2,8 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="targetPlatform" name="Target Platform" schema="schema/targetPlatform.exsd"/>
+   <extension-point id="builder" name="Builder" schema="schema/builder.exsd"/>
+   <extension-point id="buildConsole" name="BuildConsole" schema="schema/buildConsole.exsd"/>
    <extension
          id="builder"
          point="org.eclipse.core.resources.builders">
@@ -20,6 +22,14 @@
             builder="org.eclipse.cdt.build.core.builder"
             class="org.eclipse.cdt.internal.build.core.ScannerInfoProvider">
       </provider>
+   </extension>
+   <extension
+         id="externalBuilder"
+         name="External Builder"
+         point="org.eclipse.cdt.build.core.builder">
+      <builder
+            class="org.eclipse.cdt.build.core.builders.ExternalBuilder">
+      </builder>
    </extension>
 
 </plugin>

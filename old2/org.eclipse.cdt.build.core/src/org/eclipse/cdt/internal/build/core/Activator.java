@@ -1,7 +1,9 @@
 package org.eclipse.cdt.internal.build.core;
 
 import org.eclipse.cdt.build.core.IBuildService;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
+import org.eclipse.core.runtime.Status;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
@@ -56,4 +58,13 @@ public class Activator extends Plugin {
 		ServiceReference ref = context.getServiceReference(service.getName());
 		return ref != null ? (T)context.getService(ref) : null;
 	}
+	
+	public static void logError(Throwable e) {
+		plugin.getLog().log(getError(e));
+	}
+
+	public static IStatus getError(Throwable e) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, e.getLocalizedMessage(), e);
+	}
+	
 }

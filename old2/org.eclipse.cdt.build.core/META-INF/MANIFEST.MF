@@ -11,5 +11,7 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.cdt.build.core,
+ org.eclipse.cdt.build.core.builders,
  org.eclipse.cdt.build.core.model,
+ org.eclipse.cdt.build.core.model.options,
  org.eclipse.cdt.internal.build.core;x-friends:="org.eclipse.cdt.build.core.tests"

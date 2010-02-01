@@ -49,7 +49,7 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 	@Override
 	protected IProject[] build(int kind, Map args, IProgressMonitor monitor) throws CoreException {
 		BuildProject buildProject = BuildProject.getBuildProject(getProject());
-		return buildProject.getActiveBuildConfiguration().getBuilder().build(kind, args, monitor);
+		return buildProject.getActiveBuildConfiguration().getBuilder().build(this, kind, args, monitor);
 	}
 
 	/**

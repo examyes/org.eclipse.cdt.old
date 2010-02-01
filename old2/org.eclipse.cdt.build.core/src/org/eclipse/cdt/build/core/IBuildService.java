@@ -36,4 +36,9 @@ public interface IBuildService {
 	 */
 	TargetPlatform[] getTargetPlatforms() throws CoreException;
 	
+	/**
+	 * @return the build console for displaying build results.
+	 */
+	IBuildConsole getBuildConsole() throws CoreException;
+	
 }

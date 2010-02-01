@@ -10,6 +10,7 @@
  *******************************************************************************/
 package org.eclipse.cdt.build.core.model;
 
+import org.eclipse.cdt.build.core.builders.ExternalBuilder;
 import org.eclipse.cdt.core.parser.IScannerInfo;
 import org.eclipse.core.resources.IResource;
 
@@ -33,7 +34,8 @@ public class Configuration {
 	 * @return the builder for this configuration.
 	 */
 	public Builder getBuilder() {
-		return null;
+		// TODO just testing ;)
+		return new ExternalBuilder();
 	}
 
 	/**

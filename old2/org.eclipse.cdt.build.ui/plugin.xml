@@ -18,5 +18,18 @@
          </description>
       </wizard>
    </extension>
+   <extension
+         point="org.eclipse.cdt.build.core.buildConsole">
+      <buildConsole
+            class="org.eclipse.cdt.internal.build.ui.BuildConsole">
+      </buildConsole>
+   </extension>
+   <extension
+         point="org.eclipse.ui.console.consoleFactories">
+      <consoleFactory
+            class="org.eclipse.cdt.internal.build.ui.BuildConsoleFactory"
+            label="CDT Build Console">
+      </consoleFactory>
+   </extension>
 
 </plugin>

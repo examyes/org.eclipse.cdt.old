@@ -22,19 +22,26 @@ import org.eclipse.core.resources.IProject;
  */
 public class BuildProject {
 
+	private final IProject project;
+	
+	private BuildProject(IProject project) {
+		this.project = project;
+	}
+	
 	/**
 	 * @param project
 	 * @return the build object for the project
 	 */
 	public static BuildProject getBuildProject(IProject project) {
-		return null;
+		// TODO cache these things
+		return new BuildProject(project);
 	}
 	
 	/**
 	 * @return the project this object is associated with.
 	 */
 	public IProject getProject() {
-		return null;
+		return project;
 	}
 	
 	/**
@@ -48,7 +55,8 @@ public class BuildProject {
 	 * @return the current active configuration for system builds.
 	 */
 	public Configuration getActiveBuildConfiguration() {
-		return null;
+		// TODO just testing
+		return new Configuration();
 	}
 	
 	/**
