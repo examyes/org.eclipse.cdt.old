@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="true"
+            id="org.eclipse.cdt.android.ui.objectContribution"
+            objectClass="org.eclipse.core.resources.IProject">
+         <menu
+               id="com.android.ide.eclipse.adt.AndroidNature"
+               label="Android Tools"
+               path="additions">
+            <separator
+                  name="group4">
+            </separator>
+         </menu>
+         <visibility>
+            <objectState
+                  name="projectNature"
+                  value="com.android.ide.eclipse.adt.AndroidNature">
+            </objectState>
+         </visibility>
+         <action
+               class="org.eclipse.cdt.android.internal.ui.AddNativeSupport"
+               id="org.eclipse.cdt.android.ui.addNativeSupport"
+               label="Add Native Support..."
+               menubarPath="com.android.ide.eclipse.adt.AndroidTools/group4">
+         </action>
+      </objectContribution>
+   </extension>
+
+</plugin>
