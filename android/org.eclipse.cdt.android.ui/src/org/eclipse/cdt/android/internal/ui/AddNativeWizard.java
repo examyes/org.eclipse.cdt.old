@@ -41,9 +41,9 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
-import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.WorkbenchException;
@@ -54,27 +54,33 @@ import org.eclipse.ui.WorkbenchException;
  */
 public class AddNativeWizard extends Wizard {
 
-	private AddNativeProjectPage projectPage;
-	private AddNativeNDKPage ndkPage;
 	private final IWorkbenchWindow window;
 	private final IProject project;
+	
+	private AddNativeProjectPage projectPage;
+	private AddNativeNDKPage ndkPage;
 	
 	public AddNativeWizard(IWorkbenchWindow window, IProject project) {
 		this.window = window;
 		this.project = project;
-		IDialogSettings rootSettings = Activator.getDefault().getDialogSettings();
-		setDialogSettings(rootSettings.getSection(getClass().getName()));
+		
+		setWindowTitle("Add Android Native Support");
+		setDialogSettings(Activator.getDefault().getDialogSettings());
 	}
 	
 	@Override
 	public void addPages() {
-		setWindowTitle("Add Android Native Support");
-		
 		projectPage = new AddNativeProjectPage(project);
 		addPage(projectPage);
 		
 		ndkPage = new AddNativeNDKPage();
 		addPage(ndkPage);
+	}
+	
+	@Override
+	public boolean canFinish() {
+		// TODO turn off if NDK directory isn't valid
+		return super.canFinish();
 	}
 	
 	@Override
@@ -86,16 +92,25 @@ public class AddNativeWizard extends Wizard {
 			Activator.getDefault().getLog().log(e.getStatus());
 		}
 
-		final String sourceFolderName = "native";
-		final String outputFolderName = "obj";
-		final String architecture = "armeabi";
+		// Grab the data from the pages
 		final String libraryName = projectPage.getLibraryName();
-		final IToolChain toolChain = null;
+		final String sourceFolderName = projectPage.getSourceFolderName();
+		final String outputFolderName = projectPage.getOutputFolderName();
+
+		final String ndkDir = "/home/dschaefer/android/android-ndk-r3";
+		final String gccVer = "4.4.0";
+		final String androidVer = "android-5";
+		final String architecture = "armeabi";
 		
+		// Save the data
+		projectPage.saveSettings();
+		
+		// The operation to do all the dirty work
 		IWorkspaceRunnable op = new IWorkspaceRunnable() {
 			public void run(IProgressMonitor monitor) throws CoreException {
 				// This one is constant defined by Android
 				String libFolderName = "libs";
+				IToolChain toolChain = null;
 				
 				// Convert to CDT project
 				CCorePlugin.getDefault().createCDTProject(project.getDescription(), project, monitor);
@@ -157,11 +172,20 @@ public class AddNativeWizard extends Wizard {
 					map.put("lib", libraryName);
 					map.put("src", sourceFolderName);
 					map.put("obj", outputFolderName);
-					map.put("arch", "armeabi");
-					map.put("ndkDir", "/home/dschaefer/android/android-ndk-r3");
-					map.put("host", "linux-x86");
-					map.put("gccVer", "4.4.0");
-					map.put("androidVer", "android-5");
+					map.put("ndkDir", ndkDir);
+					map.put("arch", architecture);
+					map.put("gccVer", gccVer);
+					map.put("androidVer", androidVer);
+					
+					String os = Platform.getOS();
+					String host = null;
+					if (Platform.OS_WIN32.equals(os))
+						host = "windows"; // TODO check this
+					else if (Platform.OS_LINUX.equals(os))
+						host = "linux-x86";
+					else if (Platform.OS_MACOSX.equals(os))
+						host = "mac"; // TODO check this
+					map.put("host", host);
 					
 					IPath templatePath = new Path("templates/Makefile");
 					URL templateURL = FileLocator.find(Activator.getDefault().getBundle(), templatePath, null);
@@ -186,7 +210,6 @@ public class AddNativeWizard extends Wizard {
 		} catch (CoreException e) {
 			Activator.getDefault().getLog().log(e.getStatus());
 		}
-		
 		
 		return true;
 	}
