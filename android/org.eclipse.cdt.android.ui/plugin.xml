@@ -16,10 +16,18 @@
             </separator>
          </menu>
          <visibility>
-            <objectState
-                  name="projectNature"
-                  value="com.android.ide.eclipse.adt.AndroidNature">
-            </objectState>
+            <and>
+               <objectState
+                     name="projectNature"
+                     value="com.android.ide.eclipse.adt.AndroidNature">
+               </objectState>
+               <not>
+                  <objectState
+                        name="projectNature"
+                        value="org.eclipse.cdt.core.cnature">
+                  </objectState>
+               </not>
+            </and>
          </visibility>
          <action
                class="org.eclipse.cdt.android.internal.ui.AddNativeSupport"

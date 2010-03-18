@@ -16,7 +16,6 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -25,12 +24,14 @@ import org.eclipse.ui.IWorkbenchPart;
  */
 public class AddNativeSupport implements IObjectActionDelegate {
 
-	private Shell shell; 
+	private IWorkbenchPart targetPart;
 	private IProject project;
 	
 	public void run(IAction action) {
-		AddNativeWizard wizard = new AddNativeWizard(project);
-		new WizardDialog(shell, wizard).open();
+		// Run the wizard
+		AddNativeWizard wizard = new AddNativeWizard(targetPart.getSite().getWorkbenchWindow(), project);
+		WizardDialog dialog = new WizardDialog(targetPart.getSite().getShell(), wizard);
+		dialog.open();
 	}
 
 	public void selectionChanged(IAction action, ISelection selection) {
@@ -46,7 +47,7 @@ public class AddNativeSupport implements IObjectActionDelegate {
 	}
 
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-		shell = targetPart.getSite().getShell();
+		this.targetPart = targetPart;
 	}
 
 }

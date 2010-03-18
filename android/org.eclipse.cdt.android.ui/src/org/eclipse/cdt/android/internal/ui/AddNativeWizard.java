@@ -43,7 +43,10 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.WorkbenchException;
 
 /**
  * @author dschaefer
@@ -53,17 +56,21 @@ public class AddNativeWizard extends Wizard {
 
 	private AddNativeProjectPage projectPage;
 	private AddNativeNDKPage ndkPage;
+	private final IWorkbenchWindow window;
 	private final IProject project;
 	
-	public AddNativeWizard(IProject project) {
+	public AddNativeWizard(IWorkbenchWindow window, IProject project) {
+		this.window = window;
 		this.project = project;
+		IDialogSettings rootSettings = Activator.getDefault().getDialogSettings();
+		setDialogSettings(rootSettings.getSection(getClass().getName()));
 	}
 	
 	@Override
 	public void addPages() {
 		setWindowTitle("Add Android Native Support");
 		
-		projectPage = new AddNativeProjectPage();
+		projectPage = new AddNativeProjectPage(project);
 		addPage(projectPage);
 		
 		ndkPage = new AddNativeNDKPage();
@@ -72,10 +79,17 @@ public class AddNativeWizard extends Wizard {
 	
 	@Override
 	public boolean performFinish() {
+		// Switch to the C perspective
+		try {
+			window.getWorkbench().showPerspective("org.eclipse.cdt.ui.CPerspective", window); //$NON-NLS-1
+		} catch (WorkbenchException e) {
+			Activator.getDefault().getLog().log(e.getStatus());
+		}
+
 		final String sourceFolderName = "native";
 		final String outputFolderName = "obj";
 		final String architecture = "armeabi";
-		final String libName = project.getName();
+		final String libraryName = projectPage.getLibraryName();
 		final IToolChain toolChain = null;
 		
 		IWorkspaceRunnable op = new IWorkspaceRunnable() {
@@ -140,7 +154,7 @@ public class AddNativeWizard extends Wizard {
 				// Generate the Makefile
 				try {
 					Map<String, String> map = new HashMap<String, String>();
-					map.put("lib", project.getName());
+					map.put("lib", libraryName);
 					map.put("src", sourceFolderName);
 					map.put("obj", outputFolderName);
 					map.put("arch", "armeabi");
@@ -173,7 +187,7 @@ public class AddNativeWizard extends Wizard {
 			Activator.getDefault().getLog().log(e.getStatus());
 		}
 		
-		// TODO Auto-generated method stub
+		
 		return true;
 	}
 
