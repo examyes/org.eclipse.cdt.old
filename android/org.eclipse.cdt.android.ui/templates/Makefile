@@ -15,7 +15,7 @@ ANDROID_HOST = %{host}
 ANDROID_GCC_VER = %{gccVer}
 ANDROID_PLAT = %{androidVer}
 
-SOURCES = $(wildcard $(SRCROOT)/*.cpp) $(wildcard $(SRCROOT)/*.c)
+SOURCES = $(shell find $(SRCROOT) -name *.cpp -o -name *.c)
 
 OBJS = \
 	$(patsubst $(SRCROOT)/%.cpp, $(OBJROOT)/%.o, $(filter %.cpp, $(SOURCES))) \
@@ -39,7 +39,7 @@ all:	$(LIBROOT)/$(LIB)
 
 $(OBJROOT)/$(LIB):	$(OBJS)
 	$(ANDROID_PREFIX)gcc -nostdlib $(ANDROID_SYSROOT) -Wl,-shared,-Bsymbolic -Wl,--no-undefined -o $@ \
-		$(LIBS) -lc -lm $(ANDROID_TOOLCHAIN)/../lib/gcc/arm-eabi/$(ANDROID_GCC_VER)/libgcc.a
+		$^ $(LIBS) -lc -lm $(ANDROID_TOOLCHAIN)/../lib/gcc/arm-eabi/$(ANDROID_GCC_VER)/libgcc.a
 
 $(LIBROOT)/$(LIB):	$(OBJROOT)/$(LIB)
 	@[ -d $(dir $@) ] || mkdir -p $(dir $@)
