@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.cdt.android.ui.Activator;
 import org.eclipse.cdt.android.ui.TemplatedInputStream;
 import org.eclipse.cdt.core.CCProjectNature;
 import org.eclipse.cdt.core.CCorePlugin;
@@ -79,8 +78,7 @@ public class AddNativeWizard extends Wizard {
 	
 	@Override
 	public boolean canFinish() {
-		// TODO turn off if NDK directory isn't valid
-		return super.canFinish();
+		return ndkPage.isNDKLocationValid();
 	}
 	
 	@Override
@@ -97,13 +95,15 @@ public class AddNativeWizard extends Wizard {
 		final String sourceFolderName = projectPage.getSourceFolderName();
 		final String outputFolderName = projectPage.getOutputFolderName();
 
-		final String ndkDir = "/home/dschaefer/android/android-ndk-r3";
-		final String gccVer = "4.4.0";
-		final String androidVer = "android-5";
-		final String architecture = "armeabi";
+		// TODO this should be in the build env
+		final String ndkDir = ndkPage.getNDKLocation();
+		final String androidVer = ndkPage.getAndroidVer();
+		final String gccVer = ndkPage.getGCCVer();
+		final String architecture = ndkPage.getArch();
 		
 		// Save the data
 		projectPage.saveSettings();
+		ndkPage.saveSettings();
 		
 		// The operation to do all the dirty work
 		IWorkspaceRunnable op = new IWorkspaceRunnable() {

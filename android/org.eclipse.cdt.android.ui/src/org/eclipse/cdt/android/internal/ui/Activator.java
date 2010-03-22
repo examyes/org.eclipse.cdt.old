@@ -1,4 +1,4 @@
-package org.eclipse.cdt.android.ui;
+package org.eclipse.cdt.android.internal.ui;
 
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -22,19 +22,11 @@ public class Activator extends AbstractUIPlugin {
 	public Activator() {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
@@ -47,6 +39,18 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public static Activator getDefault() {
 		return plugin;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T> T getService(Class<T> clazz) {
+		BundleContext context = getBundle().getBundleContext();
+		ServiceReference ref = context.getServiceReference(clazz.getName());
+		try{
+			return (ref != null) ? (T)context.getService(ref) : null;
+		} finally {
+			if(ref != null)
+				context.ungetService(ref);
+		}
 	}
 
 }
