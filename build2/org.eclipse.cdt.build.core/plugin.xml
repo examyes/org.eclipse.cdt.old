@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="org.eclipse.cdt.build.builder"
+         point="org.eclipse.core.resources.builders">
+      <builder
+            callOnEmptyDelta="true"
+            hasNature="true"
+            isConfigurable="true">
+         <run
+               class="org.eclipse.cdt.internal.build.builder.ProjectBuilder">
+         </run>
+      </builder>
+   </extension>
+   <extension-point id="toolChain" name="ToolChain" schema="schema/toolChain.exsd"/>
+   <extension
+         id="org.eclipse.cdt.build.nature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="org.eclipse.cdt.internal.build.core.BuildProjectNature">
+         </run>
+      </runtime>
+      <builder
+            id="org.eclipse.cdt.build.builder">
+      </builder>
+   </extension>
+
+</plugin>
