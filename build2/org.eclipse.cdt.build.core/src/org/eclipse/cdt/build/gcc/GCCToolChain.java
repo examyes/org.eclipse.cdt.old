@@ -9,7 +9,7 @@
  * Wind River Systems - Initial API and implementation
  *******************************************************************************/
 
-package org.eclipse.cdt.build.ui;
+package org.eclipse.cdt.build.gcc;
 
 import org.eclipse.cdt.build.model.EnvironmentSetting;
 import org.eclipse.cdt.build.model.IToolChain;

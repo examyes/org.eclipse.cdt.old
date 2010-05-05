@@ -12,18 +12,13 @@
 package org.eclipse.cdt.build.ui;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
 
+import org.eclipse.cdt.build.gcc.GCCToolChain;
 import org.eclipse.cdt.build.model.IBuildService;
 import org.eclipse.cdt.build.model.IConfiguration;
 import org.eclipse.cdt.build.model.IProjectBuild;
 import org.eclipse.cdt.core.CCProjectNature;
 import org.eclipse.cdt.core.CCorePlugin;
-import org.eclipse.cdt.core.model.CoreModel;
-import org.eclipse.cdt.core.model.ICProject;
-import org.eclipse.cdt.core.model.IPathEntry;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IWorkspace;
