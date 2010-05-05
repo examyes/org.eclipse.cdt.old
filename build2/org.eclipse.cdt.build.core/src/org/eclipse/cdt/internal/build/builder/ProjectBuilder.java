@@ -50,12 +50,12 @@ public class ProjectBuilder extends ACBuilder {
 	protected IProject[] build(int kind, Map args, IProgressMonitor monitor) throws CoreException {
 		IProject project = getProject();
 		
+		// Get the active configuration
 		IBuildService buildService = Activator.getService(IBuildService.class);
 		IProjectBuild projectBuild = buildService.getProjectBuild(project);
 		IConfiguration config = projectBuild.getActiveConfiguration();
 		
-		ICommandLauncher launcher = new CommandLauncher();
-		
+		// The build command
 		String commandStr = kind == CLEAN_BUILD
 			? config.getCleanCommand()
 			: config.getBuildCommand();
@@ -67,13 +67,13 @@ public class ProjectBuilder extends ACBuilder {
 		IPath commandPath = new Path(command[0]);
 		
 		String[] commandArgs;
-		
 		if (command.length > 1) { 
 			commandArgs = new String[command.length - 1];
 			System.arraycopy(command, 1, commandArgs, 0, commandArgs.length);
 		} else
 			commandArgs = new String[0];
 
+		// The environment
 		Map<String, String> envMap = config.getEnvironment();
 		String[] env = new String[envMap.size()];
 		int i = 0;
@@ -98,9 +98,11 @@ public class ProjectBuilder extends ACBuilder {
 				this, errorParserIds);
 		errorParser.setOutputStream(console.getOutputStream());
 
-		// Close outgoing pipe to process
+		// Launch the build
+		ICommandLauncher launcher = new CommandLauncher();
 		Process p = launcher.execute(commandPath, commandArgs, env, dir, monitor);
 		try {
+			// Close outgoing pipe to process
 			p.getOutputStream().close();
 		} catch (IOException e) {
 			Activator.getService(ILog.class).log(new Status(IStatus.WARNING, Activator.getId(), e.getLocalizedMessage(), e));
@@ -109,8 +111,11 @@ public class ProjectBuilder extends ACBuilder {
 		// Run and process output
 		launcher.waitAndRead(errorParser, errorParser, monitor);
 		
+		// Refresh to pick up the build results
 		project.refreshLocal(IProject.DEPTH_INFINITE, monitor);
 		
+		// TODO should return the referenced projects
+		// so that we build when they change
 		return new IProject[0];
 	}
 
