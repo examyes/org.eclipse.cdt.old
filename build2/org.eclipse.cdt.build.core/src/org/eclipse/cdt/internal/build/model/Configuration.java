@@ -11,7 +11,9 @@
 
 package org.eclipse.cdt.internal.build.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.cdt.build.model.EnvironmentSetting;
@@ -44,6 +46,10 @@ public class Configuration implements IConfiguration {
 	// default values
 	private static final String DEFAULT_BUILD_COMMAND = "make";
 	private static final String DEFAULT_CLEAN_COMMAND = "make clean";
+	private static final String[] ERROR_PARSER_IDS = {
+		"org.eclipse.cdt.core.GmakeErrorParser",
+		"org.eclipse.cdt.core.CWDLocator",
+	};
 	
 	private final String id;
 	private final IProject project;
@@ -191,6 +197,18 @@ public class Configuration implements IConfiguration {
 		// TODO Override with config env
 		
 		return env;
+	}
+	
+	public String[] getErrorParserIds() throws CoreException {
+		List<String> ids = new ArrayList<String>();
+		for (String id : ERROR_PARSER_IDS)
+			ids.add(id);
+		
+		for (IToolChain toolChain : Activator.getService(IBuildService.class).getToolChains(getToolChainIds()))
+			for (String id : toolChain.getErrorParserIds())
+				ids.add(id);
+		
+		return ids.toArray(new String[ids.size()]);
 	}
 	
 	public synchronized void flush() throws CoreException {

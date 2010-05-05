@@ -115,6 +115,13 @@ public interface IConfiguration {
 	Map<String, String> getEnvironment() throws CoreException;
 
 	/**
+	 * Returns the ids of the error parsers to use with this configuration
+	 * 
+	 * @return error parser ids
+	 */
+	String[] getErrorParserIds() throws CoreException;
+	
+	/**
 	 * Save changes to this configuration.
 	 * 
 	 * @throws CoreException

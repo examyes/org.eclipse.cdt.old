@@ -24,7 +24,14 @@ import org.eclipse.cdt.build.model.IToolChain;
 public class GCCToolChain implements IToolChain {
 
 	public static final String ID = "org.eclipse.cdt.build.gcc.toolchain";
-	public static final String NAME = "GCC";
+
+	private static final String NAME = "GCC";
+	private static final String[] ERROR_PARSER_IDS = {
+		"org.eclipse.cdt.core.GCCErrorParser",
+		"org.eclipse.cdt.core.GASErrorParser",
+		"org.eclipse.cdt.core.GLDErrorParser"
+	};
+	
 		
 	public String getId() {
 		return ID; 
@@ -36,6 +43,10 @@ public class GCCToolChain implements IToolChain {
 
 	public EnvironmentSetting[] getEnvironmentSettings() {
 		return new EnvironmentSetting[0];
+	}
+
+	public String[] getErrorParserIds() {
+		return ERROR_PARSER_IDS;
 	}
 
 }

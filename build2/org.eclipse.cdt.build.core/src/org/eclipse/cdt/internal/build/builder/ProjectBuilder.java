@@ -20,11 +20,16 @@ import org.eclipse.cdt.build.model.IProjectBuild;
 import org.eclipse.cdt.build.model.IToolChain;
 import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.CommandLauncher;
+import org.eclipse.cdt.core.ErrorParserManager;
 import org.eclipse.cdt.core.ICommandLauncher;
+import org.eclipse.cdt.core.model.ICModelMarker;
 import org.eclipse.cdt.core.resources.ACBuilder;
 import org.eclipse.cdt.core.resources.IConsole;
 import org.eclipse.cdt.internal.build.core.Activator;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
@@ -77,16 +82,32 @@ public class ProjectBuilder extends ACBuilder {
 		
 		IPath dir = new Path(config.getBuildDirectory());
 		
+		// The build console
 		IConsole console = CCorePlugin.getDefault().getConsole();
 		console.start(project);
 		
+		// remove all markers
+		IMarker[] markers = project.findMarkers(ICModelMarker.C_MODEL_PROBLEM_MARKER, true, IResource.DEPTH_INFINITE);
+		if (markers != null) {
+			project.getWorkspace().deleteMarkers(markers);
+		}
+
+		// The error parser
+		String[] errorParserIds = config.getErrorParserIds();
+		ErrorParserManager errorParser = new ErrorParserManager(project, dir.toFile().toURI(),
+				this, errorParserIds);
+		errorParser.setOutputStream(console.getOutputStream());
+
+		// Close outgoing pipe to process
 		Process p = launcher.execute(commandPath, commandArgs, env, dir, monitor);
 		try {
 			p.getOutputStream().close();
 		} catch (IOException e) {
 			Activator.getService(ILog.class).log(new Status(IStatus.WARNING, Activator.getId(), e.getLocalizedMessage(), e));
 		}
-		launcher.waitAndRead(console.getOutputStream(), console.getErrorStream(), monitor);
+		
+		// Run and process output
+		launcher.waitAndRead(errorParser, errorParser, monitor);
 		
 		project.refreshLocal(IProject.DEPTH_INFINITE, monitor);
 		

@@ -44,4 +44,11 @@ public interface IToolChain {
 	 */
 	public EnvironmentSetting[] getEnvironmentSettings();
 	
+	/**
+	 * Returns the ids of the error parsers to use with this toolchain.
+	 * 
+	 * @return error parser ids
+	 */
+	public String[] getErrorParserIds();
+	
 }
