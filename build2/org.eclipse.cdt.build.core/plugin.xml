@@ -33,5 +33,13 @@
             class="org.eclipse.cdt.internal.build.scannerInfo.ScannerInfoProvider">
       </provider>
    </extension>
+   <extension
+         id="org.eclipse.cdt.build.gcc.toolchain"
+         name="GCC"
+         point="org.eclipse.cdt.build.core.toolChain">
+      <implementation
+            class="org.eclipse.cdt.build.gcc.GCCToolChain">
+      </implementation>
+   </extension>
 
 </plugin>

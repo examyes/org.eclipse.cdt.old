@@ -27,14 +27,11 @@ public class ScannerInfoProvider implements IScannerInfoProvider {
 		return null;
 	}
 
-	public void subscribe(IResource resource,
-			IScannerInfoChangeListener listener) {
-		// TODO Auto-generated method stub
+	// These don't seem to be used and they're not supported here
+	public void subscribe(IResource resource, IScannerInfoChangeListener listener) {
 	}
 
-	public void unsubscribe(IResource resource,
-			IScannerInfoChangeListener listener) {
-		// TODO Auto-generated method stub
+	public void unsubscribe(IResource resource, IScannerInfoChangeListener listener) {
 	}
 
 }

@@ -13,12 +13,4 @@
             project="true">
       </wizard>
    </extension>
-   <extension
-         id="org.eclipse.cdt.build.gcc.toolchain"
-         name="GCC"
-         point="org.eclipse.cdt.build.core.toolChain">
-      <implementation
-            class="org.eclipse.cdt.build.ui.GCCToolChain">
-      </implementation>
-   </extension>
 </plugin>
