@@ -11,6 +11,9 @@
 
 package org.eclipse.cdt.build.model;
 
+import org.eclipse.cdt.core.parser.IScannerInfo;
+import org.eclipse.core.resources.IResource;
+
 
 /**
  * @author Doug Schaefer
@@ -28,27 +31,35 @@ public interface IToolChain {
 	 * 
 	 * @return
 	 */
-	public String getId();
+	String getId();
 	
 	/**
 	 * Returns the name for the toolchain.
 	 * 
 	 * @return name
 	 */
-	public String getName();
+	String getName();
 
 	/**
 	 * Returns the built-in environment settings required by this toolchain.
 	 * 
 	 * @return toolchain environment settings
 	 */
-	public EnvironmentSetting[] getEnvironmentSettings();
+	EnvironmentSetting[] getEnvironmentSettings();
 	
 	/**
 	 * Returns the ids of the error parsers to use with this toolchain.
 	 * 
 	 * @return error parser ids
 	 */
-	public String[] getErrorParserIds();
+	String[] getErrorParserIds();
+
+	/**
+	 * Returns the scanner info for the given resource.
+	 * 
+	 * @param command or null
+	 * @return
+	 */
+	IScannerInfo getScannerInfo(IResource resource);
 	
 }

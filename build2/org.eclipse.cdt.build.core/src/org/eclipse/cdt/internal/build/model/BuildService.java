@@ -11,11 +11,13 @@
 
 package org.eclipse.cdt.internal.build.model;
 
+import org.eclipse.cdt.build.model.DiscoveredCommand;
 import org.eclipse.cdt.build.model.IBuildService;
 import org.eclipse.cdt.build.model.IProjectBuild;
 import org.eclipse.cdt.build.model.IToolChain;
 import org.eclipse.cdt.internal.build.core.Activator;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -70,6 +72,11 @@ public class BuildService implements IBuildService {
 	}
 	
 	public String getToolChainName(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public DiscoveredCommand getDiscoveredCommand(IResource resource) {
 		// TODO Auto-generated method stub
 		return null;
 	}

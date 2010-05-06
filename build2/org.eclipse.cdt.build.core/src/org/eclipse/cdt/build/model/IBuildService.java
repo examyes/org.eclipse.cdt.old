@@ -12,6 +12,7 @@
 package org.eclipse.cdt.build.model;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -70,5 +71,13 @@ public interface IBuildService {
 	 * @return
 	 */
 	String getToolChainName(String id);
+
+	/**
+	 * Returns a discovered command that was used to build the resource.
+	 * 
+	 * @param resource
+	 * @return
+	 */
+	DiscoveredCommand getDiscoveredCommand(IResource resource);
 	
 }

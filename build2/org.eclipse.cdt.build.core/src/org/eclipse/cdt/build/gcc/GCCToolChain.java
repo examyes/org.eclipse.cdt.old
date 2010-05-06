@@ -13,6 +13,8 @@ package org.eclipse.cdt.build.gcc;
 
 import org.eclipse.cdt.build.model.EnvironmentSetting;
 import org.eclipse.cdt.build.model.IToolChain;
+import org.eclipse.cdt.core.parser.IScannerInfo;
+import org.eclipse.core.resources.IResource;
 
 /**
  * The toolchain definition for gcc.
@@ -49,4 +51,9 @@ public class GCCToolChain implements IToolChain {
 		return ERROR_PARSER_IDS;
 	}
 
+	public IScannerInfo getScannerInfo(IResource resource) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 }
