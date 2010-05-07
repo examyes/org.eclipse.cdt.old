@@ -2,6 +2,8 @@ package org.eclipse.cdt.internal.build.core;
 
 import org.eclipse.cdt.build.model.IBuildService;
 import org.eclipse.cdt.internal.build.model.BuildService;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Platform;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -49,4 +51,8 @@ public class Activator implements BundleActivator {
 		}
 	}
 
+	public static IPath getStateLocation() {
+		return Platform.getStateLocation(context.getBundle());
+	}
+	
 }

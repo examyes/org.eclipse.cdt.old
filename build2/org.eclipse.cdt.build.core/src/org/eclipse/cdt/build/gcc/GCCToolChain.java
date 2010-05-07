@@ -11,7 +11,11 @@
 
 package org.eclipse.cdt.build.gcc;
 
+import java.util.regex.Pattern;
+
+import org.eclipse.cdt.build.model.DiscoveredCommand;
 import org.eclipse.cdt.build.model.EnvironmentSetting;
+import org.eclipse.cdt.build.model.IConfiguration;
 import org.eclipse.cdt.build.model.IToolChain;
 import org.eclipse.cdt.core.parser.IScannerInfo;
 import org.eclipse.core.resources.IResource;
@@ -34,7 +38,21 @@ public class GCCToolChain implements IToolChain {
 		"org.eclipse.cdt.core.GLDErrorParser"
 	};
 	
-		
+	private final String prefix;
+	
+	public GCCToolChain() {
+		prefix = null;
+	}
+	
+	/**
+	 * Used by subclasses that are generally cross compilers.
+	 * 
+	 * @param prefix
+	 */
+	protected GCCToolChain(String prefix) {
+		this.prefix = prefix;
+	}
+	
 	public String getId() {
 		return ID; 
 	}
@@ -51,9 +69,21 @@ public class GCCToolChain implements IToolChain {
 		return ERROR_PARSER_IDS;
 	}
 
-	public IScannerInfo getScannerInfo(IResource resource) {
+	public Pattern[] getDiscoveryPatterns() {
+		String pattern = "g(cc|\\+\\+)";
+		if (prefix != null)
+			pattern = prefix + pattern;
+		return new Pattern[] { Pattern.compile(pattern) };
+	}
+
+	public DiscoveredCommand getDiscoveredCommand(String[] tokens) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
+	public IScannerInfo getScannerInfo(DiscoveredCommand command, IConfiguration configuration) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

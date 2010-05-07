@@ -11,6 +11,8 @@
 
 package org.eclipse.cdt.build.model;
 
+import java.util.regex.Pattern;
+
 import org.eclipse.cdt.core.parser.IScannerInfo;
 import org.eclipse.core.resources.IResource;
 
@@ -54,12 +56,31 @@ public interface IToolChain {
 	 */
 	String[] getErrorParserIds();
 
+	// TODO these may need to be in a discovery participant object
+	
 	/**
-	 * Returns the scanner info for the given resource.
+	 * Returns the regex patterns used by the build output parser to determine if this
+	 * toolchain is interested in a given line in the build output.
 	 * 
-	 * @param command or null
-	 * @return
+	 * @return interesting discovery patterns
 	 */
-	IScannerInfo getScannerInfo(IResource resource);
+	Pattern[] getDiscoveryPatterns();
+	
+	/**
+	 * Creates a discovered command for the given tokenized command line. Return null
+	 * if this command line wasn't that interesting.
+	 * 
+	 * @param tokens
+	 * @return discovered command
+	 */
+	DiscoveredCommand getDiscoveredCommand(String[] tokens);
+	
+	/**
+	 * Returns the scanner info for the given command in the given configuration.
+	 * 
+	 * @param command
+	 * @return scanner info for command
+	 */
+	IScannerInfo getScannerInfo(DiscoveredCommand command, IConfiguration configuration);
 	
 }

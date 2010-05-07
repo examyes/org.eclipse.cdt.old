@@ -9,7 +9,7 @@
  * Wind River Systems - Initial API and implementation
  *******************************************************************************/
 
-package org.eclipse.cdt.internal.build.scannerInfo;
+package org.eclipse.cdt.internal.build.discovery;
 
 import org.eclipse.cdt.core.parser.IScannerInfo;
 import org.eclipse.cdt.core.parser.IScannerInfoChangeListener;

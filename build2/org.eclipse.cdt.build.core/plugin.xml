@@ -30,7 +30,7 @@
          point="org.eclipse.cdt.core.ScannerInfoProvider2">
       <provider
             builder="org.eclipse.cdt.build.builder"
-            class="org.eclipse.cdt.internal.build.scannerInfo.ScannerInfoProvider">
+            class="org.eclipse.cdt.internal.build.discovery.ScannerInfoProvider">
       </provider>
    </extension>
    <extension

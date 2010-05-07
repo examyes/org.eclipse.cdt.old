@@ -12,6 +12,7 @@
 package org.eclipse.cdt.internal.build.builder;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Map;
 
 import org.eclipse.cdt.build.model.IBuildService;
@@ -25,6 +26,7 @@ import org.eclipse.cdt.core.model.ICModelMarker;
 import org.eclipse.cdt.core.resources.ACBuilder;
 import org.eclipse.cdt.core.resources.IConsole;
 import org.eclipse.cdt.internal.build.core.Activator;
+import org.eclipse.cdt.internal.build.discovery.BuildOutputParser;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -44,6 +46,7 @@ public class ProjectBuilder extends ACBuilder {
 
 	public static final String ID = "org.eclipse.cdt.build.builder";
 	
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected IProject[] build(int kind, Map args, IProgressMonitor monitor) throws CoreException {
 		IProject project = getProject();
@@ -96,6 +99,12 @@ public class ProjectBuilder extends ACBuilder {
 				this, errorParserIds);
 		errorParser.setOutputStream(console.getOutputStream());
 
+		// The discovery build output parser
+		BuildOutputParser buildOutputParser = new BuildOutputParser(errorParser, config);
+		
+		// Record which output stream to really use
+		OutputStream out = buildOutputParser;
+		
 		// Launch the build
 		ICommandLauncher launcher = new CommandLauncher();
 		Process p = launcher.execute(commandPath, commandArgs, env, dir, monitor);
@@ -106,15 +115,14 @@ public class ProjectBuilder extends ACBuilder {
 			Activator.getService(ILog.class).log(new Status(IStatus.WARNING, Activator.getId(), e.getLocalizedMessage(), e));
 		}
 		
-		// Run and process output
-		launcher.waitAndRead(errorParser, errorParser, monitor);
+		// Run and process output streams
+		launcher.waitAndRead(out, out, monitor);
 		
 		// Refresh to pick up the build results
 		project.refreshLocal(IProject.DEPTH_INFINITE, monitor);
 		
-		// TODO should return the referenced projects
-		// so that we build when they change
-		return new IProject[0];
+		// Return the referenced projects so that we build when they change
+		return project.getReferencedProjects();
 	}
 
 	@Override
