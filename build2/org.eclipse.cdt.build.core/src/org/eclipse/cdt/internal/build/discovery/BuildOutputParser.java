@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.eclipse.cdt.build.model.DiscoveredCommand;
 import org.eclipse.cdt.build.model.IBuildService;
 import org.eclipse.cdt.build.model.IConfiguration;
 import org.eclipse.cdt.build.model.IToolChain;
@@ -59,8 +60,88 @@ public class BuildOutputParser extends OutputStream {
 		}
 	}
 	
+	private static enum State { inWS, inToken, singleQuoted, doubleQuoted, inBackSlash };
+	
+	private static String[] tokenize(StringBuffer line) {
+		char [] chars = new char[line.length()];
+		line.getChars(0, line.length(), chars, 0);
+		StringBuffer token = new StringBuffer();
+		List<String> tokens = new ArrayList<String>();
+		
+		// find white space separated tokens taking into account quoted arguments
+		State state = State.inWS;
+		
+		for (int i = 0; i < chars.length; ++i) {
+			char c = chars[i];
+			
+			if (c == '\\' && state != State.inBackSlash) {
+				state = State.inBackSlash;
+				continue;
+			}
+			
+			switch (state) {
+			case inBackSlash:
+				token.append(c);
+				state = State.inToken;
+				break;
+				
+			case inWS:
+				if (c == '"') {
+					state = State.doubleQuoted;
+				} else if (c == '\'') {
+					state = State.singleQuoted;
+				} else if (c != ' ' && c != '\t') {
+					token.append(c);
+					state = State.inToken;
+				}
+				break;
+				
+			case inToken:
+				if (c == '"') {
+					state = State.doubleQuoted;
+				} else if (c == '\'') {
+					state = State.singleQuoted;
+				} else if (c == ' ' || c == '\t') {
+					tokens.add(token.toString());
+					token.delete(0, token.length());
+					state = State.inWS;
+				} else {
+					token.append(c);
+				}
+				break;
+				
+			case doubleQuoted:
+				if (c == '"')
+					state = State.inToken;
+				else
+					token.append(c);
+				break;
+				
+			case singleQuoted:
+				if (c == '\'')
+					state = State.inToken;
+				else
+					token.append(c);
+				break;
+			}
+		}
+		
+		if (state != State.inWS)
+			tokens.add(token.toString());
+		
+		return tokens.toArray(new String[tokens.size()]);
+	}
+	
 	private void handleNewLine() {
-		// TODO handle the line :)
+		String[] tokens = null;
+		for (PatternMap pattern : patterns) {
+			if (pattern.pattern.matcher(currentLine).find()) {
+				if (tokens == null)
+					tokens = tokenize(currentLine);
+				DiscoveredCommand command = pattern.toolChain.getDiscoveredCommand(tokens);
+				// TODO check if this is a new command and add to db if it is
+			}
+		}
 		
 		// Clear the line
 		currentLine.delete(0, currentLine.length());
@@ -84,16 +165,23 @@ public class BuildOutputParser extends OutputStream {
 		int p = off;
 		int n = 0;
 		while (n < len && p < off + len) {
-			while (n < len)
-				if (b[n++] == '\n')
+			boolean newline = false;
+			int s = 0;
+			while (n < len) {
+				if (b[n++] == '\n') {
+					newline = true;
 					break;
-		
-			char[] chars = new char[n];
-			for (int i = 0; i < n; ++i)
+				}
+				else
+					++s;
+			}
+
+			char[] chars = new char[s];
+			for (int i = 0; i < s; ++i)
 				chars[i] = (char)b[p++];
 			
 			currentLine.append(chars);
-			if (n < len)
+			if (newline)
 				handleNewLine();
 		}		
 	}

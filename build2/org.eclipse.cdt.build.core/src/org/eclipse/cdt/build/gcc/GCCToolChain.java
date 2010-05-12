@@ -41,7 +41,7 @@ public class GCCToolChain implements IToolChain {
 	private final String prefix;
 	
 	public GCCToolChain() {
-		prefix = null;
+		this(null);
 	}
 	
 	/**
